@@ -1,56 +1,13 @@
-name: build
-
-concurrency:
-  group: ${{ github.workflow }}-${{ github.ref }}
-  cancel-in-progress: true
+name: ci
 
 on:
-  push:
-    branches:
-      - main
   pull_request:
     branches:
       - main
 
 jobs:
-  build:
-    runs-on: macos-latest
-
-    steps:
-      # 1. Check out the repository
-      - name: Checkout code
-        uses: actions/checkout@v3
-
-      # 2. Install Flutter
-      - name: Install Flutter
-        uses: subosito/flutter-action@v2
-        with:
-          flutter-version: 3.38.7
-
-      # 3. Install FVM
-      - name: Install FVM
-        run: dart pub global activate fvm
-
-      # 4. Install Flutter version from .fvm/flutter_sdk
-      - name: Install Flutter SDK
-        run: fvm install
-
-      # 5. Ensure FVM bin is on PATH
-      - name: Add FVM Flutter to PATH
-        run: echo "${HOME}/fvm/default/bin" >> $GITHUB_PATH
-
-      # 6. Install Melos globally
-      - name: Install Melos
-        run: fvm flutter pub global activate melos
-
-      # 7. Bootstrap all packages in the workspace
-      - name: Bootstrap packages
-        run: fvm flutter pub global run melos bootstrap
-
-      # 8. Run bloc_lint on all packages
-      - name: Run bloc_lint
-        run: fvm flutter pub run bloc_lint
-
-      # 9. Run Flutter tests for all packages
-      - name: Run tests
-        run: fvm flutter test
+  flutter_ci:
+    uses: VeryGoodOpenSource/very_good_workflows/.github/workflows/flutter_package.yml@v1
+    with:
+      flutter_version: "3.38.x"
+      run_bloc_lint: true
