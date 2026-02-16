@@ -1,4 +1,4 @@
-name: inventory_app
+name: build
 
 concurrency:
   group: ${{ github.workflow }}-${{ github.ref }}
@@ -13,18 +13,38 @@ on:
       - main
 
 jobs:
-  semantic-pull-request:
-    uses: VeryGoodOpenSource/very_good_workflows/.github/workflows/semantic_pull_request.yml@v1
-
   build:
-    uses: VeryGoodOpenSource/very_good_workflows/.github/workflows/flutter_package.yml@v1
-    with:
-      flutter_version: "3.35.x"
-      run_bloc_lint: true
+    runs-on: macos-latest
 
-  spell-check:
-    uses: VeryGoodOpenSource/very_good_workflows/.github/workflows/spell_check.yml@v1
-    with:
-      includes: |
-        **/*.md
-      modified_files_only: false
+    steps:
+      # 1. Check out the repository
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      # 2. Install FVM
+      - name: Install FVM
+        run: dart pub global activate fvm
+
+      # 3. Install Flutter version from .fvm/flutter_sdk
+      - name: Install Flutter SDK
+        run: fvm install
+
+      # 4. Ensure FVM bin is on PATH
+      - name: Add FVM Flutter to PATH
+        run: echo "${HOME}/fvm/default/bin" >> $GITHUB_PATH
+
+      # 5. Install Melos globally
+      - name: Install Melos
+        run: fvm flutter pub global activate melos
+
+      # 6. Bootstrap all packages in the workspace
+      - name: Bootstrap packages
+        run: fvm flutter pub global run melos bootstrap
+
+      # 7. Run bloc_lint on all packages
+      - name: Run bloc_lint
+        run: fvm flutter pub run bloc_lint
+
+      # 8. Run Flutter tests for all packages
+      - name: Run tests
+        run: fvm flutter test
