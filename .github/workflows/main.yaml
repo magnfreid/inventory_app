@@ -1,6 +1,9 @@
 name: ci
 
 on:
+name: ci
+
+on:
   pull_request:
     branches:
       - main
