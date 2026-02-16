@@ -6,46 +6,18 @@ concurrency:
 
 on:
   pull_request:
-    branches:
-      - main
     paths:
       - "pubspec.yaml"
-      - ".github/workflows/license_check.yml"
+      - ".github/workflows/license_check.yaml"
   push:
     branches:
       - main
     paths:
       - "pubspec.yaml"
-      - ".github/workflows/license_check.yml"
+      - ".github/workflows/license_check.yaml"
 
 jobs:
   license_check:
-    runs-on: macos-latest
-    steps:
-      # 1. Checkout code
-      - uses: actions/checkout@v3
-
-      # 2. Install Flutter
-      - uses: subosito/flutter-action@v2
-        with:
-          flutter-version: 3.38.7
-
-      # 3. Install FVM
-      - run: dart pub global activate fvm
-
-      # 4. Ensure FVM Flutter is on PATH
-      - run: echo "${HOME}/.pub-cache/bin" >> $GITHUB_PATH
-
-      # 5. Install Melos globally
-      - run: fvm flutter pub global activate melos
-
-      # 6. Bootstrap all packages
-      - run: fvm flutter pub global run melos bootstrap
-
-      # 7. Run license check for all packages
-      - name: Run license check
-        run: |
-          for package in packages/*; do
-            echo "Checking licenses for $package"
-            (cd $package && fvm flutter pub get && fvm flutter pub run license_checker)
-          done
+    uses: VeryGoodOpenSource/very_good_workflows/.github/workflows/license_check.yml@v1
+    with:
+      allowed: "MIT,BSD-3-Clause,BSD-2-Clause,Apache-2.0"
