@@ -1,13 +1,13 @@
 // Not required for test files
 // ignore_for_file: prefer_const_constructors
 
+import 'package:firebase_auth_repository/firebase_auth_repository.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:user_repository/user_repository.dart';
 
 void main() {
-  group('UserRepository', () {
+  group('FirebaseAuthRepository', () {
     test('can be instantiated', () {
-      expect(UserRepository(), isNotNull);
+      expect(FirebaseAuthRepository(), isNotNull);
     });
   });
 }
