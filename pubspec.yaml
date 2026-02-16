@@ -42,3 +42,8 @@ melos:
       run: melos exec -c 1 --depends-on build_runner -- fvm dart run build_runner build
     upgrade:
       run: fvm flutter pub upgrade
+    license_check:
+      run: |
+        for package in packages/*; do
+          (cd $package && flutter pub get && flutter pub run license_checker)
+        done
