@@ -7,6 +7,9 @@ environment:
   sdk: ^3.10.7
   flutter: ^3.38.7
 
+workspace:
+  - packages/inventory_item_repository
+
 dependencies:
   bloc: ^9.2.0
   flutter:
@@ -22,9 +25,15 @@ dev_dependencies:
   bloc_tools: ^0.1.0-dev.20
   flutter_test:
     sdk: flutter
+  melos: ^7.4.0
   mocktail: ^1.0.4
   very_good_analysis: ^10.1.0
 
 flutter:
   generate: true
   uses-material-design: true
+
+melos:
+  scripts:
+    generate:
+      run: melos exec -c 1 --depends-on build_runner -- fvm dart run build_runner build
