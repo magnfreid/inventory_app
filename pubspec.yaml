@@ -37,3 +37,5 @@ melos:
   scripts:
     generate:
       run: melos exec -c 1 --depends-on build_runner -- fvm dart run build_runner build
+    upgrade:
+      run: fvm flutter pub upgrade
