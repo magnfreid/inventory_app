@@ -19,7 +19,6 @@ dependencies:
   auth_repository:
     path: packages/auth_repository
   bloc: ^9.2.0
-  build_runner: ^2.11.1
   firebase_auth_repository:
     path: packages/firebase_auth_repository
   firebase_core: ^4.4.0
@@ -42,6 +41,7 @@ dev_dependencies:
   bloc_lint: ">=0.3.3 <0.3.6"
   bloc_test: ^10.0.0
   bloc_tools: ^0.1.0-dev.20
+  build_runner: ^2.11.1
   flutter_test:
     sdk: flutter
   melos: ^7.4.0
@@ -55,6 +55,8 @@ flutter:
 melos:
   scripts:
     generate:
-      run: melos exec -c 1 --depends-on build_runner -- fvm dart run build_runner build
+      run: |
+        fvm dart run build_runner build --delete-conflicting-outputs
+        melos exec -c 1 --depends-on build_runner -- fvm dart run build_runner build --delete-conflicting-outputs
     upgrade:
-      run: fvm flutter pub upgrade
+      run: melos exec -c 1 --depends-on build_runner -- fvm dart run build_runner build --delete-conflicting-outputs

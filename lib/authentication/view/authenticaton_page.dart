@@ -17,7 +17,7 @@ class AuthenticationPage extends StatelessWidget {
               loading: () => const Center(
                 child: CircularProgressIndicator(),
               ),
-              unauthenticated: SignInPage.new,
+              unauthenticated: () => const SignInPage(),
               authenticated: (user) => Center(child: Text(user.id)),
             );
           },
