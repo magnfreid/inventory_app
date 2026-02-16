@@ -9,6 +9,8 @@ environment:
 
 workspace:
   - packages/inventory_item_repository
+  - packages/location_repository
+  - packages/user_repository
 
 dependencies:
   bloc: ^9.2.0
