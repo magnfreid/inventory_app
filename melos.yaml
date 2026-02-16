@@ -1,0 +1,5 @@
+name: inventory_app
+
+packages:
+  - packages/**
+sdkPath: .fvm/flutter_sdk
