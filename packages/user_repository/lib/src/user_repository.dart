@@ -1,7 +1,5 @@
-/// {@template user_repository}
-/// A Very Good Project created by Very Good CLI.
-/// {@endtemplate}
-class UserRepository {
-  /// {@macro user_repository}
-  const UserRepository();
+import 'package:user_repository/user_repository.dart';
+
+abstract interface class UserRepository {
+  Stream<User?> currentUser(String userId);
 }

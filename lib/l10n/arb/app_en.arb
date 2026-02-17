@@ -1,7 +1,15 @@
 {
     "@@locale": "en",
-    "counterAppBarTitle": "Counter",
-    "@counterAppBarTitle": {
-        "description": "Text shown in the AppBar of the Counter Page"
+    "signInEmailTextFieldLabel": "Email",
+    "@signInEmailTextFieldLabel": {
+        "description": "Label for email textfield"
+    },
+    "signInPasswordTextFieldLabel": "Password",
+    "@signInPasswordTextField": {
+        "description": "Label for password textfield"
+    },
+    "signInSignInButtonText": "Sign in",
+    "@signInSignInButtonText": {
+        "description": "Sign in button text"
     }
 }

@@ -4,28 +4,45 @@ version: 1.0.0+1
 publish_to: none
 
 environment:
-  sdk: ^3.10.7
-  flutter: ^3.38.7
+  sdk: ^3.11.0
+  flutter: ^3.41.1
 
 workspace:
   - packages/inventory_item_repository
   - packages/location_repository
   - packages/user_repository
+  - packages/auth_repository
+  - packages/firebase_auth_repository
+  - packages/firebase_user_repository
 
 dependencies:
+  auth_repository:
+    path: packages/auth_repository
   bloc: ^9.2.0
+  bloc_concurrency: ^0.3.0
+  bloc_test: ^10.0.0
+  firebase_auth_repository:
+    path: packages/firebase_auth_repository
   firebase_core: ^4.4.0
   flutter:
     sdk: flutter
   flutter_bloc: ^9.1.1
   flutter_localizations:
     sdk: flutter
+  freezed: ^3.2.3
+  freezed_annotation: ^3.1.0
   intl: ^0.20.2
+  inventory_item_repository:
+    path: packages/inventory_item_repository
+  location_repository:
+    path: packages/location_repository
+  user_repository:
+    path: packages/user_repository
 
 dev_dependencies:
   bloc_lint: ">=0.3.3 <0.3.6"
-  bloc_test: ^10.0.0
   bloc_tools: ^0.1.0-dev.20
+  build_runner: ^2.11.1
   flutter_test:
     sdk: flutter
   melos: ^7.4.0
@@ -39,6 +56,16 @@ flutter:
 melos:
   scripts:
     generate:
-      run: melos exec -c 1 --depends-on build_runner -- fvm dart run build_runner build
+      run: |
+        fvm dart run build_runner build --delete-conflicting-outputs
+        melos exec -c 1 --depends-on build_runner -- fvm dart run build_runner build --delete-conflicting-outputs
     upgrade:
-      run: fvm flutter pub upgrade
+      run: |
+        fvm flutter pub upgrade
+        fvm dart run melos bootstrap
+    full-upgrade:
+      run: |
+        fvm install stable
+        fvm use stable
+        melos exec -- fvm flutter pub upgrade
+        melos bootstrap
