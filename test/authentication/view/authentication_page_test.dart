@@ -96,4 +96,30 @@ void main() {
       ).called(1);
     },
   );
+
+  testWidgets(
+    'renders CircularProgressIndicator when loading',
+    (tester) async {
+      when(
+        () => authenticationBloc.state,
+      ).thenReturn(const .loading());
+      whenListen(
+        authenticationBloc,
+        Stream<AuthenticationState>.fromIterable([
+          const .loading(),
+        ]),
+        initialState: const AuthenticationState.loading(),
+      );
+      await tester.pumpApp(
+        RepositoryProvider.value(
+          value: authRepository,
+          child: BlocProvider.value(
+            value: authenticationBloc,
+            child: const AuthenticationPage(),
+          ),
+        ),
+      );
+      expect(find.byType(CircularProgressIndicator), findsOneWidget);
+    },
+  );
 }
