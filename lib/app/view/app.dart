@@ -45,7 +45,7 @@ class AppView extends StatelessWidget {
       ),
       localizationsDelegates: AppLocalizations.localizationsDelegates,
       supportedLocales: AppLocalizations.supportedLocales,
-      home: const AuthenticationPage(),
+      home: const Scaffold(body: AuthenticationPage()),
     );
   }
 }

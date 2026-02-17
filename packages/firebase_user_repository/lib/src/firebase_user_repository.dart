@@ -2,13 +2,14 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:user_repository/user_repository.dart';
 
 class FirebaseUserRepository implements UserRepository {
-  FirebaseUserRepository();
+  FirebaseUserRepository({FirebaseFirestore? firestore})
+    : _firestore = firestore ?? FirebaseFirestore.instance;
 
-  final FirebaseFirestore firestore = FirebaseFirestore.instance;
+  final FirebaseFirestore _firestore;
 
   @override
   Stream<User?> currentUser(String userId) =>
-      firestore.collection('users').doc().snapshots().map((doc) {
+      _firestore.collection('users').doc().snapshots().map((doc) {
         final data = doc.data();
         return data == null
             ? null

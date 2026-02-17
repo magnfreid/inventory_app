@@ -1,13 +1,19 @@
-// Not required for test files
-// ignore_for_file: prefer_const_constructors
-
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_user_repository/firebase_user_repository.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:mocktail/mocktail.dart';
+
+class MockFirebaseFirestore extends Mock implements FirebaseFirestore {}
 
 void main() {
-  group('FirebaseUserRepository', () {
-    test('can be instantiated', () {
-      expect(FirebaseUserRepository(), isNotNull);
-    });
+  late FirebaseUserRepository repository;
+
+  setUp(() {
+    final mockFirebaseFirestore = MockFirebaseFirestore();
+    repository = FirebaseUserRepository(firestore: mockFirebaseFirestore);
+  });
+
+  test('can be instantiated', () {
+    expect(repository, isNotNull);
   });
 }

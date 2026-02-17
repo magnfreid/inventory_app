@@ -29,8 +29,8 @@ class _SignInViewState extends State<SignInView> {
 
   @override
   void initState() {
-    _emailTextController = TextEditingController();
-    _passwordTextController = TextEditingController();
+    _emailTextController = TextEditingController(text: 'test@test.com');
+    _passwordTextController = TextEditingController(text: 'testpassword');
     super.initState();
   }
 
@@ -43,39 +43,64 @@ class _SignInViewState extends State<SignInView> {
 
   @override
   Widget build(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 50),
-      child: BlocBuilder<SignInBloc, SignInState>(
-        builder: (context, state) {
-          return Column(
-            mainAxisAlignment: .center,
-            children: [
-              const Spacer(),
-              TextField(
-                decoration: const InputDecoration(label: Text('Email')),
-                controller: _emailTextController,
-              ),
-              TextField(
-                decoration: const InputDecoration(label: Text('Password')),
-                controller: _passwordTextController,
-              ),
-              const Spacer(),
-              //TODO(magnfreid): l10n!!!
-              ElevatedButton(
-                onPressed: () => context.read<SignInBloc>().add(
-                  SignInButtonPressed(
-                    email: _emailTextController.text,
-                    password: _passwordTextController.text,
+    return BlocListener<SignInBloc, SignInState>(
+      listenWhen: (previous, current) => current.error != null,
+      listener: (context, state) {
+        ScaffoldMessenger.of(
+          context,
+        ).showSnackBar(
+          SnackBar(
+            duration: const Duration(seconds: 3),
+            content: Text(state.error.toString()),
+          ),
+        );
+      },
+      child: Padding(
+        padding: const EdgeInsets.symmetric(horizontal: 50),
+        child: BlocBuilder<SignInBloc, SignInState>(
+          builder: (context, state) {
+            return Scaffold(
+              body: Column(
+                mainAxisAlignment: .center,
+                children: [
+                  const Spacer(),
+                  TextField(
+                    decoration: const InputDecoration(label: Text('Email')),
+                    controller: _emailTextController,
                   ),
-                ),
-                child: state.isLoading
-                    ? const Center(child: CircularProgressIndicator())
-                    : const Text('Sign in'),
+                  TextField(
+                    decoration: const InputDecoration(label: Text('Password')),
+                    controller: _passwordTextController,
+                  ),
+                  const Spacer(),
+                  //TODO(magnfreid): l10n!!!
+                  SizedBox(
+                    width: double.infinity,
+                    height: 48,
+                    child: ElevatedButton(
+                      onPressed: () => context.read<SignInBloc>().add(
+                        SignInButtonPressed(
+                          email: _emailTextController.text,
+                          password: _passwordTextController.text,
+                        ),
+                      ),
+                      child: state.isLoading
+                          ? const Center(
+                              child: SizedBox(
+                                width: 24,
+                                height: 24,
+                                child: CircularProgressIndicator(),
+                              ),
+                            )
+                          : const Text('Sign in'),
+                    ),
+                  ),
+                  const Spacer(),
+                ],
               ),
-              const Spacer(),
-            ],
-          );
-        },
+            );
+          },
+        ),
       ),
     );
   }

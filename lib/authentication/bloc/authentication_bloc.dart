@@ -13,6 +13,7 @@ class AuthenticationBloc
     : _authRepository = authRepository,
       super(const .loading()) {
     on<_OnUserChanged>(_onUserChanged);
+    on<SignOutButtonPressed>(_onSignOutButtonPressed);
 
     _userSubscription = _authRepository.currentUser.listen(
       (user) => add(_OnUserChanged(newUser: user)),
@@ -36,5 +37,12 @@ class AuthenticationBloc
   Future<void> close() async {
     await _userSubscription.cancel();
     return super.close();
+  }
+
+  FutureOr<void> _onSignOutButtonPressed(
+    SignOutButtonPressed event,
+    Emitter<AuthenticationState> emit,
+  ) async {
+    await _authRepository.signOut();
   }
 }
