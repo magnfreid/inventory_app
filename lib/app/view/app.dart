@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:inventory_app/authentication/bloc/authentication_bloc.dart';
 import 'package:inventory_app/authentication/view/authenticaton_page.dart';
-import 'package:inventory_app/l10n/l10n.dart';
+import 'package:inventory_app/l10n/gen/app_localizations.dart';
 
 class App extends StatelessWidget {
   const App({required AuthRepository authRepository, super.key})

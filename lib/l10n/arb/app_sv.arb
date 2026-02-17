@@ -1,7 +1,15 @@
 {
     "@@locale": "sv",
-    "counterAppBarTitle": "Räknare",
-    "@counterAppBarTitle": {
-        "description": "Appens titel"
+    "signInEmailTextFieldLabel": "Email",
+    "@signInEmailTextFieldLabel": {
+        "description": "Etikett till email-textfält"
+    },
+    "signInPasswordTextFieldLabel": "Lösenord",
+    "@signInPasswordTextField": {
+        "description": "Etikett till lösenordstextfält"
+    },
+    "signInSignInButtonText": "Logga in",
+    "@signInSignInButtonText": {
+        "description": "Text för inloggningknapp"
     }
 }

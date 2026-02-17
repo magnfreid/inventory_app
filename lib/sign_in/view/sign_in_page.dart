@@ -1,6 +1,7 @@
 import 'package:auth_repository/auth_repository.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:inventory_app/l10n/l10n.dart';
 import 'package:inventory_app/sign_in/bloc/sign_in_bloc.dart';
 import 'package:inventory_app/sign_in/bloc/sign_in_state.dart';
 
@@ -43,6 +44,7 @@ class _SignInViewState extends State<SignInView> {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = context.l10n;
     return BlocListener<SignInBloc, SignInState>(
       listenWhen: (previous, current) => current.error != null,
       listener: (context, state) {
@@ -65,15 +67,18 @@ class _SignInViewState extends State<SignInView> {
                 children: [
                   const Spacer(),
                   TextField(
-                    decoration: const InputDecoration(label: Text('Email')),
+                    decoration: InputDecoration(
+                      label: Text(l10n.signInEmailTextFieldLabel),
+                    ),
                     controller: _emailTextController,
                   ),
                   TextField(
-                    decoration: const InputDecoration(label: Text('Password')),
+                    decoration: InputDecoration(
+                      label: Text(l10n.signInPasswordTextFieldLabel),
+                    ),
                     controller: _passwordTextController,
                   ),
                   const Spacer(),
-                  //TODO(magnfreid): l10n!!!
                   SizedBox(
                     width: double.infinity,
                     height: 48,
@@ -92,7 +97,7 @@ class _SignInViewState extends State<SignInView> {
                                 child: CircularProgressIndicator(),
                               ),
                             )
-                          : const Text('Sign in'),
+                          : Text(l10n.signInSignInButtonText),
                     ),
                   ),
                   const Spacer(),
