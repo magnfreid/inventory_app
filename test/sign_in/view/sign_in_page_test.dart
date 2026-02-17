@@ -16,6 +16,9 @@ void main() {
   setUp(() {
     bloc = MockSignInBloc();
   });
+  registerFallbackValue(
+    const SignInButtonPressed(email: '', password: ''),
+  );
   group('SignInPage', () {
     testWidgets('renders textfields with titles and save button with text in '
         'SignInView when idle', (
@@ -74,6 +77,28 @@ void main() {
 
       expect(find.byType(SnackBar), findsOneWidget);
       expect(find.text('Exception: Something went wrong'), findsOneWidget);
+    });
+
+    testWidgets('adds SignInButtonPressed when button is tapped', (
+      tester,
+    ) async {
+      when(() => bloc.state).thenReturn(const SignInState());
+      whenListen(bloc, const Stream<SignInState>.empty());
+
+      await tester.pumpApp(
+        BlocProvider.value(
+          value: bloc,
+          child: const SignInView(),
+        ),
+      );
+
+      await tester.enterText(find.byType(TextField).first, 'test@email.com');
+      await tester.enterText(find.byType(TextField).last, 'password');
+
+      await tester.tap(find.byType(ElevatedButton));
+      await tester.pump();
+
+      verify(() => bloc.add(any(that: isA<SignInButtonPressed>()))).called(1);
     });
   });
 }
