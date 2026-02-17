@@ -34,7 +34,7 @@ void main() {
       return bloc;
     },
     act: (bloc) => bloc.add(
-      SignInButtonPressed(
+      const SignInButtonPressed(
         email: 'test@test.com',
         password: 'password',
       ),
@@ -65,7 +65,7 @@ void main() {
       return bloc;
     },
     act: (bloc) => bloc.add(
-      SignInButtonPressed(
+      const SignInButtonPressed(
         email: 'test@test.com',
         password: 'password',
       ),

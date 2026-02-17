@@ -15,8 +15,9 @@ class AuthenticationPage extends StatelessWidget {
       appBar: AppBar(
         actions: [
           IconButton(
-            onPressed: () =>
-                context.read<AuthenticationBloc>().add(SignOutButtonPressed()),
+            onPressed: () => context.read<AuthenticationBloc>().add(
+              const SignOutButtonPressed(),
+            ),
             icon: const Icon(Icons.logout),
           ),
         ],

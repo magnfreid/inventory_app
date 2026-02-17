@@ -59,7 +59,7 @@ void main() {
         when(() => authRepository.signOut()).thenAnswer((_) async {});
         return AuthenticationBloc(authRepository: authRepository);
       },
-      act: (bloc) => bloc.add(SignOutButtonPressed()),
+      act: (bloc) => bloc.add(const SignOutButtonPressed()),
       verify: (_) {
         verify(() => authRepository.signOut()).called(1);
       },
