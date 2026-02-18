@@ -1,8 +1,8 @@
 import 'package:auth_repository/auth_repository.dart';
 import 'package:bloc_test/bloc_test.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:inventory_app/authentication/bloc/authentication_bloc.dart';
-import 'package:inventory_app/authentication/bloc/authentication_state.dart';
+import 'package:inventory_app/authentication/cubit/authentication_cubit.dart';
+import 'package:inventory_app/authentication/cubit/authentication_state.dart';
 import 'package:mocktail/mocktail.dart';
 
 import '../../helpers/mocks.dart';
@@ -21,45 +21,45 @@ void main() {
       when(
         () => authRepository.currentUser,
       ).thenAnswer((_) => const Stream.empty());
-      final bloc = AuthenticationBloc(authRepository: authRepository);
-      expect(bloc.state, const AuthenticationState.loading());
-      await bloc.close();
+      final cubit = AuthenticationCubit(authRepository: authRepository);
+      expect(cubit.state, const AuthenticationState.loading());
+      await cubit.close();
     });
 
-    blocTest<AuthenticationBloc, AuthenticationState>(
+    blocTest<AuthenticationCubit, AuthenticationState>(
       'emits unauthenticated when user stream emits null',
       build: () {
         when(
           () => authRepository.currentUser,
         ).thenAnswer((_) => Stream.value(null));
-        return AuthenticationBloc(authRepository: authRepository);
+        return AuthenticationCubit(authRepository: authRepository);
       },
       expect: () => [const AuthenticationState.unauthenticated()],
     );
 
-    blocTest<AuthenticationBloc, AuthenticationState>(
+    blocTest<AuthenticationCubit, AuthenticationState>(
       'emits authenticated when user stream emits a user',
       build: () {
         when(
           () => authRepository.currentUser,
         ).thenAnswer((_) => Stream.value(user));
-        return AuthenticationBloc(authRepository: authRepository);
+        return AuthenticationCubit(authRepository: authRepository);
       },
       expect: () => [
         AuthenticationState.authenticated(user: user),
       ],
     );
 
-    blocTest<AuthenticationBloc, AuthenticationState>(
+    blocTest<AuthenticationCubit, AuthenticationState>(
       'calls signOut on AuthRepository when SignOutButtonPressed is added',
       build: () {
         when(
           () => authRepository.currentUser,
         ).thenAnswer((_) => const Stream.empty());
         when(() => authRepository.signOut()).thenAnswer((_) async {});
-        return AuthenticationBloc(authRepository: authRepository);
+        return AuthenticationCubit(authRepository: authRepository);
       },
-      act: (bloc) => bloc.add(const SignOutButtonPressed()),
+      act: (bloc) => bloc.signOut(),
       verify: (_) {
         verify(() => authRepository.signOut()).called(1);
       },

@@ -3,8 +3,8 @@ import 'package:bloc_test/bloc_test.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:inventory_app/authentication/bloc/authentication_bloc.dart';
-import 'package:inventory_app/authentication/bloc/authentication_state.dart';
+import 'package:inventory_app/authentication/cubit/authentication_cubit.dart';
+import 'package:inventory_app/authentication/cubit/authentication_state.dart';
 import 'package:inventory_app/authentication/view/authenticaton_page.dart';
 import 'package:inventory_app/home/view/home_page.dart';
 import 'package:inventory_app/sign_in/view/sign_in_page.dart';
@@ -13,11 +13,11 @@ import 'package:mocktail/mocktail.dart';
 import '../../helpers/helpers.dart';
 
 void main() {
-  late AuthenticationBloc authenticationBloc;
+  late AuthenticationCubit authenticationCubit;
   late AuthRepository authRepository;
 
   setUp(() {
-    authenticationBloc = MockAuthenticationBloc();
+    authenticationCubit = MockAuthenticationCubit();
     authRepository = MockAuthRepository();
   });
 
@@ -25,7 +25,7 @@ void main() {
     'renders SignInPage when unauthenticated',
     (tester) async {
       whenListen(
-        authenticationBloc,
+        authenticationCubit,
         Stream<AuthenticationState>.fromIterable([
           const .unauthenticated(),
         ]),
@@ -36,7 +36,7 @@ void main() {
         RepositoryProvider.value(
           value: authRepository,
           child: BlocProvider.value(
-            value: authenticationBloc,
+            value: authenticationCubit,
             child: const AuthenticationPage(),
           ),
         ),
@@ -51,7 +51,7 @@ void main() {
     (tester) async {
       final authUser = AuthUser(id: '123');
       whenListen(
-        authenticationBloc,
+        authenticationCubit,
         Stream<AuthenticationState>.fromIterable([
           .authenticated(user: authUser),
         ]),
@@ -62,7 +62,7 @@ void main() {
         RepositoryProvider.value(
           value: authRepository,
           child: BlocProvider.value(
-            value: authenticationBloc,
+            value: authenticationCubit,
             child: const AuthenticationPage(),
           ),
         ),
@@ -76,15 +76,18 @@ void main() {
     'adds SignOutButtonPressed when logout button is pressed',
     (tester) async {
       when(
-        () => authenticationBloc.state,
+        () => authenticationCubit.state,
       ).thenReturn(const .unauthenticated());
-      whenListen(authenticationBloc, const Stream<AuthenticationState>.empty());
+      whenListen(
+        authenticationCubit,
+        const Stream<AuthenticationState>.empty(),
+      );
 
       await tester.pumpApp(
         RepositoryProvider.value(
           value: authRepository,
           child: BlocProvider.value(
-            value: authenticationBloc,
+            value: authenticationCubit,
             child: const AuthenticationPage(),
           ),
         ),
@@ -92,7 +95,7 @@ void main() {
       await tester.tap(find.byIcon(Icons.logout));
       await tester.pump();
       verify(
-        () => authenticationBloc.add(const SignOutButtonPressed()),
+        () => authenticationCubit.signOut(),
       ).called(1);
     },
   );
@@ -101,10 +104,10 @@ void main() {
     'renders CircularProgressIndicator when loading',
     (tester) async {
       when(
-        () => authenticationBloc.state,
+        () => authenticationCubit.state,
       ).thenReturn(const .loading());
       whenListen(
-        authenticationBloc,
+        authenticationCubit,
         Stream<AuthenticationState>.fromIterable([
           const .loading(),
         ]),
@@ -114,7 +117,7 @@ void main() {
         RepositoryProvider.value(
           value: authRepository,
           child: BlocProvider.value(
-            value: authenticationBloc,
+            value: authenticationCubit,
             child: const AuthenticationPage(),
           ),
         ),

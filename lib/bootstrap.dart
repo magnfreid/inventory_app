@@ -4,6 +4,7 @@ import 'dart:developer';
 import 'package:bloc/bloc.dart';
 import 'package:firebase_auth_repository/firebase_auth_repository.dart';
 import 'package:firebase_core/firebase_core.dart';
+import 'package:firebase_user_repository/firebase_user_repository.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:inventory_app/app/bloc_observer.dart';
@@ -24,6 +25,7 @@ Future<void> bootstrap() async {
   Bloc.observer = const AppBlocObserver();
 
   final authRepository = FirebaseAuthRepository();
+  final userRepository = FirebaseUserRepository();
 
-  runApp(App(authRepository: authRepository));
+  runApp(App(authRepository: authRepository, userRepository: userRepository));
 }

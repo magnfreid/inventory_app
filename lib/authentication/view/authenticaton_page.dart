@@ -1,9 +1,14 @@
+import 'package:firebase_catalogue_repository/firebase_catalogue_repository.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:inventory_app/authentication/bloc/authentication_bloc.dart';
-import 'package:inventory_app/authentication/bloc/authentication_state.dart';
+import 'package:inventory_app/authentication/cubit/authentication_cubit.dart';
+import 'package:inventory_app/authentication/cubit/authentication_state.dart';
+import 'package:inventory_app/catalogue/bloc/catalogue_bloc.dart';
+import 'package:inventory_app/home/cubit/user_cubit.dart';
+import 'package:inventory_app/home/cubit/user_state.dart';
 import 'package:inventory_app/home/view/home_page.dart';
 import 'package:inventory_app/sign_in/view/sign_in_page.dart';
+import 'package:user_repository/user_repository.dart';
 
 class AuthenticationPage extends StatelessWidget {
   const AuthenticationPage({super.key});
@@ -15,26 +20,68 @@ class AuthenticationPage extends StatelessWidget {
       appBar: AppBar(
         actions: [
           IconButton(
-            onPressed: () => context.read<AuthenticationBloc>().add(
-              const SignOutButtonPressed(),
-            ),
+            onPressed: () => context.read<AuthenticationCubit>().signOut(),
             icon: const Icon(Icons.logout),
           ),
         ],
       ),
       body: SafeArea(
-        child: BlocBuilder<AuthenticationBloc, AuthenticationState>(
+        child: BlocBuilder<AuthenticationCubit, AuthenticationState>(
           builder: (context, state) {
             return state.when(
               loading: () => const Center(
                 child: CircularProgressIndicator(),
               ),
               unauthenticated: () => const SignInPage(),
-              authenticated: (user) => const HomePage(),
+              authenticated: (authUser) => BlocProvider(
+                create: (context) => UserCubit(
+                  userRepository: context.read<UserRepository>(),
+                  currentUserId: authUser.id,
+                ),
+                child: const AuthentionPageView(),
+              ),
             );
           },
         ),
       ),
+    );
+  }
+}
+
+//TODO(magnfreid): Make this it's own view/feature?
+class AuthentionPageView extends StatelessWidget {
+  const AuthentionPageView({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return BlocBuilder<UserCubit, UserState>(
+      builder: (context, state) {
+        return state.when(
+          loading: () => const Center(child: CircularProgressIndicator()),
+          error: (error) => Text(error.toString()),
+          loaded: (user) {
+            final catalogueRepository = FirebaseCatalogueRepository(
+              organizationId: user.organizationId,
+            );
+            return MultiRepositoryProvider(
+              providers: [
+                RepositoryProvider.value(
+                  value: catalogueRepository,
+                ),
+              ],
+              child: MultiBlocProvider(
+                providers: [
+                  BlocProvider(
+                    create: (_) =>
+                        CatalogueBloc(catalogueRepository: catalogueRepository),
+                  ),
+                ],
+                child: const HomePage(),
+              ),
+            );
+          },
+        );
+      },
     );
   }
 }
