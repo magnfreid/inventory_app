@@ -38,7 +38,7 @@ class AuthenticationPage extends StatelessWidget {
                   userRepository: context.read<UserRepository>(),
                   currentUserId: authUser.id,
                 ),
-                child: const AuthentionPageView(),
+                child: const AuthenticationView(),
               ),
             );
           },
@@ -49,8 +49,8 @@ class AuthenticationPage extends StatelessWidget {
 }
 
 //TODO(magnfreid): Make this it's own view/feature?
-class AuthentionPageView extends StatelessWidget {
-  const AuthentionPageView({super.key});
+class AuthenticationView extends StatelessWidget {
+  const AuthenticationView({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -60,20 +60,21 @@ class AuthentionPageView extends StatelessWidget {
           loading: () => const Center(child: CircularProgressIndicator()),
           error: (error) => Text(error.toString()),
           loaded: (user) {
-            final catalogueRepository = FirebaseCatalogueRepository(
-              organizationId: user.organizationId,
-            );
             return MultiRepositoryProvider(
               providers: [
-                RepositoryProvider.value(
-                  value: catalogueRepository,
+                RepositoryProvider(
+                  create: (_) => FirebaseCatalogueRepository(
+                    organizationId: user.organizationId,
+                  ),
                 ),
               ],
               child: MultiBlocProvider(
                 providers: [
                   BlocProvider(
-                    create: (_) =>
-                        CatalogueBloc(catalogueRepository: catalogueRepository),
+                    create: (context) => CatalogueBloc(
+                      catalogueRepository: context
+                          .read<FirebaseCatalogueRepository>(),
+                    ),
                   ),
                 ],
                 child: const HomePage(),

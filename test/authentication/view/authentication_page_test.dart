@@ -9,16 +9,19 @@ import 'package:inventory_app/authentication/view/authenticaton_page.dart';
 import 'package:inventory_app/home/view/home_page.dart';
 import 'package:inventory_app/sign_in/view/sign_in_page.dart';
 import 'package:mocktail/mocktail.dart';
+import 'package:user_repository/user_repository.dart';
 
 import '../../helpers/helpers.dart';
 
 void main() {
   late AuthenticationCubit authenticationCubit;
   late AuthRepository authRepository;
+  late UserRepository userRepository;
 
   setUp(() {
     authenticationCubit = MockAuthenticationCubit();
     authRepository = MockAuthRepository();
+    userRepository = MockUserRepository();
   });
 
   testWidgets(
@@ -33,8 +36,15 @@ void main() {
       );
 
       await tester.pumpApp(
-        RepositoryProvider.value(
-          value: authRepository,
+        MultiRepositoryProvider(
+          providers: [
+            RepositoryProvider.value(
+              value: authRepository,
+            ),
+            RepositoryProvider.value(
+              value: userRepository,
+            ),
+          ],
           child: BlocProvider.value(
             value: authenticationCubit,
             child: const AuthenticationPage(),
@@ -47,20 +57,36 @@ void main() {
   );
 
   testWidgets(
-    'renders HomePage when authenticated',
+    'renders HomePage when authenticated and user loads',
     (tester) async {
       final authUser = AuthUser(id: '123');
+
+      final user = User(
+        id: '123',
+        organizationId: 'org1',
+        name: 'name',
+        email: 'email',
+        role: .admin,
+      );
+
       whenListen(
         authenticationCubit,
         Stream<AuthenticationState>.fromIterable([
-          .authenticated(user: authUser),
+          AuthenticationState.authenticated(user: authUser),
         ]),
         initialState: AuthenticationState.authenticated(user: authUser),
       );
 
+      when(
+        () => userRepository.watchUser(authUser.id),
+      ).thenAnswer((_) => Stream.value(user));
+
       await tester.pumpApp(
-        RepositoryProvider.value(
-          value: authRepository,
+        MultiRepositoryProvider(
+          providers: [
+            RepositoryProvider.value(value: authRepository),
+            RepositoryProvider.value(value: userRepository),
+          ],
           child: BlocProvider.value(
             value: authenticationCubit,
             child: const AuthenticationPage(),
@@ -68,12 +94,15 @@ void main() {
         ),
       );
 
+      await tester.pump(); // allow UserCubit to emit loaded
+      await tester.pumpAndSettle();
+
       expect(find.byType(HomePage), findsOneWidget);
     },
   );
 
   testWidgets(
-    'adds SignOutButtonPressed when logout button is pressed',
+    'calls signOut() when logout button is pressed',
     (tester) async {
       when(
         () => authenticationCubit.state,
@@ -82,6 +111,8 @@ void main() {
         authenticationCubit,
         const Stream<AuthenticationState>.empty(),
       );
+
+      when(() => authenticationCubit.signOut()).thenAnswer((_) async {});
 
       await tester.pumpApp(
         RepositoryProvider.value(

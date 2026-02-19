@@ -1,14 +1,17 @@
 import 'package:flutter/material.dart';
 import 'package:inventory_app/catalogue/view/catalogue_page.dart';
+import 'package:inventory_app/inventory/view/inventory_page.dart';
+import 'package:inventory_app/statistics/view/statistics_page.dart';
+import 'package:inventory_app/storages/view/storages_page.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({super.key});
 
   List<Widget> get pages => const [
-    Text('Inventory'),
+    InventoryPage(),
     CataloguePage(),
-    Text('Storages'),
-    Text('Statistics'),
+    StoragesPage(),
+    StatisticsPage(),
   ];
 
   List<NavigationDestination> get tabs => const [

@@ -9,7 +9,7 @@ class UserCubit extends Cubit<UserState> {
     required UserRepository userRepository,
     required String currentUserId,
   }) : _userRepository = userRepository,
-       super(const UserState.loading()) {
+       super(const .loading()) {
     _userStreamSubscription = _userRepository.watchUser(currentUserId).listen(
       (
         user,
