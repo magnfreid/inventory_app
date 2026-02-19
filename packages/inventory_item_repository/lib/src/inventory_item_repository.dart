@@ -1,3 +1,0 @@
-class InventoryItemRepository {
-  const InventoryItemRepository();
-}

@@ -8,14 +8,16 @@ environment:
   flutter: ^3.41.1
 
 workspace:
-  - packages/catalogue_repository
-  - packages/inventory_item_repository
-  - packages/location_repository
-  - packages/user_repository
   - packages/auth_repository
   - packages/firebase_auth_repository
+  - packages/firebase_inventory_repository
+  - packages/firebase_location_repository
+  - packages/firebase_product_repository
   - packages/firebase_user_repository
-  - packages/firebase_catalogue_repository
+  - packages/inventory_repository
+  - packages/location_repository
+  - packages/product_repository
+  - packages/user_repository
 
 dependencies:
   auth_repository:
@@ -23,13 +25,15 @@ dependencies:
   bloc: ^9.2.0
   bloc_concurrency: ^0.3.0
   bloc_test: ^10.0.0
-  catalogue_repository:
-    path: packages/catalogue_repository
   firebase_auth_repository:
     path: packages/firebase_auth_repository
-  firebase_catalogue_repository:
-    path: packages/firebase_catalogue_repository
+  firebase_inventory_repository:
+    path: packages/firebase_inventory_repository
   firebase_core: ^4.4.0
+  firebase_location_repository:
+    path: packages/firebase_location_repository
+  firebase_product_repository:
+    path: packages/firebase_product_repository
   firebase_user_repository:
     path: packages/firebase_user_repository
   flutter:
@@ -40,10 +44,12 @@ dependencies:
   freezed: ^3.2.3
   freezed_annotation: ^3.1.0
   intl: ^0.20.2
-  inventory_item_repository:
-    path: packages/inventory_item_repository
+  inventory_repository:
+    path: packages/inventory_repository
   location_repository:
     path: packages/location_repository
+  product_repository:
+    path: packages/product_repository
   user_repository:
     path: packages/user_repository
 

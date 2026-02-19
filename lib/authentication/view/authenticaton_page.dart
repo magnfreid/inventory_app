@@ -1,14 +1,17 @@
-import 'package:catalogue_repository/catalogue_repository.dart';
-import 'package:firebase_catalogue_repository/firebase_catalogue_repository.dart';
+import 'package:firebase_inventory_repository/firebase_inventory_repository.dart';
+import 'package:firebase_location_repository/firebase_location_repository.dart';
+import 'package:firebase_product_repository/firebase_product_repository.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:inventory_app/authentication/cubit/authentication_cubit.dart';
 import 'package:inventory_app/authentication/cubit/authentication_state.dart';
-import 'package:inventory_app/catalogue/bloc/catalogue_bloc.dart';
 import 'package:inventory_app/home/cubit/user_cubit.dart';
 import 'package:inventory_app/home/cubit/user_state.dart';
 import 'package:inventory_app/home/view/home_page.dart';
 import 'package:inventory_app/sign_in/view/sign_in_page.dart';
+import 'package:inventory_repository/inventory_repository.dart';
+import 'package:location_repository/location_repository.dart';
+import 'package:product_repository/product_repository.dart';
 import 'package:user_repository/user_repository.dart';
 
 class AuthenticationPage extends StatelessWidget {
@@ -63,8 +66,18 @@ class AuthenticationView extends StatelessWidget {
           loaded: (user) {
             return MultiRepositoryProvider(
               providers: [
-                RepositoryProvider<CatalogueRepository>(
-                  create: (_) => FirebaseCatalogueRepository(
+                RepositoryProvider<LocationRepository>(
+                  create: (_) => FirebaseLocationRepository(
+                    organizationId: user.organizationId,
+                  ),
+                ),
+                RepositoryProvider<InventoryRepository>(
+                  create: (_) => FirebaseInventoryRepository(
+                    organizationId: user.organizationId,
+                  ),
+                ),
+                RepositoryProvider<ProductRepository>(
+                  create: (_) => FirebaseProductRepository(
                     organizationId: user.organizationId,
                   ),
                 ),

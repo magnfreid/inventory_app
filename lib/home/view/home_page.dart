@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:inventory_app/catalogue/view/catalogue_page.dart';
+import 'package:inventory_app/products/view/products_page.dart';
 import 'package:inventory_app/inventory/view/inventory_page.dart';
 import 'package:inventory_app/statistics/view/statistics_page.dart';
 import 'package:inventory_app/storages/view/storages_page.dart';
@@ -9,7 +9,7 @@ class HomePage extends StatefulWidget {
 
   List<Widget> get pages => const [
     InventoryPage(),
-    CataloguePage(),
+    ProductsPage(),
     StoragesPage(),
     StatisticsPage(),
   ];

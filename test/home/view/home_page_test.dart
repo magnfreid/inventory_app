@@ -1,5 +1,5 @@
 import 'package:flutter_test/flutter_test.dart';
-import 'package:inventory_app/catalogue/view/catalogue_page.dart';
+import 'package:inventory_app/products/view/products_page.dart';
 import 'package:inventory_app/home/view/home_page.dart';
 import 'package:inventory_app/inventory/view/inventory_page.dart';
 
@@ -13,7 +13,7 @@ void main() {
       );
 
       expect(find.byType(InventoryPage), findsOneWidget);
-      expect(find.byType(CataloguePage), findsNothing);
+      expect(find.byType(ProductsPage), findsNothing);
     });
   });
 
@@ -25,6 +25,6 @@ void main() {
     await tester.tap(find.text('Catalogue'));
     await tester.pumpAndSettle();
 
-    expect(find.byType(CataloguePage), findsOneWidget);
+    expect(find.byType(ProductsPage), findsOneWidget);
   });
 }
