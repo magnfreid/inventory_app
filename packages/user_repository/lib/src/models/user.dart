@@ -16,16 +16,6 @@ class User {
 
   factory User.fromJson(Map<String, dynamic> json) => _$UserFromJson(json);
 
-  factory User.fromFirestore(
-    Map<String, dynamic> json,
-    String id,
-  ) {
-    return User.fromJson({
-      ...json,
-      'id': id,
-    });
-  }
-
   final String id;
   final String organizationId;
   final String name;

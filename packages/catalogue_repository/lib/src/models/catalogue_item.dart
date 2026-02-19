@@ -17,16 +17,6 @@ class CatalogueItem {
   factory CatalogueItem.fromJson(Map<String, dynamic> json) =>
       _$CatalogueItemFromJson(json);
 
-  factory CatalogueItem.fromFirestore(
-    Map<String, dynamic> json,
-    String id,
-  ) {
-    return CatalogueItem.fromJson({
-      ...json,
-      'id': id,
-    });
-  }
-
   final String id;
   final String name;
   final String detailNumber;

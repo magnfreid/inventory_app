@@ -8,8 +8,13 @@ class FirebaseUserRepository implements UserRepository {
     _collection = _firestore
         .collection('users')
         .withConverter<User>(
-          fromFirestore: (snapshot, _) =>
-              User.fromFirestore(snapshot.data()!, snapshot.id),
+          fromFirestore: (snapshot, _) {
+            final json = snapshot.data()!;
+            return User.fromJson({
+              ...json,
+              'id': snapshot.id,
+            });
+          },
           toFirestore: (item, _) {
             final json = item.toJson()..remove('id');
             return json;

@@ -10,18 +10,26 @@ class UserCubit extends Cubit<UserState> {
     required String currentUserId,
   }) : _userRepository = userRepository,
        super(const .loading()) {
-    _userStreamSubscription = _userRepository.watchUser(currentUserId).listen(
-      (
-        user,
-      ) {
-        if (user == null) {
-          emit(.error(error: Exception('User not found')));
-        } else {
-          emit(.loaded(currentUser: user));
-        }
-      },
-      onError: (error, _) => emit(.error(error: error as Exception)),
-    );
+    _userStreamSubscription = _userRepository
+        .watchUser(currentUserId)
+        .listen(
+          (
+            user,
+          ) {
+            if (user == null) {
+              emit(.error(error: Exception('User not found')));
+            } else {
+              emit(.loaded(currentUser: user));
+            }
+          },
+          onError: (Object error, StackTrace stackTrace) {
+            emit(
+              .error(
+                error: error is Exception ? error : Exception(error.toString()),
+              ),
+            );
+          },
+        );
   }
 
   final UserRepository _userRepository;
