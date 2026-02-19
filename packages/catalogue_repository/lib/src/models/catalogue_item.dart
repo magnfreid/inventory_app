@@ -1,3 +1,4 @@
+import 'package:catalogue_repository/catalogue_repository.dart';
 import 'package:json_annotation/json_annotation.dart';
 
 part 'catalogue_item.g.dart';
@@ -16,6 +17,19 @@ class CatalogueItem {
 
   factory CatalogueItem.fromJson(Map<String, dynamic> json) =>
       _$CatalogueItemFromJson(json);
+
+  factory CatalogueItem.fromCreateItem({
+    required String id,
+    required CatalogueItemCreate item,
+  }) => CatalogueItem(
+    id: id,
+    name: item.name,
+    detailNumber: item.detailNumber,
+    isRecycled: item.isRecycled,
+    price: item.price,
+    brand: item.brand,
+    description: item.description,
+  );
 
   final String id;
   final String name;

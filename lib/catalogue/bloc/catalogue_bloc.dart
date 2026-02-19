@@ -37,7 +37,13 @@ class CatalogueBloc extends Bloc<CatalogueEvent, CatalogueState> {
   FutureOr<void> _onAddButtonPressed(
     SaveButtonPressed event,
     Emitter<CatalogueState> emit,
-  ) {
-    emit(state.copyWith(saveIsLoading: true));
+  ) async {
+    emit(state.copyWith(saveStatus: .loading));
+    try {
+      await _catalogueRepository.addCatalogueItem(item: event.item);
+      emit(state.copyWith(saveStatus: .success));
+    } on Exception catch (_) {
+      emit(state.copyWith(saveStatus: .error));
+    }
   }
 }

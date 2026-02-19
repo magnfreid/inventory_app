@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:inventory_app/catalogue/bloc/catalogue_bloc.dart';
 import 'package:inventory_app/catalogue/bloc/catalogue_state.dart';
+import 'package:inventory_app/l10n/l10n.dart';
 
 class CataloguePage extends StatelessWidget {
   const CataloguePage({super.key});
@@ -25,6 +26,7 @@ class CatalogueView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = context.l10n;
     return Scaffold(
       floatingActionButton: FloatingActionButton.extended(
         onPressed: () async {
@@ -39,7 +41,7 @@ class CatalogueView extends StatelessWidget {
           );
         },
         icon: const Icon(Icons.add),
-        label: const Text('New item'),
+        label: Text(l10n.addNewCatalogueItemButtonText),
       ),
       body: BlocBuilder<CatalogueBloc, CatalogueState>(
         builder: (context, state) {
@@ -73,29 +75,35 @@ class _CatalogueItemCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Card(
-      child: Padding(
-        padding: const EdgeInsets.all(8),
-        child: Row(
-          children: [
-            Column(
-              crossAxisAlignment: .start,
-              children: [
-                Text(item.name),
-                Text(
-                  item.detailNumber,
-                  style: const TextStyle(color: Colors.blueGrey, fontSize: 10),
-                ),
-                Text(item.brand ?? ''),
-              ],
-            ),
-            const Spacer(),
-            Column(
-              children: [
-                Text(item.price.toString()),
-              ],
-            ),
-          ],
+    return Dismissible(
+      key: ValueKey(item.id),
+      child: Card(
+        child: Padding(
+          padding: const EdgeInsets.all(8),
+          child: Row(
+            children: [
+              Column(
+                crossAxisAlignment: .start,
+                children: [
+                  Text(item.name),
+                  Text(
+                    item.detailNumber,
+                    style: const TextStyle(
+                      color: Colors.blueGrey,
+                      fontSize: 10,
+                    ),
+                  ),
+                  Text(item.brand ?? ''),
+                ],
+              ),
+              const Spacer(),
+              Column(
+                children: [
+                  Text(item.price.toString()),
+                ],
+              ),
+            ],
+          ),
         ),
       ),
     );
@@ -147,92 +155,134 @@ class _BottomSheetViewState extends State<_BottomSheetView> {
 
   @override
   Widget build(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.all(24),
-      child: Form(
-        key: _formKey,
-        onChanged: () => setState(() {
-          _canSave = _formKey.currentState?.validate() ?? false;
-        }),
-        child: Column(
-          mainAxisSize: .min,
-          children: [
-            const Text(
-              'Add new part',
-            ),
-            TextFormField(
-              controller: _nameController,
-              decoration: const InputDecoration(labelText: 'Name'),
-              autovalidateMode: .always,
-              validator: (value) =>
-                  value == null || value.isEmpty ? 'Required' : null,
-            ),
-            TextFormField(
-              controller: _detailNumberController,
-              decoration: const InputDecoration(labelText: 'Detail Number'),
-            ),
-            TextFormField(
-              controller: _priceController,
-              decoration: const InputDecoration(labelText: 'Price'),
-              autovalidateMode: .always,
-              keyboardType: TextInputType.number,
-              validator: (value) => double.tryParse(value ?? '') == null
-                  ? 'Enter a number'
-                  : null,
-            ),
-            Padding(
-              padding: const .symmetric(vertical: 24),
-              child: Row(
-                mainAxisAlignment: .spaceBetween,
-                children: [
-                  const Text('Recycled?'),
-                  Switch(
-                    value: _isRecycled,
-                    onChanged: (value) {
-                      setState(() {
-                        _isRecycled = value;
-                      });
-                    },
-                  ),
-                ],
+    final l10n = context.l10n;
+    return BlocListener<CatalogueBloc, CatalogueState>(
+      listenWhen: (previous, current) => current.saveStatus == .success,
+      listener: (context, state) {
+        Navigator.of(context).pop();
+      },
+      child: Padding(
+        padding: const EdgeInsets.all(24),
+        child: Form(
+          key: _formKey,
+          onChanged: () => setState(() {
+            _canSave = _formKey.currentState?.validate() ?? false;
+          }),
+          child: Column(
+            mainAxisSize: .min,
+            children: [
+              Text(l10n.formFieldTitleText),
+              TextFormField(
+                controller: _nameController,
+                decoration: InputDecoration(
+                  labelText: '${l10n.formFieldNameLabelText}:',
+                ),
+                autovalidateMode: .always,
+                validator: (value) => value == null || value.isEmpty
+                    ? l10n.validationRequired
+                    : null,
               ),
-            ),
-            const Divider(),
+              TextFormField(
+                controller: _priceController,
+                decoration: InputDecoration(
+                  labelText: '${l10n.formFieldPriceLabelText}:',
+                ),
+                autovalidateMode: .always,
+                keyboardType: TextInputType.number,
+                validator: (value) => double.tryParse(value ?? '') == null
+                    ? l10n.validationEnterNumber
+                    : null,
+              ),
+              TextFormField(
+                controller: _detailNumberController,
+                decoration: InputDecoration(
+                  labelText: '${l10n.formFieldDetailNumberLabelText}:',
+                ),
+              ),
 
-            TextFormField(
-              controller: _brandController,
-              decoration: const InputDecoration(labelText: 'Brand'),
-            ),
-            TextFormField(
-              controller: _descriptionController,
-              decoration: const InputDecoration(labelText: 'Description'),
-            ),
-            const Spacer(),
-            Padding(
-              padding: const .symmetric(vertical: 8),
-              child: BlocBuilder<CatalogueBloc, CatalogueState>(
-                buildWhen: (previous, current) =>
-                    previous.saveIsLoading != current.saveIsLoading,
-                builder: (context, state) {
-                  return SizedBox(
-                    width: double.infinity,
-                    child: ElevatedButton(
-                      onPressed: _canSave ? () {} : null,
-                      child: state.saveIsLoading
-                          ? const Center(
-                              child: SizedBox(
-                                height: 24,
-                                width: 24,
-                                child: CircularProgressIndicator(),
-                              ),
-                            )
-                          : const Text('Save'),
+              Padding(
+                padding: const .symmetric(vertical: 24),
+                child: Row(
+                  mainAxisAlignment: .spaceBetween,
+                  children: [
+                    Text(l10n.formFieldRecycledLabelText),
+                    Switch(
+                      value: _isRecycled,
+                      onChanged: (value) {
+                        setState(() {
+                          _isRecycled = value;
+                        });
+                      },
                     ),
-                  );
-                },
+                  ],
+                ),
               ),
-            ),
-          ],
+              const Divider(),
+
+              TextFormField(
+                controller: _brandController,
+                decoration: InputDecoration(
+                  labelText: '${l10n.formFieldBrandLabelText}:',
+                ),
+              ),
+              TextFormField(
+                controller: _descriptionController,
+                decoration: InputDecoration(
+                  labelText: '${l10n.formFieldDescriptionLabelText}:',
+                ),
+              ),
+              const Spacer(),
+              Padding(
+                padding: const .symmetric(vertical: 8),
+                child: BlocBuilder<CatalogueBloc, CatalogueState>(
+                  buildWhen: (previous, current) =>
+                      previous.isSaving != current.isSaving,
+                  builder: (context, state) {
+                    return SizedBox(
+                      width: double.infinity,
+                      child: ElevatedButton(
+                        onPressed: _canSave
+                            ? () {
+                                context.read<CatalogueBloc>().add(
+                                  SaveButtonPressed(
+                                    item: CatalogueItemCreate(
+                                      name: _nameController.text,
+                                      detailNumber:
+                                          _detailNumberController.text,
+                                      isRecycled: _isRecycled,
+                                      price:
+                                          double.tryParse(
+                                            _priceController.text,
+                                          ) ??
+                                          0.0,
+                                      brand: _brandController.text,
+                                      description: _descriptionController.text,
+                                    ),
+                                  ),
+                                );
+                              }
+                            : null,
+                        child: state.isSaving
+                            ? const Center(
+                                child: SizedBox(
+                                  height: 24,
+                                  width: 24,
+                                  child: Padding(
+                                    padding: EdgeInsets.all(3),
+                                    child: CircularProgressIndicator(
+                                      strokeWidth: 0.5,
+                                    ),
+                                  ),
+                                ),
+                              )
+                            : Text(l10n.formSaveButtonText),
+                      ),
+                    );
+                  },
+                ),
+              ),
+            ],
+          ),
         ),
       ),
     );

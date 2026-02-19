@@ -11,5 +11,5 @@ final class _OnCatalogueItemsChanged extends CatalogueEvent {
 
 final class SaveButtonPressed extends CatalogueEvent {
   const SaveButtonPressed({required this.item});
-  final CatalogueItem item;
+  final CatalogueItemCreate item;
 }

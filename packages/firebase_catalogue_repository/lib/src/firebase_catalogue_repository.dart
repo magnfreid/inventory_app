@@ -29,9 +29,13 @@ class FirebaseCatalogueRepository implements CatalogueRepository {
   late final CollectionReference<CatalogueItem> _collection;
 
   @override
-  Future<void> addCatalogueItem({required CatalogueItem item}) {
-    // TODO: implement addCatalogueItem
-    throw UnimplementedError();
+  Future<void> addCatalogueItem({required CatalogueItemCreate item}) async {
+    final docRef = _collection.doc();
+    final catalogueItem = CatalogueItem.fromCreateItem(
+      id: docRef.id,
+      item: item,
+    );
+    await docRef.set(catalogueItem);
   }
 
   @override
