@@ -75,35 +75,32 @@ class _CatalogueItemCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Dismissible(
-      key: ValueKey(item.id),
-      child: Card(
-        child: Padding(
-          padding: const EdgeInsets.all(8),
-          child: Row(
-            children: [
-              Column(
-                crossAxisAlignment: .start,
-                children: [
-                  Text(item.name),
-                  Text(
-                    item.detailNumber,
-                    style: const TextStyle(
-                      color: Colors.blueGrey,
-                      fontSize: 10,
-                    ),
+    return Card(
+      child: Padding(
+        padding: const EdgeInsets.all(8),
+        child: Row(
+          children: [
+            Column(
+              crossAxisAlignment: .start,
+              children: [
+                Text(item.name),
+                Text(
+                  item.detailNumber,
+                  style: const TextStyle(
+                    color: Colors.blueGrey,
+                    fontSize: 10,
                   ),
-                  Text(item.brand ?? ''),
-                ],
-              ),
-              const Spacer(),
-              Column(
-                children: [
-                  Text(item.price.toString()),
-                ],
-              ),
-            ],
-          ),
+                ),
+                Text(item.brand ?? ''),
+              ],
+            ),
+            const Spacer(),
+            Column(
+              children: [
+                Text(item.price.toString()),
+              ],
+            ),
+          ],
         ),
       ),
     );
