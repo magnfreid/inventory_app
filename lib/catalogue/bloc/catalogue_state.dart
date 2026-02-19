@@ -10,6 +10,8 @@ abstract class CatalogueState with _$CatalogueState {
   const factory CatalogueState({
     @Default(CatalogueStateStatus.loading) CatalogueStateStatus status,
     @Default([]) List<CatalogueItem> items,
+    @Default(false) bool saveIsLoading,
+    @Default(false) bool bottomSheetShouldClose,
   }) = _CatalogueState;
   const CatalogueState._();
 

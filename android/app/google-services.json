@@ -1,46 +1,82 @@
 {
-	"project_info": {
-		"project_number": "898806904217",
-		"project_id": "inventory-app-ccf2a",
-		"storage_bucket": "inventory-app-ccf2a.firebasestorage.app"
-	},
-	"client": [
-		{
-			"client_info": {
-				"mobilesdk_app_id": "1:898806904217:android:c260757d80301c5aa00f08",
-				"android_client_info": {
-					"package_name": "com.example.verygoodcore.inventory_app"
-				}
-			},
-			"oauth_client": [
-				{
-					"client_id": "898806904217-r5inlm7rjhq1cmmitstqig6764m713lt.apps.googleusercontent.com",
-					"client_type": 3
-				}
-			],
-			"api_key": [
-				{
-					"current_key": "AIzaSyBp0pYY13057U4hn-HuFvDEfFUmokFAYkc"
-				}
-			],
-			"services": {
-				"appinvite_service": {
-					"other_platform_oauth_client": [
-						{
-							"client_id": "898806904217-r5inlm7rjhq1cmmitstqig6764m713lt.apps.googleusercontent.com",
-							"client_type": 3
-						},
-						{
-							"client_id": "898806904217-va923kdj7qigr8i05qtoujnhcgh2hp0u.apps.googleusercontent.com",
-							"client_type": 2,
-							"ios_info": {
-								"bundle_id": "com.example.verygoodcore.inventory-app"
-							}
-						}
-					]
-				}
-			}
-		}
-	],
-	"configuration_version": "1"
+  "project_info": {
+    "project_number": "898806904217",
+    "project_id": "inventory-app-ccf2a",
+    "storage_bucket": "inventory-app-ccf2a.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:898806904217:android:c260757d80301c5aa00f08",
+        "android_client_info": {
+          "package_name": "com.example.verygoodcore.inventory_app"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "898806904217-r5inlm7rjhq1cmmitstqig6764m713lt.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBp0pYY13057U4hn-HuFvDEfFUmokFAYkc"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "898806904217-r5inlm7rjhq1cmmitstqig6764m713lt.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "898806904217-690gfmd0a286t4si52ccvv2klaom0fms.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.example.verygoodcore.inventoryapp"
+              }
+            }
+          ]
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:898806904217:android:a92b70162edffa49a00f08",
+        "android_client_info": {
+          "package_name": "com.example.verygoodcore.inventory_app.dev"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "898806904217-r5inlm7rjhq1cmmitstqig6764m713lt.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBp0pYY13057U4hn-HuFvDEfFUmokFAYkc"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "898806904217-r5inlm7rjhq1cmmitstqig6764m713lt.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "898806904217-690gfmd0a286t4si52ccvv2klaom0fms.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.example.verygoodcore.inventoryapp"
+              }
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
 }

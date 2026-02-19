@@ -12,6 +12,7 @@ class CatalogueBloc extends Bloc<CatalogueEvent, CatalogueState> {
       super(const CatalogueState()) {
     //TODO(magnfreid): Add debounce!
     on<_OnCatalogueItemsChanged>(_onCatalogueItemsChanged);
+    on<SaveButtonPressed>(_onAddButtonPressed);
 
     _streamSubscription = _catalogueRepository.watchCatalogueItems().listen(
       (items) => add(_OnCatalogueItemsChanged(updates: items)),
@@ -31,5 +32,12 @@ class CatalogueBloc extends Bloc<CatalogueEvent, CatalogueState> {
     Emitter<CatalogueState> emit,
   ) {
     emit(state.copyWith(status: .loaded, items: event.updates));
+  }
+
+  FutureOr<void> _onAddButtonPressed(
+    SaveButtonPressed event,
+    Emitter<CatalogueState> emit,
+  ) {
+    emit(state.copyWith(saveIsLoading: true));
   }
 }

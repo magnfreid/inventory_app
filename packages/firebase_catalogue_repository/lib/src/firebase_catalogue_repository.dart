@@ -9,7 +9,7 @@ class FirebaseCatalogueRepository implements CatalogueRepository {
     _collection = _firestore
         .collection('organizations')
         .doc(organizationId)
-        .collection('catalogueItems')
+        .collection('catalogue')
         .withConverter<CatalogueItem>(
           fromFirestore: (snapshot, _) {
             final json = snapshot.data()!;

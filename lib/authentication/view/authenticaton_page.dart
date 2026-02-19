@@ -1,3 +1,4 @@
+import 'package:catalogue_repository/catalogue_repository.dart';
 import 'package:firebase_catalogue_repository/firebase_catalogue_repository.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -62,23 +63,13 @@ class AuthenticationView extends StatelessWidget {
           loaded: (user) {
             return MultiRepositoryProvider(
               providers: [
-                RepositoryProvider(
+                RepositoryProvider<CatalogueRepository>(
                   create: (_) => FirebaseCatalogueRepository(
                     organizationId: user.organizationId,
                   ),
                 ),
               ],
-              child: MultiBlocProvider(
-                providers: [
-                  BlocProvider(
-                    create: (context) => CatalogueBloc(
-                      catalogueRepository: context
-                          .read<FirebaseCatalogueRepository>(),
-                    ),
-                  ),
-                ],
-                child: const HomePage(),
-              ),
+              child: const HomePage(),
             );
           },
         );

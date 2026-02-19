@@ -14,7 +14,7 @@ T _$identity<T>(T value) => value;
 /// @nodoc
 mixin _$CatalogueState {
 
- CatalogueStateStatus get status; List<CatalogueItem> get items;
+ CatalogueStateStatus get status; List<CatalogueItem> get items; bool get saveIsLoading; bool get bottomSheetShouldClose;
 /// Create a copy of CatalogueState
 /// with the given fields replaced by the non-null parameter values.
 @JsonKey(includeFromJson: false, includeToJson: false)
@@ -25,16 +25,16 @@ $CatalogueStateCopyWith<CatalogueState> get copyWith => _$CatalogueStateCopyWith
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is CatalogueState&&(identical(other.status, status) || other.status == status)&&const DeepCollectionEquality().equals(other.items, items));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is CatalogueState&&(identical(other.status, status) || other.status == status)&&const DeepCollectionEquality().equals(other.items, items)&&(identical(other.saveIsLoading, saveIsLoading) || other.saveIsLoading == saveIsLoading)&&(identical(other.bottomSheetShouldClose, bottomSheetShouldClose) || other.bottomSheetShouldClose == bottomSheetShouldClose));
 }
 
 
 @override
-int get hashCode => Object.hash(runtimeType,status,const DeepCollectionEquality().hash(items));
+int get hashCode => Object.hash(runtimeType,status,const DeepCollectionEquality().hash(items),saveIsLoading,bottomSheetShouldClose);
 
 @override
 String toString() {
-  return 'CatalogueState(status: $status, items: $items)';
+  return 'CatalogueState(status: $status, items: $items, saveIsLoading: $saveIsLoading, bottomSheetShouldClose: $bottomSheetShouldClose)';
 }
 
 
@@ -45,7 +45,7 @@ abstract mixin class $CatalogueStateCopyWith<$Res>  {
   factory $CatalogueStateCopyWith(CatalogueState value, $Res Function(CatalogueState) _then) = _$CatalogueStateCopyWithImpl;
 @useResult
 $Res call({
- CatalogueStateStatus status, List<CatalogueItem> items
+ CatalogueStateStatus status, List<CatalogueItem> items, bool saveIsLoading, bool bottomSheetShouldClose
 });
 
 
@@ -62,11 +62,13 @@ class _$CatalogueStateCopyWithImpl<$Res>
 
 /// Create a copy of CatalogueState
 /// with the given fields replaced by the non-null parameter values.
-@pragma('vm:prefer-inline') @override $Res call({Object? status = null,Object? items = null,}) {
+@pragma('vm:prefer-inline') @override $Res call({Object? status = null,Object? items = null,Object? saveIsLoading = null,Object? bottomSheetShouldClose = null,}) {
   return _then(_self.copyWith(
 status: null == status ? _self.status : status // ignore: cast_nullable_to_non_nullable
 as CatalogueStateStatus,items: null == items ? _self.items : items // ignore: cast_nullable_to_non_nullable
-as List<CatalogueItem>,
+as List<CatalogueItem>,saveIsLoading: null == saveIsLoading ? _self.saveIsLoading : saveIsLoading // ignore: cast_nullable_to_non_nullable
+as bool,bottomSheetShouldClose: null == bottomSheetShouldClose ? _self.bottomSheetShouldClose : bottomSheetShouldClose // ignore: cast_nullable_to_non_nullable
+as bool,
   ));
 }
 
@@ -151,10 +153,10 @@ return $default(_that);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function( CatalogueStateStatus status,  List<CatalogueItem> items)?  $default,{required TResult orElse(),}) {final _that = this;
+@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function( CatalogueStateStatus status,  List<CatalogueItem> items,  bool saveIsLoading,  bool bottomSheetShouldClose)?  $default,{required TResult orElse(),}) {final _that = this;
 switch (_that) {
 case _CatalogueState() when $default != null:
-return $default(_that.status,_that.items);case _:
+return $default(_that.status,_that.items,_that.saveIsLoading,_that.bottomSheetShouldClose);case _:
   return orElse();
 
 }
@@ -172,10 +174,10 @@ return $default(_that.status,_that.items);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function( CatalogueStateStatus status,  List<CatalogueItem> items)  $default,) {final _that = this;
+@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function( CatalogueStateStatus status,  List<CatalogueItem> items,  bool saveIsLoading,  bool bottomSheetShouldClose)  $default,) {final _that = this;
 switch (_that) {
 case _CatalogueState():
-return $default(_that.status,_that.items);case _:
+return $default(_that.status,_that.items,_that.saveIsLoading,_that.bottomSheetShouldClose);case _:
   throw StateError('Unexpected subclass');
 
 }
@@ -192,10 +194,10 @@ return $default(_that.status,_that.items);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function( CatalogueStateStatus status,  List<CatalogueItem> items)?  $default,) {final _that = this;
+@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function( CatalogueStateStatus status,  List<CatalogueItem> items,  bool saveIsLoading,  bool bottomSheetShouldClose)?  $default,) {final _that = this;
 switch (_that) {
 case _CatalogueState() when $default != null:
-return $default(_that.status,_that.items);case _:
+return $default(_that.status,_that.items,_that.saveIsLoading,_that.bottomSheetShouldClose);case _:
   return null;
 
 }
@@ -207,7 +209,7 @@ return $default(_that.status,_that.items);case _:
 
 
 class _CatalogueState extends CatalogueState {
-  const _CatalogueState({this.status = CatalogueStateStatus.loading, final  List<CatalogueItem> items = const []}): _items = items,super._();
+  const _CatalogueState({this.status = CatalogueStateStatus.loading, final  List<CatalogueItem> items = const [], this.saveIsLoading = false, this.bottomSheetShouldClose = false}): _items = items,super._();
   
 
 @override@JsonKey() final  CatalogueStateStatus status;
@@ -218,6 +220,8 @@ class _CatalogueState extends CatalogueState {
   return EqualUnmodifiableListView(_items);
 }
 
+@override@JsonKey() final  bool saveIsLoading;
+@override@JsonKey() final  bool bottomSheetShouldClose;
 
 /// Create a copy of CatalogueState
 /// with the given fields replaced by the non-null parameter values.
@@ -229,16 +233,16 @@ _$CatalogueStateCopyWith<_CatalogueState> get copyWith => __$CatalogueStateCopyW
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is _CatalogueState&&(identical(other.status, status) || other.status == status)&&const DeepCollectionEquality().equals(other._items, _items));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is _CatalogueState&&(identical(other.status, status) || other.status == status)&&const DeepCollectionEquality().equals(other._items, _items)&&(identical(other.saveIsLoading, saveIsLoading) || other.saveIsLoading == saveIsLoading)&&(identical(other.bottomSheetShouldClose, bottomSheetShouldClose) || other.bottomSheetShouldClose == bottomSheetShouldClose));
 }
 
 
 @override
-int get hashCode => Object.hash(runtimeType,status,const DeepCollectionEquality().hash(_items));
+int get hashCode => Object.hash(runtimeType,status,const DeepCollectionEquality().hash(_items),saveIsLoading,bottomSheetShouldClose);
 
 @override
 String toString() {
-  return 'CatalogueState(status: $status, items: $items)';
+  return 'CatalogueState(status: $status, items: $items, saveIsLoading: $saveIsLoading, bottomSheetShouldClose: $bottomSheetShouldClose)';
 }
 
 
@@ -249,7 +253,7 @@ abstract mixin class _$CatalogueStateCopyWith<$Res> implements $CatalogueStateCo
   factory _$CatalogueStateCopyWith(_CatalogueState value, $Res Function(_CatalogueState) _then) = __$CatalogueStateCopyWithImpl;
 @override @useResult
 $Res call({
- CatalogueStateStatus status, List<CatalogueItem> items
+ CatalogueStateStatus status, List<CatalogueItem> items, bool saveIsLoading, bool bottomSheetShouldClose
 });
 
 
@@ -266,11 +270,13 @@ class __$CatalogueStateCopyWithImpl<$Res>
 
 /// Create a copy of CatalogueState
 /// with the given fields replaced by the non-null parameter values.
-@override @pragma('vm:prefer-inline') $Res call({Object? status = null,Object? items = null,}) {
+@override @pragma('vm:prefer-inline') $Res call({Object? status = null,Object? items = null,Object? saveIsLoading = null,Object? bottomSheetShouldClose = null,}) {
   return _then(_CatalogueState(
 status: null == status ? _self.status : status // ignore: cast_nullable_to_non_nullable
 as CatalogueStateStatus,items: null == items ? _self._items : items // ignore: cast_nullable_to_non_nullable
-as List<CatalogueItem>,
+as List<CatalogueItem>,saveIsLoading: null == saveIsLoading ? _self.saveIsLoading : saveIsLoading // ignore: cast_nullable_to_non_nullable
+as bool,bottomSheetShouldClose: null == bottomSheetShouldClose ? _self.bottomSheetShouldClose : bottomSheetShouldClose // ignore: cast_nullable_to_non_nullable
+as bool,
   ));
 }
 
