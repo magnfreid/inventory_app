@@ -1,0 +1,5 @@
+coverage_exclusions:
+  - "**/*.g.dart"
+  - "**/*.freezed.dart"
+  - "**/*.gen.dart"
+  - "**/generated_plugin_registrant.dart"
