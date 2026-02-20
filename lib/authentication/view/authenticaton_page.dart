@@ -66,13 +66,13 @@ class AuthenticationView extends StatelessWidget {
           loaded: (user) {
             return MultiRepositoryProvider(
               providers: [
-                RepositoryProvider<LocationRepository>(
-                  create: (_) => FirebaseLocationRepository(
+                RepositoryProvider<InventoryRepository>(
+                  create: (_) => FirebaseInventoryRepository(
                     organizationId: user.organizationId,
                   ),
                 ),
-                RepositoryProvider<InventoryRepository>(
-                  create: (_) => FirebaseInventoryRepository(
+                RepositoryProvider<LocationRepository>(
+                  create: (_) => FirebaseLocationRepository(
                     organizationId: user.organizationId,
                   ),
                 ),

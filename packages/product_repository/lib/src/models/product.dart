@@ -1,4 +1,5 @@
 import 'package:json_annotation/json_annotation.dart';
+import 'package:product_repository/src/models/product_create_model.dart';
 
 part 'product.g.dart';
 
@@ -16,6 +17,17 @@ class Product {
 
   factory Product.fromJson(Map<String, dynamic> json) =>
       _$ProductFromJson(json);
+
+  factory Product.fromCreateModel(String id, ProductCreateModel createModel) =>
+      Product(
+        id: id,
+        name: createModel.name,
+        detailNumber: createModel.detailNumber,
+        isRecycled: createModel.isRecycled,
+        price: createModel.price,
+        brand: createModel.brand,
+        description: createModel.description,
+      );
 
   Map<String, dynamic> toJson() => _$ProductToJson(this);
 

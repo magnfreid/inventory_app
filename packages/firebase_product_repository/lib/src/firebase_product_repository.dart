@@ -1,6 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 
 import 'package:product_repository/product_repository.dart';
+import 'package:product_repository/src/models/product_create_model.dart';
 
 class FirebaseProductRepository implements ProductRepository {
   FirebaseProductRepository({
@@ -12,8 +13,13 @@ class FirebaseProductRepository implements ProductRepository {
         .doc(organizationId)
         .collection('products')
         .withConverter<Product>(
-          fromFirestore: (snapshot, _) =>
-              Product.fromJson(snapshot.data()!..['id'] = snapshot.id),
+          fromFirestore: (snapshot, _) {
+            final data = snapshot.data()!;
+            return Product.fromJson({
+              ...data,
+              'id': snapshot.id,
+            });
+          },
           toFirestore: (item, _) {
             final json = item.toJson()..remove('id');
             return json;
@@ -29,5 +35,13 @@ class FirebaseProductRepository implements ProductRepository {
     return _collection.snapshots().map(
       (snapshot) => snapshot.docs.map((doc) => doc.data()).toList(),
     );
+  }
+
+  @override
+  Future<Product> addProduct(ProductCreateModel productCreateModel) async {
+    final docRef = _collection.doc();
+    final product = Product.fromCreateModel(docRef.id, productCreateModel);
+    await docRef.set(product);
+    return product;
   }
 }

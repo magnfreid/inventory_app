@@ -3,6 +3,8 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:inventory_app/products/bloc/products_bloc.dart';
 import 'package:inventory_app/products/bloc/products_state.dart';
 import 'package:inventory_app/l10n/l10n.dart';
+import 'package:inventory_repository/inventory_repository.dart';
+import 'package:location_repository/location_repository.dart';
 import 'package:product_repository/product_repository.dart';
 
 class ProductsPage extends StatelessWidget {
@@ -12,6 +14,8 @@ class ProductsPage extends StatelessWidget {
   Widget build(BuildContext context) {
     return BlocProvider(
       create: (_) => ProductsBloc(
+        inventoryRepository: context.read<InventoryRepository>(),
+        locationRepository: context.read<LocationRepository>(),
         productRepository: context.read<ProductRepository>(),
       ),
       child: const ProductsView(),
@@ -51,7 +55,7 @@ class ProductsView extends StatelessWidget {
                   itemCount: items.length,
                   itemBuilder: (context, index) {
                     final item = items[index];
-                    return _CatalogueItemCard(item: item);
+                    return _InventoryItemCard(item: item);
                   },
                 ),
               ),
@@ -63,8 +67,8 @@ class ProductsView extends StatelessWidget {
   }
 }
 
-class _CatalogueItemCard extends StatelessWidget {
-  const _CatalogueItemCard({
+class _InventoryItemCard extends StatelessWidget {
+  const _InventoryItemCard({
     required this.item,
     super.key,
   });
@@ -238,23 +242,23 @@ class _BottomSheetViewState extends State<_BottomSheetView> {
                       child: ElevatedButton(
                         onPressed: _canSave
                             ? () {
-                                // context.read<ProductsBloc>().add(
-                                //   SaveButtonPressed(
-                                //     product: CatalogueItemCreate(
-                                //       name: _nameController.text,
-                                //       detailNumber:
-                                //           _detailNumberController.text,
-                                //       isRecycled: _isRecycled,
-                                //       price:
-                                //           double.tryParse(
-                                //             _priceController.text,
-                                //           ) ??
-                                //           0.0,
-                                //       brand: _brandController.text,
-                                //       description: _descriptionController.text,
-                                //     ),
-                                //   ),
-                                // );
+                                context.read<ProductsBloc>().add(
+                                  SaveButtonPressed(
+                                    product: ProductCreateModel(
+                                      name: _nameController.text,
+                                      detailNumber:
+                                          _detailNumberController.text,
+                                      isRecycled: _isRecycled,
+                                      price:
+                                          double.tryParse(
+                                            _priceController.text,
+                                          ) ??
+                                          0.0,
+                                      brand: _brandController.text,
+                                      description: _descriptionController.text,
+                                    ),
+                                  ),
+                                );
                               }
                             : null,
                         child: state.isSaving
@@ -263,7 +267,7 @@ class _BottomSheetViewState extends State<_BottomSheetView> {
                                   height: 24,
                                   width: 24,
                                   child: Padding(
-                                    padding: EdgeInsets.all(3),
+                                    padding: .all(3),
                                     child: CircularProgressIndicator(
                                       strokeWidth: 0.5,
                                     ),

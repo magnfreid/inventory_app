@@ -11,5 +11,5 @@ final class _OnProductsChanged extends ProductsEvent {
 
 final class SaveButtonPressed extends ProductsEvent {
   const SaveButtonPressed({required this.product});
-  final Product product;
+  final ProductCreateModel product;
 }
