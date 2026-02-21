@@ -18,10 +18,18 @@ class InventoryItemDetailsPage extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(),
-      body: Placeholder(
-        child: Center(
-          child: Text('Details of: ${item.name}'),
-        ),
+      body: Column(
+        children: [
+          ListTile(title: const Text('Name'), subtitle: Text(item.name)),
+          ListTile(
+            title: const Text('Detail number'),
+            subtitle: Text(item.detailNumber),
+          ),
+          ListTile(
+            title: const Text('Price'),
+            subtitle: Text(item.price.toString()),
+          ),
+        ],
       ),
     );
   }

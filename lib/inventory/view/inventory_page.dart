@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:inventory_app/authentication_gate/cubits/auth/authentication_cubit.dart';
 import 'package:inventory_app/inventory/bloc/inventory_bloc.dart';
 import 'package:inventory_app/inventory/bloc/inventory_state.dart';
 import 'package:inventory_app/inventory/models/inventory_item_ui_model.dart';
@@ -28,19 +29,54 @@ class InventoryPage extends StatelessWidget {
   }
 }
 
-class InventoryView extends StatelessWidget {
+class InventoryView extends StatefulWidget {
   const InventoryView({super.key});
 
+  @override
+  State<InventoryView> createState() => _InventoryViewState();
+}
+
+class _InventoryViewState extends State<InventoryView> {
+  final int _selectedIndex = 0;
   @override
   Widget build(BuildContext context) {
     final l10n = context.l10n;
     return Scaffold(
       appBar: AppBar(),
+      drawer: Drawer(
+        child: SafeArea(
+          child: Column(
+            children: [
+              const DrawerHeader(
+                child: Align(
+                  alignment: .bottomLeft,
+                  child: Text('Choose your destiny'),
+                ),
+              ),
+              const ListTile(
+                leading: Icon(Icons.shelves),
+                title: Text('Storages'),
+              ),
+              const ListTile(
+                leading: Icon(Icons.query_stats),
+                title: Text('Statistics'),
+              ),
+              const ListTile(
+                leading: Icon(Icons.settings),
+                title: Text('Settings'),
+              ),
+              const Spacer(),
+              ListTile(
+                leading: const Icon(Icons.logout),
+                title: const Text('Sign out'),
+                onTap: () => context.read<AuthenticationCubit>().signOut(),
+              ),
+            ],
+          ),
+        ),
+      ),
       bottomNavigationBar: BottomAppBar(
-        // shape: const CircularNotchedRectangle(),
-        // padding: const .all(16),
         color: Colors.transparent,
-
         child: Row(
           mainAxisAlignment: .center,
           mainAxisSize: .min,
@@ -62,11 +98,11 @@ class InventoryView extends StatelessWidget {
         ),
       ),
       floatingActionButton: FloatingActionButton.small(
-        onPressed: () {
+        onPressed: () async {
           final bloc = InventoryItemEditorBloc(
             productRepository: context.read<ProductRepository>(),
           );
-          Navigator.push(
+          await Navigator.push(
             context,
             InventoryItemEditorPage.route(bloc: bloc),
           );
