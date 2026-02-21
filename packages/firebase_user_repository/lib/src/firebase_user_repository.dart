@@ -2,22 +2,39 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:user_repository/user_repository.dart';
 
 class FirebaseUserRepository implements UserRepository {
-  FirebaseUserRepository({FirebaseFirestore? firestore})
-    : _firestore = firestore ?? FirebaseFirestore.instance;
+  FirebaseUserRepository({
+    FirebaseFirestore? firestore,
+  }) : _firestore = firestore ?? FirebaseFirestore.instance {
+    _collection = _firestore
+        .collection('users')
+        .withConverter<User>(
+          fromFirestore: (snapshot, _) {
+            final json = snapshot.data()!;
+            return User.fromJson({
+              ...json,
+              'id': snapshot.id,
+            });
+          },
+          toFirestore: (item, _) {
+            final json = item.toJson()..remove('id');
+            return json;
+          },
+        );
+  }
 
   final FirebaseFirestore _firestore;
+  late final CollectionReference<User> _collection;
 
   @override
-  Stream<User?> currentUser(String userId) =>
-      _firestore.collection('users').doc().snapshots().map((doc) {
-        final data = doc.data();
-        return data == null
-            ? null
-            : User(
-                id: doc.id,
-                name: data['name'] as String,
-                email: data['email'] as String,
-                role: data['role'] as UserRole,
-              );
-      });
+  Stream<User?> watchUser(String userId) {
+    return _collection.doc(userId).snapshots().map((doc) => doc.data());
+  }
+
+  @override
+  Stream<List<User>> watchUsers(String organizationId) {
+    return _collection
+        .where('organizationId', isEqualTo: organizationId)
+        .snapshots()
+        .map((snapshot) => snapshot.docs.map((doc) => doc.data()).toList());
+  }
 }

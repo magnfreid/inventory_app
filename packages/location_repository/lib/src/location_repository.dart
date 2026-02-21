@@ -1,7 +1,5 @@
-/// {@template location_repository}
-/// A Very Good Project created by Very Good CLI.
-/// {@endtemplate}
-class LocationRepository {
-  /// {@macro location_repository}
-  const LocationRepository();
+import 'package:location_repository/src/models/location.dart';
+
+abstract interface class LocationRepository {
+  Stream<List<Location>> watchLocations();
 }

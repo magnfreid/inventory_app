@@ -1,15 +1,73 @@
 {
-    "@@locale": "sv",
-    "signInEmailTextFieldLabel": "Email",
-    "@signInEmailTextFieldLabel": {
-        "description": "Etikett till email-textfält"
-    },
-    "signInPasswordTextFieldLabel": "Lösenord",
-    "@signInPasswordTextField": {
-        "description": "Etikett till lösenordstextfält"
-    },
-    "signInSignInButtonText": "Logga in",
-    "@signInSignInButtonText": {
-        "description": "Text för inloggningknapp"
-    }
+  "@@locale": "sv",
+
+  "signInEmailTextFieldLabel": "Email",
+  "@signInEmailTextFieldLabel": {
+    "description": "Label for email textfield"
+  },
+
+  "signInPasswordTextFieldLabel": "Lösenord",
+  "@signInPasswordTextFieldLabel": {
+    "description": "Label for password textfield"
+  },
+
+  "signInSignInButtonText": "Logga in",
+  "@signInSignInButtonText": {
+    "description": "Sign in button text"
+  },
+
+  "addNewCatalogueItemButtonText": "Ny artikel",
+  "@addNewCatalogueItemButtonText": {
+    "description": "Add new catalogue item button text"
+  },
+
+  "formFieldTitleText": "Lägg till ny artikel",
+  "@formFieldTitleText": {
+    "description": "Text for form field title"
+  },
+
+  "formFieldNameLabelText": "Namn",
+  "@formFieldNameLabelText": {
+    "description": "Label text for name form field"
+  },
+
+  "formFieldDetailNumberLabelText": "Artikelnummer",
+  "@formFieldDetailNumberLabelText": {
+    "description": "Label text for detail number form field"
+  },
+
+  "formFieldPriceLabelText": "Pris",
+  "@formFieldPriceLabelText": {
+    "description": "Label text for price form field"
+  },
+
+  "formFieldRecycledLabelText": "Återvunnen?",
+  "@formFieldRecycledLabelText": {
+    "description": "Label text for recycled switch"
+  },
+
+  "formFieldBrandLabelText": "Märke",
+  "@formFieldBrandLabelText": {
+    "description": "Label text for brand form field"
+  },
+
+  "formFieldDescriptionLabelText": "Beskrivning",
+  "@formFieldDescriptionLabelText": {
+    "description": "Label text for description form field"
+  },
+
+  "formSaveButtonText": "Spara",
+  "@formSaveButtonText": {
+    "description": "Text for save button in catalogue form"
+  },
+
+  "validationRequired": "Obligatoriskt fält",
+  "@validationRequired": {
+    "description": "Validation message for required fields"
+  },
+
+  "validationEnterNumber": "Ange ett giltigt nummer",
+  "@validationEnterNumber": {
+    "description": "Validation message when numeric input is invalid"
+  }
 }
