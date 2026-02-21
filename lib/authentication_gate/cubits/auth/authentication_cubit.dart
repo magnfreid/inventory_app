@@ -2,7 +2,7 @@ import 'dart:async';
 
 import 'package:auth_repository/auth_repository.dart';
 import 'package:bloc/bloc.dart';
-import 'package:inventory_app/app/cubit/authentication_state.dart';
+import 'package:inventory_app/authentication_gate/cubits/auth/authentication_state.dart';
 
 class AuthenticationCubit extends Cubit<AuthenticationState> {
   AuthenticationCubit({required AuthRepository authRepository})

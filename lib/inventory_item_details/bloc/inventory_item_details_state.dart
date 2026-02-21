@@ -1,6 +1,13 @@
-part 'inventory_item_details.freezed.dart';
+import 'package:freezed_annotation/freezed_annotation.dart';
+
+part 'inventory_item_details_state.freezed.dart';
+
+enum InventoryItemDetailsStatus { idle, loading, success, error }
 
 @freezed
-class InventoryItemDetailsState with _$InventoryItemDetailsState {
-  const factory InventoryItemDetailsState.initial() = _Initial;
+abstract class InventoryItemDetailsState with _$InventoryItemDetailsState {
+  const factory InventoryItemDetailsState({
+    @Default(InventoryItemDetailsStatus.idle) InventoryItemDetailsStatus status,
+  }) = _InventoryItemDetailsState;
+  const InventoryItemDetailsState._();
 }

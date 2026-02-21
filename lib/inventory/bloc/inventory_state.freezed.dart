@@ -14,7 +14,7 @@ T _$identity<T>(T value) => value;
 /// @nodoc
 mixin _$InventoryState {
 
- InventoryStateStatus get status; List<InventoryItemUiModel> get items; InventoyStateSaveStatus get saveStatus;
+ InventoryStateStatus get status; List<InventoryItemUiModel> get items;
 /// Create a copy of InventoryState
 /// with the given fields replaced by the non-null parameter values.
 @JsonKey(includeFromJson: false, includeToJson: false)
@@ -25,16 +25,16 @@ $InventoryStateCopyWith<InventoryState> get copyWith => _$InventoryStateCopyWith
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is InventoryState&&(identical(other.status, status) || other.status == status)&&const DeepCollectionEquality().equals(other.items, items)&&(identical(other.saveStatus, saveStatus) || other.saveStatus == saveStatus));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is InventoryState&&(identical(other.status, status) || other.status == status)&&const DeepCollectionEquality().equals(other.items, items));
 }
 
 
 @override
-int get hashCode => Object.hash(runtimeType,status,const DeepCollectionEquality().hash(items),saveStatus);
+int get hashCode => Object.hash(runtimeType,status,const DeepCollectionEquality().hash(items));
 
 @override
 String toString() {
-  return 'InventoryState(status: $status, items: $items, saveStatus: $saveStatus)';
+  return 'InventoryState(status: $status, items: $items)';
 }
 
 
@@ -45,7 +45,7 @@ abstract mixin class $InventoryStateCopyWith<$Res>  {
   factory $InventoryStateCopyWith(InventoryState value, $Res Function(InventoryState) _then) = _$InventoryStateCopyWithImpl;
 @useResult
 $Res call({
- InventoryStateStatus status, List<InventoryItemUiModel> items, InventoyStateSaveStatus saveStatus
+ InventoryStateStatus status, List<InventoryItemUiModel> items
 });
 
 
@@ -62,12 +62,11 @@ class _$InventoryStateCopyWithImpl<$Res>
 
 /// Create a copy of InventoryState
 /// with the given fields replaced by the non-null parameter values.
-@pragma('vm:prefer-inline') @override $Res call({Object? status = null,Object? items = null,Object? saveStatus = null,}) {
+@pragma('vm:prefer-inline') @override $Res call({Object? status = null,Object? items = null,}) {
   return _then(_self.copyWith(
 status: null == status ? _self.status : status // ignore: cast_nullable_to_non_nullable
 as InventoryStateStatus,items: null == items ? _self.items : items // ignore: cast_nullable_to_non_nullable
-as List<InventoryItemUiModel>,saveStatus: null == saveStatus ? _self.saveStatus : saveStatus // ignore: cast_nullable_to_non_nullable
-as InventoyStateSaveStatus,
+as List<InventoryItemUiModel>,
   ));
 }
 
@@ -152,10 +151,10 @@ return $default(_that);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function( InventoryStateStatus status,  List<InventoryItemUiModel> items,  InventoyStateSaveStatus saveStatus)?  $default,{required TResult orElse(),}) {final _that = this;
+@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function( InventoryStateStatus status,  List<InventoryItemUiModel> items)?  $default,{required TResult orElse(),}) {final _that = this;
 switch (_that) {
 case _InventoryState() when $default != null:
-return $default(_that.status,_that.items,_that.saveStatus);case _:
+return $default(_that.status,_that.items);case _:
   return orElse();
 
 }
@@ -173,10 +172,10 @@ return $default(_that.status,_that.items,_that.saveStatus);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function( InventoryStateStatus status,  List<InventoryItemUiModel> items,  InventoyStateSaveStatus saveStatus)  $default,) {final _that = this;
+@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function( InventoryStateStatus status,  List<InventoryItemUiModel> items)  $default,) {final _that = this;
 switch (_that) {
 case _InventoryState():
-return $default(_that.status,_that.items,_that.saveStatus);case _:
+return $default(_that.status,_that.items);case _:
   throw StateError('Unexpected subclass');
 
 }
@@ -193,10 +192,10 @@ return $default(_that.status,_that.items,_that.saveStatus);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function( InventoryStateStatus status,  List<InventoryItemUiModel> items,  InventoyStateSaveStatus saveStatus)?  $default,) {final _that = this;
+@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function( InventoryStateStatus status,  List<InventoryItemUiModel> items)?  $default,) {final _that = this;
 switch (_that) {
 case _InventoryState() when $default != null:
-return $default(_that.status,_that.items,_that.saveStatus);case _:
+return $default(_that.status,_that.items);case _:
   return null;
 
 }
@@ -208,7 +207,7 @@ return $default(_that.status,_that.items,_that.saveStatus);case _:
 
 
 class _InventoryState extends InventoryState {
-  const _InventoryState({this.status = InventoryStateStatus.loading, final  List<InventoryItemUiModel> items = const [], this.saveStatus = InventoyStateSaveStatus.idle}): _items = items,super._();
+  const _InventoryState({this.status = InventoryStateStatus.loading, final  List<InventoryItemUiModel> items = const []}): _items = items,super._();
   
 
 @override@JsonKey() final  InventoryStateStatus status;
@@ -219,7 +218,6 @@ class _InventoryState extends InventoryState {
   return EqualUnmodifiableListView(_items);
 }
 
-@override@JsonKey() final  InventoyStateSaveStatus saveStatus;
 
 /// Create a copy of InventoryState
 /// with the given fields replaced by the non-null parameter values.
@@ -231,16 +229,16 @@ _$InventoryStateCopyWith<_InventoryState> get copyWith => __$InventoryStateCopyW
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is _InventoryState&&(identical(other.status, status) || other.status == status)&&const DeepCollectionEquality().equals(other._items, _items)&&(identical(other.saveStatus, saveStatus) || other.saveStatus == saveStatus));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is _InventoryState&&(identical(other.status, status) || other.status == status)&&const DeepCollectionEquality().equals(other._items, _items));
 }
 
 
 @override
-int get hashCode => Object.hash(runtimeType,status,const DeepCollectionEquality().hash(_items),saveStatus);
+int get hashCode => Object.hash(runtimeType,status,const DeepCollectionEquality().hash(_items));
 
 @override
 String toString() {
-  return 'InventoryState(status: $status, items: $items, saveStatus: $saveStatus)';
+  return 'InventoryState(status: $status, items: $items)';
 }
 
 
@@ -251,7 +249,7 @@ abstract mixin class _$InventoryStateCopyWith<$Res> implements $InventoryStateCo
   factory _$InventoryStateCopyWith(_InventoryState value, $Res Function(_InventoryState) _then) = __$InventoryStateCopyWithImpl;
 @override @useResult
 $Res call({
- InventoryStateStatus status, List<InventoryItemUiModel> items, InventoyStateSaveStatus saveStatus
+ InventoryStateStatus status, List<InventoryItemUiModel> items
 });
 
 
@@ -268,12 +266,11 @@ class __$InventoryStateCopyWithImpl<$Res>
 
 /// Create a copy of InventoryState
 /// with the given fields replaced by the non-null parameter values.
-@override @pragma('vm:prefer-inline') $Res call({Object? status = null,Object? items = null,Object? saveStatus = null,}) {
+@override @pragma('vm:prefer-inline') $Res call({Object? status = null,Object? items = null,}) {
   return _then(_InventoryState(
 status: null == status ? _self.status : status // ignore: cast_nullable_to_non_nullable
 as InventoryStateStatus,items: null == items ? _self._items : items // ignore: cast_nullable_to_non_nullable
-as List<InventoryItemUiModel>,saveStatus: null == saveStatus ? _self.saveStatus : saveStatus // ignore: cast_nullable_to_non_nullable
-as InventoyStateSaveStatus,
+as List<InventoryItemUiModel>,
   ));
 }
 

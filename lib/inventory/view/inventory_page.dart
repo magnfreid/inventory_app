@@ -3,6 +3,10 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:inventory_app/inventory/bloc/inventory_bloc.dart';
 import 'package:inventory_app/inventory/bloc/inventory_state.dart';
 import 'package:inventory_app/inventory/models/inventory_item_ui_model.dart';
+import 'package:inventory_app/inventory_item_details/bloc/inventory_item_details_bloc.dart';
+import 'package:inventory_app/inventory_item_details/view/inventory_item_details_page.dart';
+import 'package:inventory_app/inventory_item_editor/bloc/inventory_item_editor_bloc.dart';
+import 'package:inventory_app/inventory_item_editor/view/inventory_item_editor_page.dart';
 import 'package:inventory_app/l10n/l10n.dart';
 import 'package:inventory_repository/inventory_repository.dart';
 import 'package:location_repository/location_repository.dart';
@@ -31,6 +35,7 @@ class InventoryView extends StatelessWidget {
   Widget build(BuildContext context) {
     final l10n = context.l10n;
     return Scaffold(
+      appBar: AppBar(),
       bottomNavigationBar: BottomAppBar(
         // shape: const CircularNotchedRectangle(),
         // padding: const .all(16),
@@ -57,15 +62,13 @@ class InventoryView extends StatelessWidget {
         ),
       ),
       floatingActionButton: FloatingActionButton.small(
-        onPressed: () async {
-          await showModalBottomSheet<Widget>(
-            isScrollControlled: true,
-            showDragHandle: true,
-            useSafeArea: true,
-            context: context,
-            builder: (_) => _BottomSheetPage(
-              inventoryBloc: context.read<InventoryBloc>(),
-            ),
+        onPressed: () {
+          final bloc = InventoryItemEditorBloc(
+            productRepository: context.read<ProductRepository>(),
+          );
+          Navigator.push(
+            context,
+            InventoryItemEditorPage.route(bloc: bloc),
           );
         },
         child: const Icon(Icons.add),
@@ -104,207 +107,32 @@ class _InventoryItemCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Card(
-      child: Padding(
-        padding: const EdgeInsets.all(8),
-        child: Row(
-          children: [
-            Column(
-              crossAxisAlignment: .start,
-              children: [
-                Text(item.name),
-                Text(
-                  item.detailNumber,
-                  style: const TextStyle(
-                    color: Colors.blueGrey,
-                    fontSize: 10,
-                  ),
-                ),
-                Text(item.brand ?? ''),
-              ],
-            ),
-            const Spacer(),
-            Column(
-              children: [
-                Text(item.totalQuantity.toString()),
-              ],
-            ),
-          ],
-        ),
-      ),
-    );
-  }
-}
-
-class _BottomSheetPage extends StatelessWidget {
-  const _BottomSheetPage({required this.inventoryBloc, super.key});
-
-  final InventoryBloc inventoryBloc;
-
-  @override
-  Widget build(BuildContext context) {
-    return BlocProvider.value(
-      value: inventoryBloc,
-      child: const _BottomSheetView(),
-    );
-  }
-}
-
-class _BottomSheetView extends StatefulWidget {
-  const _BottomSheetView({
-    super.key,
-  });
-
-  @override
-  State<_BottomSheetView> createState() => _BottomSheetViewState();
-}
-
-class _BottomSheetViewState extends State<_BottomSheetView> {
-  final _formKey = GlobalKey<FormState>();
-  final _nameController = TextEditingController();
-  final _detailNumberController = TextEditingController();
-  final _priceController = TextEditingController();
-  final _brandController = TextEditingController();
-  final _descriptionController = TextEditingController();
-  bool _isRecycled = false;
-  bool _canSave = false;
-
-  @override
-  void dispose() {
-    _nameController.dispose();
-    _detailNumberController.dispose();
-    _priceController.dispose();
-    _brandController.dispose();
-    _descriptionController.dispose();
-    super.dispose();
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    final l10n = context.l10n;
-    return BlocListener<InventoryBloc, InventoryState>(
-      listenWhen: (previous, current) => current.saveStatus == .success,
-      listener: (context, state) {
-        Navigator.of(context).pop();
-      },
-      child: Padding(
-        padding: const EdgeInsets.all(24),
-        child: Form(
-          key: _formKey,
-          onChanged: () => setState(() {
-            _canSave = _formKey.currentState?.validate() ?? false;
-          }),
-          child: Column(
-            mainAxisSize: .min,
+      child: InkWell(
+        onTap: () =>
+            Navigator.push(context, InventoryItemDetailsPage.route(item: item)),
+        child: Padding(
+          padding: const EdgeInsets.all(8),
+          child: Row(
             children: [
-              Text(l10n.formFieldTitleText),
-              TextFormField(
-                controller: _nameController,
-                decoration: InputDecoration(
-                  labelText: '${l10n.formFieldNameLabelText}:',
-                ),
-                autovalidateMode: .always,
-                validator: (value) => value == null || value.isEmpty
-                    ? l10n.validationRequired
-                    : null,
-              ),
-              TextFormField(
-                controller: _priceController,
-                decoration: InputDecoration(
-                  labelText: '${l10n.formFieldPriceLabelText}:',
-                ),
-                autovalidateMode: .always,
-                keyboardType: TextInputType.number,
-                validator: (value) => double.tryParse(value ?? '') == null
-                    ? l10n.validationEnterNumber
-                    : null,
-              ),
-              TextFormField(
-                controller: _detailNumberController,
-                decoration: InputDecoration(
-                  labelText: '${l10n.formFieldDetailNumberLabelText}:',
-                ),
-              ),
-
-              Padding(
-                padding: const .symmetric(vertical: 24),
-                child: Row(
-                  mainAxisAlignment: .spaceBetween,
-                  children: [
-                    Text(l10n.formFieldRecycledLabelText),
-                    Switch(
-                      value: _isRecycled,
-                      onChanged: (value) {
-                        setState(() {
-                          _isRecycled = value;
-                        });
-                      },
+              Column(
+                crossAxisAlignment: .start,
+                children: [
+                  Text(item.name),
+                  Text(
+                    item.detailNumber,
+                    style: const TextStyle(
+                      color: Colors.blueGrey,
+                      fontSize: 10,
                     ),
-                  ],
-                ),
-              ),
-              const Divider(),
-
-              TextFormField(
-                controller: _brandController,
-                decoration: InputDecoration(
-                  labelText: '${l10n.formFieldBrandLabelText}:',
-                ),
-              ),
-              TextFormField(
-                controller: _descriptionController,
-                decoration: InputDecoration(
-                  labelText: '${l10n.formFieldDescriptionLabelText}:',
-                ),
+                  ),
+                  Text(item.brand ?? ''),
+                ],
               ),
               const Spacer(),
-              Padding(
-                padding: const .symmetric(vertical: 8),
-                child: BlocBuilder<InventoryBloc, InventoryState>(
-                  buildWhen: (previous, current) =>
-                      previous.isSaving != current.isSaving,
-                  builder: (context, state) {
-                    return SizedBox(
-                      width: double.infinity,
-                      child: ElevatedButton(
-                        onPressed: _canSave
-                            ? () {
-                                context.read<InventoryBloc>().add(
-                                  SaveButtonPressed(
-                                    ProductCreateModel(
-                                      name: _nameController.text,
-                                      detailNumber:
-                                          _detailNumberController.text,
-                                      isRecycled: _isRecycled,
-                                      price:
-                                          double.tryParse(
-                                            _priceController.text,
-                                          ) ??
-                                          0.0,
-                                      brand: _brandController.text,
-                                      description: _descriptionController.text,
-                                    ),
-                                  ),
-                                );
-                              }
-                            : null,
-                        child: state.isSaving
-                            ? const Center(
-                                child: SizedBox(
-                                  height: 24,
-                                  width: 24,
-                                  child: Padding(
-                                    padding: .all(3),
-                                    child: CircularProgressIndicator(
-                                      strokeWidth: 0.5,
-                                    ),
-                                  ),
-                                ),
-                              )
-                            : Text(l10n.formSaveButtonText),
-                      ),
-                    );
-                  },
-                ),
+              Column(
+                children: [
+                  Text(item.totalQuantity.toString()),
+                ],
               ),
             ],
           ),
