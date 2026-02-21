@@ -1,6 +1,6 @@
 import 'package:flutter_test/flutter_test.dart';
 import 'package:inventory_app/inventory/view/inventory_page.dart';
-import 'package:inventory_app/home/view/home_page.dart';
+import 'package:inventory_app/authenticated_app/view/authenticated_app.dart';
 import 'package:inventory_app/inventory/view/inventory_page.dart';
 
 import '../../helpers/pump_app.dart';

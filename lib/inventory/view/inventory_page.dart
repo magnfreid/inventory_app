@@ -14,7 +14,7 @@ class InventoryPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return BlocProvider(
-      create: (_) => InventoryBloc(
+      create: (context) => InventoryBloc(
         inventoryRepository: context.read<InventoryRepository>(),
         locationRepository: context.read<LocationRepository>(),
         productRepository: context.read<ProductRepository>(),
