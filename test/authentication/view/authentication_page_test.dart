@@ -97,7 +97,7 @@ void main() {
       await tester.pump(); // allow UserCubit to emit loaded
       await tester.pumpAndSettle();
 
-      expect(find.byType(HomePage), findsOneWidget);
+      expect(find.byType(HomeView), findsOneWidget);
     },
   );
 

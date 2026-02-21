@@ -61,7 +61,8 @@ class AuthenticationView extends StatelessWidget {
     return BlocBuilder<UserCubit, UserState>(
       builder: (context, state) {
         return state.when(
-          loading: () => const Center(child: CircularProgressIndicator()),
+          loading: () =>
+              const Center(child: CircularProgressIndicator.adaptive()),
           error: (error) => Text(error.toString()),
           loaded: (user) {
             return MultiRepositoryProvider(
