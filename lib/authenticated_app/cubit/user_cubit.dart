@@ -1,7 +1,7 @@
 import 'dart:async';
 
 import 'package:bloc/bloc.dart';
-import 'package:inventory_app/authentication_gate/user/user_state.dart';
+import 'package:inventory_app/authenticated_app/cubit/user_state.dart';
 import 'package:user_repository/user_repository.dart';
 
 class UserCubit extends Cubit<UserState> {

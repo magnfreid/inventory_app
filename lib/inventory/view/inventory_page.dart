@@ -1,10 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:inventory_app/authentication_gate/cubits/auth/authentication_cubit.dart';
+import 'package:inventory_app/authentication_gate/cubit/authentication_cubit.dart';
 import 'package:inventory_app/inventory/bloc/inventory_bloc.dart';
 import 'package:inventory_app/inventory/bloc/inventory_state.dart';
 import 'package:inventory_app/inventory/models/inventory_item_ui_model.dart';
-import 'package:inventory_app/inventory_item_details/bloc/inventory_item_details_bloc.dart';
 import 'package:inventory_app/inventory_item_details/view/inventory_item_details_page.dart';
 import 'package:inventory_app/inventory_item_editor/bloc/inventory_item_editor_bloc.dart';
 import 'package:inventory_app/inventory_item_editor/view/inventory_item_editor_page.dart';

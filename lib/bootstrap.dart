@@ -9,7 +9,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:inventory_app/app/bloc_observer.dart';
 import 'package:inventory_app/app/view/app.dart';
-import 'package:inventory_app/authentication_gate/cubits/auth/authentication_cubit.dart';
+import 'package:inventory_app/authentication_gate/cubit/authentication_cubit.dart';
 import 'package:inventory_app/firebase_options.dart';
 
 Future<void> bootstrap() async {
