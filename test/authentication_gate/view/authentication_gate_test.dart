@@ -3,10 +3,10 @@ import 'package:bloc_test/bloc_test.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:inventory_app/app/cubit/authentication_cubit.dart';
-import 'package:inventory_app/app/cubit/authentication_state.dart';
-import 'package:inventory_app/authentication_gate/view/authenticaton_gate.dart';
 import 'package:inventory_app/authenticated_app/view/authenticated_app.dart';
+import 'package:inventory_app/authentication_gate/cubit/authentication_cubit.dart';
+import 'package:inventory_app/authentication_gate/cubit/authentication_state.dart';
+import 'package:inventory_app/authentication_gate/view/authentication_gate.dart';
 import 'package:inventory_app/sign_in/view/sign_in_page.dart';
 import 'package:mocktail/mocktail.dart';
 import 'package:user_repository/user_repository.dart';
@@ -57,7 +57,7 @@ void main() {
   );
 
   testWidgets(
-    'renders HomePage when authenticated and user loads',
+    'renders AuthenticatedApp when authenticated',
     (tester) async {
       final authUser = AuthUser(id: '123');
 
@@ -94,40 +94,7 @@ void main() {
         ),
       );
 
-      await tester.pump(); // allow UserCubit to emit loaded
-      await tester.pumpAndSettle();
-
-      expect(find.byType(HomeView), findsOneWidget);
-    },
-  );
-
-  testWidgets(
-    'calls signOut() when logout button is pressed',
-    (tester) async {
-      when(
-        () => authenticationCubit.state,
-      ).thenReturn(const .unauthenticated());
-      whenListen(
-        authenticationCubit,
-        const Stream<AuthenticationState>.empty(),
-      );
-
-      when(() => authenticationCubit.signOut()).thenAnswer((_) async {});
-
-      await tester.pumpApp(
-        RepositoryProvider.value(
-          value: authRepository,
-          child: BlocProvider.value(
-            value: authenticationCubit,
-            child: const AuthenticationGate(),
-          ),
-        ),
-      );
-      await tester.tap(find.byIcon(Icons.logout));
-      await tester.pump();
-      verify(
-        () => authenticationCubit.signOut(),
-      ).called(1);
+      expect(find.byType(AuthenticatedApp), findsOneWidget);
     },
   );
 

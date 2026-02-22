@@ -1,8 +1,9 @@
 import 'package:auth_repository/auth_repository.dart';
 import 'package:bloc_test/bloc_test.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:inventory_app/app/cubit/authentication_cubit.dart';
-import 'package:inventory_app/app/cubit/authentication_state.dart';
+import 'package:inventory_app/authentication_gate/cubit/authentication_cubit.dart';
+import 'package:inventory_app/authentication_gate/cubit/authentication_state.dart';
+
 import 'package:mocktail/mocktail.dart';
 
 import '../../helpers/mocks.dart';

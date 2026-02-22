@@ -21,7 +21,6 @@ class InventoryBloc extends Bloc<InventoryEvent, InventoryState> {
        _productRepository = productRepository,
        super(const InventoryState()) {
     on<_InventoryListUpdated>(_onInventoryListUpdated);
-    on<SaveButtonPressed>(_onSaveButtonPressed);
 
     setStreamSubscription();
   }
@@ -91,18 +90,5 @@ class InventoryBloc extends Bloc<InventoryEvent, InventoryState> {
         return uiItems;
       },
     ).listen((items) => add(_InventoryListUpdated(items: items)));
-  }
-
-  FutureOr<void> _onSaveButtonPressed(
-    SaveButtonPressed event,
-    Emitter<InventoryState> emit,
-  ) async {
-    emit(state.copyWith(saveStatus: .loading));
-    try {
-      await _productRepository.addProduct(event.product);
-      emit(state.copyWith(saveStatus: .success));
-    } on Exception catch (_) {
-      emit(state.copyWith(saveStatus: .error));
-    }
   }
 }
