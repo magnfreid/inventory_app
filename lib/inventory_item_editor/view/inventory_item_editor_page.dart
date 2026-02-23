@@ -6,31 +6,25 @@ import 'package:inventory_app/l10n/l10n.dart';
 import 'package:product_repository/product_repository.dart';
 
 class InventoryItemEditorPage extends StatelessWidget {
-  const InventoryItemEditorPage({required this.bloc, super.key});
+  const InventoryItemEditorPage({super.key});
 
-  final InventoryItemEditorBloc bloc;
-
-  static MaterialPageRoute<void> route({
-    required InventoryItemEditorBloc bloc,
-  }) => MaterialPageRoute<void>(
-    builder: (context) => InventoryItemEditorPage(
-      bloc: bloc,
-    ),
+  static MaterialPageRoute<void> route() => MaterialPageRoute<void>(
+    builder: (context) => const InventoryItemEditorPage(),
   );
 
   @override
   Widget build(BuildContext context) {
-    return BlocProvider.value(
-      value: bloc,
+    return BlocProvider(
+      create: (context) => InventoryItemEditorBloc(
+        productRepository: context.read<ProductRepository>(),
+      ),
       child: const InventoryItemEditorView(),
     );
   }
 }
 
 class InventoryItemEditorView extends StatefulWidget {
-  const InventoryItemEditorView({
-    super.key,
-  });
+  const InventoryItemEditorView({super.key});
 
   @override
   State<InventoryItemEditorView> createState() =>

@@ -51,7 +51,11 @@ class AuthenticatedApp extends StatelessWidget {
                     productRepositoryFactory(currentUser.organizationId),
               ),
             ],
-            child: const InventoryPage(),
+            child: Navigator(
+              onGenerateRoute: (_) => MaterialPageRoute(
+                builder: (context) => const InventoryPage(),
+              ),
+            ),
           ),
         ),
       ),

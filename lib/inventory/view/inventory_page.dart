@@ -7,11 +7,10 @@ import 'package:inventory_app/inventory/bloc/inventory_bloc.dart';
 import 'package:inventory_app/inventory/bloc/inventory_state.dart';
 import 'package:inventory_app/inventory/models/inventory_item_ui_model.dart';
 import 'package:inventory_app/inventory_item_details/view/inventory_item_details_page.dart';
-import 'package:inventory_app/inventory_item_editor/bloc/inventory_item_editor_bloc.dart';
 import 'package:inventory_app/inventory_item_editor/view/inventory_item_editor_page.dart';
 import 'package:inventory_app/l10n/l10n.dart';
+import 'package:inventory_app/locations/view/locations_page.dart';
 import 'package:inventory_app/statistics/view/statistics_page.dart';
-import 'package:inventory_app/storages/view/storages_page.dart';
 import 'package:inventory_repository/inventory_repository.dart';
 import 'package:location_repository/location_repository.dart';
 import 'package:product_repository/product_repository.dart';
@@ -32,14 +31,9 @@ class InventoryPage extends StatelessWidget {
   }
 }
 
-class InventoryView extends StatefulWidget {
+class InventoryView extends StatelessWidget {
   const InventoryView({super.key});
 
-  @override
-  State<InventoryView> createState() => _InventoryViewState();
-}
-
-class _InventoryViewState extends State<InventoryView> {
   @override
   Widget build(BuildContext context) {
     final l10n = context.l10n;
@@ -60,7 +54,7 @@ class _InventoryViewState extends State<InventoryView> {
                 title: Text(l10n.drawerLocationsLinkText),
                 onTap: () {
                   Navigator.pop(context);
-                  unawaited(Navigator.push(context, StoragesPage.route()));
+                  unawaited(Navigator.push(context, LocationsPage.route()));
                 },
               ),
               ListTile(
@@ -108,15 +102,10 @@ class _InventoryViewState extends State<InventoryView> {
         ),
       ),
       floatingActionButton: FloatingActionButton.small(
-        onPressed: () async {
-          final bloc = InventoryItemEditorBloc(
-            productRepository: context.read<ProductRepository>(),
-          );
-          await Navigator.push(
-            context,
-            InventoryItemEditorPage.route(bloc: bloc),
-          );
-        },
+        onPressed: () => Navigator.push(
+          context,
+          InventoryItemEditorPage.route(),
+        ),
         child: const Icon(Icons.add),
       ),
       floatingActionButtonLocation: .endContained,
