@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:inventory_app/authentication_gate/cubit/authentication_cubit.dart';
@@ -8,6 +10,8 @@ import 'package:inventory_app/inventory_item_details/view/inventory_item_details
 import 'package:inventory_app/inventory_item_editor/bloc/inventory_item_editor_bloc.dart';
 import 'package:inventory_app/inventory_item_editor/view/inventory_item_editor_page.dart';
 import 'package:inventory_app/l10n/l10n.dart';
+import 'package:inventory_app/statistics/view/statistics_page.dart';
+import 'package:inventory_app/storages/view/storages_page.dart';
 import 'package:inventory_repository/inventory_repository.dart';
 import 'package:location_repository/location_repository.dart';
 import 'package:product_repository/product_repository.dart';
@@ -36,7 +40,6 @@ class InventoryView extends StatefulWidget {
 }
 
 class _InventoryViewState extends State<InventoryView> {
-  final int _selectedIndex = 0;
   @override
   Widget build(BuildContext context) {
     final l10n = context.l10n;
@@ -46,28 +49,36 @@ class _InventoryViewState extends State<InventoryView> {
         child: SafeArea(
           child: Column(
             children: [
-              const DrawerHeader(
+              DrawerHeader(
                 child: Align(
                   alignment: .bottomLeft,
-                  child: Text('Choose your destiny'),
+                  child: Text(l10n.drawerHeaderText),
                 ),
               ),
-              const ListTile(
-                leading: Icon(Icons.shelves),
-                title: Text('Storages'),
+              ListTile(
+                leading: const Icon(Icons.shelves),
+                title: Text(l10n.drawerLocationsLinkText),
+                onTap: () {
+                  Navigator.pop(context);
+                  unawaited(Navigator.push(context, StoragesPage.route()));
+                },
               ),
-              const ListTile(
-                leading: Icon(Icons.query_stats),
-                title: Text('Statistics'),
+              ListTile(
+                leading: const Icon(Icons.query_stats),
+                title: Text(l10n.drawerStatisticsLinkText),
+                onTap: () {
+                  Navigator.pop(context);
+                  unawaited(Navigator.push(context, StatisticsPage.route()));
+                },
               ),
-              const ListTile(
-                leading: Icon(Icons.settings),
-                title: Text('Settings'),
+              ListTile(
+                leading: const Icon(Icons.settings),
+                title: Text(l10n.drawerSettingsLinkText),
               ),
               const Spacer(),
               ListTile(
                 leading: const Icon(Icons.logout),
-                title: const Text('Sign out'),
+                title: Text(l10n.drawerSignOutActionText),
                 onTap: () => context.read<AuthenticationCubit>().signOut(),
               ),
             ],
@@ -134,7 +145,6 @@ class _InventoryViewState extends State<InventoryView> {
 class _InventoryItemCard extends StatelessWidget {
   const _InventoryItemCard({
     required this.item,
-    super.key,
   });
 
   final InventoryItemUiModel item;
