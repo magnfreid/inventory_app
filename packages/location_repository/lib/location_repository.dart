@@ -2,4 +2,4 @@
 library;
 
 export 'src/location_repository.dart';
-export 'src/models/location.dart';
+export 'src/models/models.dart';

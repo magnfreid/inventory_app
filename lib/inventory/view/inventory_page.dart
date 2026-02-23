@@ -2,12 +2,13 @@ import 'dart:async';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:inventory_app/authentication_gate/cubit/authentication_cubit.dart';
+import 'package:inventory_app/authentication/cubit/authentication_cubit.dart';
 import 'package:inventory_app/inventory/bloc/inventory_bloc.dart';
 import 'package:inventory_app/inventory/bloc/inventory_state.dart';
 import 'package:inventory_app/inventory/models/inventory_item_ui_model.dart';
 import 'package:inventory_app/inventory_item_details/view/inventory_item_details_page.dart';
 import 'package:inventory_app/inventory_item_editor/view/inventory_item_editor_page.dart';
+import 'package:inventory_app/inventory_item_editor/view/inventory_item_quick_editor_page.dart';
 import 'package:inventory_app/l10n/l10n.dart';
 import 'package:inventory_app/locations/view/locations_page.dart';
 import 'package:inventory_app/statistics/view/statistics_page.dart';
@@ -144,6 +145,10 @@ class _InventoryItemCard extends StatelessWidget {
       child: InkWell(
         onTap: () =>
             Navigator.push(context, InventoryItemDetailsPage.route(item: item)),
+        onLongPress: () => showModalBottomSheet<void>(
+          context: context,
+          builder: (context) => const InventoryItemQuickEditorPage(),
+        ),
         child: Padding(
           padding: const EdgeInsets.all(8),
           child: Row(

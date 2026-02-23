@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:inventory_app/locations/bloc/locations_bloc.dart';
 import 'package:inventory_app/locations/bloc/locations_state.dart';
+import 'package:inventory_app/locations_editor/view/locations_editor_page.dart';
 import 'package:location_repository/location_repository.dart';
 
 class LocationsPage extends StatelessWidget {
@@ -26,12 +27,17 @@ class LocationsView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      appBar: AppBar(),
       floatingActionButton: FloatingActionButton.extended(
         label: const Text('New storage'),
         icon: const Icon(Icons.add),
-        onPressed: () {},
+        onPressed: () => showModalBottomSheet<void>(
+          showDragHandle: true,
+          context: context,
+          builder: (context) => const LocationsEditorPage(),
+        ),
       ),
-      appBar: AppBar(),
+
       body: BlocBuilder<LocationsBloc, LocationsState>(
         builder: (context, state) {
           final locations = state.locations;

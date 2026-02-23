@@ -2,18 +2,27 @@ import 'dart:async';
 
 import 'package:bloc/bloc.dart';
 import 'package:inventory_app/inventory_item_editor/bloc/inventory_item_editor_state.dart';
+import 'package:inventory_repository/inventory_repository.dart';
+import 'package:location_repository/location_repository.dart';
 import 'package:product_repository/product_repository.dart';
 
 part 'inventory_item_editor_event.dart';
 
 class InventoryItemEditorBloc
     extends Bloc<InventoryItemEditorEvent, InventoryItemEditorState> {
-  InventoryItemEditorBloc({required ProductRepository productRepository})
-    : _productRepository = productRepository,
-      super(const InventoryItemEditorState()) {
+  InventoryItemEditorBloc({
+    required InventoryRepository inventoryRepository,
+    required LocationRepository locationRepository,
+    required ProductRepository productRepository,
+  }) : _inventoryRepository = inventoryRepository,
+       _locationRepository = locationRepository,
+       _productRepository = productRepository,
+       super(const InventoryItemEditorState()) {
     on<SaveButtonPressed>(_onSaveButtonPressed);
   }
 
+  final InventoryRepository _inventoryRepository;
+  final LocationRepository _locationRepository;
   final ProductRepository _productRepository;
 
   FutureOr<void> _onSaveButtonPressed(

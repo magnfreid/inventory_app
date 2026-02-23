@@ -1,5 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:location_repository/location_repository.dart';
+import 'package:location_repository/src/models/location_create_model.dart';
 
 class FirebaseLocationRepository implements LocationRepository {
   FirebaseLocationRepository({
@@ -28,5 +29,18 @@ class FirebaseLocationRepository implements LocationRepository {
     return _collection.snapshots().map(
       (snapshot) => snapshot.docs.map((doc) => doc.data()).toList(),
     );
+  }
+
+  @override
+  Future<Location> add({
+    required LocationCreateModel locationCreateModel,
+  }) async {
+    final docRef = _collection.doc();
+    final location = Location.fromCreateModel(
+      id: docRef.id,
+      createModel: locationCreateModel,
+    );
+    await docRef.set(location);
+    return location;
   }
 }

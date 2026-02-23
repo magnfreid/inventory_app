@@ -57,13 +57,13 @@ class _SignInViewState extends State<SignInView> {
           ),
         );
       },
-      child: Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 50),
-        child: BlocBuilder<SignInBloc, SignInState>(
-          builder: (context, state) {
-            return Scaffold(
-              body: Column(
-                mainAxisAlignment: .center,
+      child: BlocBuilder<SignInBloc, SignInState>(
+        builder: (context, state) {
+          return Scaffold(
+            body: Padding(
+              padding: const .symmetric(horizontal: 50),
+              child: Column(
+                // mainAxisAlignment: .center,
                 children: [
                   const Spacer(),
                   TextField(
@@ -94,7 +94,7 @@ class _SignInViewState extends State<SignInView> {
                               child: SizedBox(
                                 width: 24,
                                 height: 24,
-                                child: CircularProgressIndicator(),
+                                child: CircularProgressIndicator.adaptive(),
                               ),
                             )
                           : Text(l10n.signInSignInButtonText),
@@ -103,9 +103,9 @@ class _SignInViewState extends State<SignInView> {
                   const Spacer(),
                 ],
               ),
-            );
-          },
-        ),
+            ),
+          );
+        },
       ),
     );
   }
