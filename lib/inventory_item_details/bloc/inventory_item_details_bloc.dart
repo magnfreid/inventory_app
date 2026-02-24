@@ -17,6 +17,7 @@ class InventoryItemDetailsBloc
        super(const InventoryItemDetailsState()) {
     on<_LocationsUpdated>(_onLocationsUpdated);
     on<ShowAddViewButtonPressed>(_onShowAddViewButtonPressed);
+    on<SaveButtonPressed>(_onSaveButtonPressed);
 
     _streamSubscription = locationRepository.watchLocations().listen(
       (data) => add(_LocationsUpdated(locations: data)),
@@ -46,5 +47,22 @@ class InventoryItemDetailsBloc
   ) {
     final current = state.showAddView;
     emit(state.copyWith(showAddView: !current));
+  }
+
+  FutureOr<void> _onSaveButtonPressed(
+    SaveButtonPressed event,
+    Emitter<InventoryItemDetailsState> emit,
+  ) {
+    emit(state.copyWith(saveStatus: .loading));
+    try {
+      _inventoryRepository.increaseStock(
+        productId: event.productId,
+        locationId: event.locationId,
+        amount: event.amount,
+      );
+      emit(state.copyWith(saveStatus: .success));
+    } on Exception catch (exception) {
+      emit(state.copyWith(saveStatus: .error));
+    }
   }
 }

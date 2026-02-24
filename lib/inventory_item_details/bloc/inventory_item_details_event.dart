@@ -12,3 +12,14 @@ final class _LocationsUpdated extends InventoryItemDetailsEvent {
 final class ShowAddViewButtonPressed extends InventoryItemDetailsEvent {
   const ShowAddViewButtonPressed();
 }
+
+final class SaveButtonPressed extends InventoryItemDetailsEvent {
+  const SaveButtonPressed({
+    required this.productId,
+    required this.locationId,
+    required this.amount,
+  });
+  final String productId;
+  final String locationId;
+  final int amount;
+}

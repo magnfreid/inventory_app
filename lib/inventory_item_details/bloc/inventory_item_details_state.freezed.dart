@@ -14,7 +14,7 @@ T _$identity<T>(T value) => value;
 /// @nodoc
 mixin _$InventoryItemDetailsState {
 
- InventoryItemDetailsStatus get status; List<Location> get locations; bool get showAddView;
+ InventoryItemDetailsStatus get status; InventoryItemDetailsSaveStatus get saveStatus; List<Location> get locations; bool get showAddView;
 /// Create a copy of InventoryItemDetailsState
 /// with the given fields replaced by the non-null parameter values.
 @JsonKey(includeFromJson: false, includeToJson: false)
@@ -25,16 +25,16 @@ $InventoryItemDetailsStateCopyWith<InventoryItemDetailsState> get copyWith => _$
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is InventoryItemDetailsState&&(identical(other.status, status) || other.status == status)&&const DeepCollectionEquality().equals(other.locations, locations)&&(identical(other.showAddView, showAddView) || other.showAddView == showAddView));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is InventoryItemDetailsState&&(identical(other.status, status) || other.status == status)&&(identical(other.saveStatus, saveStatus) || other.saveStatus == saveStatus)&&const DeepCollectionEquality().equals(other.locations, locations)&&(identical(other.showAddView, showAddView) || other.showAddView == showAddView));
 }
 
 
 @override
-int get hashCode => Object.hash(runtimeType,status,const DeepCollectionEquality().hash(locations),showAddView);
+int get hashCode => Object.hash(runtimeType,status,saveStatus,const DeepCollectionEquality().hash(locations),showAddView);
 
 @override
 String toString() {
-  return 'InventoryItemDetailsState(status: $status, locations: $locations, showAddView: $showAddView)';
+  return 'InventoryItemDetailsState(status: $status, saveStatus: $saveStatus, locations: $locations, showAddView: $showAddView)';
 }
 
 
@@ -45,7 +45,7 @@ abstract mixin class $InventoryItemDetailsStateCopyWith<$Res>  {
   factory $InventoryItemDetailsStateCopyWith(InventoryItemDetailsState value, $Res Function(InventoryItemDetailsState) _then) = _$InventoryItemDetailsStateCopyWithImpl;
 @useResult
 $Res call({
- InventoryItemDetailsStatus status, List<Location> locations, bool showAddView
+ InventoryItemDetailsStatus status, InventoryItemDetailsSaveStatus saveStatus, List<Location> locations, bool showAddView
 });
 
 
@@ -62,10 +62,11 @@ class _$InventoryItemDetailsStateCopyWithImpl<$Res>
 
 /// Create a copy of InventoryItemDetailsState
 /// with the given fields replaced by the non-null parameter values.
-@pragma('vm:prefer-inline') @override $Res call({Object? status = null,Object? locations = null,Object? showAddView = null,}) {
+@pragma('vm:prefer-inline') @override $Res call({Object? status = null,Object? saveStatus = null,Object? locations = null,Object? showAddView = null,}) {
   return _then(_self.copyWith(
 status: null == status ? _self.status : status // ignore: cast_nullable_to_non_nullable
-as InventoryItemDetailsStatus,locations: null == locations ? _self.locations : locations // ignore: cast_nullable_to_non_nullable
+as InventoryItemDetailsStatus,saveStatus: null == saveStatus ? _self.saveStatus : saveStatus // ignore: cast_nullable_to_non_nullable
+as InventoryItemDetailsSaveStatus,locations: null == locations ? _self.locations : locations // ignore: cast_nullable_to_non_nullable
 as List<Location>,showAddView: null == showAddView ? _self.showAddView : showAddView // ignore: cast_nullable_to_non_nullable
 as bool,
   ));
@@ -152,10 +153,10 @@ return $default(_that);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function( InventoryItemDetailsStatus status,  List<Location> locations,  bool showAddView)?  $default,{required TResult orElse(),}) {final _that = this;
+@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function( InventoryItemDetailsStatus status,  InventoryItemDetailsSaveStatus saveStatus,  List<Location> locations,  bool showAddView)?  $default,{required TResult orElse(),}) {final _that = this;
 switch (_that) {
 case _InventoryItemDetailsState() when $default != null:
-return $default(_that.status,_that.locations,_that.showAddView);case _:
+return $default(_that.status,_that.saveStatus,_that.locations,_that.showAddView);case _:
   return orElse();
 
 }
@@ -173,10 +174,10 @@ return $default(_that.status,_that.locations,_that.showAddView);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function( InventoryItemDetailsStatus status,  List<Location> locations,  bool showAddView)  $default,) {final _that = this;
+@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function( InventoryItemDetailsStatus status,  InventoryItemDetailsSaveStatus saveStatus,  List<Location> locations,  bool showAddView)  $default,) {final _that = this;
 switch (_that) {
 case _InventoryItemDetailsState():
-return $default(_that.status,_that.locations,_that.showAddView);case _:
+return $default(_that.status,_that.saveStatus,_that.locations,_that.showAddView);case _:
   throw StateError('Unexpected subclass');
 
 }
@@ -193,10 +194,10 @@ return $default(_that.status,_that.locations,_that.showAddView);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function( InventoryItemDetailsStatus status,  List<Location> locations,  bool showAddView)?  $default,) {final _that = this;
+@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function( InventoryItemDetailsStatus status,  InventoryItemDetailsSaveStatus saveStatus,  List<Location> locations,  bool showAddView)?  $default,) {final _that = this;
 switch (_that) {
 case _InventoryItemDetailsState() when $default != null:
-return $default(_that.status,_that.locations,_that.showAddView);case _:
+return $default(_that.status,_that.saveStatus,_that.locations,_that.showAddView);case _:
   return null;
 
 }
@@ -208,10 +209,11 @@ return $default(_that.status,_that.locations,_that.showAddView);case _:
 
 
 class _InventoryItemDetailsState extends InventoryItemDetailsState {
-  const _InventoryItemDetailsState({this.status = InventoryItemDetailsStatus.loading, final  List<Location> locations = const [], this.showAddView = false}): _locations = locations,super._();
+  const _InventoryItemDetailsState({this.status = InventoryItemDetailsStatus.loading, this.saveStatus = InventoryItemDetailsSaveStatus.idle, final  List<Location> locations = const [], this.showAddView = false}): _locations = locations,super._();
   
 
 @override@JsonKey() final  InventoryItemDetailsStatus status;
+@override@JsonKey() final  InventoryItemDetailsSaveStatus saveStatus;
  final  List<Location> _locations;
 @override@JsonKey() List<Location> get locations {
   if (_locations is EqualUnmodifiableListView) return _locations;
@@ -231,16 +233,16 @@ _$InventoryItemDetailsStateCopyWith<_InventoryItemDetailsState> get copyWith => 
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is _InventoryItemDetailsState&&(identical(other.status, status) || other.status == status)&&const DeepCollectionEquality().equals(other._locations, _locations)&&(identical(other.showAddView, showAddView) || other.showAddView == showAddView));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is _InventoryItemDetailsState&&(identical(other.status, status) || other.status == status)&&(identical(other.saveStatus, saveStatus) || other.saveStatus == saveStatus)&&const DeepCollectionEquality().equals(other._locations, _locations)&&(identical(other.showAddView, showAddView) || other.showAddView == showAddView));
 }
 
 
 @override
-int get hashCode => Object.hash(runtimeType,status,const DeepCollectionEquality().hash(_locations),showAddView);
+int get hashCode => Object.hash(runtimeType,status,saveStatus,const DeepCollectionEquality().hash(_locations),showAddView);
 
 @override
 String toString() {
-  return 'InventoryItemDetailsState(status: $status, locations: $locations, showAddView: $showAddView)';
+  return 'InventoryItemDetailsState(status: $status, saveStatus: $saveStatus, locations: $locations, showAddView: $showAddView)';
 }
 
 
@@ -251,7 +253,7 @@ abstract mixin class _$InventoryItemDetailsStateCopyWith<$Res> implements $Inven
   factory _$InventoryItemDetailsStateCopyWith(_InventoryItemDetailsState value, $Res Function(_InventoryItemDetailsState) _then) = __$InventoryItemDetailsStateCopyWithImpl;
 @override @useResult
 $Res call({
- InventoryItemDetailsStatus status, List<Location> locations, bool showAddView
+ InventoryItemDetailsStatus status, InventoryItemDetailsSaveStatus saveStatus, List<Location> locations, bool showAddView
 });
 
 
@@ -268,10 +270,11 @@ class __$InventoryItemDetailsStateCopyWithImpl<$Res>
 
 /// Create a copy of InventoryItemDetailsState
 /// with the given fields replaced by the non-null parameter values.
-@override @pragma('vm:prefer-inline') $Res call({Object? status = null,Object? locations = null,Object? showAddView = null,}) {
+@override @pragma('vm:prefer-inline') $Res call({Object? status = null,Object? saveStatus = null,Object? locations = null,Object? showAddView = null,}) {
   return _then(_InventoryItemDetailsState(
 status: null == status ? _self.status : status // ignore: cast_nullable_to_non_nullable
-as InventoryItemDetailsStatus,locations: null == locations ? _self._locations : locations // ignore: cast_nullable_to_non_nullable
+as InventoryItemDetailsStatus,saveStatus: null == saveStatus ? _self.saveStatus : saveStatus // ignore: cast_nullable_to_non_nullable
+as InventoryItemDetailsSaveStatus,locations: null == locations ? _self._locations : locations // ignore: cast_nullable_to_non_nullable
 as List<Location>,showAddView: null == showAddView ? _self.showAddView : showAddView // ignore: cast_nullable_to_non_nullable
 as bool,
   ));

@@ -79,6 +79,7 @@ class InventoryBloc extends Bloc<InventoryEvent, InventoryState> {
           }).toList();
           uiItems.add(
             InventoryItemUiModel(
+              productId: product.id,
               name: product.name,
               detailNumber: product.detailNumber,
               price: product.price,

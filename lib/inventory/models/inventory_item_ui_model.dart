@@ -2,6 +2,7 @@ import 'package:inventory_app/inventory/models/location_quantity_ui_model.dart';
 
 class InventoryItemUiModel {
   InventoryItemUiModel({
+    required this.productId,
     required this.name,
     required this.detailNumber,
     required this.price,
@@ -10,6 +11,7 @@ class InventoryItemUiModel {
     this.description,
   });
 
+  final String productId;
   final String name;
   final String detailNumber;
   final double price;
