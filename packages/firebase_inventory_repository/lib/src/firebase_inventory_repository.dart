@@ -11,12 +11,11 @@ class FirebaseInventoryRepository implements InventoryRepository {
         .doc(organizationId)
         .collection('inventory')
         .withConverter<InventoryItem>(
-          fromFirestore: (snapshot, _) =>
-              InventoryItem.fromJson(snapshot.data()!..['id'] = snapshot.id),
-          toFirestore: (item, _) {
-            final json = item.toJson()..remove('id');
-            return json;
+          fromFirestore: (snapshot, _) {
+            final data = snapshot.data()!;
+            return InventoryItem.fromJson(data);
           },
+          toFirestore: (item, _) => item.toJson(),
         );
   }
 
@@ -28,5 +27,64 @@ class FirebaseInventoryRepository implements InventoryRepository {
     return _collection.snapshots().map(
       (snapshot) => snapshot.docs.map((doc) => doc.data()).toList(),
     );
+  }
+
+  @override
+  Future<void> decreaseStock({
+    required String productId,
+    required String locationId,
+    required int amount,
+  }) async {
+    if (amount <= 0) {
+      throw ArgumentError('Amount must be greater than 0');
+    }
+
+    final id = '${productId}_$locationId';
+    final docRef = _collection.doc(id);
+
+    await _firestore.runTransaction((transaction) async {
+      final snapshot = await transaction.get(docRef);
+      if (!snapshot.exists) {
+        throw Exception('No stock exists for this product at this location');
+      }
+      final currentQuantity = snapshot.data()?.quantity ?? 0;
+      if (currentQuantity < amount) {
+        throw Exception('Insufficient stock');
+      }
+      transaction.update(docRef, {
+        'quantity': FieldValue.increment(-amount),
+      });
+    });
+  }
+
+  @override
+  Future<void> increaseStock({
+    required String productId,
+    required String locationId,
+    required int amount,
+  }) async {
+    if (amount <= 0) {
+      throw ArgumentError('Amount must be greater than 0');
+    }
+    final id = '${productId}_$locationId';
+    final docRef = _collection.doc(id);
+
+    await _firestore.runTransaction((transaction) async {
+      final snapshot = await transaction.get(docRef);
+
+      if (!snapshot.exists) {
+        transaction.set(
+          docRef,
+          InventoryItem(
+            productId: productId,
+            locationId: locationId,
+            quantity: amount,
+          ),
+        );
+        return;
+      }
+
+      transaction.update(docRef, {'quantity': FieldValue.increment(amount)});
+    });
   }
 }

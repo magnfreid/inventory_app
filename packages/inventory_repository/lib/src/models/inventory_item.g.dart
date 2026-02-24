@@ -8,14 +8,14 @@ part of 'inventory_item.dart';
 
 InventoryItem _$InventoryItemFromJson(Map<String, dynamic> json) =>
     InventoryItem(
-      storageId: json['storageId'] as String,
+      locationId: json['locationId'] as String,
       productId: json['productId'] as String,
       quantity: (json['quantity'] as num).toInt(),
     );
 
 Map<String, dynamic> _$InventoryItemToJson(InventoryItem instance) =>
     <String, dynamic>{
-      'storageId': instance.storageId,
+      'locationId': instance.locationId,
       'productId': instance.productId,
       'quantity': instance.quantity,
     };

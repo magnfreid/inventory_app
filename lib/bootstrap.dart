@@ -30,7 +30,6 @@ Future<void> bootstrap() async {
   final authCubit = AuthenticationCubit(
     authRepository: authRepository,
   );
-  // final router = createGoRouter(authCubit);
 
   runApp(
     App(

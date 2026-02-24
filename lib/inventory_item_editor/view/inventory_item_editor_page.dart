@@ -69,9 +69,9 @@ class _InventoryItemEditorViewState extends State<InventoryItemEditorView> {
           padding: const EdgeInsets.all(24),
           child: Form(
             key: _formKey,
-            onChanged: () => setState(() {
-              _canSave = _formKey.currentState?.validate() ?? false;
-            }),
+            onChanged: () => setState(
+              () => _canSave = _formKey.currentState?.validate() ?? false,
+            ),
             child: Column(
               mainAxisSize: .min,
               children: [
@@ -103,7 +103,6 @@ class _InventoryItemEditorViewState extends State<InventoryItemEditorView> {
                     labelText: '${l10n.formFieldDetailNumberLabelText}:',
                   ),
                 ),
-
                 Padding(
                   padding: const .symmetric(vertical: 24),
                   child: Row(
@@ -150,32 +149,29 @@ class _InventoryItemEditorViewState extends State<InventoryItemEditorView> {
                             width: double.infinity,
                             child: ElevatedButton(
                               onPressed: _canSave
-                                  ? () {
-                                      context
-                                          .read<InventoryItemEditorBloc>()
-                                          .add(
-                                            SaveButtonPressed(
-                                              productCreateModel:
-                                                  ProductCreateModel(
-                                                    name: _nameController.text,
-                                                    detailNumber:
-                                                        _detailNumberController
-                                                            .text,
-                                                    isRecycled: _isRecycled,
-                                                    price:
-                                                        double.tryParse(
-                                                          _priceController.text,
-                                                        ) ??
-                                                        0.0,
-                                                    brand:
-                                                        _brandController.text,
-                                                    description:
-                                                        _descriptionController
-                                                            .text,
-                                                  ),
-                                            ),
-                                          );
-                                    }
+                                  ? () => context
+                                        .read<InventoryItemEditorBloc>()
+                                        .add(
+                                          SaveButtonPressed(
+                                            productCreateModel:
+                                                ProductCreateModel(
+                                                  name: _nameController.text,
+                                                  detailNumber:
+                                                      _detailNumberController
+                                                          .text,
+                                                  isRecycled: _isRecycled,
+                                                  price:
+                                                      double.tryParse(
+                                                        _priceController.text,
+                                                      ) ??
+                                                      0.0,
+                                                  brand: _brandController.text,
+                                                  description:
+                                                      _descriptionController
+                                                          .text,
+                                                ),
+                                          ),
+                                        )
                                   : null,
                               child: state.isLoading
                                   ? const Center(

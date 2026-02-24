@@ -1,13 +1,50 @@
+import 'dart:async';
+
 import 'package:bloc/bloc.dart';
 import 'package:inventory_app/inventory_item_details/bloc/inventory_item_details_state.dart';
+import 'package:inventory_repository/inventory_repository.dart';
+import 'package:location_repository/location_repository.dart';
 
 part 'inventory_item_details_event.dart';
 
 class InventoryItemDetailsBloc
     extends Bloc<InventoryItemDetailsEvent, InventoryItemDetailsState> {
-  InventoryItemDetailsBloc() : super(const InventoryItemDetailsState()) {
-    on<InventoryItemDetailsEvent>((event, emit) {
-      // TODO: implement event handler
-    });
+  InventoryItemDetailsBloc({
+    required InventoryRepository inventoryRepository,
+    required LocationRepository locationRepository,
+  }) : _inventoryRepository = inventoryRepository,
+       _locationRepository = locationRepository,
+       super(const InventoryItemDetailsState()) {
+    on<_LocationsUpdated>(_onLocationsUpdated);
+    on<ShowAddViewButtonPressed>(_onShowAddViewButtonPressed);
+
+    _streamSubscription = locationRepository.watchLocations().listen(
+      (data) => add(_LocationsUpdated(locations: data)),
+    );
+  }
+
+  final InventoryRepository _inventoryRepository;
+  final LocationRepository _locationRepository;
+  late final StreamSubscription<List<Location>> _streamSubscription;
+
+  @override
+  Future<void> close() async {
+    await _streamSubscription.cancel();
+    return super.close();
+  }
+
+  FutureOr<void> _onLocationsUpdated(
+    _LocationsUpdated event,
+    Emitter<InventoryItemDetailsState> emit,
+  ) {
+    emit(state.copyWith(status: .success, locations: event.locations));
+  }
+
+  FutureOr<void> _onShowAddViewButtonPressed(
+    ShowAddViewButtonPressed event,
+    Emitter<InventoryItemDetailsState> emit,
+  ) {
+    final current = state.showAddView;
+    emit(state.copyWith(showAddView: !current));
   }
 }

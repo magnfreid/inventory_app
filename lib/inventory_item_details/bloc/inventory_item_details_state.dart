@@ -1,13 +1,17 @@
 import 'package:freezed_annotation/freezed_annotation.dart';
+import 'package:location_repository/location_repository.dart';
 
 part 'inventory_item_details_state.freezed.dart';
 
-enum InventoryItemDetailsStatus { idle, loading, success, error }
+enum InventoryItemDetailsStatus { loading, loaded, success }
 
 @freezed
 abstract class InventoryItemDetailsState with _$InventoryItemDetailsState {
   const factory InventoryItemDetailsState({
-    @Default(InventoryItemDetailsStatus.idle) InventoryItemDetailsStatus status,
+    @Default(InventoryItemDetailsStatus.loading)
+    InventoryItemDetailsStatus status,
+    @Default([]) List<Location> locations,
+    @Default(false) bool showAddView,
   }) = _InventoryItemDetailsState;
   const InventoryItemDetailsState._();
 }

@@ -3,7 +3,7 @@ import 'dart:async';
 import 'package:bloc/bloc.dart';
 import 'package:inventory_app/inventory/bloc/inventory_state.dart';
 import 'package:inventory_app/inventory/models/inventory_item_ui_model.dart';
-import 'package:inventory_app/inventory/models/storage_quantity_ui_model.dart';
+import 'package:inventory_app/inventory/models/location_quantity_ui_model.dart';
 import 'package:inventory_repository/inventory_repository.dart';
 import 'package:location_repository/location_repository.dart';
 import 'package:product_repository/product_repository.dart';
@@ -70,9 +70,10 @@ class InventoryBloc extends Bloc<InventoryEvent, InventoryState> {
         for (final product in products) {
           final productInventory = inventoryByProduct[product.id] ?? const [];
           final storageQuantities = productInventory.map((inventory) {
-            final location = locationMap[inventory.storageId];
-            return StorageQuantityUiModel(
-              storageName: location?.name ?? 'Unknown',
+            final location = locationMap[inventory.locationId];
+            return LocationQuantityUiModel(
+              locationId: inventory.locationId,
+              locationName: location?.name ?? 'Unknown',
               quantity: inventory.quantity,
             );
           }).toList();
@@ -83,7 +84,7 @@ class InventoryBloc extends Bloc<InventoryEvent, InventoryState> {
               price: product.price,
               brand: product.brand,
               description: product.description,
-              storageQuantities: storageQuantities,
+              stock: storageQuantities,
             ),
           );
         }

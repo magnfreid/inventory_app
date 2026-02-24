@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:inventory_app/l10n/l10n.dart';
 import 'package:inventory_app/locations_editor/bloc/locations_editor_bloc.dart';
 import 'package:inventory_app/locations_editor/bloc/locations_editor_state.dart';
 import 'package:location_repository/location_repository.dart';
@@ -50,6 +51,7 @@ class _LocationsEditorViewState extends State<LocationsEditorView> {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = context.l10n;
     return BlocListener<LocationsEditorBloc, LocationsEditorState>(
       listenWhen: (previous, current) => current.isSuccess,
       listener: (context, state) => Navigator.of(context).pop(),
@@ -61,18 +63,21 @@ class _LocationsEditorViewState extends State<LocationsEditorView> {
             children: [
               const Text('Add new storage'),
               TextFormField(
-                decoration: const InputDecoration(label: Text('Name:')),
+                decoration: InputDecoration(
+                  label: Text(l10n.formFieldNameLabelText),
+                ),
                 controller: _nameTextController,
                 autovalidateMode: .always,
-                validator: (value) =>
-                    value == null || value.isEmpty ? 'Required' : null,
+                validator: (value) => value == null || value.isEmpty
+                    ? l10n.validationRequired
+                    : null,
                 onChanged: (value) => setState(() {
                   canSave = value.isNotEmpty;
                 }),
               ),
               TextFormField(
-                decoration: const InputDecoration(
-                  label: Text('Description'),
+                decoration: InputDecoration(
+                  label: Text(l10n.formFieldDescriptionLabelText),
                 ),
                 controller: _descriptionTextController,
               ),
@@ -101,7 +106,7 @@ class _LocationsEditorViewState extends State<LocationsEditorView> {
                               width: 24,
                               child: CircularProgressIndicator.adaptive(),
                             )
-                          : const Text('Save');
+                          : Text(l10n.formSaveButtonText);
                     },
                   ),
                 ),

@@ -63,7 +63,6 @@ class _SignInViewState extends State<SignInView> {
             body: Padding(
               padding: const .symmetric(horizontal: 50),
               child: Column(
-                // mainAxisAlignment: .center,
                 children: [
                   const Spacer(),
                   TextField(

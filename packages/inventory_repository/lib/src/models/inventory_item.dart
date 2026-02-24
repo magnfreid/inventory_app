@@ -5,7 +5,7 @@ part 'inventory_item.g.dart';
 @JsonSerializable()
 class InventoryItem {
   InventoryItem({
-    required this.storageId,
+    required this.locationId,
     required this.productId,
     required this.quantity,
   });
@@ -15,7 +15,7 @@ class InventoryItem {
 
   Map<String, dynamic> toJson() => _$InventoryItemToJson(this);
 
-  final String storageId;
+  final String locationId;
   final String productId;
   final int quantity;
 }

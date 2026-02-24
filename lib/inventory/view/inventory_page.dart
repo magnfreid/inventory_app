@@ -37,76 +37,13 @@ class InventoryView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final l10n = context.l10n;
     return Scaffold(
       appBar: AppBar(),
-      drawer: Drawer(
-        child: SafeArea(
-          child: Column(
-            children: [
-              DrawerHeader(
-                child: Align(
-                  alignment: .bottomLeft,
-                  child: Text(l10n.drawerHeaderText),
-                ),
-              ),
-              ListTile(
-                leading: const Icon(Icons.shelves),
-                title: Text(l10n.drawerLocationsLinkText),
-                onTap: () {
-                  Navigator.pop(context);
-                  unawaited(Navigator.push(context, LocationsPage.route()));
-                },
-              ),
-              ListTile(
-                leading: const Icon(Icons.query_stats),
-                title: Text(l10n.drawerStatisticsLinkText),
-                onTap: () {
-                  Navigator.pop(context);
-                  unawaited(Navigator.push(context, StatisticsPage.route()));
-                },
-              ),
-              ListTile(
-                leading: const Icon(Icons.settings),
-                title: Text(l10n.drawerSettingsLinkText),
-              ),
-              const Spacer(),
-              ListTile(
-                leading: const Icon(Icons.logout),
-                title: Text(l10n.drawerSignOutActionText),
-                onTap: () => context.read<AuthenticationCubit>().signOut(),
-              ),
-            ],
-          ),
-        ),
-      ),
-      bottomNavigationBar: BottomAppBar(
-        color: Colors.transparent,
-        child: Row(
-          mainAxisAlignment: .center,
-          mainAxisSize: .min,
-          children: [
-            IconButton(
-              onPressed: () {},
-              icon: const Icon(Icons.search),
-            ),
-            IconButton(
-              onPressed: () {},
-              icon: const Icon(Icons.arrow_downward),
-            ),
-
-            IconButton(
-              onPressed: () {},
-              icon: const Icon(Icons.filter_list),
-            ),
-          ],
-        ),
-      ),
+      drawer: const _Drawer(),
+      bottomNavigationBar: const _ToolBar(),
       floatingActionButton: FloatingActionButton.small(
-        onPressed: () => Navigator.push(
-          context,
-          InventoryItemEditorPage.route(),
-        ),
+        onPressed: () =>
+            Navigator.push(context, InventoryItemEditorPage.route()),
         child: const Icon(Icons.add),
       ),
       floatingActionButtonLocation: .endContained,
@@ -118,15 +55,91 @@ class InventoryView extends StatelessWidget {
               Expanded(
                 child: ListView.builder(
                   itemCount: items.length,
-                  itemBuilder: (context, index) {
-                    final item = items[index];
-                    return _InventoryItemCard(item: item);
-                  },
+                  itemBuilder: (context, index) =>
+                      _InventoryItemCard(item: items[index]),
                 ),
               ),
             ],
           );
         },
+      ),
+    );
+  }
+}
+
+class _ToolBar extends StatelessWidget {
+  const _ToolBar();
+
+  @override
+  Widget build(BuildContext context) {
+    return BottomAppBar(
+      color: Colors.transparent,
+      child: Row(
+        mainAxisAlignment: .center,
+        mainAxisSize: .min,
+        children: [
+          IconButton(
+            onPressed: () {},
+            icon: const Icon(Icons.search),
+          ),
+          IconButton(
+            onPressed: () {},
+            icon: const Icon(Icons.arrow_downward),
+          ),
+          IconButton(
+            onPressed: () {},
+            icon: const Icon(Icons.filter_list),
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+class _Drawer extends StatelessWidget {
+  const _Drawer();
+
+  @override
+  Widget build(BuildContext context) {
+    final l10n = context.l10n;
+    return Drawer(
+      child: SafeArea(
+        child: Column(
+          children: [
+            DrawerHeader(
+              child: Align(
+                alignment: .bottomLeft,
+                child: Text(l10n.drawerHeaderText),
+              ),
+            ),
+            ListTile(
+              leading: const Icon(Icons.shelves),
+              title: Text(l10n.drawerLocationsLinkText),
+              onTap: () {
+                Navigator.pop(context);
+                unawaited(Navigator.push(context, LocationsPage.route()));
+              },
+            ),
+            ListTile(
+              leading: const Icon(Icons.query_stats),
+              title: Text(l10n.drawerStatisticsLinkText),
+              onTap: () {
+                Navigator.pop(context);
+                unawaited(Navigator.push(context, StatisticsPage.route()));
+              },
+            ),
+            ListTile(
+              leading: const Icon(Icons.settings),
+              title: Text(l10n.drawerSettingsLinkText),
+            ),
+            const Spacer(),
+            ListTile(
+              leading: const Icon(Icons.logout),
+              title: Text(l10n.drawerSignOutActionText),
+              onTap: () => context.read<AuthenticationCubit>().signOut(),
+            ),
+          ],
+        ),
       ),
     );
   }

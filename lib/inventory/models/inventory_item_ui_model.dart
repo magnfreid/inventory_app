@@ -1,11 +1,11 @@
-import 'package:inventory_app/inventory/models/storage_quantity_ui_model.dart';
+import 'package:inventory_app/inventory/models/location_quantity_ui_model.dart';
 
 class InventoryItemUiModel {
   InventoryItemUiModel({
     required this.name,
     required this.detailNumber,
     required this.price,
-    this.storageQuantities = const [],
+    this.stock = const [],
     this.brand,
     this.description,
   });
@@ -15,8 +15,8 @@ class InventoryItemUiModel {
   final double price;
   final String? brand;
   final String? description;
-  final List<StorageQuantityUiModel> storageQuantities;
+  final List<LocationQuantityUiModel> stock;
 
   int get totalQuantity =>
-      storageQuantities.fold(0, (sum, element) => sum + element.quantity);
+      stock.fold(0, (sum, element) => sum + element.quantity);
 }
