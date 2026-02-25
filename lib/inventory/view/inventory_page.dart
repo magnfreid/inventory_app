@@ -5,16 +5,16 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:inventory_app/authentication/cubit/authentication_cubit.dart';
 import 'package:inventory_app/inventory/bloc/inventory_bloc.dart';
 import 'package:inventory_app/inventory/bloc/inventory_state.dart';
-import 'package:inventory_app/inventory/models/inventory_item_ui_model.dart';
-import 'package:inventory_app/inventory_item_details/view/inventory_item_details_page.dart';
-import 'package:inventory_app/inventory_item_editor/view/inventory_item_editor_page.dart';
-import 'package:inventory_app/inventory_item_editor/view/inventory_item_quick_editor_page.dart';
+import 'package:inventory_app/inventory/models/part_ui_model.dart';
+import 'package:inventory_app/part_details/view/part_details_page.dart';
+import 'package:inventory_app/part_editor/view/part_editor_page.dart';
+import 'package:inventory_app/part_editor/view/part_quick_editor_page.dart';
 import 'package:inventory_app/l10n/l10n.dart';
-import 'package:inventory_app/locations/view/locations_page.dart';
+import 'package:inventory_app/storages/view/storages_page.dart';
 import 'package:inventory_app/statistics/view/statistics_page.dart';
-import 'package:inventory_repository/inventory_repository.dart';
-import 'package:location_repository/location_repository.dart';
-import 'package:product_repository/product_repository.dart';
+import 'package:part_repository/part_repository.dart';
+import 'package:stock_repository/stock_repository.dart';
+import 'package:storage_repository/storage_repository.dart';
 
 class InventoryPage extends StatelessWidget {
   const InventoryPage({super.key});
@@ -23,9 +23,9 @@ class InventoryPage extends StatelessWidget {
   Widget build(BuildContext context) {
     return BlocProvider(
       create: (context) => InventoryBloc(
-        inventoryRepository: context.read<InventoryRepository>(),
-        locationRepository: context.read<LocationRepository>(),
-        productRepository: context.read<ProductRepository>(),
+        stockRepository: context.read<StockRepository>(),
+        storageRepository: context.read<StorageRepository>(),
+        partRepository: context.read<PartRepository>(),
       ),
       child: const InventoryView(),
     );
@@ -49,14 +49,14 @@ class InventoryView extends StatelessWidget {
       floatingActionButtonLocation: .endContained,
       body: BlocBuilder<InventoryBloc, InventoryState>(
         builder: (context, state) {
-          final items = state.items;
+          final parts = state.parts;
           return Column(
             children: [
               Expanded(
                 child: ListView.builder(
-                  itemCount: items.length,
+                  itemCount: parts.length,
                   itemBuilder: (context, index) =>
-                      _InventoryItemCard(item: items[index]),
+                      _PartCard(part: parts[index]),
                 ),
               ),
             ],
@@ -117,7 +117,7 @@ class _Drawer extends StatelessWidget {
               title: Text(l10n.drawerLocationsLinkText),
               onTap: () {
                 Navigator.pop(context);
-                unawaited(Navigator.push(context, LocationsPage.route()));
+                unawaited(Navigator.push(context, StoragesPage.route()));
               },
             ),
             ListTile(
@@ -145,22 +145,21 @@ class _Drawer extends StatelessWidget {
   }
 }
 
-class _InventoryItemCard extends StatelessWidget {
-  const _InventoryItemCard({
-    required this.item,
+class _PartCard extends StatelessWidget {
+  const _PartCard({
+    required this.part,
   });
 
-  final InventoryItemUiModel item;
+  final PartUiModel part;
 
   @override
   Widget build(BuildContext context) {
     return Card(
       child: InkWell(
-        onTap: () =>
-            Navigator.push(context, InventoryItemDetailsPage.route(item: item)),
+        onTap: () => Navigator.push(context, PartDetailsPage.route(item: part)),
         onLongPress: () => showModalBottomSheet<void>(
           context: context,
-          builder: (context) => const InventoryItemQuickEditorPage(),
+          builder: (context) => const PartQuickEditorPage(),
         ),
         child: Padding(
           padding: const EdgeInsets.all(8),
@@ -169,21 +168,21 @@ class _InventoryItemCard extends StatelessWidget {
               Column(
                 crossAxisAlignment: .start,
                 children: [
-                  Text(item.name),
+                  Text(part.name),
                   Text(
-                    item.detailNumber,
+                    part.detailNumber,
                     style: const TextStyle(
                       color: Colors.blueGrey,
                       fontSize: 10,
                     ),
                   ),
-                  Text(item.brand ?? ''),
+                  Text(part.brand ?? ''),
                 ],
               ),
               const Spacer(),
               Column(
                 children: [
-                  Text(item.totalQuantity.toString()),
+                  Text(part.totalQuantity.toString()),
                 ],
               ),
             ],

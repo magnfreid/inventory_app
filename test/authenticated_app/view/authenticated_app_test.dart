@@ -49,9 +49,9 @@ void main() {
               value: userRepository,
               child: AuthenticatedApp(
                 authUser: authUser,
-                inventoryRepositoryFactory: (orgId) => inventoryRepository,
-                locationRepositoryFactory: (orgId) => locationRepository,
-                productRepositoryFactory: (orgId) => productRepository,
+                stockRepositoryFactory: (orgId) => inventoryRepository,
+                storageRepositoryFactory: (orgId) => locationRepository,
+                partRepositoryFactory: (orgId) => productRepository,
               ),
             ),
           ),
@@ -84,9 +84,9 @@ void main() {
             value: userRepository,
             child: AuthenticatedApp(
               authUser: authUser,
-              inventoryRepositoryFactory: (orgId) => inventoryRepository,
-              locationRepositoryFactory: (orgId) => locationRepository,
-              productRepositoryFactory: (orgId) => productRepository,
+              stockRepositoryFactory: (orgId) => inventoryRepository,
+              storageRepositoryFactory: (orgId) => locationRepository,
+              partRepositoryFactory: (orgId) => productRepository,
             ),
           ),
         );

@@ -22,11 +22,11 @@ class Authentication extends StatelessWidget {
           unauthenticated: SignInPage.new,
           authenticated: (authUser) => AuthenticatedApp(
             authUser: authUser,
-            inventoryRepositoryFactory: (orgId) =>
+            stockRepositoryFactory: (orgId) =>
                 FirebaseInventoryRepository(organizationId: orgId),
-            locationRepositoryFactory: (orgId) =>
+            storageRepositoryFactory: (orgId) =>
                 FirebaseLocationRepository(organizationId: orgId),
-            productRepositoryFactory: (orgId) =>
+            partRepositoryFactory: (orgId) =>
                 FirebaseProductRepository(organizationId: orgId),
           ),
         );
