@@ -1,28 +1,29 @@
-import 'package:auth_repository/auth_repository.dart';
+import 'package:authentication_service/authentication_service.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:inventory_app/authenticated_app/cubit/user_cubit.dart';
 import 'package:inventory_app/authenticated_app/cubit/user_state.dart';
 import 'package:inventory_app/inventory/view/inventory_page.dart';
-import 'package:inventory_repository/inventory_repository.dart';
-import 'package:location_repository/location_repository.dart';
-import 'package:product_repository/product_repository.dart';
+import 'package:part_repository/part_repository.dart';
+import 'package:stock_repository/stock_repository.dart';
+import 'package:storage_repository/storage_repository.dart';
+
 import 'package:user_repository/user_repository.dart';
 
 class AuthenticatedApp extends StatelessWidget {
   const AuthenticatedApp({
     required this.authUser,
-    required this.inventoryRepositoryFactory,
-    required this.locationRepositoryFactory,
-    required this.productRepositoryFactory,
+    required this.stockRepositoryFactory,
+    required this.storageRepositoryFactory,
+    required this.partRepositoryFactory,
     super.key,
   });
 
-  final AuthUser authUser;
+  final AuthenticatedUser authUser;
 
-  final InventoryRepository Function(String orgId) inventoryRepositoryFactory;
-  final LocationRepository Function(String orgId) locationRepositoryFactory;
-  final ProductRepository Function(String orgId) productRepositoryFactory;
+  final StockRepository Function(String orgId) stockRepositoryFactory;
+  final StorageRepository Function(String orgId) storageRepositoryFactory;
+  final PartRepository Function(String orgId) partRepositoryFactory;
 
   @override
   Widget build(BuildContext context) {
@@ -38,20 +39,24 @@ class AuthenticatedApp extends StatelessWidget {
           error: (error) => Text(error.toString()),
           loaded: (currentUser) => MultiRepositoryProvider(
             providers: [
-              RepositoryProvider<InventoryRepository>(
+              RepositoryProvider<StockRepository>(
                 create: (_) =>
-                    inventoryRepositoryFactory(currentUser.organizationId),
+                    stockRepositoryFactory(currentUser.organizationId),
               ),
-              RepositoryProvider<LocationRepository>(
+              RepositoryProvider<StorageRepository>(
                 create: (_) =>
-                    locationRepositoryFactory(currentUser.organizationId),
+                    storageRepositoryFactory(currentUser.organizationId),
               ),
-              RepositoryProvider<ProductRepository>(
+              RepositoryProvider<PartRepository>(
                 create: (_) =>
-                    productRepositoryFactory(currentUser.organizationId),
+                    partRepositoryFactory(currentUser.organizationId),
               ),
             ],
-            child: const InventoryPage(),
+            child: Navigator(
+              onGenerateRoute: (_) => MaterialPageRoute(
+                builder: (context) => const InventoryPage(),
+              ),
+            ),
           ),
         ),
       ),

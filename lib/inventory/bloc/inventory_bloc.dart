@@ -2,33 +2,34 @@ import 'dart:async';
 
 import 'package:bloc/bloc.dart';
 import 'package:inventory_app/inventory/bloc/inventory_state.dart';
-import 'package:inventory_app/inventory/models/inventory_item_ui_model.dart';
-import 'package:inventory_app/inventory/models/storage_quantity_ui_model.dart';
-import 'package:inventory_repository/inventory_repository.dart';
-import 'package:location_repository/location_repository.dart';
-import 'package:product_repository/product_repository.dart';
+import 'package:inventory_app/inventory/models/part_ui_model.dart';
+import 'package:inventory_app/inventory/models/storage_quantity_model.dart';
+import 'package:part_repository/part_repository.dart';
+
 import 'package:rxdart/rxdart.dart';
+import 'package:stock_repository/stock_repository.dart';
+import 'package:storage_repository/storage_repository.dart';
 
 part 'inventory_event.dart';
 
 class InventoryBloc extends Bloc<InventoryEvent, InventoryState> {
   InventoryBloc({
-    required LocationRepository locationRepository,
-    required InventoryRepository inventoryRepository,
-    required ProductRepository productRepository,
-  }) : _locationRepository = locationRepository,
-       _inventoryRepository = inventoryRepository,
-       _productRepository = productRepository,
+    required StorageRepository storageRepository,
+    required StockRepository stockRepository,
+    required PartRepository partRepository,
+  }) : _storageRepository = storageRepository,
+       _stockRepository = stockRepository,
+       _partRepository = partRepository,
        super(const InventoryState()) {
-    on<_InventoryListUpdated>(_onInventoryListUpdated);
+    on<_PartsUpdated>(_onPartsUpdated);
 
     setStreamSubscription();
   }
 
-  final LocationRepository _locationRepository;
-  final InventoryRepository _inventoryRepository;
-  final ProductRepository _productRepository;
-  late final StreamSubscription<List<InventoryItemUiModel>> _streamSubscription;
+  final StockRepository _stockRepository;
+  final StorageRepository _storageRepository;
+  final PartRepository _partRepository;
+  late final StreamSubscription<List<PartUiModel>> _streamSubscription;
 
   @override
   Future<void> close() async {
@@ -36,59 +37,59 @@ class InventoryBloc extends Bloc<InventoryEvent, InventoryState> {
     return super.close();
   }
 
-  FutureOr<void> _onInventoryListUpdated(
-    _InventoryListUpdated event,
+  FutureOr<void> _onPartsUpdated(
+    _PartsUpdated event,
     Emitter<InventoryState> emit,
   ) {
-    emit(state.copyWith(items: event.items));
+    emit(state.copyWith(parts: event.parts));
   }
 
   void setStreamSubscription() {
     _streamSubscription = Rx.combineLatest3(
-      _inventoryRepository.watchInventoryItems(),
-      _productRepository.watchProducts(),
-      _locationRepository.watchLocations(),
+      _stockRepository.watchStock(),
+      _partRepository.watchParts(),
+      _storageRepository.watchStorages(),
       (
-        inventoryItems,
-        products,
-        locations,
+        stocks,
+        parts,
+        storages,
       ) {
-        final locationMap = {
-          for (final location in locations) location.id: location,
+        final storagesMap = {
+          for (final storage in storages) storage.id: storage,
         };
 
-        final inventoryByProduct = <String, List<InventoryItem>>{};
+        final stockByPart = <String, List<Stock>>{};
 
-        for (final inventory in inventoryItems) {
-          inventoryByProduct
-              .putIfAbsent(inventory.productId, () => [])
-              .add(inventory);
+        for (final stock in stocks) {
+          stockByPart.putIfAbsent(stock.partId, () => []).add(stock);
         }
 
-        final uiItems = <InventoryItemUiModel>[];
+        final uiItems = <PartUiModel>[];
 
-        for (final product in products) {
-          final productInventory = inventoryByProduct[product.id] ?? const [];
-          final storageQuantities = productInventory.map((inventory) {
-            final location = locationMap[inventory.storageId];
-            return StorageQuantityUiModel(
-              storageName: location?.name ?? 'Unknown',
-              quantity: inventory.quantity,
+        for (final part in parts) {
+          final partStock = stockByPart[part.id] ?? const [];
+          final storageQuantities = partStock.map((stock) {
+            final storage = storagesMap[stock.storageId];
+            return StorageQuantityModel(
+              storageId: stock.storageId,
+              locationName: storage?.name ?? 'Unknown',
+              quantity: stock.quantity,
             );
           }).toList();
           uiItems.add(
-            InventoryItemUiModel(
-              name: product.name,
-              detailNumber: product.detailNumber,
-              price: product.price,
-              brand: product.brand,
-              description: product.description,
-              storageQuantities: storageQuantities,
+            PartUiModel(
+              partId: part.id,
+              name: part.name,
+              detailNumber: part.detailNumber,
+              price: part.price,
+              brand: part.brand,
+              description: part.description,
+              stock: storageQuantities,
             ),
           );
         }
         return uiItems;
       },
-    ).listen((items) => add(_InventoryListUpdated(items: items)));
+    ).listen((parts) => add(_PartsUpdated(parts: parts)));
   }
 }

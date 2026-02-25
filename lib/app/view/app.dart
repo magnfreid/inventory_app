@@ -1,23 +1,23 @@
-import 'package:auth_repository/auth_repository.dart';
+import 'package:authentication_service/authentication_service.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:inventory_app/app/app_themes.dart';
-import 'package:inventory_app/authentication_gate/cubit/authentication_cubit.dart';
-import 'package:inventory_app/authentication_gate/view/authentication_gate.dart';
+import 'package:inventory_app/authentication/cubit/authentication_cubit.dart';
+import 'package:inventory_app/authentication/view/authentication.dart';
 import 'package:inventory_app/l10n/gen/app_localizations.dart';
 import 'package:user_repository/user_repository.dart';
 
 class App extends StatelessWidget {
   const App({
-    required AuthRepository authRepository,
+    required AuthenticationService authService,
     required UserRepository userRepository,
     required AuthenticationCubit authCubit,
     super.key,
-  }) : _authRepository = authRepository,
+  }) : _authService = authService,
        _userRepository = userRepository,
        _authCubit = authCubit;
 
-  final AuthRepository _authRepository;
+  final AuthenticationService _authService;
   final UserRepository _userRepository;
   final AuthenticationCubit _authCubit;
 
@@ -26,7 +26,7 @@ class App extends StatelessWidget {
     return MultiRepositoryProvider(
       providers: [
         RepositoryProvider.value(
-          value: _authRepository,
+          value: _authService,
         ),
         RepositoryProvider.value(value: _userRepository),
       ],
@@ -52,7 +52,7 @@ class AppView extends StatelessWidget {
       darkTheme: AppThemes.darkTheme(context),
       localizationsDelegates: AppLocalizations.localizationsDelegates,
       supportedLocales: AppLocalizations.supportedLocales,
-      home: const AuthenticationGate(),
+      home: const Authentication(),
     );
   }
 }

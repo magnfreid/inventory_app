@@ -1,4 +1,4 @@
-import 'package:auth_repository/auth_repository.dart';
+import 'package:authentication_service/authentication_service.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:inventory_app/l10n/l10n.dart';
@@ -11,7 +11,8 @@ class SignInPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return BlocProvider(
-      create: (_) => SignInBloc(authRepository: context.read<AuthRepository>()),
+      create: (_) =>
+          SignInBloc(authService: context.read<AuthenticationService>()),
       child: const SignInView(),
     );
   }
@@ -57,13 +58,12 @@ class _SignInViewState extends State<SignInView> {
           ),
         );
       },
-      child: Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 50),
-        child: BlocBuilder<SignInBloc, SignInState>(
-          builder: (context, state) {
-            return Scaffold(
-              body: Column(
-                mainAxisAlignment: .center,
+      child: BlocBuilder<SignInBloc, SignInState>(
+        builder: (context, state) {
+          return Scaffold(
+            body: Padding(
+              padding: const .symmetric(horizontal: 50),
+              child: Column(
                 children: [
                   const Spacer(),
                   TextField(
@@ -94,7 +94,7 @@ class _SignInViewState extends State<SignInView> {
                               child: SizedBox(
                                 width: 24,
                                 height: 24,
-                                child: CircularProgressIndicator(),
+                                child: CircularProgressIndicator.adaptive(),
                               ),
                             )
                           : Text(l10n.signInSignInButtonText),
@@ -103,9 +103,9 @@ class _SignInViewState extends State<SignInView> {
                   const Spacer(),
                 ],
               ),
-            );
-          },
-        ),
+            ),
+          );
+        },
       ),
     );
   }

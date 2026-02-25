@@ -1,6 +1,6 @@
 import 'dart:async';
 
-import 'package:auth_repository/auth_repository.dart';
+import 'package:authentication_service/authentication_service.dart';
 import 'package:bloc/bloc.dart';
 import 'package:bloc_concurrency/bloc_concurrency.dart';
 import 'package:inventory_app/sign_in/bloc/sign_in_state.dart';
@@ -8,13 +8,13 @@ import 'package:inventory_app/sign_in/bloc/sign_in_state.dart';
 part 'sign_in_event.dart';
 
 class SignInBloc extends Bloc<SignInEvent, SignInState> {
-  SignInBloc({required AuthRepository authRepository})
-    : _authRepository = authRepository,
+  SignInBloc({required AuthenticationService authService})
+    : _authService = authService,
       super(const SignInState()) {
     on<SignInButtonPressed>(_onSignInButtonPressed, transformer: droppable());
   }
 
-  final AuthRepository _authRepository;
+  final AuthenticationService _authService;
 
   FutureOr<void> _onSignInButtonPressed(
     SignInButtonPressed event,
@@ -22,7 +22,7 @@ class SignInBloc extends Bloc<SignInEvent, SignInState> {
   ) async {
     emit(state.copyWith(status: .loading, error: null));
     try {
-      await _authRepository.signInWithEmailAndPassword(
+      await _authService.signInWithEmailAndPassword(
         email: event.email,
         password: event.password,
       );
