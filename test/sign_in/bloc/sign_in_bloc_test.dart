@@ -14,7 +14,7 @@ void main() {
 
   setUp(() {
     authRepository = MockAuthRepository();
-    bloc = SignInBloc(authRepository: authRepository);
+    bloc = SignInBloc(authService: authRepository);
     error = Exception('Test error');
   });
 

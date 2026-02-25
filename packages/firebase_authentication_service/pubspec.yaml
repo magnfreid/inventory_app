@@ -1,0 +1,22 @@
+name: firebase_authentication_service
+description: A Very Good Project created by Very Good CLI.
+version: 0.1.0+1
+publish_to: none
+
+environment:
+  sdk: ">=3.11.0 <4.0.0"
+
+dependencies:
+  authentication_service:
+    path: ../authentication_service
+  firebase_auth: ^6.1.4
+  flutter:
+    sdk: flutter
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+  mocktail: ^1.0.4
+  very_good_analysis: ^10.1.0
+
+resolution: workspace

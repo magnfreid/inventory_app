@@ -8,27 +8,27 @@ environment:
   flutter: ^3.41.1
 
 workspace:
-  - packages/auth_repository
-  - packages/firebase_auth_repository
+  - packages/firebase_authentication_service
   - packages/firebase_storage_remote_data_source
   - packages/firebase_user_remote_data_source
-  - packages/stock_repository
-  - packages/storage_repository
-  - packages/part_repository
-  - packages/user_repository
   - packages/part_remote_data_source
+  - packages/part_repository
   - packages/stock_remote_data_source
+  - packages/stock_repository
   - packages/storage_remote_data_source
+  - packages/storage_repository
   - packages/user_remote_data_source
+  - packages/user_repository
+  - packages/authentication_service
 
 dependencies:
-  auth_repository:
-    path: packages/auth_repository
+  authentication_service:
+    path: packages/authentication_service
   bloc: ^9.2.0
   bloc_concurrency: ^0.3.0
   bloc_test: ^10.0.0
-  firebase_auth_repository:
-    path: packages/firebase_auth_repository
+  firebase_authentication_service:
+    path: packages/firebase_authentication_service
   firebase_core: ^4.4.0
   firebase_part_remote_data_source:
     path: packages/firebase_part_remote_data_source

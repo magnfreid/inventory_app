@@ -122,7 +122,7 @@ return authenticated(_that);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult maybeWhen<TResult extends Object?>({TResult Function()?  loading,TResult Function()?  unauthenticated,TResult Function( AuthUser user)?  authenticated,required TResult orElse(),}) {final _that = this;
+@optionalTypeArgs TResult maybeWhen<TResult extends Object?>({TResult Function()?  loading,TResult Function()?  unauthenticated,TResult Function( AuthenticatedUser user)?  authenticated,required TResult orElse(),}) {final _that = this;
 switch (_that) {
 case _Loading() when loading != null:
 return loading();case _Unauthenticated() when unauthenticated != null:
@@ -145,7 +145,7 @@ return authenticated(_that.user);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult when<TResult extends Object?>({required TResult Function()  loading,required TResult Function()  unauthenticated,required TResult Function( AuthUser user)  authenticated,}) {final _that = this;
+@optionalTypeArgs TResult when<TResult extends Object?>({required TResult Function()  loading,required TResult Function()  unauthenticated,required TResult Function( AuthenticatedUser user)  authenticated,}) {final _that = this;
 switch (_that) {
 case _Loading():
 return loading();case _Unauthenticated():
@@ -164,7 +164,7 @@ return authenticated(_that.user);}
 /// }
 /// ```
 
-@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>({TResult? Function()?  loading,TResult? Function()?  unauthenticated,TResult? Function( AuthUser user)?  authenticated,}) {final _that = this;
+@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>({TResult? Function()?  loading,TResult? Function()?  unauthenticated,TResult? Function( AuthenticatedUser user)?  authenticated,}) {final _that = this;
 switch (_that) {
 case _Loading() when loading != null:
 return loading();case _Unauthenticated() when unauthenticated != null:
@@ -248,7 +248,7 @@ class _Authenticated implements AuthenticationState {
   const _Authenticated({required this.user});
   
 
- final  AuthUser user;
+ final  AuthenticatedUser user;
 
 /// Create a copy of AuthenticationState
 /// with the given fields replaced by the non-null parameter values.
@@ -280,7 +280,7 @@ abstract mixin class _$AuthenticatedCopyWith<$Res> implements $AuthenticationSta
   factory _$AuthenticatedCopyWith(_Authenticated value, $Res Function(_Authenticated) _then) = __$AuthenticatedCopyWithImpl;
 @useResult
 $Res call({
- AuthUser user
+ AuthenticatedUser user
 });
 
 
@@ -300,7 +300,7 @@ class __$AuthenticatedCopyWithImpl<$Res>
 @pragma('vm:prefer-inline') $Res call({Object? user = null,}) {
   return _then(_Authenticated(
 user: null == user ? _self.user : user // ignore: cast_nullable_to_non_nullable
-as AuthUser,
+as AuthenticatedUser,
   ));
 }
 

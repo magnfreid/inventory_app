@@ -22,7 +22,7 @@ void main() {
       when(
         () => authRepository.currentUser,
       ).thenAnswer((_) => const Stream.empty());
-      final cubit = AuthenticationCubit(authRepository: authRepository);
+      final cubit = AuthenticationCubit(authService: authRepository);
       expect(cubit.state, const AuthenticationState.loading());
       await cubit.close();
     });
@@ -33,7 +33,7 @@ void main() {
         when(
           () => authRepository.currentUser,
         ).thenAnswer((_) => Stream.value(null));
-        return AuthenticationCubit(authRepository: authRepository);
+        return AuthenticationCubit(authService: authRepository);
       },
       expect: () => [const AuthenticationState.unauthenticated()],
     );
@@ -44,7 +44,7 @@ void main() {
         when(
           () => authRepository.currentUser,
         ).thenAnswer((_) => Stream.value(user));
-        return AuthenticationCubit(authRepository: authRepository);
+        return AuthenticationCubit(authService: authRepository);
       },
       expect: () => [
         AuthenticationState.authenticated(user: user),
@@ -58,7 +58,7 @@ void main() {
           () => authRepository.currentUser,
         ).thenAnswer((_) => const Stream.empty());
         when(() => authRepository.signOut()).thenAnswer((_) async {});
-        return AuthenticationCubit(authRepository: authRepository);
+        return AuthenticationCubit(authService: authRepository);
       },
       act: (bloc) => bloc.signOut(),
       verify: (_) {

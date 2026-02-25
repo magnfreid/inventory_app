@@ -1,5 +1,6 @@
-import 'package:auth_repository/auth_repository.dart';
+import 'package:authentication_service/authentication_service.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
+import 'package:inventory_app/authenticated_app/view/authenticated_app.dart';
 
 part 'authentication_state.freezed.dart';
 
@@ -8,6 +9,6 @@ sealed class AuthenticationState with _$AuthenticationState {
   const factory AuthenticationState.loading() = _Loading;
   const factory AuthenticationState.unauthenticated() = _Unauthenticated;
   const factory AuthenticationState.authenticated({
-    required AuthUser user,
+    required AuthenticatedUser user,
   }) = _Authenticated;
 }

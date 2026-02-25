@@ -1,22 +1,22 @@
 import 'dart:async';
 
-import 'package:auth_repository/auth_repository.dart';
+import 'package:authentication_service/authentication_service.dart';
 import 'package:bloc/bloc.dart';
 import 'package:inventory_app/authentication/cubit/authentication_state.dart';
 
 class AuthenticationCubit extends Cubit<AuthenticationState> {
-  AuthenticationCubit({required AuthRepository authRepository})
-    : _authRepository = authRepository,
+  AuthenticationCubit({required AuthenticationService authService})
+    : _authService = authService,
       super(const AuthenticationState.loading()) {
-    _userSubscription = _authRepository.currentUser.listen(
+    _userSubscription = _authService.currentUser.listen(
       _onUserChanged,
     );
   }
 
-  final AuthRepository _authRepository;
-  late final StreamSubscription<AuthUser?> _userSubscription;
+  final AuthenticationService _authService;
+  late final StreamSubscription<AuthenticatedUser?> _userSubscription;
 
-  void _onUserChanged(AuthUser? user) {
+  void _onUserChanged(AuthenticatedUser? user) {
     if (user == null) {
       emit(const AuthenticationState.unauthenticated());
     } else {
@@ -25,7 +25,7 @@ class AuthenticationCubit extends Cubit<AuthenticationState> {
   }
 
   Future<void> signOut() async {
-    await _authRepository.signOut();
+    await _authService.signOut();
   }
 
   @override

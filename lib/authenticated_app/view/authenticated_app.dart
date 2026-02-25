@@ -1,4 +1,4 @@
-import 'package:auth_repository/auth_repository.dart';
+import 'package:authentication_service/authentication_service.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:inventory_app/authenticated_app/cubit/user_cubit.dart';
@@ -19,7 +19,7 @@ class AuthenticatedApp extends StatelessWidget {
     super.key,
   });
 
-  final AuthUser authUser;
+  final AuthenticatedUser authUser;
 
   final StockRepository Function(String orgId) stockRepositoryFactory;
   final StorageRepository Function(String orgId) storageRepositoryFactory;
