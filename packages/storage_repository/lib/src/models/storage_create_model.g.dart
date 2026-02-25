@@ -1,20 +1,19 @@
 // GENERATED CODE - DO NOT MODIFY BY HAND
 
-part of 'location_create_model.dart';
+part of 'storage_create_model.dart';
 
 // **************************************************************************
 // JsonSerializableGenerator
 // **************************************************************************
 
-LocationCreateModel _$LocationCreateModelFromJson(Map<String, dynamic> json) =>
-    LocationCreateModel(
+StorageCreateModel _$StorageCreateModelFromJson(Map<String, dynamic> json) =>
+    StorageCreateModel(
       name: json['name'] as String,
       description: json['description'] as String?,
     );
 
-Map<String, dynamic> _$LocationCreateModelToJson(
-  LocationCreateModel instance,
-) => <String, dynamic>{
-  'name': instance.name,
-  'description': instance.description,
-};
+Map<String, dynamic> _$StorageCreateModelToJson(StorageCreateModel instance) =>
+    <String, dynamic>{
+      'name': instance.name,
+      'description': instance.description,
+    };

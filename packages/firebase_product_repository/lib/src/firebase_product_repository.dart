@@ -9,7 +9,7 @@ class FirebaseProductRepository implements PartRepository {
     _collection = _firestore
         .collection('organizations')
         .doc(organizationId)
-        .collection('products')
+        .collection('parts')
         .withConverter<Part>(
           fromFirestore: (snapshot, _) {
             final data = snapshot.data()!;
@@ -38,8 +38,8 @@ class FirebaseProductRepository implements PartRepository {
   @override
   Future<Part> addPart(PartCreateModel productCreateModel) async {
     final docRef = _collection.doc();
-    final product = Part.fromCreateModel(docRef.id, productCreateModel);
-    await docRef.set(product);
-    return product;
+    final part = Part.fromCreateModel(docRef.id, productCreateModel);
+    await docRef.set(part);
+    return part;
   }
 }

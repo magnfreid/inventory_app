@@ -1,8 +1,8 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:location_repository/location_repository.dart';
-import 'package:location_repository/src/models/location_create_model.dart';
 
-class FirebaseLocationRepository implements LocationRepository {
+import 'package:storage_repository/storage_repository.dart';
+
+class FirebaseLocationRepository implements StorageRepository {
   FirebaseLocationRepository({
     required String organizationId,
     FirebaseFirestore? firestore,
@@ -10,10 +10,10 @@ class FirebaseLocationRepository implements LocationRepository {
     _collection = _firestore
         .collection('organizations')
         .doc(organizationId)
-        .collection('locations')
-        .withConverter<Location>(
+        .collection('storages')
+        .withConverter<Storage>(
           fromFirestore: (snapshot, _) =>
-              Location.fromJson(snapshot.data()!..['id'] = snapshot.id),
+              Storage.fromJson(snapshot.data()!..['id'] = snapshot.id),
           toFirestore: (item, _) {
             final json = item.toJson()..remove('id');
             return json;
@@ -22,25 +22,25 @@ class FirebaseLocationRepository implements LocationRepository {
   }
 
   final FirebaseFirestore _firestore;
-  late final CollectionReference<Location> _collection;
+  late final CollectionReference<Storage> _collection;
 
   @override
-  Stream<List<Location>> watchLocations() {
+  Stream<List<Storage>> watchStorages() {
     return _collection.snapshots().map(
       (snapshot) => snapshot.docs.map((doc) => doc.data()).toList(),
     );
   }
 
   @override
-  Future<Location> add({
-    required LocationCreateModel locationCreateModel,
+  Future<Storage> add({
+    required StorageCreateModel storageCreateModel,
   }) async {
     final docRef = _collection.doc();
-    final location = Location.fromCreateModel(
+    final storage = Storage.fromCreateModel(
       id: docRef.id,
-      createModel: locationCreateModel,
+      createModel: storageCreateModel,
     );
-    await docRef.set(location);
-    return location;
+    await docRef.set(storage);
+    return storage;
   }
 }

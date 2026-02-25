@@ -15,7 +15,7 @@ workspace:
   - packages/firebase_product_repository
   - packages/firebase_user_repository
   - packages/stock_repository
-  - packages/location_repository
+  - packages/storage_repository
   - packages/part_repository
   - packages/user_repository
 
@@ -46,8 +46,8 @@ dependencies:
   intl: ^0.20.2
   stock_repository:
     path: packages/stock_repository
-  location_repository:
-    path: packages/location_repository
+  storage_repository:
+    path: packages/storage_repository
   part_repository:
     path: packages/part_repository
   user_repository:
