@@ -1,7 +1,7 @@
-import 'package:inventory_repository/inventory_repository.dart';
+import 'package:stock_repository/src/models/stock.dart';
 
-abstract interface class InventoryRepository {
-  Stream<List<InventoryItem>> watchInventoryItems();
+abstract interface class StockRepository {
+  Stream<List<Stock>> watchStock();
   Future<void> increaseStock({
     required String productId,
     required String locationId,

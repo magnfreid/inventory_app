@@ -14,7 +14,7 @@ workspace:
   - packages/firebase_location_repository
   - packages/firebase_product_repository
   - packages/firebase_user_repository
-  - packages/inventory_repository
+  - packages/stock_repository
   - packages/location_repository
   - packages/part_repository
   - packages/user_repository
@@ -44,8 +44,8 @@ dependencies:
   freezed: ^3.2.3
   freezed_annotation: ^3.1.0
   intl: ^0.20.2
-  inventory_repository:
-    path: packages/inventory_repository
+  stock_repository:
+    path: packages/stock_repository
   location_repository:
     path: packages/location_repository
   part_repository:

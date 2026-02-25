@@ -8,8 +8,8 @@ environment:
 
 dependencies:
   cloud_firestore: ^6.1.2
-  inventory_repository:
-    path: ../inventory_repository
+  stock_repository:
+    path: packages/stock_repository
 
 dev_dependencies:
   mocktail: ^1.0.4

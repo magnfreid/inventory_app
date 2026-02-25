@@ -1,7 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:inventory_repository/inventory_repository.dart';
+import 'package:stock_repository/stock_repository.dart';
 
-class FirebaseInventoryRepository implements InventoryRepository {
+class FirebaseInventoryRepository implements StockRepository {
   FirebaseInventoryRepository({
     required String organizationId,
     FirebaseFirestore? firestore,
@@ -9,21 +9,21 @@ class FirebaseInventoryRepository implements InventoryRepository {
     _collection = _firestore
         .collection('organizations')
         .doc(organizationId)
-        .collection('inventory')
-        .withConverter<InventoryItem>(
+        .collection('stock')
+        .withConverter<Stock>(
           fromFirestore: (snapshot, _) {
             final data = snapshot.data()!;
-            return InventoryItem.fromJson(data);
+            return Stock.fromJson(data);
           },
           toFirestore: (item, _) => item.toJson(),
         );
   }
 
   final FirebaseFirestore _firestore;
-  late final CollectionReference<InventoryItem> _collection;
+  late final CollectionReference<Stock> _collection;
 
   @override
-  Stream<List<InventoryItem>> watchInventoryItems() {
+  Stream<List<Stock>> watchStock() {
     return _collection.snapshots().map(
       (snapshot) => snapshot.docs.map((doc) => doc.data()).toList(),
     );
@@ -75,9 +75,9 @@ class FirebaseInventoryRepository implements InventoryRepository {
       if (!snapshot.exists) {
         transaction.set(
           docRef,
-          InventoryItem(
-            productId: productId,
-            locationId: locationId,
+          Stock(
+            partId: productId,
+            storageId: locationId,
             quantity: amount,
           ),
         );
