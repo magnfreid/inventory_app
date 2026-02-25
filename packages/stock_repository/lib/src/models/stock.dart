@@ -1,8 +1,5 @@
-import 'package:json_annotation/json_annotation.dart';
+import 'package:stock_remote_data_source/stock_remote_data_source.dart';
 
-part 'stock.g.dart';
-
-@JsonSerializable()
 class Stock {
   Stock({
     required this.storageId,
@@ -10,9 +7,11 @@ class Stock {
     required this.quantity,
   });
 
-  factory Stock.fromJson(Map<String, dynamic> json) => _$StockFromJson(json);
-
-  Map<String, dynamic> toJson() => _$StockToJson(this);
+  factory Stock.fromDto(StockDto dto) => Stock(
+    storageId: dto.storageId,
+    partId: dto.partId,
+    quantity: dto.quantity,
+  );
 
   final String storageId;
   final String partId;

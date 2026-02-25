@@ -55,8 +55,8 @@ class PartDetailsBloc extends Bloc<PartDetailsEvent, PartDetailsState> {
     emit(state.copyWith(saveStatus: .loading));
     try {
       _stockRepository.increaseStock(
-        productId: event.partId,
-        locationId: event.storageId,
+        partId: event.partId,
+        storageId: event.storageId,
         amount: event.amount,
       );
       emit(state.copyWith(saveStatus: .success));

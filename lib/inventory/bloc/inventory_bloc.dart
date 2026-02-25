@@ -47,7 +47,7 @@ class InventoryBloc extends Bloc<InventoryEvent, InventoryState> {
   void setStreamSubscription() {
     _streamSubscription = Rx.combineLatest3(
       _stockRepository.watchStock(),
-      _partRepository.watchProducts(),
+      _partRepository.watchParts(),
       _storageRepository.watchStorages(),
       (
         stocks,

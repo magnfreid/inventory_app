@@ -1,9 +1,6 @@
-import 'package:json_annotation/json_annotation.dart';
+import 'package:part_remote_data_source/part_remote_data_source.dart';
 import 'package:part_repository/src/models/part_create_model.dart';
 
-part 'part.g.dart';
-
-@JsonSerializable()
 class Part {
   Part({
     required this.id,
@@ -15,8 +12,6 @@ class Part {
     required this.description,
   });
 
-  factory Part.fromJson(Map<String, dynamic> json) => _$PartFromJson(json);
-
   factory Part.fromCreateModel(String id, PartCreateModel createModel) => Part(
     id: id,
     name: createModel.name,
@@ -27,7 +22,15 @@ class Part {
     description: createModel.description,
   );
 
-  Map<String, dynamic> toJson() => _$PartToJson(this);
+  factory Part.fromDto(PartDto dto) => Part(
+    id: dto.id,
+    name: dto.name,
+    detailNumber: dto.detailNumber,
+    isRecycled: dto.isRecycled,
+    price: dto.price,
+    brand: dto.brand,
+    description: dto.description,
+  );
 
   final String id;
   final String name;

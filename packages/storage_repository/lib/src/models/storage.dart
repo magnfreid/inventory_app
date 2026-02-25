@@ -1,14 +1,11 @@
-import 'package:json_annotation/json_annotation.dart';
+import 'package:storage_remote_data_source/storage_remote_data_source.dart';
 import 'package:storage_repository/src/models/storage_create_model.dart';
 
-part 'storage.g.dart';
-
-@JsonSerializable()
 class Storage {
   Storage({required this.id, required this.name, this.description});
 
-  factory Storage.fromJson(Map<String, dynamic> json) =>
-      _$StorageFromJson(json);
+  factory Storage.fromDto(StorageDto dto) =>
+      Storage(id: dto.id, name: dto.name, description: dto.description);
 
   factory Storage.fromCreateModel({
     required String id,
@@ -18,8 +15,6 @@ class Storage {
     name: createModel.name,
     description: createModel.description,
   );
-
-  Map<String, dynamic> toJson() => _$StorageToJson(this);
 
   final String id;
   final String name;

@@ -4,13 +4,14 @@ import 'dart:developer';
 import 'package:bloc/bloc.dart';
 import 'package:firebase_auth_repository/firebase_auth_repository.dart';
 import 'package:firebase_core/firebase_core.dart';
-import 'package:firebase_user_repository/firebase_user_repository.dart';
+import 'package:firebase_user_remote_data_source/firebase_user_remote_data_source.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:inventory_app/app/bloc_observer.dart';
 import 'package:inventory_app/app/view/app.dart';
 import 'package:inventory_app/authentication/cubit/authentication_cubit.dart';
 import 'package:inventory_app/firebase_options.dart';
+import 'package:user_repository/user_repository.dart';
 
 Future<void> bootstrap() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -25,8 +26,9 @@ Future<void> bootstrap() async {
 
   Bloc.observer = const AppBlocObserver();
 
+  final firebaseUserRemote = FirebaseUserRemoteDataSource();
   final authRepository = FirebaseAuthRepository();
-  final userRepository = FirebaseUserRepository();
+  final userRepository = UserRepository(remote: firebaseUserRemote);
   final authCubit = AuthenticationCubit(
     authRepository: authRepository,
   );

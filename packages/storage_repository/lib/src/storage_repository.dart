@@ -1,7 +1,30 @@
-import 'package:storage_repository/src/models/storage.dart';
-import 'package:storage_repository/src/models/storage_create_model.dart';
+import 'package:storage_remote_data_source/storage_remote_data_source.dart';
+import 'package:storage_repository/storage_repository.dart';
 
-abstract interface class StorageRepository {
-  Stream<List<Storage>> watchStorages();
-  Future<Storage> add({required StorageCreateModel storageCreateModel});
+class StorageRepository {
+  StorageRepository({
+    required StorageRemoteDataSource remote,
+  }) : _remote = remote;
+
+  final StorageRemoteDataSource _remote;
+
+  Stream<List<Storage>> watchStorages() {
+    return _remote.watchStorages().map(
+      (dtos) => dtos.map(Storage.fromDto).toList(),
+    );
+  }
+
+  Future<Storage> addStorage({
+    required StorageCreateModel storageCreateModel,
+  }) async {
+    final dto = StorageDto(
+      id: '',
+      name: storageCreateModel.name,
+      description: storageCreateModel.description,
+    );
+
+    final createdDto = await _remote.addStorage(dto);
+
+    return Storage.fromDto(createdDto);
+  }
 }

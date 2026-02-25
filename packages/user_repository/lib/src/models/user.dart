@@ -1,10 +1,7 @@
-import 'package:json_annotation/json_annotation.dart';
-
-part 'user.g.dart';
+import 'package:user_remote_data_source/user_remote_data_source.dart';
 
 enum UserRole { admin, user }
 
-@JsonSerializable()
 class User {
   User({
     required this.id,
@@ -14,13 +11,20 @@ class User {
     required this.role,
   });
 
-  factory User.fromJson(Map<String, dynamic> json) => _$UserFromJson(json);
+  factory User.fromDto(UserDto dto) => User(
+    id: dto.id,
+    organizationId: dto.organizationId,
+    name: dto.name,
+    email: dto.email,
+    role: switch (dto.role) {
+      .admin => .admin,
+      .user => .admin,
+    },
+  );
 
   final String id;
   final String organizationId;
   final String name;
   final String email;
   final UserRole role;
-
-  Map<String, dynamic> toJson() => _$UserToJson(this);
 }

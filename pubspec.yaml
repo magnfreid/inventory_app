@@ -10,14 +10,16 @@ environment:
 workspace:
   - packages/auth_repository
   - packages/firebase_auth_repository
-  - packages/firebase_inventory_repository
-  - packages/firebase_location_repository
-  - packages/firebase_product_repository
-  - packages/firebase_user_repository
+  - packages/firebase_storage_remote_data_source
+  - packages/firebase_user_remote_data_source
   - packages/stock_repository
   - packages/storage_repository
   - packages/part_repository
   - packages/user_repository
+  - packages/part_remote_data_source
+  - packages/stock_remote_data_source
+  - packages/storage_remote_data_source
+  - packages/user_remote_data_source
 
 dependencies:
   auth_repository:
@@ -27,15 +29,15 @@ dependencies:
   bloc_test: ^10.0.0
   firebase_auth_repository:
     path: packages/firebase_auth_repository
-  firebase_inventory_repository:
-    path: packages/firebase_inventory_repository
   firebase_core: ^4.4.0
-  firebase_location_repository:
-    path: packages/firebase_location_repository
-  firebase_product_repository:
-    path: packages/firebase_product_repository
-  firebase_user_repository:
-    path: packages/firebase_user_repository
+  firebase_part_remote_data_source:
+    path: packages/firebase_part_remote_data_source
+  firebase_stock_remote_data_source:
+    path: packages/firebase_stock_remote_data_source
+  firebase_storage_remote_data_source:
+    path: packages/firebase_storage_remote_data_source
+  firebase_user_remote_data_source:
+    path: packages/firebase_user_remote_data_source
   flutter:
     sdk: flutter
   flutter_bloc: ^9.1.1
@@ -44,15 +46,21 @@ dependencies:
   freezed: ^3.2.3
   freezed_annotation: ^3.1.0
   intl: ^0.20.2
+  part_remote_data_source:
+    path: packages/part_remote_data_source
+  part_repository:
+    path: packages/part_repository
+  rxdart: ^0.28.0
+  stock_remote_data_source:
+    path: packages/stock_remote_data_source
   stock_repository:
     path: packages/stock_repository
   storage_repository:
     path: packages/storage_repository
-  part_repository:
-    path: packages/part_repository
+  user_remote_data_source:
+    path: packages/user_remote_data_source
   user_repository:
     path: packages/user_repository
-  rxdart: ^0.28.0
 
 dev_dependencies:
   bloc_lint: ">=0.3.3 <0.3.6"

@@ -369,6 +369,20 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "3.4.0"
+  firebase_part_remote_data_source:
+    dependency: "direct main"
+    description:
+      path: "packages/firebase_part_remote_data_source"
+      relative: true
+    source: path
+    version: "0.1.0+1"
+  firebase_stock_remote_data_source:
+    dependency: "direct main"
+    description:
+      path: "packages/firebase_stock_remote_data_source"
+      relative: true
+    source: path
+    version: "0.1.0+1"
   fixnum:
     dependency: transitive
     description:
