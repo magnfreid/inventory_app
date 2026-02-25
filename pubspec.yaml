@@ -8,6 +8,7 @@ environment:
   flutter: ^3.41.1
 
 workspace:
+  - packages/app_ui
   - packages/firebase_authentication_service
   - packages/firebase_storage_remote_data_source
   - packages/firebase_user_remote_data_source
@@ -22,6 +23,8 @@ workspace:
   - packages/authentication_service
 
 dependencies:
+  app_ui:
+    path: packages/app_ui
   authentication_service:
     path: packages/authentication_service
   bloc: ^9.2.0
