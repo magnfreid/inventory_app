@@ -1,12 +1,12 @@
 // GENERATED CODE - DO NOT MODIFY BY HAND
 
-part of 'product.dart';
+part of 'part.dart';
 
 // **************************************************************************
 // JsonSerializableGenerator
 // **************************************************************************
 
-Product _$ProductFromJson(Map<String, dynamic> json) => Product(
+Part _$PartFromJson(Map<String, dynamic> json) => Part(
   id: json['id'] as String,
   name: json['name'] as String,
   detailNumber: json['detailNumber'] as String,
@@ -16,7 +16,7 @@ Product _$ProductFromJson(Map<String, dynamic> json) => Product(
   description: json['description'] as String?,
 );
 
-Map<String, dynamic> _$ProductToJson(Product instance) => <String, dynamic>{
+Map<String, dynamic> _$PartToJson(Part instance) => <String, dynamic>{
   'id': instance.id,
   'name': instance.name,
   'detailNumber': instance.detailNumber,

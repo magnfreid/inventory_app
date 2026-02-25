@@ -16,7 +16,7 @@ workspace:
   - packages/firebase_user_repository
   - packages/inventory_repository
   - packages/location_repository
-  - packages/product_repository
+  - packages/part_repository
   - packages/user_repository
 
 dependencies:
@@ -48,8 +48,8 @@ dependencies:
     path: packages/inventory_repository
   location_repository:
     path: packages/location_repository
-  product_repository:
-    path: packages/product_repository
+  part_repository:
+    path: packages/part_repository
   user_repository:
     path: packages/user_repository
   rxdart: ^0.28.0

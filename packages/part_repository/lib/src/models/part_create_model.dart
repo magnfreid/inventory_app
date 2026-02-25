@@ -1,10 +1,10 @@
 import 'package:json_annotation/json_annotation.dart';
 
-part 'product_create_model.g.dart';
+part 'part_create_model.g.dart';
 
 @JsonSerializable()
-class ProductCreateModel {
-  ProductCreateModel({
+class PartCreateModel {
+  PartCreateModel({
     required this.name,
     required this.detailNumber,
     required this.isRecycled,
@@ -13,10 +13,10 @@ class ProductCreateModel {
     required this.description,
   });
 
-  factory ProductCreateModel.fromJson(Map<String, dynamic> json) =>
-      _$ProductCreateModelFromJson(json);
+  factory PartCreateModel.fromJson(Map<String, dynamic> json) =>
+      _$PartCreateModelFromJson(json);
 
-  Map<String, dynamic> toJson() => _$ProductCreateModelToJson(this);
+  Map<String, dynamic> toJson() => _$PartCreateModelToJson(this);
 
   final String name;
   final String detailNumber;

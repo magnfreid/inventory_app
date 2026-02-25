@@ -2,4 +2,4 @@
 library;
 
 export 'src/models/models.dart';
-export 'src/product_repository.dart';
+export 'src/part_repository.dart';

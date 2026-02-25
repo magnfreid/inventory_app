@@ -1,13 +1,13 @@
 // GENERATED CODE - DO NOT MODIFY BY HAND
 
-part of 'product_create_model.dart';
+part of 'part_create_model.dart';
 
 // **************************************************************************
 // JsonSerializableGenerator
 // **************************************************************************
 
-ProductCreateModel _$ProductCreateModelFromJson(Map<String, dynamic> json) =>
-    ProductCreateModel(
+PartCreateModel _$PartCreateModelFromJson(Map<String, dynamic> json) =>
+    PartCreateModel(
       name: json['name'] as String,
       detailNumber: json['detailNumber'] as String,
       isRecycled: json['isRecycled'] as bool,
@@ -16,7 +16,7 @@ ProductCreateModel _$ProductCreateModelFromJson(Map<String, dynamic> json) =>
       description: json['description'] as String?,
     );
 
-Map<String, dynamic> _$ProductCreateModelToJson(ProductCreateModel instance) =>
+Map<String, dynamic> _$PartCreateModelToJson(PartCreateModel instance) =>
     <String, dynamic>{
       'name': instance.name,
       'detailNumber': instance.detailNumber,

@@ -8,8 +8,8 @@ environment:
 
 dependencies:
   cloud_firestore: ^6.1.2
-  product_repository:
-    path: packages/product_repository
+  part_repository:
+    path: packages/part_repository
 
 dev_dependencies:
   mocktail: ^1.0.4

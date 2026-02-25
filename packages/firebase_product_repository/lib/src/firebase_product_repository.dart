@@ -1,9 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:part_repository/part_repository.dart';
 
-import 'package:product_repository/product_repository.dart';
-import 'package:product_repository/src/models/product_create_model.dart';
-
-class FirebaseProductRepository implements ProductRepository {
+class FirebaseProductRepository implements PartRepository {
   FirebaseProductRepository({
     required String organizationId,
     FirebaseFirestore? firestore,
@@ -12,10 +10,10 @@ class FirebaseProductRepository implements ProductRepository {
         .collection('organizations')
         .doc(organizationId)
         .collection('products')
-        .withConverter<Product>(
+        .withConverter<Part>(
           fromFirestore: (snapshot, _) {
             final data = snapshot.data()!;
-            return Product.fromJson({
+            return Part.fromJson({
               ...data,
               'id': snapshot.id,
             });
@@ -28,19 +26,19 @@ class FirebaseProductRepository implements ProductRepository {
   }
 
   final FirebaseFirestore _firestore;
-  late final CollectionReference<Product> _collection;
+  late final CollectionReference<Part> _collection;
 
   @override
-  Stream<List<Product>> watchProducts() {
+  Stream<List<Part>> watchProducts() {
     return _collection.snapshots().map(
       (snapshot) => snapshot.docs.map((doc) => doc.data()).toList(),
     );
   }
 
   @override
-  Future<Product> addProduct(ProductCreateModel productCreateModel) async {
+  Future<Part> addPart(PartCreateModel productCreateModel) async {
     final docRef = _collection.doc();
-    final product = Product.fromCreateModel(docRef.id, productCreateModel);
+    final product = Part.fromCreateModel(docRef.id, productCreateModel);
     await docRef.set(product);
     return product;
   }
