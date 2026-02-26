@@ -1,26 +1,27 @@
-import 'package:auth_repository/auth_repository.dart';
+import 'package:authentication_service/authentication_service.dart';
 import 'package:bloc_test/bloc_test.dart';
 import 'package:inventory_app/authentication/cubit/authentication_cubit.dart';
 import 'package:inventory_app/authentication/cubit/authentication_state.dart';
 
 import 'package:inventory_app/sign_in/bloc/sign_in_bloc.dart';
 import 'package:inventory_app/sign_in/bloc/sign_in_state.dart';
-import 'package:inventory_repository/inventory_repository.dart';
-import 'package:location_repository/location_repository.dart';
+
 import 'package:mocktail/mocktail.dart';
-import 'package:product_repository/product_repository.dart';
+import 'package:part_repository/part_repository.dart';
+import 'package:stock_repository/stock_repository.dart';
+import 'package:storage_repository/storage_repository.dart';
 import 'package:user_repository/user_repository.dart';
 
 //Repositories
-class MockAuthRepository extends Mock implements AuthRepository {}
+class MockAuthRepository extends Mock implements AuthenticationService {}
 
 class MockUserRepository extends Mock implements UserRepository {}
 
-class MockLocationRepository extends Mock implements LocationRepository {}
+class MockStorageRepository extends Mock implements StorageRepository {}
 
-class MockInventoryRepository extends Mock implements InventoryRepository {}
+class MockStockRepository extends Mock implements StockRepository {}
 
-class MockProductRepository extends Mock implements ProductRepository {}
+class MockPartRepository extends Mock implements PartRepository {}
 
 //Bloc
 class MockAuthenticationCubit extends MockCubit<AuthenticationState>

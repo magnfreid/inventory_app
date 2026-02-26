@@ -10,15 +10,17 @@ environment:
 workspace:
   - packages/app_ui
   - packages/firebase_authentication_service
-  - packages/firebase_storage_remote_data_source
-  - packages/firebase_user_remote_data_source
-  - packages/part_remote_data_source
+  - packages/firebase_part_remote
+  - packages/firebase_stock_remote
+  - packages/firebase_storage_remote
+  - packages/firebase_user_remote
+  - packages/part_remote
   - packages/part_repository
-  - packages/stock_remote_data_source
+  - packages/stock_remote
   - packages/stock_repository
-  - packages/storage_remote_data_source
+  - packages/storage_remote
   - packages/storage_repository
-  - packages/user_remote_data_source
+  - packages/user_remote
   - packages/user_repository
   - packages/authentication_service
 
@@ -33,14 +35,14 @@ dependencies:
   firebase_authentication_service:
     path: packages/firebase_authentication_service
   firebase_core: ^4.4.0
-  firebase_part_remote_data_source:
-    path: packages/firebase_part_remote_data_source
-  firebase_stock_remote_data_source:
-    path: packages/firebase_stock_remote_data_source
-  firebase_storage_remote_data_source:
-    path: packages/firebase_storage_remote_data_source
-  firebase_user_remote_data_source:
-    path: packages/firebase_user_remote_data_source
+  firebase_part_remote:
+    path: packages/firebase_part_remote
+  firebase_stock_remote:
+    path: packages/firebase_stock_remote
+  firebase_storage_remote:
+    path: packages/firebase_storage_remote
+  firebase_user_remote:
+    path: packages/firebase_user_remote
   flutter:
     sdk: flutter
   flutter_bloc: ^9.1.1
@@ -49,19 +51,19 @@ dependencies:
   freezed: ^3.2.3
   freezed_annotation: ^3.1.0
   intl: ^0.20.2
-  part_remote_data_source:
-    path: packages/part_remote_data_source
+  part_remote:
+    path: packages/part_remote
   part_repository:
     path: packages/part_repository
   rxdart: ^0.28.0
-  stock_remote_data_source:
-    path: packages/stock_remote_data_source
+  stock_remote:
+    path: packages/stock_remote
   stock_repository:
     path: packages/stock_repository
   storage_repository:
     path: packages/storage_repository
-  user_remote_data_source:
-    path: packages/user_remote_data_source
+  user_remote:
+    path: packages/user_remote
   user_repository:
     path: packages/user_repository
 

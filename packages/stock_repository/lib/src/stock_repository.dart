@@ -1,12 +1,12 @@
-import 'package:stock_remote_data_source/stock_remote_data_source.dart';
+import 'package:stock_remote/stock_remote.dart';
 import 'package:stock_repository/stock_repository.dart';
 
 class StockRepository {
   StockRepository({
-    required StockRemoteDataSource remote,
+    required StockRemote remote,
   }) : _remote = remote;
 
-  final StockRemoteDataSource _remote;
+  final StockRemote _remote;
 
   Stream<List<Stock>> watchStock() {
     return _remote.watchStock().map(

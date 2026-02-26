@@ -4,7 +4,7 @@ import 'dart:developer';
 import 'package:bloc/bloc.dart';
 import 'package:firebase_authentication_service/firebase_authentication_service.dart';
 import 'package:firebase_core/firebase_core.dart';
-import 'package:firebase_user_remote_data_source/firebase_user_remote_data_source.dart';
+import 'package:firebase_user_remote/firebase_user_remote.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:inventory_app/app/bloc_observer.dart';
@@ -26,7 +26,7 @@ Future<void> bootstrap() async {
 
   Bloc.observer = const AppBlocObserver();
 
-  final firebaseUserRemote = FirebaseUserRemoteDataSource();
+  final firebaseUserRemote = FirebaseUserRemote();
   final authService = FirebaseAuthenticationService();
   final userRepository = UserRepository(remote: firebaseUserRemote);
   final authCubit = AuthenticationCubit(

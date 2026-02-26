@@ -1,3 +1,4 @@
+import 'package:app_ui/app_ui.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:inventory_app/part_editor/bloc/part_editor_bloc.dart';
@@ -81,7 +82,7 @@ class _InventoryItemEditorViewState extends State<InventoryItemEditorView> {
                   decoration: InputDecoration(
                     labelText: '${l10n.formFieldNameLabelText}:',
                   ),
-                  autovalidateMode: .always,
+                  autovalidateMode: .onUserInteraction,
                   validator: (value) => value == null || value.isEmpty
                       ? l10n.validationRequired
                       : null,
@@ -91,7 +92,7 @@ class _InventoryItemEditorViewState extends State<InventoryItemEditorView> {
                   decoration: InputDecoration(
                     labelText: '${l10n.formFieldPriceLabelText}:',
                   ),
-                  autovalidateMode: .always,
+                  autovalidateMode: .onUserInteraction,
                   keyboardType: TextInputType.number,
                   validator: (value) => double.tryParse(value ?? '') == null
                       ? l10n.validationEnterNumber
@@ -141,43 +142,27 @@ class _InventoryItemEditorViewState extends State<InventoryItemEditorView> {
                     buildWhen: (previous, current) =>
                         previous.isLoading != current.isLoading,
                     builder: (context, state) {
-                      return SizedBox(
-                        width: double.infinity,
-                        child: ElevatedButton(
-                          onPressed: _canSave
-                              ? () => context.read<PartEditorBloc>().add(
-                                  SaveButtonPressed(
-                                    partCreateModel: PartCreateModel(
-                                      name: _nameController.text,
-                                      detailNumber:
-                                          _detailNumberController.text,
-                                      isRecycled: _isRecycled,
-                                      price:
-                                          double.tryParse(
-                                            _priceController.text,
-                                          ) ??
-                                          0.0,
-                                      brand: _brandController.text,
-                                      description: _descriptionController.text,
-                                    ),
+                      return AppButton(
+                        isLoading: state.isLoading,
+                        onPressed: _canSave
+                            ? () => context.read<PartEditorBloc>().add(
+                                SaveButtonPressed(
+                                  partCreateModel: PartCreate(
+                                    name: _nameController.text,
+                                    detailNumber: _detailNumberController.text,
+                                    isRecycled: _isRecycled,
+                                    price:
+                                        double.tryParse(
+                                          _priceController.text,
+                                        ) ??
+                                        0.0,
+                                    brand: _brandController.text,
+                                    description: _descriptionController.text,
                                   ),
-                                )
-                              : null,
-                          child: state.isLoading
-                              ? const Center(
-                                  child: SizedBox(
-                                    height: 24,
-                                    width: 24,
-                                    child: Padding(
-                                      padding: .all(3),
-                                      child: CircularProgressIndicator(
-                                        strokeWidth: 0.5,
-                                      ),
-                                    ),
-                                  ),
-                                )
-                              : Text(l10n.formSaveButtonText),
-                        ),
+                                ),
+                              )
+                            : null,
+                        child: Text(l10n.formSaveButtonText),
                       );
                     },
                   ),

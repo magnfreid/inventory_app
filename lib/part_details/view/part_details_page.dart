@@ -103,7 +103,9 @@ class PartDetailsView extends StatelessWidget {
                             );
                           }).toList(),
                         )
-                      : const SizedBox.shrink(),
+                      : const SizedBox.shrink(
+                          key: ValueKey('Empty'),
+                        ),
                 ),
               ],
             );

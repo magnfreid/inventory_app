@@ -1,4 +1,4 @@
-import 'package:auth_repository/auth_repository.dart';
+import 'package:authentication_service/authentication_service.dart';
 import 'package:bloc_test/bloc_test.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -15,12 +15,12 @@ import '../../helpers/helpers.dart';
 
 void main() {
   late AuthenticationCubit authenticationCubit;
-  late AuthRepository authRepository;
+  late AuthenticationService authService;
   late UserRepository userRepository;
 
   setUp(() {
     authenticationCubit = MockAuthenticationCubit();
-    authRepository = MockAuthRepository();
+    authService = MockAuthRepository();
     userRepository = MockUserRepository();
   });
 
@@ -39,7 +39,7 @@ void main() {
         MultiRepositoryProvider(
           providers: [
             RepositoryProvider.value(
-              value: authRepository,
+              value: authService,
             ),
             RepositoryProvider.value(
               value: userRepository,
@@ -59,7 +59,7 @@ void main() {
   testWidgets(
     'renders AuthenticatedApp when authenticated',
     (tester) async {
-      final authUser = AuthUser(id: '123');
+      final authUser = AuthenticatedUser(id: '123');
 
       final user = User(
         id: '123',
@@ -84,7 +84,7 @@ void main() {
       await tester.pumpApp(
         MultiRepositoryProvider(
           providers: [
-            RepositoryProvider.value(value: authRepository),
+            RepositoryProvider.value(value: authService),
             RepositoryProvider.value(value: userRepository),
           ],
           child: BlocProvider.value(
@@ -113,7 +113,7 @@ void main() {
       );
       await tester.pumpApp(
         RepositoryProvider.value(
-          value: authRepository,
+          value: authService,
           child: BlocProvider.value(
             value: authenticationCubit,
             child: const Authentication(),

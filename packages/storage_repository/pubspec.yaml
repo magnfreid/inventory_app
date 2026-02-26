@@ -9,8 +9,8 @@ environment:
 dependencies:
   flutter:
     sdk: flutter
-  storage_remote_data_source:
-    path: ../storage_remote_data_source
+  storage_remote:
+    path: ../storage_remote
 
 dev_dependencies:
   flutter_test:

@@ -1,12 +1,12 @@
-import 'package:storage_remote_data_source/storage_remote_data_source.dart';
+import 'package:storage_remote/storage_remote.dart';
 import 'package:storage_repository/storage_repository.dart';
 
 class StorageRepository {
   StorageRepository({
-    required StorageRemoteDataSource remote,
+    required StorageRemote remote,
   }) : _remote = remote;
 
-  final StorageRemoteDataSource _remote;
+  final StorageRemote _remote;
 
   Stream<List<Storage>> watchStorages() {
     return _remote.watchStorages().map(

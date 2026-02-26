@@ -17,7 +17,7 @@ class AppButton extends StatelessWidget {
 
   final bool isLoading;
   final bool isWide;
-  final VoidCallback onPressed;
+  final VoidCallback? onPressed;
   final Widget child;
 
   @override
