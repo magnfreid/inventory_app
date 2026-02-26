@@ -1,4 +1,4 @@
-import 'package:storage_remote_data_source/storage_remote_data_source.dart';
+import 'package:storage_remote/storage_remote.dart';
 import 'package:storage_repository/src/models/storage_create_model.dart';
 
 class Storage {

@@ -6,5 +6,5 @@ sealed class PartEditorEvent {
 
 final class SaveButtonPressed extends PartEditorEvent {
   const SaveButtonPressed({required this.partCreateModel});
-  final PartCreateModel partCreateModel;
+  final PartCreate partCreateModel;
 }

@@ -1,4 +1,4 @@
-import 'package:auth_repository/auth_repository.dart';
+import 'package:authentication_service/authentication_service.dart';
 import 'package:bloc_test/bloc_test.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:inventory_app/sign_in/bloc/sign_in_bloc.dart';
@@ -9,12 +9,12 @@ import '../../helpers/mocks.dart';
 
 void main() {
   late SignInBloc bloc;
-  late AuthRepository authRepository;
+  late AuthenticationService authService;
   late Exception error;
 
   setUp(() {
-    authRepository = MockAuthRepository();
-    bloc = SignInBloc(authService: authRepository);
+    authService = MockAuthRepository();
+    bloc = SignInBloc(authService: authService);
     error = Exception('Test error');
   });
 
@@ -26,7 +26,7 @@ void main() {
     'emits [loading, idle] when sign in succeeds',
     build: () {
       when(
-        () => authRepository.signInWithEmailAndPassword(
+        () => authService.signInWithEmailAndPassword(
           email: any(named: 'email'),
           password: any(named: 'password'),
         ),
@@ -45,7 +45,7 @@ void main() {
     ],
     verify: (_) {
       verify(
-        () => authRepository.signInWithEmailAndPassword(
+        () => authService.signInWithEmailAndPassword(
           email: 'test@test.com',
           password: 'password',
         ),
@@ -57,7 +57,7 @@ void main() {
     'emits [loading, idle with error] when sign in fails',
     build: () {
       when(
-        () => authRepository.signInWithEmailAndPassword(
+        () => authService.signInWithEmailAndPassword(
           email: any(named: 'email'),
           password: any(named: 'password'),
         ),
@@ -78,7 +78,7 @@ void main() {
     ],
     verify: (_) {
       verify(
-        () => authRepository.signInWithEmailAndPassword(
+        () => authService.signInWithEmailAndPassword(
           email: 'test@test.com',
           password: 'password',
         ),

@@ -1,4 +1,4 @@
-import 'package:stock_remote_data_source/stock_remote_data_source.dart';
+import 'package:stock_remote/stock_remote.dart';
 
 class Stock {
   Stock({

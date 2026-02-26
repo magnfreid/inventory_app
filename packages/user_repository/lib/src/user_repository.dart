@@ -1,9 +1,9 @@
-import 'package:user_remote_data_source/user_remote_data_source.dart';
+import 'package:user_remote/user_remote.dart';
 import 'package:user_repository/user_repository.dart';
 
 class UserRepository {
-  UserRepository({required UserRemoteDataSource remote}) : _remote = remote;
-  final UserRemoteDataSource _remote;
+  UserRepository({required UserRemote remote}) : _remote = remote;
+  final UserRemote _remote;
 
   Stream<User?> watchUser(String userId) => _remote
       .watchUser(userId)

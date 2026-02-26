@@ -9,8 +9,8 @@ environment:
 dependencies:
   flutter:
     sdk: flutter
-  user_remote_data_source:
-    path: ../user_remote_data_source
+  user_remote:
+    path: ../user_remote
 
 dev_dependencies:
   flutter_test:

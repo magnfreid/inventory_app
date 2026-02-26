@@ -1,5 +1,5 @@
-import 'package:part_remote_data_source/part_remote_data_source.dart';
-import 'package:part_repository/src/models/part_create_model.dart';
+import 'package:part_remote/part_remote.dart';
+import 'package:part_repository/src/models/part_create.dart';
 
 class Part {
   Part({
@@ -12,7 +12,7 @@ class Part {
     required this.description,
   });
 
-  factory Part.fromCreateModel(String id, PartCreateModel createModel) => Part(
+  factory Part.fromCreateModel(String id, PartCreate createModel) => Part(
     id: id,
     name: createModel.name,
     detailNumber: createModel.detailNumber,

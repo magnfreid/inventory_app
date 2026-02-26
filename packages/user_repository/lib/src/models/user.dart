@@ -1,4 +1,4 @@
-import 'package:user_remote_data_source/user_remote_data_source.dart';
+import 'package:user_remote/user_remote.dart';
 
 enum UserRole { admin, user }
 

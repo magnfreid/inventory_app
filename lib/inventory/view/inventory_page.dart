@@ -162,28 +162,49 @@ class _PartCard extends StatelessWidget {
           builder: (context) => const PartQuickEditorPage(),
         ),
         child: Padding(
-          padding: const EdgeInsets.all(8),
-          child: Row(
+          padding: const .all(8),
+          child: Column(
+            crossAxisAlignment: .start,
             children: [
-              Column(
-                crossAxisAlignment: .start,
+              Row(
                 children: [
-                  Text(part.name),
-                  Text(
-                    part.detailNumber,
-                    style: const TextStyle(
-                      color: Colors.blueGrey,
-                      fontSize: 10,
-                    ),
+                  Column(
+                    crossAxisAlignment: .start,
+                    children: [
+                      Text(part.name),
+                      Text(
+                        part.detailNumber,
+                        style: const TextStyle(
+                          color: Colors.blueGrey,
+                          fontSize: 10,
+                        ),
+                      ),
+                      Text(part.brand ?? ''),
+                    ],
                   ),
-                  Text(part.brand ?? ''),
+                  const Spacer(),
+                  Column(
+                    children: [
+                      Text(part.totalQuantity.toString()),
+                    ],
+                  ),
                 ],
               ),
-              const Spacer(),
-              Column(
-                children: [
-                  Text(part.totalQuantity.toString()),
-                ],
+              Wrap(
+                children: part.stock
+                    .map(
+                      (stock) => Card(
+                        color: Colors.blueAccent,
+                        child: Padding(
+                          padding: const .all(4),
+                          child: Text(
+                            '${stock.locationName} ${stock.quantity}',
+                            style: const TextStyle(fontSize: 8),
+                          ),
+                        ),
+                      ),
+                    )
+                    .toList(),
               ),
             ],
           ),

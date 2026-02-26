@@ -1,6 +1,6 @@
-import 'package:firebase_part_remote_data_source/firebase_part_remote_data_source.dart';
-import 'package:firebase_stock_remote_data_source/firebase_stock_remote_data_source.dart';
-import 'package:firebase_storage_remote_data_source/firebase_storage_remote_data_soure.dart';
+import 'package:firebase_part_remote/firebase_part_remote.dart';
+import 'package:firebase_stock_remote/firebase_stock_remote.dart';
+import 'package:firebase_storage_remote/firebase_storage_remote.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:inventory_app/authenticated_app/view/authenticated_app.dart';
@@ -26,19 +26,19 @@ class Authentication extends StatelessWidget {
           authenticated: (authUser) => AuthenticatedApp(
             authUser: authUser,
             stockRepositoryFactory: (orgId) {
-              final firebaseStockRemote = FirebaseStockRemoteDataSource(
+              final firebaseStockRemote = FirebaseStockRemote(
                 organizationId: orgId,
               );
               return StockRepository(remote: firebaseStockRemote);
             },
             storageRepositoryFactory: (orgId) {
-              final firebaseStorageRemote = FirebaseStorageRemoteDataSource(
+              final firebaseStorageRemote = FirebaseStorageRemote(
                 organizationId: orgId,
               );
               return StorageRepository(remote: firebaseStorageRemote);
             },
             partRepositoryFactory: (orgId) {
-              final firebasePartRemote = FirebasePartRemoteDataSource(
+              final firebasePartRemote = FirebasePartRemote(
                 organizationId: orgId,
               );
               return PartRepository(remote: firebasePartRemote);

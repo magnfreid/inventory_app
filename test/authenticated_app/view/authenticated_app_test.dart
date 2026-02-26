@@ -1,37 +1,37 @@
-import 'package:auth_repository/auth_repository.dart';
+import 'package:authentication_service/authentication_service.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:inventory_app/authenticated_app/view/authenticated_app.dart';
 import 'package:inventory_app/inventory/view/inventory_page.dart';
-import 'package:inventory_repository/inventory_repository.dart';
-import 'package:location_repository/location_repository.dart';
 import 'package:mocktail/mocktail.dart';
-import 'package:product_repository/product_repository.dart';
+import 'package:part_repository/part_repository.dart';
+import 'package:stock_repository/stock_repository.dart';
+import 'package:storage_repository/storage_repository.dart';
 import 'package:user_repository/user_repository.dart';
 
 import '../../helpers/helpers.dart';
 
 void main() {
   late MockUserRepository userRepository;
-  late MockLocationRepository locationRepository;
-  late MockInventoryRepository inventoryRepository;
-  late MockProductRepository productRepository;
-  late AuthUser authUser;
+  late MockStorageRepository storageRepository;
+  late MockStockRepository stockRepository;
+  late MockPartRepository partRepository;
+  late AuthenticatedUser authUser;
   late User user;
 
   setUp(() {
     userRepository = MockUserRepository();
-    locationRepository = MockLocationRepository();
-    inventoryRepository = MockInventoryRepository();
-    productRepository = MockProductRepository();
-    authUser = AuthUser(id: '123');
+    storageRepository = MockStorageRepository();
+    stockRepository = MockStockRepository();
+    partRepository = MockPartRepository();
+    authUser = AuthenticatedUser(id: '123');
     user = User(
       id: '123',
       organizationId: 'org1',
       name: 'Test',
       email: 'test@test.com',
-      role: UserRole.admin,
+      role: .admin,
     );
   });
 
@@ -49,9 +49,9 @@ void main() {
               value: userRepository,
               child: AuthenticatedApp(
                 authUser: authUser,
-                stockRepositoryFactory: (orgId) => inventoryRepository,
-                storageRepositoryFactory: (orgId) => locationRepository,
-                partRepositoryFactory: (orgId) => productRepository,
+                stockRepositoryFactory: (orgId) => stockRepository,
+                storageRepositoryFactory: (orgId) => storageRepository,
+                partRepositoryFactory: (orgId) => partRepository,
               ),
             ),
           ),
@@ -68,25 +68,25 @@ void main() {
           () => userRepository.watchUser('123'),
         ).thenAnswer((_) => Stream.value(user));
         when(
-          () => inventoryRepository.watchInventoryItems(),
-        ).thenAnswer((_) => Stream.value(<InventoryItem>[]));
+          () => stockRepository.watchStock(),
+        ).thenAnswer((_) => Stream.value(<Stock>[]));
 
         when(
-          () => locationRepository.watchLocations(),
-        ).thenAnswer((_) => Stream.value(<Location>[]));
+          () => storageRepository.watchStorages(),
+        ).thenAnswer((_) => Stream.value(<Storage>[]));
 
         when(
-          () => productRepository.watchProducts(),
-        ).thenAnswer((_) => Stream.value(<Product>[]));
+          () => partRepository.watchParts(),
+        ).thenAnswer((_) => Stream.value(<Part>[]));
 
         await tester.pumpApp(
           RepositoryProvider<UserRepository>.value(
             value: userRepository,
             child: AuthenticatedApp(
               authUser: authUser,
-              stockRepositoryFactory: (orgId) => inventoryRepository,
-              storageRepositoryFactory: (orgId) => locationRepository,
-              partRepositoryFactory: (orgId) => productRepository,
+              stockRepositoryFactory: (orgId) => stockRepository,
+              storageRepositoryFactory: (orgId) => storageRepository,
+              partRepositoryFactory: (orgId) => partRepository,
             ),
           ),
         );

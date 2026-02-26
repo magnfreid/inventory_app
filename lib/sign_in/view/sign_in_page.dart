@@ -1,3 +1,4 @@
+import 'package:app_ui/app_ui.dart';
 import 'package:authentication_service/authentication_service.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -66,39 +67,24 @@ class _SignInViewState extends State<SignInView> {
               child: Column(
                 children: [
                   const Spacer(),
-                  TextField(
-                    decoration: InputDecoration(
-                      label: Text(l10n.signInEmailTextFieldLabel),
-                    ),
+                  AppTextField(
+                    labelText: l10n.signInEmailTextFieldLabel,
                     controller: _emailTextController,
                   ),
-                  TextField(
-                    decoration: InputDecoration(
-                      label: Text(l10n.signInPasswordTextFieldLabel),
-                    ),
+                  AppTextField(
+                    labelText: l10n.signInPasswordTextFieldLabel,
                     controller: _passwordTextController,
                   ),
                   const Spacer(),
-                  SizedBox(
-                    width: double.infinity,
-                    height: 48,
-                    child: ElevatedButton(
-                      onPressed: () => context.read<SignInBloc>().add(
-                        SignInButtonPressed(
-                          email: _emailTextController.text,
-                          password: _passwordTextController.text,
-                        ),
+                  AppButton.wide(
+                    isLoading: state.isLoading,
+                    onPressed: () => context.read<SignInBloc>().add(
+                      SignInButtonPressed(
+                        email: _emailTextController.text,
+                        password: _passwordTextController.text,
                       ),
-                      child: state.isLoading
-                          ? const Center(
-                              child: SizedBox(
-                                width: 24,
-                                height: 24,
-                                child: CircularProgressIndicator.adaptive(),
-                              ),
-                            )
-                          : Text(l10n.signInSignInButtonText),
                     ),
+                    child: Text(l10n.signInSignInButtonText),
                   ),
                   const Spacer(),
                 ],

@@ -1,4 +1,4 @@
-import 'package:auth_repository/auth_repository.dart';
+import 'package:authentication_service/authentication_service.dart';
 import 'package:bloc_test/bloc_test.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:inventory_app/authentication/cubit/authentication_cubit.dart';
@@ -10,11 +10,11 @@ import '../../helpers/mocks.dart';
 
 void main() {
   late MockAuthRepository authRepository;
-  late AuthUser user;
+  late AuthenticatedUser user;
 
   setUp(() {
     authRepository = MockAuthRepository();
-    user = AuthUser(id: '123');
+    user = AuthenticatedUser(id: '123');
   });
 
   group('AuthenticationBloc', () {
@@ -57,7 +57,9 @@ void main() {
         when(
           () => authRepository.currentUser,
         ).thenAnswer((_) => const Stream.empty());
-        when(() => authRepository.signOut()).thenAnswer((_) async {});
+        when(() => authRepository.signOut()).thenAnswer((_) async {
+          return;
+        });
         return AuthenticationCubit(authService: authRepository);
       },
       act: (bloc) => bloc.signOut(),

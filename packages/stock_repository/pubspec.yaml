@@ -9,8 +9,8 @@ environment:
 dependencies:
   flutter:
     sdk: flutter
-  stock_remote_data_source:
-    path: ../stock_remote_data_source
+  stock_remote:
+    path: ../stock_remote
 
 dev_dependencies:
   flutter_test:
