@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:developer';
 
 import 'package:bloc/bloc.dart';
 import 'package:inventory_app/inventory/bloc/inventory_state.dart';
@@ -57,6 +58,8 @@ class InventoryBloc extends Bloc<InventoryEvent, InventoryState> {
         final storagesMap = {
           for (final storage in storages) storage.id: storage,
         };
+
+        log('Storages map: $storagesMap');
 
         final stockByPart = <String, List<Stock>>{};
 

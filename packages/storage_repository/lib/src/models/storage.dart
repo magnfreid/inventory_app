@@ -19,4 +19,8 @@ class Storage {
   final String id;
   final String name;
   String? description;
+
+  @override
+  String toString() =>
+      'Storage(id: $id, name: $name, description: $description)';
 }

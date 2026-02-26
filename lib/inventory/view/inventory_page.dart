@@ -159,7 +159,9 @@ class _PartCard extends StatelessWidget {
         onTap: () => Navigator.push(context, PartDetailsPage.route(item: part)),
         onLongPress: () => showModalBottomSheet<void>(
           context: context,
-          builder: (context) => const PartQuickEditorPage(),
+          builder: (context) => PartQuickEditorPage(
+            part: part,
+          ),
         ),
         child: Padding(
           padding: const .all(8),
@@ -192,6 +194,7 @@ class _PartCard extends StatelessWidget {
               ),
               Wrap(
                 children: part.stock
+                    .where((stock) => stock.quantity > 0)
                     .map(
                       (stock) => Card(
                         color: Colors.blueAccent,
