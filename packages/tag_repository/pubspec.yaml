@@ -9,6 +9,7 @@ environment:
 dependencies:
   flutter:
     sdk: flutter
+  rxdart: ^0.28.0
   tag_remote:
     path: ../tag_remote
 
