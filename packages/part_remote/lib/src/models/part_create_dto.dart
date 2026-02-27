@@ -9,7 +9,7 @@ class PartCreateDto {
     required this.detailNumber,
     required this.isRecycled,
     required this.price,
-    required this.brand,
+    required this.mainTagId,
     required this.description,
   });
 
@@ -22,6 +22,6 @@ class PartCreateDto {
   final String detailNumber;
   final bool isRecycled;
   final double price;
-  final String? brand;
+  final String? mainTagId;
   final String? description;
 }

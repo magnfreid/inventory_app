@@ -162,7 +162,7 @@ class _InventoryItemEditorViewState extends State<InventoryItemEditorView> {
                                           _priceController.text,
                                         ) ??
                                         0.0,
-                                    brand: _brandController.text,
+                                    mainTagId: null,
                                     description: _descriptionController.text,
                                   ),
                                 ),

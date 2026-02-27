@@ -8,7 +8,7 @@ class Part {
     required this.detailNumber,
     required this.isRecycled,
     required this.price,
-    required this.brand,
+    required this.mainTagId,
     required this.description,
   });
 
@@ -18,7 +18,7 @@ class Part {
     detailNumber: createModel.detailNumber,
     isRecycled: createModel.isRecycled,
     price: createModel.price,
-    brand: createModel.brand,
+    mainTagId: createModel.mainTagId,
     description: createModel.description,
   );
 
@@ -28,7 +28,7 @@ class Part {
     detailNumber: dto.detailNumber,
     isRecycled: dto.isRecycled,
     price: dto.price,
-    brand: dto.brand,
+    mainTagId: dto.mainTagId,
     description: dto.description,
   );
 
@@ -37,6 +37,6 @@ class Part {
   final String detailNumber;
   final bool isRecycled;
   final double price;
-  final String? brand;
+  final String? mainTagId;
   final String? description;
 }

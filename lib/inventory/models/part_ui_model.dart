@@ -1,4 +1,5 @@
 import 'package:inventory_app/inventory/models/storage_quantity_model.dart';
+import 'package:tag_repository/tag_repository.dart';
 
 class PartUiModel {
   PartUiModel({
@@ -8,7 +9,7 @@ class PartUiModel {
     required this.price,
     required this.isRecycled,
     this.stock = const [],
-    this.brand,
+    this.mainTag,
     this.description,
   });
 
@@ -17,7 +18,7 @@ class PartUiModel {
   final String detailNumber;
   final double price;
   final bool isRecycled;
-  final String? brand;
+  final Tag? mainTag;
   final String? description;
   final List<StorageQuantityModel> stock;
 

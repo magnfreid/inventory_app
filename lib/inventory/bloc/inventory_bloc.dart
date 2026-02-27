@@ -10,26 +10,30 @@ import 'package:part_repository/part_repository.dart';
 import 'package:rxdart/rxdart.dart';
 import 'package:stock_repository/stock_repository.dart';
 import 'package:storage_repository/storage_repository.dart';
+import 'package:tag_repository/tag_repository.dart';
 
 part 'inventory_event.dart';
 
 class InventoryBloc extends Bloc<InventoryEvent, InventoryState> {
   InventoryBloc({
+    required PartRepository partRepository,
     required StorageRepository storageRepository,
     required StockRepository stockRepository,
-    required PartRepository partRepository,
-  }) : _storageRepository = storageRepository,
+    required TagRepository tagRepository,
+  }) : _partRepository = partRepository,
+       _storageRepository = storageRepository,
        _stockRepository = stockRepository,
-       _partRepository = partRepository,
+       _tagRepository = tagRepository,
        super(const InventoryState()) {
     on<_PartsUpdated>(_onPartsUpdated);
 
     setStreamSubscription();
   }
 
+  final PartRepository _partRepository;
   final StockRepository _stockRepository;
   final StorageRepository _storageRepository;
-  final PartRepository _partRepository;
+  final TagRepository _tagRepository;
   late final StreamSubscription<List<PartUiModel>> _streamSubscription;
 
   @override
@@ -46,54 +50,61 @@ class InventoryBloc extends Bloc<InventoryEvent, InventoryState> {
   }
 
   void setStreamSubscription() {
-    _streamSubscription = Rx.combineLatest3(
-      _stockRepository.watchStock(),
-      _partRepository.watchParts(),
-      _storageRepository.watchStorages(),
-      (
-        stocks,
-        parts,
-        storages,
-      ) {
-        final storagesMap = {
-          for (final storage in storages) storage.id: storage,
-        };
-
-        log('Storages map: $storagesMap');
-
-        final stockByPart = <String, List<Stock>>{};
-
-        for (final stock in stocks) {
-          stockByPart.putIfAbsent(stock.partId, () => []).add(stock);
-        }
-
-        final uiItems = <PartUiModel>[];
-
-        for (final part in parts) {
-          final partStock = stockByPart[part.id] ?? const [];
-          final storageQuantities = partStock.map((stock) {
-            final storage = storagesMap[stock.storageId];
-            return StorageQuantityModel(
-              storageId: stock.storageId,
-              locationName: storage?.name ?? 'Unknown',
-              quantity: stock.quantity,
+    _streamSubscription =
+        Rx.combineLatest4<
+              List<Stock>,
+              List<Part>,
+              List<Storage>,
+              List<Tag>,
+              List<PartUiModel>
+            >(
+              _stockRepository.watchStock(),
+              _partRepository.watchParts(),
+              _storageRepository.watchStorages(),
+              _tagRepository.watchMainTags(),
+              (stocks, parts, storages, tags) {
+                final storagesMap = {
+                  for (final storage in storages) storage.id: storage,
+                };
+                final tagsMap = {
+                  for (final tag in tags) tag.id: tag,
+                };
+                final stockByPart = <String, List<Stock>>{};
+                for (final stock in stocks) {
+                  stockByPart.putIfAbsent(stock.partId, () => []).add(stock);
+                }
+                final uiItems = <PartUiModel>[];
+                for (final part in parts) {
+                  final partStock = stockByPart[part.id] ?? const [];
+                  final storageQuantities = partStock.map((stock) {
+                    final storage = storagesMap[stock.storageId];
+                    return StorageQuantityModel(
+                      storageId: stock.storageId,
+                      locationName: storage?.name ?? 'Unknown',
+                      quantity: stock.quantity,
+                    );
+                  }).toList();
+                  final mainTag = part.mainTagId != null
+                      ? tagsMap[part.mainTagId!]
+                      : null;
+                  uiItems.add(
+                    PartUiModel(
+                      partId: part.id,
+                      name: part.name,
+                      detailNumber: part.detailNumber,
+                      price: part.price,
+                      isRecycled: part.isRecycled,
+                      mainTag: mainTag,
+                      description: part.description,
+                      stock: storageQuantities,
+                    ),
+                  );
+                }
+                return uiItems;
+              },
+            )
+            .listen(
+              (parts) => add(_PartsUpdated(parts: parts)),
             );
-          }).toList();
-          uiItems.add(
-            PartUiModel(
-              partId: part.id,
-              name: part.name,
-              detailNumber: part.detailNumber,
-              price: part.price,
-              isRecycled: part.isRecycled,
-              brand: part.brand,
-              description: part.description,
-              stock: storageQuantities,
-            ),
-          );
-        }
-        return uiItems;
-      },
-    ).listen((parts) => add(_PartsUpdated(parts: parts)));
   }
 }

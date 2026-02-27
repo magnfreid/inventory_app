@@ -190,15 +190,11 @@ class _Details extends StatelessWidget {
     final l10n = context.l10n;
     return Column(
       children: [
-        if (part.brand != null)
+        if (part.mainTag != null)
           ListTile(
-            title: Text(l10n.formFieldBrandLabelText),
-            trailing: Text(part.brand!),
+            title: Text(l10n.formFieldDetailNumberLabelText),
+            trailing: Text(part.detailNumber),
           ),
-        ListTile(
-          title: Text(l10n.formFieldDetailNumberLabelText),
-          trailing: Text(part.detailNumber),
-        ),
         ListTile(
           title: Text(l10n.formFieldPriceLabelText),
           trailing: Text(part.price.toString()),

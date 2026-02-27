@@ -11,7 +11,7 @@ class PartDto {
     required this.detailNumber,
     required this.isRecycled,
     required this.price,
-    required this.brand,
+    required this.mainTagId,
     required this.description,
   });
 
@@ -25,7 +25,7 @@ class PartDto {
         detailNumber: createModel.detailNumber,
         isRecycled: createModel.isRecycled,
         price: createModel.price,
-        brand: createModel.brand,
+        mainTagId: createModel.mainTagId,
         description: createModel.description,
       );
 
@@ -36,6 +36,6 @@ class PartDto {
   final String detailNumber;
   final bool isRecycled;
   final double price;
-  final String? brand;
+  final String? mainTagId;
   final String? description;
 }

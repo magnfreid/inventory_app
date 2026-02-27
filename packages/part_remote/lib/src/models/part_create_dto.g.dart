@@ -12,7 +12,7 @@ PartCreateDto _$PartCreateDtoFromJson(Map<String, dynamic> json) =>
       detailNumber: json['detailNumber'] as String,
       isRecycled: json['isRecycled'] as bool,
       price: (json['price'] as num).toDouble(),
-      brand: json['brand'] as String?,
+      mainTagId: json['mainTagId'] as String?,
       description: json['description'] as String?,
     );
 
@@ -22,6 +22,6 @@ Map<String, dynamic> _$PartCreateDtoToJson(PartCreateDto instance) =>
       'detailNumber': instance.detailNumber,
       'isRecycled': instance.isRecycled,
       'price': instance.price,
-      'brand': instance.brand,
+      'mainTagId': instance.mainTagId,
       'description': instance.description,
     };

@@ -10,7 +10,7 @@ class PartCreate {
     required this.detailNumber,
     required this.isRecycled,
     required this.price,
-    required this.brand,
+    required this.mainTagId,
     required this.description,
   });
 
@@ -22,7 +22,7 @@ class PartCreate {
     detailNumber: detailNumber,
     isRecycled: isRecycled,
     price: price,
-    brand: brand,
+    mainTagId: mainTagId,
     description: description,
   );
 
@@ -32,6 +32,6 @@ class PartCreate {
   final String detailNumber;
   final bool isRecycled;
   final double price;
-  final String? brand;
+  final String? mainTagId;
   final String? description;
 }

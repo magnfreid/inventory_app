@@ -16,6 +16,7 @@ import 'package:inventory_app/theme/cubit/theme_cubit.dart';
 import 'package:part_repository/part_repository.dart';
 import 'package:stock_repository/stock_repository.dart';
 import 'package:storage_repository/storage_repository.dart';
+import 'package:tag_repository/tag_repository.dart';
 
 class InventoryPage extends StatelessWidget {
   const InventoryPage({super.key});
@@ -27,6 +28,7 @@ class InventoryPage extends StatelessWidget {
         stockRepository: context.read<StockRepository>(),
         storageRepository: context.read<StorageRepository>(),
         partRepository: context.read<PartRepository>(),
+        tagRepository: context.read<TagRepository>(),
       ),
       child: const InventoryView(),
     );

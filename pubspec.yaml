@@ -8,21 +8,7 @@ environment:
   flutter: ^3.41.1
 
 workspace:
-  - packages/app_ui
-  - packages/firebase_authentication_service
-  - packages/firebase_part_remote
-  - packages/firebase_stock_remote
-  - packages/firebase_storage_remote
-  - packages/firebase_user_remote
-  - packages/part_remote
-  - packages/part_repository
-  - packages/stock_remote
-  - packages/stock_repository
-  - packages/storage_remote
-  - packages/storage_repository
-  - packages/user_remote
-  - packages/user_repository
-  - packages/authentication_service
+  - packages/**
 
 dependencies:
   app_ui:
@@ -41,6 +27,8 @@ dependencies:
     path: packages/firebase_stock_remote
   firebase_storage_remote:
     path: packages/firebase_storage_remote
+  firebase_tag_remote:
+    path: packages/firebase_tag_remote
   firebase_user_remote:
     path: packages/firebase_user_remote
   flutter:
@@ -62,6 +50,10 @@ dependencies:
     path: packages/stock_repository
   storage_repository:
     path: packages/storage_repository
+  tag_remote:
+    path: packages/tag_remote
+  tag_repository:
+    path: packages/tag_repository
   user_remote:
     path: packages/user_remote
   user_repository:
@@ -83,17 +75,15 @@ flutter:
 
 melos:
   scripts:
-    generate:
-      run: |
-        fvm dart run build_runner build --delete-conflicting-outputs
-        melos exec -c 1 --depends-on build_runner -- fvm dart run build_runner build --delete-conflicting-outputs
-    upgrade:
-      run: |
-        fvm flutter pub upgrade
-        fvm dart run melos bootstrap
-    full-upgrade:
-      run: |
-        fvm install stable
-        fvm use stable
-        melos exec -- fvm flutter pub upgrade
-        melos bootstrap
+    boot:
+      description: "Bootstrap the repo via FVM"
+      run: fvm dart run melos bootstrap
+    gen:
+      description: "Run build_runner in the app (lib)"
+      run: fvm dart run build_runner build --delete-conflicting-outputs
+    gen-packages:
+      description: "Run build_runner in all packages"
+      run: melos exec --depends-on=build_runner -c 1 -- fvm dart run build_runner build --delete-conflicting-outputs
+    l10n:
+      description: "Generate Flutter localization"
+      run: fvm flutter gen-l10n
