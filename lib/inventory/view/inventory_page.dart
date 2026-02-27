@@ -6,12 +6,13 @@ import 'package:inventory_app/authentication/cubit/authentication_cubit.dart';
 import 'package:inventory_app/inventory/bloc/inventory_bloc.dart';
 import 'package:inventory_app/inventory/bloc/inventory_state.dart';
 import 'package:inventory_app/inventory/models/part_ui_model.dart';
+import 'package:inventory_app/l10n/l10n.dart';
 import 'package:inventory_app/part_details/view/part_details_page.dart';
 import 'package:inventory_app/part_editor/view/part_editor_page.dart';
 import 'package:inventory_app/part_editor/view/part_quick_editor_page.dart';
-import 'package:inventory_app/l10n/l10n.dart';
-import 'package:inventory_app/storages/view/storages_page.dart';
 import 'package:inventory_app/statistics/view/statistics_page.dart';
+import 'package:inventory_app/storages/view/storages_page.dart';
+import 'package:inventory_app/theme/cubit/theme_cubit.dart';
 import 'package:part_repository/part_repository.dart';
 import 'package:stock_repository/stock_repository.dart';
 import 'package:storage_repository/storage_repository.dart';
@@ -101,6 +102,7 @@ class _Drawer extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final themeMode = context.watch<ThemeCubit>().state;
     final l10n = context.l10n;
     return Drawer(
       child: SafeArea(
@@ -112,6 +114,28 @@ class _Drawer extends StatelessWidget {
                 child: Text(l10n.drawerHeaderText),
               ),
             ),
+            SegmentedButton<ThemeMode>(
+              style: SegmentedButton.styleFrom(),
+              segments: const [
+                ButtonSegment<ThemeMode>(
+                  value: .system,
+                  icon: Icon(Icons.system_security_update),
+                ),
+                ButtonSegment<ThemeMode>(
+                  value: .light,
+                  icon: Icon(Icons.light_mode),
+                ),
+                ButtonSegment<ThemeMode>(
+                  value: .dark,
+                  icon: Icon(Icons.dark_mode),
+                ),
+              ],
+              selected: {themeMode},
+              onSelectionChanged: (selection) => context
+                  .read<ThemeCubit>()
+                  .themeButtonPressed(selection.first),
+            ),
+
             ListTile(
               leading: const Icon(Icons.shelves),
               title: Text(l10n.drawerLocationsLinkText),
@@ -158,56 +182,88 @@ class _PartCard extends StatelessWidget {
       child: InkWell(
         onTap: () => Navigator.push(context, PartDetailsPage.route(item: part)),
         onLongPress: () => showModalBottomSheet<void>(
+          showDragHandle: true,
           context: context,
-          builder: (context) => const PartQuickEditorPage(),
+          builder: (context) => PartQuickEditorPage(
+            part: part,
+          ),
         ),
-        child: Padding(
-          padding: const .all(8),
-          child: Column(
-            crossAxisAlignment: .start,
-            children: [
-              Row(
+        child: Stack(
+          children: [
+            Padding(
+              padding: const EdgeInsets.all(8),
+              child: Column(
+                crossAxisAlignment: .start,
                 children: [
-                  Column(
-                    crossAxisAlignment: .start,
+                  Row(
                     children: [
-                      Text(part.name),
-                      Text(
-                        part.detailNumber,
-                        style: const TextStyle(
-                          color: Colors.blueGrey,
-                          fontSize: 10,
+                      Column(
+                        crossAxisAlignment: .start,
+                        children: [
+                          Text(
+                            part.name,
+                            style: const TextStyle(fontSize: 16),
+                          ),
+                          Text(
+                            part.detailNumber,
+                            style: const TextStyle(
+                              color: Colors.blueGrey,
+                            ),
+                          ),
+                        ],
+                      ),
+                      const Spacer(),
+                      Padding(
+                        padding: const EdgeInsets.all(8),
+                        child: Text(
+                          part.totalQuantity.toString(),
+                          style: const TextStyle(fontSize: 20),
                         ),
                       ),
-                      Text(part.brand ?? ''),
                     ],
                   ),
-                  const Spacer(),
-                  Column(
-                    children: [
-                      Text(part.totalQuantity.toString()),
-                    ],
+                  const Divider(
+                    thickness: 0.3,
+                  ),
+                  Wrap(
+                    children: part.stock
+                        .where((stock) => stock.quantity > 0)
+                        .map(
+                          (stock) => Card.outlined(
+                            color: Theme.of(
+                              context,
+                            ).colorScheme.secondaryContainer,
+                            child: Padding(
+                              padding: const .all(5),
+                              child: Text(
+                                '${stock.locationName.toUpperCase()}'
+                                ' ${stock.quantity}',
+                                style: TextStyle(
+                                  fontSize: 12,
+                                  color: Theme.of(
+                                    context,
+                                  ).colorScheme.onSecondaryContainer,
+                                ),
+                              ),
+                            ),
+                          ),
+                        )
+                        .toList(),
                   ),
                 ],
               ),
-              Wrap(
-                children: part.stock
-                    .map(
-                      (stock) => Card(
-                        color: Colors.blueAccent,
-                        child: Padding(
-                          padding: const .all(4),
-                          child: Text(
-                            '${stock.locationName} ${stock.quantity}',
-                            style: const TextStyle(fontSize: 8),
-                          ),
-                        ),
-                      ),
-                    )
-                    .toList(),
+            ),
+            if (part.isRecycled)
+              const Positioned(
+                top: 3,
+                right: 3,
+                child: Icon(
+                  size: 16,
+                  Icons.eco,
+                  color: Colors.green,
+                ),
               ),
-            ],
-          ),
+          ],
         ),
       ),
     );

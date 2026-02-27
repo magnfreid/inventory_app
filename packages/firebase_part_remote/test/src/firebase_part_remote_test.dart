@@ -1,12 +1,14 @@
 // Not required for test files
-// ignore_for_file: prefer_const_constructors
 import 'package:firebase_part_remote/firebase_part_remote.dart';
+import 'package:mocktail/mocktail.dart';
 import 'package:test/test.dart';
 
+class FirebasePartRemoteMock extends Mock implements FirebasePartRemote {}
+
 void main() {
-  group('FirebasePartRemoteDataSource', () {
+  group('FirebasePartRemote', () {
     test('can be instantiated', () {
-      expect(FirebasePartRemoteDataSource(), isNotNull);
+      expect(FirebasePartRemote(), isNotNull);
     });
   });
 }

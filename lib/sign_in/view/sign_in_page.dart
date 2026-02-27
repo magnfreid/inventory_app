@@ -65,18 +65,23 @@ class _SignInViewState extends State<SignInView> {
             body: Padding(
               padding: const .symmetric(horizontal: 50),
               child: Column(
+                spacing: 10,
                 children: [
                   const Spacer(),
-                  AppTextField(
-                    labelText: l10n.signInEmailTextFieldLabel,
+                  TextFormField(
+                    decoration: InputDecoration(
+                      label: Text(l10n.signInEmailTextFieldLabel),
+                    ),
                     controller: _emailTextController,
                   ),
-                  AppTextField(
-                    labelText: l10n.signInPasswordTextFieldLabel,
+                  TextFormField(
+                    decoration: InputDecoration(
+                      label: Text(l10n.signInPasswordTextFieldLabel),
+                    ),
                     controller: _passwordTextController,
                   ),
                   const Spacer(),
-                  AppButton.wide(
+                  AppButton(
                     isLoading: state.isLoading,
                     onPressed: () => context.read<SignInBloc>().add(
                       SignInButtonPressed(
@@ -84,7 +89,7 @@ class _SignInViewState extends State<SignInView> {
                         password: _passwordTextController.text,
                       ),
                     ),
-                    child: Text(l10n.signInSignInButtonText),
+                    label: l10n.signInSignInButtonText,
                   ),
                   const Spacer(),
                 ],

@@ -6,6 +6,7 @@ class PartUiModel {
     required this.name,
     required this.detailNumber,
     required this.price,
+    required this.isRecycled,
     this.stock = const [],
     this.brand,
     this.description,
@@ -15,6 +16,7 @@ class PartUiModel {
   final String name;
   final String detailNumber;
   final double price;
+  final bool isRecycled;
   final String? brand;
   final String? description;
   final List<StorageQuantityModel> stock;

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:inventory_app/l10n/l10n.dart';
 import 'package:inventory_app/storages/bloc/storages_bloc.dart';
 import 'package:inventory_app/storages/bloc/storages_state.dart';
 import 'package:inventory_app/storages_editor/view/storages_editor_page.dart';
@@ -26,10 +27,13 @@ class StoragesView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = context.l10n;
     return Scaffold(
-      appBar: AppBar(),
+      appBar: AppBar(
+        title: Text(l10n.storagePageTitle),
+      ),
       floatingActionButton: FloatingActionButton.extended(
-        label: const Text('New storage'),
+        label: Text(l10n.addStorageFabLabelText),
         icon: const Icon(Icons.add),
         onPressed: () => showModalBottomSheet<void>(
           showDragHandle: true,

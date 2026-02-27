@@ -1,3 +1,4 @@
+import 'package:app_ui/app_ui.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:inventory_app/l10n/l10n.dart';
@@ -61,7 +62,7 @@ class _StoragesEditorViewState extends State<StoragesEditorView> {
           padding: const EdgeInsets.symmetric(vertical: 8, horizontal: 24),
           child: Column(
             children: [
-              const Text('Add new storage'),
+              Text(l10n.addStorageBottomSheetTitle),
               TextFormField(
                 decoration: InputDecoration(
                   label: Text(l10n.formFieldNameLabelText),
@@ -84,31 +85,27 @@ class _StoragesEditorViewState extends State<StoragesEditorView> {
               const Spacer(),
               SizedBox(
                 width: double.infinity,
-                child: ElevatedButton(
-                  onPressed: canSave
-                      ? () {
-                          final location = StorageCreateModel(
-                            name: _nameTextController.text,
-                            description: _descriptionTextController.text == ''
-                                ? null
-                                : _descriptionTextController.text,
-                          );
-                          context.read<StoragesEditorBloc>().add(
-                            SaveButtonPressed(storageCreateModel: location),
-                          );
-                        }
-                      : null,
-                  child: BlocBuilder<StoragesEditorBloc, StoragesEditorState>(
-                    builder: (context, state) {
-                      return state.isLoading
-                          ? const SizedBox(
-                              height: 24,
-                              width: 24,
-                              child: CircularProgressIndicator.adaptive(),
-                            )
-                          : Text(l10n.formSaveButtonText);
-                    },
-                  ),
+                child: BlocBuilder<StoragesEditorBloc, StoragesEditorState>(
+                  builder: (context, state) {
+                    return AppButton(
+                      isLoading: state.isLoading,
+                      onPressed: canSave
+                          ? () {
+                              final location = StorageCreateModel(
+                                name: _nameTextController.text,
+                                description:
+                                    _descriptionTextController.text == ''
+                                    ? null
+                                    : _descriptionTextController.text,
+                              );
+                              context.read<StoragesEditorBloc>().add(
+                                SaveButtonPressed(storageCreateModel: location),
+                              );
+                            }
+                          : null,
+                      label: l10n.formSaveButtonText,
+                    );
+                  },
                 ),
               ),
               const Spacer(),

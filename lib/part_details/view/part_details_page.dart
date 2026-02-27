@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:inventory_app/inventory/models/part_ui_model.dart';
+import 'package:inventory_app/l10n/l10n.dart';
 import 'package:inventory_app/part_details/bloc/part_details_bloc.dart';
 import 'package:inventory_app/part_details/bloc/part_details_state.dart';
 import 'package:stock_repository/stock_repository.dart';
@@ -39,7 +40,9 @@ class PartDetailsView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(),
+      appBar: AppBar(
+        title: Text(part.name),
+      ),
       body: BlocListener<PartDetailsBloc, PartDetailsState>(
         listenWhen: (previous, current) => current.saveStatus == .success,
         listener: (context, state) => Navigator.of(context).pop(),
@@ -148,9 +151,10 @@ class _BottomSheetState extends State<_BottomSheet> {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = context.l10n;
     return Column(
       children: [
-        const Text('Add stock:'),
+        Text(l10n.addStockTitleText),
         Row(
           children: [
             Text(widget.storage.name),
@@ -169,7 +173,7 @@ class _BottomSheetState extends State<_BottomSheet> {
             if (quantity == null || quantity == 0) return;
             widget.onPressed(quantity);
           },
-          child: const Text('Save'),
+          child: Text(l10n.saveButtonText),
         ),
       ],
     );
@@ -183,16 +187,21 @@ class _Details extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = context.l10n;
     return Column(
       children: [
-        ListTile(title: const Text('Name'), subtitle: Text(part.name)),
+        if (part.brand != null)
+          ListTile(
+            title: Text(l10n.formFieldBrandLabelText),
+            trailing: Text(part.brand!),
+          ),
         ListTile(
-          title: const Text('Detail number'),
-          subtitle: Text(part.detailNumber),
+          title: Text(l10n.formFieldDetailNumberLabelText),
+          trailing: Text(part.detailNumber),
         ),
         ListTile(
-          title: const Text('Price'),
-          subtitle: Text(part.price.toString()),
+          title: Text(l10n.formFieldPriceLabelText),
+          trailing: Text(part.price.toString()),
         ),
       ],
     );

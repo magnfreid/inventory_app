@@ -8,7 +8,7 @@ class FirebaseStorageRemote implements StorageRemote {
     FirebaseFirestore? firestore,
   }) : _firestore = firestore ?? FirebaseFirestore.instance {
     _collection = _firestore
-        .collection(organizationId)
+        .collection(organizationsCollection)
         .doc(organizationId)
         .collection(storagesCollection)
         .withConverter<StorageDto>(

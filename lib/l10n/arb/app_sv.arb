@@ -32,9 +32,13 @@
 	"@formFieldPriceLabelText": {
 		"description": "Label text for price form field"
 	},
-	"formFieldRecycledLabelText": "Återvunnen?",
+	"formFieldRecycledLabelText": "Återvunnen",
 	"@formFieldRecycledLabelText": {
 		"description": "Label text for recycled switch"
+	},
+	"formFieldNewLabelText": "Ny",
+	"@formFieldNewLabelText": {
+		"description": "Label text for new switch"
 	},
 	"formFieldBrandLabelText": "Märke",
 	"@formFieldBrandLabelText": {
@@ -75,5 +79,29 @@
 	"drawerSignOutActionText": "Logga ut",
 	"@drawerSignOutActionText": {
 		"description": "Sign out button text in drawer menu"
+	},
+	"addStockTitleText": "Lägg till i lager",
+	"@addStockTitleText": {
+		"description": "Add to stock bottom sheet title"
+	},
+	"saveButtonText": "Spara",
+	"@saveButtonText": {
+		"description": "Save button label"
+	},
+	"useButtonText": "Förbruka",
+	"@useButtonText": {
+		"description": "Use spare part button label"
+	},
+	"addStorageBottomSheetTitle": "Lägg till nytt lager",
+	"@addStorageBottomSheetTitle": {
+		"description": "Title text for add new storage sheet"
+	},
+	"addStorageFabLabelText": "Nytt lager",
+	"@addStorageFabLabelText": {
+		"description": "Title text for add new storage fab"
+	},
+	"storagePageTitle": "Lager",
+	"@storagePageTitle": {
+		"description": "Title text for storage page"
 	}
 }

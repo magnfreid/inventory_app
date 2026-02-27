@@ -32,9 +32,13 @@
 	"@formFieldPriceLabelText": {
 		"description": "Label text for price form field"
 	},
-	"formFieldRecycledLabelText": "Recycled?",
+	"formFieldRecycledLabelText": "Recycled",
 	"@formFieldRecycledLabelText": {
 		"description": "Label text for recycled switch"
+	},
+	"formFieldNewLabelText": "New",
+	"@formFieldNewLabelText": {
+		"description": "Label text for new switch"
 	},
 	"formFieldBrandLabelText": "Brand",
 	"@formFieldBrandLabelText": {
@@ -52,11 +56,11 @@
 	"@validationRequired": {
 		"description": "Validation message for required fields"
 	},
-	"validationEnterNumber": "Ange ett giltigt nummer",
+	"validationEnterNumber": "Enter a number",
 	"@validationEnterNumber": {
 		"description": "Validation message when numeric input is invalid"
 	},
-	"drawerHeaderText": "Enter a number",
+	"drawerHeaderText": "Settings",
 	"@drawerHeaderText": {
 		"description": "The title text for the drawer menu"
 	},
@@ -75,5 +79,29 @@
 	"drawerSignOutActionText": "Sign out",
 	"@drawerSignOutActionText": {
 		"description": "Sign out button text in drawer menu"
+	},
+	"addStockTitleText": "Add to stock",
+	"@addStockTitleText": {
+		"description": "Add to stock bottom sheet title"
+	},
+	"saveButtonText": "Save",
+	"@saveButtonText": {
+		"description": "Save button label"
+	},
+	"useButtonText": "Use",
+	"@useButtonText": {
+		"description": "Use spare part button label"
+	},
+	"addStorageBottomSheetTitle": "Add new storage",
+	"@addStorageBottomSheetTitle": {
+		"description": "Title text for add new storage sheet"
+	},
+	"addStorageFabLabelText": "New storage",
+	"@addStorageFabLabelText": {
+		"description": "Title text for add new storage fab"
+	},
+	"storagePageTitle": "Lager",
+	"@storagePageTitle": {
+		"description": "Title text for storage page"
 	}
 }
