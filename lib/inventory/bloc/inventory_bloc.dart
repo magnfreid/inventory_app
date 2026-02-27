@@ -85,6 +85,7 @@ class InventoryBloc extends Bloc<InventoryEvent, InventoryState> {
               name: part.name,
               detailNumber: part.detailNumber,
               price: part.price,
+              isRecycled: part.isRecycled,
               brand: part.brand,
               description: part.description,
               stock: storageQuantities,

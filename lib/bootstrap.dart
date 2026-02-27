@@ -11,6 +11,7 @@ import 'package:inventory_app/app/bloc_observer.dart';
 import 'package:inventory_app/app/view/app.dart';
 import 'package:inventory_app/authentication/cubit/authentication_cubit.dart';
 import 'package:inventory_app/firebase_options.dart';
+import 'package:inventory_app/theme/cubit/theme_cubit.dart';
 import 'package:user_repository/user_repository.dart';
 
 Future<void> bootstrap() async {
@@ -32,12 +33,14 @@ Future<void> bootstrap() async {
   final authCubit = AuthenticationCubit(
     authService: authService,
   );
+  final themeCubit = ThemeCubit();
 
   runApp(
     App(
       authService: authService,
       userRepository: userRepository,
       authCubit: authCubit,
+      themeCubit: themeCubit,
     ),
   );
 }

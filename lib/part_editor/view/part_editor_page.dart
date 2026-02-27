@@ -1,9 +1,11 @@
+import 'dart:math';
+
 import 'package:app_ui/app_ui.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:inventory_app/l10n/l10n.dart';
 import 'package:inventory_app/part_editor/bloc/part_editor_bloc.dart';
 import 'package:inventory_app/part_editor/bloc/part_editor_state.dart';
-import 'package:inventory_app/l10n/l10n.dart';
 import 'package:part_repository/part_repository.dart';
 import 'package:stock_repository/stock_repository.dart';
 import 'package:storage_repository/storage_repository.dart';
@@ -43,7 +45,7 @@ class _InventoryItemEditorViewState extends State<InventoryItemEditorView> {
   final _priceController = TextEditingController();
   final _brandController = TextEditingController();
   final _descriptionController = TextEditingController();
-  bool _isRecycled = false;
+  bool _isRecycled = true;
   bool _canSave = false;
 
   @override
@@ -65,7 +67,7 @@ class _InventoryItemEditorViewState extends State<InventoryItemEditorView> {
         Navigator.of(context).pop();
       },
       child: Scaffold(
-        appBar: AppBar(),
+        appBar: AppBar(title: Text(l10n.formFieldTitleText)),
         body: Padding(
           padding: const EdgeInsets.all(24),
           child: Form(
@@ -74,9 +76,9 @@ class _InventoryItemEditorViewState extends State<InventoryItemEditorView> {
               () => _canSave = _formKey.currentState?.validate() ?? false,
             ),
             child: Column(
+              spacing: 10,
               mainAxisSize: .min,
               children: [
-                Text(l10n.formFieldTitleText),
                 TextFormField(
                   controller: _nameController,
                   decoration: InputDecoration(
@@ -104,25 +106,6 @@ class _InventoryItemEditorViewState extends State<InventoryItemEditorView> {
                     labelText: '${l10n.formFieldDetailNumberLabelText}:',
                   ),
                 ),
-                Padding(
-                  padding: const .symmetric(vertical: 24),
-                  child: Row(
-                    mainAxisAlignment: .spaceBetween,
-                    children: [
-                      Text(l10n.formFieldRecycledLabelText),
-                      Switch.adaptive(
-                        value: _isRecycled,
-                        onChanged: (value) {
-                          setState(() {
-                            _isRecycled = value;
-                          });
-                        },
-                      ),
-                    ],
-                  ),
-                ),
-                const Divider(),
-
                 TextFormField(
                   controller: _brandController,
                   decoration: InputDecoration(
@@ -133,6 +116,29 @@ class _InventoryItemEditorViewState extends State<InventoryItemEditorView> {
                   controller: _descriptionController,
                   decoration: InputDecoration(
                     labelText: '${l10n.formFieldDescriptionLabelText}:',
+                  ),
+                ),
+                Padding(
+                  padding: const .symmetric(vertical: 24),
+                  child: SegmentedButton<bool>(
+                    segments: [
+                      ButtonSegment<bool>(
+                        value: false,
+                        label: Text(l10n.formFieldNewLabelText),
+                        icon: const Icon(Icons.inventory_outlined),
+                      ),
+                      ButtonSegment<bool>(
+                        value: true,
+                        label: Text(l10n.formFieldRecycledLabelText),
+                        icon: const Icon(Icons.eco),
+                      ),
+                    ],
+                    selected: {_isRecycled},
+                    onSelectionChanged: (selection) {
+                      setState(() {
+                        _isRecycled = selection.first;
+                      });
+                    },
                   ),
                 ),
                 const Spacer(),
@@ -162,7 +168,7 @@ class _InventoryItemEditorViewState extends State<InventoryItemEditorView> {
                                 ),
                               )
                             : null,
-                        child: Text(l10n.formSaveButtonText),
+                        label: l10n.formSaveButtonText,
                       );
                     },
                   ),
