@@ -1,10 +1,9 @@
 import 'dart:async';
-import 'dart:developer';
 
 import 'package:bloc/bloc.dart';
 import 'package:inventory_app/inventory/bloc/inventory_state.dart';
 import 'package:inventory_app/inventory/models/part_ui_model.dart';
-import 'package:inventory_app/inventory/models/storage_quantity_model.dart';
+import 'package:inventory_app/inventory/models/stock_ui_model.dart';
 import 'package:part_repository/part_repository.dart';
 
 import 'package:rxdart/rxdart.dart';
@@ -26,6 +25,7 @@ class InventoryBloc extends Bloc<InventoryEvent, InventoryState> {
        _tagRepository = tagRepository,
        super(const InventoryState()) {
     on<_PartsUpdated>(_onPartsUpdated);
+    on<UseStockButtonPressed>(_onUseStockButtonPressed);
 
     setStreamSubscription();
   }
@@ -47,6 +47,23 @@ class InventoryBloc extends Bloc<InventoryEvent, InventoryState> {
     Emitter<InventoryState> emit,
   ) {
     emit(state.copyWith(parts: event.parts));
+  }
+
+  FutureOr<void> _onUseStockButtonPressed(
+    UseStockButtonPressed event,
+    Emitter<InventoryState> emit,
+  ) {
+    emit(state.copyWith(bottomSheetStatus: .loading));
+    try {
+      _stockRepository.decreaseStock(
+        partId: event.partId,
+        storageId: event.storageId,
+        amount: 1,
+      );
+      emit(state.copyWith(bottomSheetStatus: .success));
+    } on Exception catch (exception) {
+      emit(state.copyWith(bottomSheetStatus: .error));
+    }
   }
 
   void setStreamSubscription() {
@@ -78,9 +95,9 @@ class InventoryBloc extends Bloc<InventoryEvent, InventoryState> {
                   final partStock = stockByPart[part.id] ?? const [];
                   final storageQuantities = partStock.map((stock) {
                     final storage = storagesMap[stock.storageId];
-                    return StorageQuantityModel(
+                    return StockUiModel(
                       storageId: stock.storageId,
-                      locationName: storage?.name ?? 'Unknown',
+                      storageName: storage?.name ?? 'Unknown',
                       quantity: stock.quantity,
                     );
                   }).toList();

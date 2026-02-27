@@ -18,7 +18,6 @@ class PartEditorBloc extends Bloc<PartEditorEvent, PartEditorState> {
        _partRepository = partRepository,
        super(const PartEditorState()) {
     on<SaveButtonPressed>(_onSaveButtonPressed);
-    on<UseButtonPressed>(_onUseButtonPressed);
   }
 
   final StockRepository _stockRepository;
@@ -34,23 +33,6 @@ class PartEditorBloc extends Bloc<PartEditorEvent, PartEditorState> {
       await _partRepository.addPart(event.partCreateModel);
       emit(state.copyWith(status: .success));
     } on Exception catch (_) {
-      emit(state.copyWith(status: .error));
-    }
-  }
-
-  FutureOr<void> _onUseButtonPressed(
-    UseButtonPressed event,
-    Emitter<PartEditorState> emit,
-  ) {
-    emit(state.copyWith(status: .loading));
-    try {
-      _stockRepository.decreaseStock(
-        partId: event.partId,
-        storageId: event.storageId,
-        amount: 1,
-      );
-      emit(state.copyWith(status: .success));
-    } on Exception catch (exception) {
       emit(state.copyWith(status: .error));
     }
   }

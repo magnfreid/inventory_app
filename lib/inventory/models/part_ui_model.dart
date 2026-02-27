@@ -1,4 +1,4 @@
-import 'package:inventory_app/inventory/models/storage_quantity_model.dart';
+import 'package:inventory_app/inventory/models/stock_ui_model.dart';
 import 'package:tag_repository/tag_repository.dart';
 
 class PartUiModel {
@@ -20,7 +20,7 @@ class PartUiModel {
   final bool isRecycled;
   final Tag? mainTag;
   final String? description;
-  final List<StorageQuantityModel> stock;
+  final List<StockUiModel> stock;
 
   int get totalQuantity =>
       stock.fold(0, (sum, element) => sum + element.quantity);

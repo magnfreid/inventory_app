@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:inventory_app/inventory/bloc/inventory_bloc.dart';
 import 'package:inventory_app/inventory/models/part_ui_model.dart';
+import 'package:inventory_app/inventory/widgets/inventory_stock_bottom_sheet.dart';
 import 'package:inventory_app/part_details/view/part_details_page.dart';
-import 'package:inventory_app/part_editor/view/part_quick_editor_page.dart';
 
 class InventoryPartCard extends StatelessWidget {
   const InventoryPartCard({
@@ -19,8 +21,9 @@ class InventoryPartCard extends StatelessWidget {
         onLongPress: () => showModalBottomSheet<void>(
           showDragHandle: true,
           context: context,
-          builder: (context) => PartQuickEditorPage(
-            part: part,
+          builder: (_) => BlocProvider.value(
+            value: context.read<InventoryBloc>(),
+            child: InventoryStockBottomSheet(part: part),
           ),
         ),
         child: Stack(
@@ -71,7 +74,7 @@ class InventoryPartCard extends StatelessWidget {
                             child: Padding(
                               padding: const .all(5),
                               child: Text(
-                                '${stock.locationName.toUpperCase()}'
+                                '${stock.storageName.toUpperCase()}'
                                 ' ${stock.quantity}',
                                 style: TextStyle(
                                   fontSize: 12,
