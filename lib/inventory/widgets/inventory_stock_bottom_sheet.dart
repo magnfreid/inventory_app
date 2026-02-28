@@ -14,7 +14,9 @@ class InventoryStockBottomSheet extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return BlocListener<InventoryBloc, InventoryState>(
-      listenWhen: (previous, current) => current.bottomSheetStatus == .success,
+      listenWhen: (previous, current) =>
+          previous.bottomSheetStatus != current.bottomSheetStatus &&
+          current.bottomSheetStatus == .success,
       listener: (context, state) => Navigator.of(context).pop(),
       child: BlocBuilder<InventoryBloc, InventoryState>(
         buildWhen: (previous, current) =>

@@ -34,6 +34,7 @@ class FirebaseTagRemote implements TagRemote {
   Future<TagDto> addMainTag(TagCreateDto tag) async {
     final docRef = _mainTagscollection.doc();
     final dto = TagDto.fromCreateModel(createModel: tag, id: docRef.id);
+    await docRef.set(dto);
     return dto;
   }
 
