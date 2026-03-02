@@ -14,7 +14,7 @@ T _$identity<T>(T value) => value;
 /// @nodoc
 mixin _$PartEditorState {
 
- PartEditorStatus get status;
+ PartEditorStatus get status; List<Tag> get mainTags;
 /// Create a copy of PartEditorState
 /// with the given fields replaced by the non-null parameter values.
 @JsonKey(includeFromJson: false, includeToJson: false)
@@ -25,16 +25,16 @@ $PartEditorStateCopyWith<PartEditorState> get copyWith => _$PartEditorStateCopyW
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is PartEditorState&&(identical(other.status, status) || other.status == status));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is PartEditorState&&(identical(other.status, status) || other.status == status)&&const DeepCollectionEquality().equals(other.mainTags, mainTags));
 }
 
 
 @override
-int get hashCode => Object.hash(runtimeType,status);
+int get hashCode => Object.hash(runtimeType,status,const DeepCollectionEquality().hash(mainTags));
 
 @override
 String toString() {
-  return 'PartEditorState(status: $status)';
+  return 'PartEditorState(status: $status, mainTags: $mainTags)';
 }
 
 
@@ -45,7 +45,7 @@ abstract mixin class $PartEditorStateCopyWith<$Res>  {
   factory $PartEditorStateCopyWith(PartEditorState value, $Res Function(PartEditorState) _then) = _$PartEditorStateCopyWithImpl;
 @useResult
 $Res call({
- PartEditorStatus status
+ PartEditorStatus status, List<Tag> mainTags
 });
 
 
@@ -62,10 +62,11 @@ class _$PartEditorStateCopyWithImpl<$Res>
 
 /// Create a copy of PartEditorState
 /// with the given fields replaced by the non-null parameter values.
-@pragma('vm:prefer-inline') @override $Res call({Object? status = null,}) {
+@pragma('vm:prefer-inline') @override $Res call({Object? status = null,Object? mainTags = null,}) {
   return _then(_self.copyWith(
 status: null == status ? _self.status : status // ignore: cast_nullable_to_non_nullable
-as PartEditorStatus,
+as PartEditorStatus,mainTags: null == mainTags ? _self.mainTags : mainTags // ignore: cast_nullable_to_non_nullable
+as List<Tag>,
   ));
 }
 
@@ -150,10 +151,10 @@ return $default(_that);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function( PartEditorStatus status)?  $default,{required TResult orElse(),}) {final _that = this;
+@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function( PartEditorStatus status,  List<Tag> mainTags)?  $default,{required TResult orElse(),}) {final _that = this;
 switch (_that) {
 case _PartEditorState() when $default != null:
-return $default(_that.status);case _:
+return $default(_that.status,_that.mainTags);case _:
   return orElse();
 
 }
@@ -171,10 +172,10 @@ return $default(_that.status);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function( PartEditorStatus status)  $default,) {final _that = this;
+@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function( PartEditorStatus status,  List<Tag> mainTags)  $default,) {final _that = this;
 switch (_that) {
 case _PartEditorState():
-return $default(_that.status);case _:
+return $default(_that.status,_that.mainTags);case _:
   throw StateError('Unexpected subclass');
 
 }
@@ -191,10 +192,10 @@ return $default(_that.status);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function( PartEditorStatus status)?  $default,) {final _that = this;
+@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function( PartEditorStatus status,  List<Tag> mainTags)?  $default,) {final _that = this;
 switch (_that) {
 case _PartEditorState() when $default != null:
-return $default(_that.status);case _:
+return $default(_that.status,_that.mainTags);case _:
   return null;
 
 }
@@ -206,10 +207,17 @@ return $default(_that.status);case _:
 
 
 class _PartEditorState extends PartEditorState {
-  const _PartEditorState({this.status = PartEditorStatus.idle}): super._();
+  const _PartEditorState({this.status = PartEditorStatus.idle, final  List<Tag> mainTags = const []}): _mainTags = mainTags,super._();
   
 
 @override@JsonKey() final  PartEditorStatus status;
+ final  List<Tag> _mainTags;
+@override@JsonKey() List<Tag> get mainTags {
+  if (_mainTags is EqualUnmodifiableListView) return _mainTags;
+  // ignore: implicit_dynamic_type
+  return EqualUnmodifiableListView(_mainTags);
+}
+
 
 /// Create a copy of PartEditorState
 /// with the given fields replaced by the non-null parameter values.
@@ -221,16 +229,16 @@ _$PartEditorStateCopyWith<_PartEditorState> get copyWith => __$PartEditorStateCo
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is _PartEditorState&&(identical(other.status, status) || other.status == status));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is _PartEditorState&&(identical(other.status, status) || other.status == status)&&const DeepCollectionEquality().equals(other._mainTags, _mainTags));
 }
 
 
 @override
-int get hashCode => Object.hash(runtimeType,status);
+int get hashCode => Object.hash(runtimeType,status,const DeepCollectionEquality().hash(_mainTags));
 
 @override
 String toString() {
-  return 'PartEditorState(status: $status)';
+  return 'PartEditorState(status: $status, mainTags: $mainTags)';
 }
 
 
@@ -241,7 +249,7 @@ abstract mixin class _$PartEditorStateCopyWith<$Res> implements $PartEditorState
   factory _$PartEditorStateCopyWith(_PartEditorState value, $Res Function(_PartEditorState) _then) = __$PartEditorStateCopyWithImpl;
 @override @useResult
 $Res call({
- PartEditorStatus status
+ PartEditorStatus status, List<Tag> mainTags
 });
 
 
@@ -258,10 +266,11 @@ class __$PartEditorStateCopyWithImpl<$Res>
 
 /// Create a copy of PartEditorState
 /// with the given fields replaced by the non-null parameter values.
-@override @pragma('vm:prefer-inline') $Res call({Object? status = null,}) {
+@override @pragma('vm:prefer-inline') $Res call({Object? status = null,Object? mainTags = null,}) {
   return _then(_PartEditorState(
 status: null == status ? _self.status : status // ignore: cast_nullable_to_non_nullable
-as PartEditorStatus,
+as PartEditorStatus,mainTags: null == mainTags ? _self._mainTags : mainTags // ignore: cast_nullable_to_non_nullable
+as List<Tag>,
   ));
 }
 

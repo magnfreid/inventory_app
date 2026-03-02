@@ -38,8 +38,7 @@ class InventoryView extends StatelessWidget {
       drawer: const InventoryDrawer(),
       bottomNavigationBar: const InventoryToolBar(),
       floatingActionButton: FloatingActionButton.small(
-        onPressed: () =>
-            Navigator.push(context, InventoryItemEditorPage.route()),
+        onPressed: () => Navigator.push(context, PartEditorPage.route()),
         child: const Icon(Icons.add),
       ),
       floatingActionButtonLocation: .endContained,

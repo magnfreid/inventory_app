@@ -4,7 +4,6 @@ import 'package:inventory_app/inventory/bloc/inventory_bloc.dart';
 import 'package:inventory_app/inventory/models/part_ui_model.dart';
 import 'package:inventory_app/inventory/widgets/inventory_stock_bottom_sheet.dart';
 import 'package:inventory_app/part_details/view/part_details_page.dart';
-import 'package:inventory_app/tags/extensions/tag_color_extensions.dart';
 
 class InventoryPartCard extends StatelessWidget {
   const InventoryPartCard({
@@ -43,7 +42,7 @@ class InventoryPartCard extends StatelessWidget {
                             Text(
                               part.mainTag!.label,
                               style: TextStyle(
-                                color: part.mainTag!.color.toColor(),
+                                color: part.mainTag!.color,
                               ),
                             ),
                           Text(

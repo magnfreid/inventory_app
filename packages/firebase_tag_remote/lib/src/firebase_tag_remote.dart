@@ -12,7 +12,7 @@ class FirebaseTagRemote implements TagRemote {
     _mainTagscollection = _firestore
         .collection(organizationsCollection)
         .doc(organizationId)
-        .collection(mainTagsCollection)
+        .collection(tagsCollection)
         .withConverter<TagDto>(
           fromFirestore: (snapshot, _) {
             final data = snapshot.data()!;
@@ -31,7 +31,7 @@ class FirebaseTagRemote implements TagRemote {
   late final CollectionReference<TagDto> _mainTagscollection;
 
   @override
-  Future<TagDto> addMainTag(TagCreateDto tag) async {
+  Future<TagDto> addTag(TagCreateDto tag) async {
     final docRef = _mainTagscollection.doc();
     final dto = TagDto.fromCreateModel(createModel: tag, id: docRef.id);
     await docRef.set(dto);
@@ -39,12 +39,12 @@ class FirebaseTagRemote implements TagRemote {
   }
 
   @override
-  Future<void> deleteMainTag(String id) async {
+  Future<void> deleteTag(String id) async {
     await _mainTagscollection.doc(id).delete();
   }
 
   @override
-  Stream<List<TagDto>> watchMainTags() {
+  Stream<List<TagDto>> watchTags() {
     return _mainTagscollection.snapshots().map(
       (snapshot) => snapshot.docs.map((doc) => doc.data()).toList(),
     );

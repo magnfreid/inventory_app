@@ -1,5 +1,5 @@
 import 'package:inventory_app/inventory/models/stock_ui_model.dart';
-import 'package:tag_repository/tag_repository.dart';
+import 'package:inventory_app/tags/models/tag_ui_model.dart';
 
 class PartUiModel {
   PartUiModel({
@@ -10,6 +10,8 @@ class PartUiModel {
     required this.isRecycled,
     this.stock = const [],
     this.mainTag,
+    this.brandTag,
+    this.standardTags = const [],
     this.description,
   });
 
@@ -18,7 +20,9 @@ class PartUiModel {
   final String detailNumber;
   final double price;
   final bool isRecycled;
-  final Tag? mainTag;
+  final TagUiModel? mainTag;
+  final TagUiModel? brandTag;
+  final List<TagUiModel> standardTags;
   final String? description;
   final List<StockUiModel> stock;
 

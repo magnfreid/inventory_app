@@ -14,7 +14,7 @@ T _$identity<T>(T value) => value;
 /// @nodoc
 mixin _$TagsState {
 
- TagsStateStatus get status; TagsStateBottomSheetStatus get bottomSheetStatus; List<Tag> get tags;
+ TagsStateStatus get status; TagsStateBottomSheetStatus get bottomSheetStatus; List<TagUiModel> get brandTags; List<TagUiModel> get categoryTags; List<TagUiModel> get generalTags;
 /// Create a copy of TagsState
 /// with the given fields replaced by the non-null parameter values.
 @JsonKey(includeFromJson: false, includeToJson: false)
@@ -25,16 +25,16 @@ $TagsStateCopyWith<TagsState> get copyWith => _$TagsStateCopyWithImpl<TagsState>
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is TagsState&&(identical(other.status, status) || other.status == status)&&(identical(other.bottomSheetStatus, bottomSheetStatus) || other.bottomSheetStatus == bottomSheetStatus)&&const DeepCollectionEquality().equals(other.tags, tags));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is TagsState&&(identical(other.status, status) || other.status == status)&&(identical(other.bottomSheetStatus, bottomSheetStatus) || other.bottomSheetStatus == bottomSheetStatus)&&const DeepCollectionEquality().equals(other.brandTags, brandTags)&&const DeepCollectionEquality().equals(other.categoryTags, categoryTags)&&const DeepCollectionEquality().equals(other.generalTags, generalTags));
 }
 
 
 @override
-int get hashCode => Object.hash(runtimeType,status,bottomSheetStatus,const DeepCollectionEquality().hash(tags));
+int get hashCode => Object.hash(runtimeType,status,bottomSheetStatus,const DeepCollectionEquality().hash(brandTags),const DeepCollectionEquality().hash(categoryTags),const DeepCollectionEquality().hash(generalTags));
 
 @override
 String toString() {
-  return 'TagsState(status: $status, bottomSheetStatus: $bottomSheetStatus, tags: $tags)';
+  return 'TagsState(status: $status, bottomSheetStatus: $bottomSheetStatus, brandTags: $brandTags, categoryTags: $categoryTags, generalTags: $generalTags)';
 }
 
 
@@ -45,7 +45,7 @@ abstract mixin class $TagsStateCopyWith<$Res>  {
   factory $TagsStateCopyWith(TagsState value, $Res Function(TagsState) _then) = _$TagsStateCopyWithImpl;
 @useResult
 $Res call({
- TagsStateStatus status, TagsStateBottomSheetStatus bottomSheetStatus, List<Tag> tags
+ TagsStateStatus status, TagsStateBottomSheetStatus bottomSheetStatus, List<TagUiModel> brandTags, List<TagUiModel> categoryTags, List<TagUiModel> generalTags
 });
 
 
@@ -62,12 +62,14 @@ class _$TagsStateCopyWithImpl<$Res>
 
 /// Create a copy of TagsState
 /// with the given fields replaced by the non-null parameter values.
-@pragma('vm:prefer-inline') @override $Res call({Object? status = null,Object? bottomSheetStatus = null,Object? tags = null,}) {
+@pragma('vm:prefer-inline') @override $Res call({Object? status = null,Object? bottomSheetStatus = null,Object? brandTags = null,Object? categoryTags = null,Object? generalTags = null,}) {
   return _then(_self.copyWith(
 status: null == status ? _self.status : status // ignore: cast_nullable_to_non_nullable
 as TagsStateStatus,bottomSheetStatus: null == bottomSheetStatus ? _self.bottomSheetStatus : bottomSheetStatus // ignore: cast_nullable_to_non_nullable
-as TagsStateBottomSheetStatus,tags: null == tags ? _self.tags : tags // ignore: cast_nullable_to_non_nullable
-as List<Tag>,
+as TagsStateBottomSheetStatus,brandTags: null == brandTags ? _self.brandTags : brandTags // ignore: cast_nullable_to_non_nullable
+as List<TagUiModel>,categoryTags: null == categoryTags ? _self.categoryTags : categoryTags // ignore: cast_nullable_to_non_nullable
+as List<TagUiModel>,generalTags: null == generalTags ? _self.generalTags : generalTags // ignore: cast_nullable_to_non_nullable
+as List<TagUiModel>,
   ));
 }
 
@@ -152,10 +154,10 @@ return $default(_that);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function( TagsStateStatus status,  TagsStateBottomSheetStatus bottomSheetStatus,  List<Tag> tags)?  $default,{required TResult orElse(),}) {final _that = this;
+@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function( TagsStateStatus status,  TagsStateBottomSheetStatus bottomSheetStatus,  List<TagUiModel> brandTags,  List<TagUiModel> categoryTags,  List<TagUiModel> generalTags)?  $default,{required TResult orElse(),}) {final _that = this;
 switch (_that) {
 case _TagsState() when $default != null:
-return $default(_that.status,_that.bottomSheetStatus,_that.tags);case _:
+return $default(_that.status,_that.bottomSheetStatus,_that.brandTags,_that.categoryTags,_that.generalTags);case _:
   return orElse();
 
 }
@@ -173,10 +175,10 @@ return $default(_that.status,_that.bottomSheetStatus,_that.tags);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function( TagsStateStatus status,  TagsStateBottomSheetStatus bottomSheetStatus,  List<Tag> tags)  $default,) {final _that = this;
+@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function( TagsStateStatus status,  TagsStateBottomSheetStatus bottomSheetStatus,  List<TagUiModel> brandTags,  List<TagUiModel> categoryTags,  List<TagUiModel> generalTags)  $default,) {final _that = this;
 switch (_that) {
 case _TagsState():
-return $default(_that.status,_that.bottomSheetStatus,_that.tags);case _:
+return $default(_that.status,_that.bottomSheetStatus,_that.brandTags,_that.categoryTags,_that.generalTags);case _:
   throw StateError('Unexpected subclass');
 
 }
@@ -193,10 +195,10 @@ return $default(_that.status,_that.bottomSheetStatus,_that.tags);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function( TagsStateStatus status,  TagsStateBottomSheetStatus bottomSheetStatus,  List<Tag> tags)?  $default,) {final _that = this;
+@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function( TagsStateStatus status,  TagsStateBottomSheetStatus bottomSheetStatus,  List<TagUiModel> brandTags,  List<TagUiModel> categoryTags,  List<TagUiModel> generalTags)?  $default,) {final _that = this;
 switch (_that) {
 case _TagsState() when $default != null:
-return $default(_that.status,_that.bottomSheetStatus,_that.tags);case _:
+return $default(_that.status,_that.bottomSheetStatus,_that.brandTags,_that.categoryTags,_that.generalTags);case _:
   return null;
 
 }
@@ -208,16 +210,30 @@ return $default(_that.status,_that.bottomSheetStatus,_that.tags);case _:
 
 
 class _TagsState extends TagsState {
-  const _TagsState({this.status = TagsStateStatus.loading, this.bottomSheetStatus = TagsStateBottomSheetStatus.idle, final  List<Tag> tags = const []}): _tags = tags,super._();
+  const _TagsState({this.status = TagsStateStatus.loading, this.bottomSheetStatus = TagsStateBottomSheetStatus.idle, final  List<TagUiModel> brandTags = const [], final  List<TagUiModel> categoryTags = const [], final  List<TagUiModel> generalTags = const []}): _brandTags = brandTags,_categoryTags = categoryTags,_generalTags = generalTags,super._();
   
 
 @override@JsonKey() final  TagsStateStatus status;
 @override@JsonKey() final  TagsStateBottomSheetStatus bottomSheetStatus;
- final  List<Tag> _tags;
-@override@JsonKey() List<Tag> get tags {
-  if (_tags is EqualUnmodifiableListView) return _tags;
+ final  List<TagUiModel> _brandTags;
+@override@JsonKey() List<TagUiModel> get brandTags {
+  if (_brandTags is EqualUnmodifiableListView) return _brandTags;
   // ignore: implicit_dynamic_type
-  return EqualUnmodifiableListView(_tags);
+  return EqualUnmodifiableListView(_brandTags);
+}
+
+ final  List<TagUiModel> _categoryTags;
+@override@JsonKey() List<TagUiModel> get categoryTags {
+  if (_categoryTags is EqualUnmodifiableListView) return _categoryTags;
+  // ignore: implicit_dynamic_type
+  return EqualUnmodifiableListView(_categoryTags);
+}
+
+ final  List<TagUiModel> _generalTags;
+@override@JsonKey() List<TagUiModel> get generalTags {
+  if (_generalTags is EqualUnmodifiableListView) return _generalTags;
+  // ignore: implicit_dynamic_type
+  return EqualUnmodifiableListView(_generalTags);
 }
 
 
@@ -231,16 +247,16 @@ _$TagsStateCopyWith<_TagsState> get copyWith => __$TagsStateCopyWithImpl<_TagsSt
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is _TagsState&&(identical(other.status, status) || other.status == status)&&(identical(other.bottomSheetStatus, bottomSheetStatus) || other.bottomSheetStatus == bottomSheetStatus)&&const DeepCollectionEquality().equals(other._tags, _tags));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is _TagsState&&(identical(other.status, status) || other.status == status)&&(identical(other.bottomSheetStatus, bottomSheetStatus) || other.bottomSheetStatus == bottomSheetStatus)&&const DeepCollectionEquality().equals(other._brandTags, _brandTags)&&const DeepCollectionEquality().equals(other._categoryTags, _categoryTags)&&const DeepCollectionEquality().equals(other._generalTags, _generalTags));
 }
 
 
 @override
-int get hashCode => Object.hash(runtimeType,status,bottomSheetStatus,const DeepCollectionEquality().hash(_tags));
+int get hashCode => Object.hash(runtimeType,status,bottomSheetStatus,const DeepCollectionEquality().hash(_brandTags),const DeepCollectionEquality().hash(_categoryTags),const DeepCollectionEquality().hash(_generalTags));
 
 @override
 String toString() {
-  return 'TagsState(status: $status, bottomSheetStatus: $bottomSheetStatus, tags: $tags)';
+  return 'TagsState(status: $status, bottomSheetStatus: $bottomSheetStatus, brandTags: $brandTags, categoryTags: $categoryTags, generalTags: $generalTags)';
 }
 
 
@@ -251,7 +267,7 @@ abstract mixin class _$TagsStateCopyWith<$Res> implements $TagsStateCopyWith<$Re
   factory _$TagsStateCopyWith(_TagsState value, $Res Function(_TagsState) _then) = __$TagsStateCopyWithImpl;
 @override @useResult
 $Res call({
- TagsStateStatus status, TagsStateBottomSheetStatus bottomSheetStatus, List<Tag> tags
+ TagsStateStatus status, TagsStateBottomSheetStatus bottomSheetStatus, List<TagUiModel> brandTags, List<TagUiModel> categoryTags, List<TagUiModel> generalTags
 });
 
 
@@ -268,12 +284,14 @@ class __$TagsStateCopyWithImpl<$Res>
 
 /// Create a copy of TagsState
 /// with the given fields replaced by the non-null parameter values.
-@override @pragma('vm:prefer-inline') $Res call({Object? status = null,Object? bottomSheetStatus = null,Object? tags = null,}) {
+@override @pragma('vm:prefer-inline') $Res call({Object? status = null,Object? bottomSheetStatus = null,Object? brandTags = null,Object? categoryTags = null,Object? generalTags = null,}) {
   return _then(_TagsState(
 status: null == status ? _self.status : status // ignore: cast_nullable_to_non_nullable
 as TagsStateStatus,bottomSheetStatus: null == bottomSheetStatus ? _self.bottomSheetStatus : bottomSheetStatus // ignore: cast_nullable_to_non_nullable
-as TagsStateBottomSheetStatus,tags: null == tags ? _self._tags : tags // ignore: cast_nullable_to_non_nullable
-as List<Tag>,
+as TagsStateBottomSheetStatus,brandTags: null == brandTags ? _self._brandTags : brandTags // ignore: cast_nullable_to_non_nullable
+as List<TagUiModel>,categoryTags: null == categoryTags ? _self._categoryTags : categoryTags // ignore: cast_nullable_to_non_nullable
+as List<TagUiModel>,generalTags: null == generalTags ? _self._generalTags : generalTags // ignore: cast_nullable_to_non_nullable
+as List<TagUiModel>,
   ));
 }
 

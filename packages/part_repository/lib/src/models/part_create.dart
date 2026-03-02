@@ -11,6 +11,8 @@ class PartCreate {
     required this.isRecycled,
     required this.price,
     required this.mainTagId,
+    required this.brandTagId,
+    required this.standardTagIds,
     required this.description,
   });
 
@@ -23,6 +25,8 @@ class PartCreate {
     isRecycled: isRecycled,
     price: price,
     mainTagId: mainTagId,
+    brandTagId: brandTagId,
+    standardTagIds: standardTagIds,
     description: description,
   );
 
@@ -33,5 +37,7 @@ class PartCreate {
   final bool isRecycled;
   final double price;
   final String? mainTagId;
+  final String? brandTagId;
+  final List<String> standardTagIds;
   final String? description;
 }

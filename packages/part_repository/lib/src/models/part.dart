@@ -3,6 +3,7 @@ import 'package:part_repository/src/models/part_create.dart';
 
 class Part {
   Part({
+    required this.standardTagIds,
     required this.id,
     required this.name,
     required this.detailNumber,
@@ -10,6 +11,7 @@ class Part {
     required this.price,
     required this.mainTagId,
     required this.description,
+    this.brandTagId,
   });
 
   factory Part.fromCreateModel(String id, PartCreate createModel) => Part(
@@ -19,6 +21,8 @@ class Part {
     isRecycled: createModel.isRecycled,
     price: createModel.price,
     mainTagId: createModel.mainTagId,
+    brandTagId: createModel.brandTagId,
+    standardTagIds: createModel.standardTagIds,
     description: createModel.description,
   );
 
@@ -29,6 +33,8 @@ class Part {
     isRecycled: dto.isRecycled,
     price: dto.price,
     mainTagId: dto.mainTagId,
+    brandTagId: dto.brandTagId,
+    standardTagIds: dto.standardTagIds,
     description: dto.description,
   );
 
@@ -38,5 +44,7 @@ class Part {
   final bool isRecycled;
   final double price;
   final String? mainTagId;
+  final String? brandTagId;
+  final List<String>? standardTagIds;
   final String? description;
 }

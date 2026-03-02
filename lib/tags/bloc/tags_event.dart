@@ -6,7 +6,7 @@ sealed class TagsEvent {
 
 final class _TagsUpdated extends TagsEvent {
   const _TagsUpdated({required this.tags});
-  final List<Tag> tags;
+  final List<TagUiModel> tags;
 }
 
 final class SaveButtonPressed extends TagsEvent {

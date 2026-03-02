@@ -4,6 +4,7 @@ import 'package:bloc/bloc.dart';
 import 'package:inventory_app/inventory/bloc/inventory_state.dart';
 import 'package:inventory_app/inventory/models/part_ui_model.dart';
 import 'package:inventory_app/inventory/models/stock_ui_model.dart';
+import 'package:inventory_app/tags/models/tag_ui_model.dart';
 import 'package:part_repository/part_repository.dart';
 
 import 'package:rxdart/rxdart.dart';
@@ -78,7 +79,7 @@ class InventoryBloc extends Bloc<InventoryEvent, InventoryState> {
               _stockRepository.watchStock(),
               _partRepository.watchParts(),
               _storageRepository.watchStorages(),
-              _tagRepository.watchMainTags(),
+              _tagRepository.watchAllTags(),
               (stocks, parts, storages, tags) {
                 final storagesMap = {
                   for (final storage in storages) storage.id: storage,
@@ -111,7 +112,9 @@ class InventoryBloc extends Bloc<InventoryEvent, InventoryState> {
                       detailNumber: part.detailNumber,
                       price: part.price,
                       isRecycled: part.isRecycled,
-                      mainTag: mainTag,
+                      mainTag: mainTag == null
+                          ? null
+                          : TagUiModel.fromDomainModel(mainTag),
                       description: part.description,
                       stock: storageQuantities,
                     ),

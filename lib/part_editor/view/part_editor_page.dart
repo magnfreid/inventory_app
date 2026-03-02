@@ -10,11 +10,11 @@ import 'package:part_repository/part_repository.dart';
 import 'package:stock_repository/stock_repository.dart';
 import 'package:storage_repository/storage_repository.dart';
 
-class InventoryItemEditorPage extends StatelessWidget {
-  const InventoryItemEditorPage({super.key});
+class PartEditorPage extends StatelessWidget {
+  const PartEditorPage({super.key});
 
   static MaterialPageRoute<void> route() => MaterialPageRoute<void>(
-    builder: (context) => const InventoryItemEditorPage(),
+    builder: (context) => const PartEditorPage(),
   );
 
   @override
@@ -25,20 +25,19 @@ class InventoryItemEditorPage extends StatelessWidget {
         storageRepository: context.read<StorageRepository>(),
         partRepository: context.read<PartRepository>(),
       ),
-      child: const InventoryItemEditorView(),
+      child: const PartEditorView(),
     );
   }
 }
 
-class InventoryItemEditorView extends StatefulWidget {
-  const InventoryItemEditorView({super.key});
+class PartEditorView extends StatefulWidget {
+  const PartEditorView({super.key});
 
   @override
-  State<InventoryItemEditorView> createState() =>
-      _InventoryItemEditorViewState();
+  State<PartEditorView> createState() => _PartEditorViewState();
 }
 
-class _InventoryItemEditorViewState extends State<InventoryItemEditorView> {
+class _PartEditorViewState extends State<PartEditorView> {
   final _formKey = GlobalKey<FormState>();
   final _nameController = TextEditingController();
   final _detailNumberController = TextEditingController();
@@ -162,7 +161,10 @@ class _InventoryItemEditorViewState extends State<InventoryItemEditorView> {
                                           _priceController.text,
                                         ) ??
                                         0.0,
+                                    //TODO(magnfreid): Add tags!
                                     mainTagId: null,
+                                    brandTagId: null,
+                                    standardTagIds: [],
                                     description: _descriptionController.text,
                                   ),
                                 ),

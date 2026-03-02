@@ -13,6 +13,8 @@ class PartDto {
     required this.price,
     required this.mainTagId,
     required this.description,
+    required this.brandTagId,
+    required this.standardTagIds,
   });
 
   factory PartDto.fromJson(Map<String, dynamic> json) =>
@@ -26,6 +28,8 @@ class PartDto {
         isRecycled: createModel.isRecycled,
         price: createModel.price,
         mainTagId: createModel.mainTagId,
+        brandTagId: createModel.brandTagId,
+        standardTagIds: createModel.standardTagIds,
         description: createModel.description,
       );
 
@@ -37,5 +41,7 @@ class PartDto {
   final bool isRecycled;
   final double price;
   final String? mainTagId;
+  final String? brandTagId;
+  final List<String>? standardTagIds;
   final String? description;
 }

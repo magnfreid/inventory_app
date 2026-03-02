@@ -12,6 +12,10 @@ PartCreate _$PartCreateFromJson(Map<String, dynamic> json) => PartCreate(
   isRecycled: json['isRecycled'] as bool,
   price: (json['price'] as num).toDouble(),
   mainTagId: json['mainTagId'] as String?,
+  brandTagId: json['brandTagId'] as String?,
+  standardTagIds: (json['standardTagIds'] as List<dynamic>)
+      .map((e) => e as String)
+      .toList(),
   description: json['description'] as String?,
 );
 
@@ -22,5 +26,7 @@ Map<String, dynamic> _$PartCreateToJson(PartCreate instance) =>
       'isRecycled': instance.isRecycled,
       'price': instance.price,
       'mainTagId': instance.mainTagId,
+      'brandTagId': instance.brandTagId,
+      'standardTagIds': instance.standardTagIds,
       'description': instance.description,
     };

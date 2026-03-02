@@ -54,7 +54,7 @@ class AuthenticatedApp extends StatelessWidget {
                 create: (_) =>
                     partRepositoryFactory(currentUser.organizationId),
               ),
-              RepositoryProvider(
+              RepositoryProvider<TagRepository>(
                 create: (_) => tagRepositoryFactory(currentUser.organizationId),
               ),
             ],
