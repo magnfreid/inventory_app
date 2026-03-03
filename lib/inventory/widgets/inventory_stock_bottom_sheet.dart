@@ -22,43 +22,52 @@ class InventoryStockBottomSheet extends StatelessWidget {
         buildWhen: (previous, current) =>
             previous.bottomSheetStatus != current.bottomSheetStatus,
         builder: (context, state) {
-          return Padding(
-            padding: const EdgeInsets.all(16),
-            child: Column(
-              crossAxisAlignment: .start,
-              children: [
-                Padding(
-                  padding: const EdgeInsets.fromLTRB(8, 0, 0, 10),
-                  child: Column(
-                    crossAxisAlignment: .start,
-                    children: [
-                      Text(
-                        part.name,
-                        style: const TextStyle(fontSize: 20),
-                      ),
-                      Text(
-                        part.detailNumber,
-                        style: const TextStyle(color: Colors.blueGrey),
-                      ),
-                    ],
-                  ),
-                ),
-                const Divider(),
-                ...part.stock
-                    .where((stock) => stock.quantity > 0)
-                    .map(
-                      (stock) => UseStockListItem(
-                        stock: stock,
-                        isLoading: state.isLoadingBottomSheet,
-                        onPressed: () => context.read<InventoryBloc>().add(
-                          UseStockButtonPressed(
-                            partId: part.partId,
-                            storageId: stock.storageId,
-                          ),
+          final stocks = part.stock
+              .where((stock) => stock.quantity > 0)
+              .toList();
+          return SafeArea(
+            child: Padding(
+              padding: const EdgeInsets.all(16),
+              child: Column(
+                crossAxisAlignment: .start,
+                children: [
+                  Padding(
+                    padding: const .fromLTRB(8, 0, 0, 10),
+                    child: Column(
+                      crossAxisAlignment: .start,
+                      children: [
+                        Text(
+                          part.name,
+                          style: const TextStyle(fontSize: 20),
                         ),
-                      ),
+                        Text(
+                          part.detailNumber,
+                          style: const TextStyle(color: Colors.blueGrey),
+                        ),
+                      ],
                     ),
-              ],
+                  ),
+                  const Divider(),
+                  Expanded(
+                    child: ListView.builder(
+                      itemCount: stocks.length,
+                      itemBuilder: (context, index) {
+                        final stock = stocks[index];
+                        return UseStockListItem(
+                          stock: stock,
+                          isLoading: state.isLoadingBottomSheet,
+                          onPressed: () => context.read<InventoryBloc>().add(
+                            UseStockButtonPressed(
+                              partId: part.partId,
+                              storageId: stock.storageId,
+                            ),
+                          ),
+                        );
+                      },
+                    ),
+                  ),
+                ],
+              ),
             ),
           );
         },

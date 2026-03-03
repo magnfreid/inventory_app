@@ -38,13 +38,17 @@ class InventoryPartCard extends StatelessWidget {
                       Column(
                         crossAxisAlignment: .start,
                         children: [
-                          if (part.mainTag != null)
-                            Text(
-                              part.mainTag!.label,
-                              style: TextStyle(
-                                color: part.mainTag!.color,
-                              ),
-                            ),
+                          Row(
+                            children: [
+                              if (part.mainTag != null)
+                                Text(
+                                  part.mainTag!.label,
+                                  style: TextStyle(
+                                    color: part.mainTag!.color,
+                                  ),
+                                ),
+                            ],
+                          ),
                           Text(
                             part.name,
                             style: const TextStyle(fontSize: 16),

@@ -11,10 +11,10 @@ class PartDto {
     required this.detailNumber,
     required this.isRecycled,
     required this.price,
-    required this.mainTagId,
+    required this.categoryTagId,
     required this.description,
     required this.brandTagId,
-    required this.standardTagIds,
+    required this.generalTagIds,
   });
 
   factory PartDto.fromJson(Map<String, dynamic> json) =>
@@ -27,9 +27,9 @@ class PartDto {
         detailNumber: createModel.detailNumber,
         isRecycled: createModel.isRecycled,
         price: createModel.price,
-        mainTagId: createModel.mainTagId,
+        categoryTagId: createModel.mainTagId,
         brandTagId: createModel.brandTagId,
-        standardTagIds: createModel.standardTagIds,
+        generalTagIds: createModel.standardTagIds,
         description: createModel.description,
       );
 
@@ -40,8 +40,8 @@ class PartDto {
   final String detailNumber;
   final bool isRecycled;
   final double price;
-  final String? mainTagId;
+  final String? categoryTagId;
   final String? brandTagId;
-  final List<String>? standardTagIds;
+  final List<String>? generalTagIds;
   final String? description;
 }

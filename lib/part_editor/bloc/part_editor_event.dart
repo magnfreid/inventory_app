@@ -5,6 +5,11 @@ sealed class PartEditorEvent {
 }
 
 final class SaveButtonPressed extends PartEditorEvent {
-  const SaveButtonPressed({required this.partCreateModel});
-  final PartCreate partCreateModel;
+  const SaveButtonPressed({required this.draft});
+  final PartDraft draft;
+}
+
+final class _TagsUpdated extends PartEditorEvent {
+  const _TagsUpdated({required this.tags});
+  final List<TagUiModel> tags;
 }

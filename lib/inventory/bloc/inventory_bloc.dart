@@ -102,8 +102,8 @@ class InventoryBloc extends Bloc<InventoryEvent, InventoryState> {
                       quantity: stock.quantity,
                     );
                   }).toList();
-                  final mainTag = part.mainTagId != null
-                      ? tagsMap[part.mainTagId!]
+                  final mainTag = part.categoryTagId != null
+                      ? tagsMap[part.categoryTagId!]
                       : null;
                   uiItems.add(
                     PartUiModel(

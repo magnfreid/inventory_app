@@ -3,13 +3,13 @@ import 'package:part_repository/src/models/part_create.dart';
 
 class Part {
   Part({
-    required this.standardTagIds,
+    required this.generalTagIds,
     required this.id,
     required this.name,
     required this.detailNumber,
     required this.isRecycled,
     required this.price,
-    required this.mainTagId,
+    required this.categoryTagId,
     required this.description,
     this.brandTagId,
   });
@@ -20,9 +20,9 @@ class Part {
     detailNumber: createModel.detailNumber,
     isRecycled: createModel.isRecycled,
     price: createModel.price,
-    mainTagId: createModel.mainTagId,
+    categoryTagId: createModel.categoryTagId,
     brandTagId: createModel.brandTagId,
-    standardTagIds: createModel.standardTagIds,
+    generalTagIds: createModel.generalTagIds,
     description: createModel.description,
   );
 
@@ -32,10 +32,22 @@ class Part {
     detailNumber: dto.detailNumber,
     isRecycled: dto.isRecycled,
     price: dto.price,
-    mainTagId: dto.mainTagId,
+    categoryTagId: dto.categoryTagId,
     brandTagId: dto.brandTagId,
-    standardTagIds: dto.standardTagIds,
+    generalTagIds: dto.generalTagIds,
     description: dto.description,
+  );
+
+  PartDto toDto() => PartDto(
+    id: id,
+    name: name,
+    detailNumber: detailNumber,
+    isRecycled: isRecycled,
+    price: price,
+    categoryTagId: categoryTagId,
+    description: description,
+    brandTagId: brandTagId,
+    generalTagIds: generalTagIds,
   );
 
   final String id;
@@ -43,8 +55,8 @@ class Part {
   final String detailNumber;
   final bool isRecycled;
   final double price;
-  final String? mainTagId;
+  final String? categoryTagId;
   final String? brandTagId;
-  final List<String>? standardTagIds;
+  final List<String>? generalTagIds;
   final String? description;
 }

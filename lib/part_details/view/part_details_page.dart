@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:inventory_app/inventory/models/part_ui_model.dart';
-import 'package:inventory_app/l10n/l10n.dart';
 import 'package:inventory_app/part_details/bloc/part_details_bloc.dart';
 import 'package:inventory_app/part_details/bloc/part_details_state.dart';
 import 'package:inventory_app/part_details/widgets/part_details_bottom_sheet.dart';
 import 'package:inventory_app/part_details/widgets/part_details_info.dart';
+import 'package:inventory_app/part_editor/view/part_editor_page.dart';
 import 'package:stock_repository/stock_repository.dart';
 import 'package:storage_repository/storage_repository.dart';
 
@@ -44,6 +44,13 @@ class PartDetailsView extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(
         title: Text(part.name),
+        actions: [
+          IconButton(
+            onPressed: () =>
+                Navigator.push(context, PartEditorPage.route(part: part)),
+            icon: const Icon(Icons.edit),
+          ),
+        ],
       ),
       body: BlocListener<PartDetailsBloc, PartDetailsState>(
         listenWhen: (previous, current) => current.saveStatus == .success,

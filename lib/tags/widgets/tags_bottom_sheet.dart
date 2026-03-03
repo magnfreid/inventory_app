@@ -8,7 +8,9 @@ import 'package:tag_remote/tag_remote.dart';
 import 'package:tag_repository/tag_repository.dart';
 
 class TagsBottomSheet extends StatefulWidget {
-  const TagsBottomSheet({super.key});
+  const TagsBottomSheet({this.initialBrand = .brand, super.key});
+
+  final TagType initialBrand;
 
   @override
   State<TagsBottomSheet> createState() => _TagsBottomSheetState();
@@ -17,10 +19,11 @@ class TagsBottomSheet extends StatefulWidget {
 class _TagsBottomSheetState extends State<TagsBottomSheet> {
   late final TextEditingController _labelTextController;
   Color _selectedColor = TagColor.values.first.toColor();
-  TagType _selectedTagType = TagType.brand;
+  late TagType _selectedTagType;
 
   @override
   void initState() {
+    _selectedTagType = widget.initialBrand;
     _labelTextController = TextEditingController();
     super.initState();
   }

@@ -4,6 +4,7 @@ import 'package:inventory_app/tags/bloc/tags_bloc.dart';
 import 'package:inventory_app/tags/bloc/tags_state.dart';
 import 'package:inventory_app/tags/models/tag_ui_model.dart';
 import 'package:inventory_app/tags/widgets/tags_bottom_sheet.dart';
+import 'package:tag_remote/tag_remote.dart';
 import 'package:tag_repository/tag_repository.dart';
 
 class TagsPage extends StatelessWidget {
@@ -68,7 +69,11 @@ class _TagsViewState extends State<TagsView> with TickerProviderStateMixin {
           context: context,
           builder: (_) => BlocProvider.value(
             value: context.read<TagsBloc>(),
-            child: const SafeArea(child: TagsBottomSheet()),
+            child: SafeArea(
+              child: TagsBottomSheet(
+                initialBrand: TagType.values[_tabController.index],
+              ),
+            ),
           ),
         ),
         label: const Text('New tag'),
@@ -99,18 +104,16 @@ class _TabContent extends StatelessWidget {
   Widget build(BuildContext context) {
     return tags.isEmpty
         ? const Center(child: Text('No tags added yet!'))
-        : Expanded(
-            child: ListView.builder(
-              itemCount: tags.length,
-              itemBuilder: (context, index) {
-                final tag = tags[index];
-                return ListTile(
-                  title: Text(tag.label),
-                  iconColor: tag.color,
-                  trailing: const Icon(Icons.label),
-                );
-              },
-            ),
+        : ListView.builder(
+            itemCount: tags.length,
+            itemBuilder: (context, index) {
+              final tag = tags[index];
+              return ListTile(
+                title: Text(tag.label),
+                iconColor: tag.color,
+                trailing: const Icon(Icons.label),
+              );
+            },
           );
   }
 }

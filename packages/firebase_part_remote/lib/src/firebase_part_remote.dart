@@ -43,4 +43,20 @@ class FirebasePartRemote implements PartRemote {
     await docRef.set(dto);
     return dto;
   }
+
+  @override
+  Future<void> editPart(PartDto updatedPart) async {
+    final docRef = _collection.doc(updatedPart.id);
+    return docRef.update({
+      'name': updatedPart.name,
+      'detailNumber': updatedPart.detailNumber,
+      'price': updatedPart.price,
+      'isRecycled': updatedPart.isRecycled,
+      'categoryTagId': updatedPart.categoryTagId,
+      'brandTagId': updatedPart.brandTagId,
+      'generalTagIds': updatedPart.generalTagIds,
+      'description': updatedPart.description,
+      'updatedAt': FieldValue.serverTimestamp(),
+    });
+  }
 }

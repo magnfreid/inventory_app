@@ -12,10 +12,10 @@ PartDto _$PartDtoFromJson(Map<String, dynamic> json) => PartDto(
   detailNumber: json['detailNumber'] as String,
   isRecycled: json['isRecycled'] as bool,
   price: (json['price'] as num).toDouble(),
-  mainTagId: json['mainTagId'] as String?,
+  categoryTagId: json['mainTagId'] as String?,
   description: json['description'] as String?,
   brandTagId: json['brandTagId'] as String?,
-  standardTagIds: (json['standardTagIds'] as List<dynamic>?)
+  generalTagIds: (json['standardTagIds'] as List<dynamic>?)
       ?.map((e) => e as String)
       .toList(),
 );
@@ -26,8 +26,8 @@ Map<String, dynamic> _$PartDtoToJson(PartDto instance) => <String, dynamic>{
   'detailNumber': instance.detailNumber,
   'isRecycled': instance.isRecycled,
   'price': instance.price,
-  'mainTagId': instance.mainTagId,
+  'mainTagId': instance.categoryTagId,
   'brandTagId': instance.brandTagId,
-  'standardTagIds': instance.standardTagIds,
+  'standardTagIds': instance.generalTagIds,
   'description': instance.description,
 };

@@ -17,4 +17,8 @@ class PartRepository {
     final dto = await _remote.addPart(createDto);
     return Part.fromDto(dto);
   }
+
+  Future<void> editPart(Part updatedPart) async {
+    await _remote.editPart(updatedPart.toDto());
+  }
 }
