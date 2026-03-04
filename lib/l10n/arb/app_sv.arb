@@ -48,6 +48,10 @@
 	"@formFieldDescriptionLabelText": {
 		"description": "Label text for description form field"
 	},
+	"formFieldRecycledStatusLabelText": "Status",
+	"@formFieldRecycledStatusLabelText": {
+		"description": "Label text for recycled status title"
+	},
 	"formSaveButtonText": "Spara",
 	"@formSaveButtonText": {
 		"description": "Text for save button in catalogue form"

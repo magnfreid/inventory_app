@@ -66,7 +66,7 @@ void main() {
   });
 
   test('editPart calls remote with correct DTO', () async {
-    when(() => mockRemote.editPart(any())).thenAnswer((_) async {});
+    when(() => mockRemote.editPart(any())).thenAnswer((_) async => dto);
 
     await repository.editPart(domainPart);
 

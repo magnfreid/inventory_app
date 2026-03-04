@@ -3,7 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:inventory_app/l10n/l10n.dart';
 import 'package:inventory_app/tags/bloc/tags_bloc.dart';
 import 'package:inventory_app/tags/bloc/tags_state.dart';
-import 'package:inventory_app/tags/models/tag_ui_model.dart';
+import 'package:inventory_app/tags/models/tag_presentation.dart';
 import 'package:inventory_app/tags/widgets/tags_bottom_sheet.dart';
 import 'package:tag_repository/tag_repository.dart';
 
@@ -97,7 +97,7 @@ class _TagsViewState extends State<TagsView> with TickerProviderStateMixin {
 class _TabContent extends StatelessWidget {
   const _TabContent({required this.tags});
 
-  final List<TagUiModel> tags;
+  final List<TagPresentation> tags;
 
   @override
   Widget build(BuildContext context) {

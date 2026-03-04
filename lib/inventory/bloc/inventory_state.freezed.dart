@@ -14,7 +14,7 @@ T _$identity<T>(T value) => value;
 /// @nodoc
 mixin _$InventoryState {
 
- InventoryStateStatus get status; InventoryStateBottomSheetStatus get bottomSheetStatus; List<PartUiModel> get parts;
+ InventoryStateStatus get status; InventoryStateBottomSheetStatus get bottomSheetStatus; List<PartPresentation> get parts;
 /// Create a copy of InventoryState
 /// with the given fields replaced by the non-null parameter values.
 @JsonKey(includeFromJson: false, includeToJson: false)
@@ -45,7 +45,7 @@ abstract mixin class $InventoryStateCopyWith<$Res>  {
   factory $InventoryStateCopyWith(InventoryState value, $Res Function(InventoryState) _then) = _$InventoryStateCopyWithImpl;
 @useResult
 $Res call({
- InventoryStateStatus status, InventoryStateBottomSheetStatus bottomSheetStatus, List<PartUiModel> parts
+ InventoryStateStatus status, InventoryStateBottomSheetStatus bottomSheetStatus, List<PartPresentation> parts
 });
 
 
@@ -67,7 +67,7 @@ class _$InventoryStateCopyWithImpl<$Res>
 status: null == status ? _self.status : status // ignore: cast_nullable_to_non_nullable
 as InventoryStateStatus,bottomSheetStatus: null == bottomSheetStatus ? _self.bottomSheetStatus : bottomSheetStatus // ignore: cast_nullable_to_non_nullable
 as InventoryStateBottomSheetStatus,parts: null == parts ? _self.parts : parts // ignore: cast_nullable_to_non_nullable
-as List<PartUiModel>,
+as List<PartPresentation>,
   ));
 }
 
@@ -152,7 +152,7 @@ return $default(_that);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function( InventoryStateStatus status,  InventoryStateBottomSheetStatus bottomSheetStatus,  List<PartUiModel> parts)?  $default,{required TResult orElse(),}) {final _that = this;
+@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function( InventoryStateStatus status,  InventoryStateBottomSheetStatus bottomSheetStatus,  List<PartPresentation> parts)?  $default,{required TResult orElse(),}) {final _that = this;
 switch (_that) {
 case _InventoryState() when $default != null:
 return $default(_that.status,_that.bottomSheetStatus,_that.parts);case _:
@@ -173,7 +173,7 @@ return $default(_that.status,_that.bottomSheetStatus,_that.parts);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function( InventoryStateStatus status,  InventoryStateBottomSheetStatus bottomSheetStatus,  List<PartUiModel> parts)  $default,) {final _that = this;
+@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function( InventoryStateStatus status,  InventoryStateBottomSheetStatus bottomSheetStatus,  List<PartPresentation> parts)  $default,) {final _that = this;
 switch (_that) {
 case _InventoryState():
 return $default(_that.status,_that.bottomSheetStatus,_that.parts);case _:
@@ -193,7 +193,7 @@ return $default(_that.status,_that.bottomSheetStatus,_that.parts);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function( InventoryStateStatus status,  InventoryStateBottomSheetStatus bottomSheetStatus,  List<PartUiModel> parts)?  $default,) {final _that = this;
+@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function( InventoryStateStatus status,  InventoryStateBottomSheetStatus bottomSheetStatus,  List<PartPresentation> parts)?  $default,) {final _that = this;
 switch (_that) {
 case _InventoryState() when $default != null:
 return $default(_that.status,_that.bottomSheetStatus,_that.parts);case _:
@@ -208,13 +208,13 @@ return $default(_that.status,_that.bottomSheetStatus,_that.parts);case _:
 
 
 class _InventoryState extends InventoryState {
-  const _InventoryState({this.status = InventoryStateStatus.loading, this.bottomSheetStatus = InventoryStateBottomSheetStatus.idle, final  List<PartUiModel> parts = const []}): _parts = parts,super._();
+  const _InventoryState({this.status = InventoryStateStatus.loading, this.bottomSheetStatus = InventoryStateBottomSheetStatus.idle, final  List<PartPresentation> parts = const []}): _parts = parts,super._();
   
 
 @override@JsonKey() final  InventoryStateStatus status;
 @override@JsonKey() final  InventoryStateBottomSheetStatus bottomSheetStatus;
- final  List<PartUiModel> _parts;
-@override@JsonKey() List<PartUiModel> get parts {
+ final  List<PartPresentation> _parts;
+@override@JsonKey() List<PartPresentation> get parts {
   if (_parts is EqualUnmodifiableListView) return _parts;
   // ignore: implicit_dynamic_type
   return EqualUnmodifiableListView(_parts);
@@ -251,7 +251,7 @@ abstract mixin class _$InventoryStateCopyWith<$Res> implements $InventoryStateCo
   factory _$InventoryStateCopyWith(_InventoryState value, $Res Function(_InventoryState) _then) = __$InventoryStateCopyWithImpl;
 @override @useResult
 $Res call({
- InventoryStateStatus status, InventoryStateBottomSheetStatus bottomSheetStatus, List<PartUiModel> parts
+ InventoryStateStatus status, InventoryStateBottomSheetStatus bottomSheetStatus, List<PartPresentation> parts
 });
 
 
@@ -273,7 +273,7 @@ class __$InventoryStateCopyWithImpl<$Res>
 status: null == status ? _self.status : status // ignore: cast_nullable_to_non_nullable
 as InventoryStateStatus,bottomSheetStatus: null == bottomSheetStatus ? _self.bottomSheetStatus : bottomSheetStatus // ignore: cast_nullable_to_non_nullable
 as InventoryStateBottomSheetStatus,parts: null == parts ? _self._parts : parts // ignore: cast_nullable_to_non_nullable
-as List<PartUiModel>,
+as List<PartPresentation>,
   ));
 }
 

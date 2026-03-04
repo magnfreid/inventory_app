@@ -2,14 +2,14 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:inventory_app/inventory/bloc/inventory_bloc.dart';
 import 'package:inventory_app/inventory/bloc/inventory_state.dart';
-import 'package:inventory_app/inventory/models/part_ui_model.dart';
+import 'package:inventory_app/use_cases/part_presentation.dart/models/part_presentation.dart';
 
 import 'package:inventory_app/shared/widgets/use_stock_list_item.dart';
 
 class InventoryStockBottomSheet extends StatelessWidget {
   const InventoryStockBottomSheet({required this.part, super.key});
 
-  final PartUiModel part;
+  final PartPresentation part;
 
   @override
   Widget build(BuildContext context) {

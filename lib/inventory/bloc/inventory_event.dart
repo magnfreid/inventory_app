@@ -6,7 +6,7 @@ sealed class InventoryEvent {
 
 final class _PartsUpdated extends InventoryEvent {
   const _PartsUpdated({required this.parts});
-  final List<PartUiModel> parts;
+  final List<PartPresentation> parts;
 }
 
 final class UseStockButtonPressed extends InventoryEvent {

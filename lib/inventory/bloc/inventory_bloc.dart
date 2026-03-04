@@ -2,40 +2,29 @@ import 'dart:async';
 
 import 'package:bloc/bloc.dart';
 import 'package:inventory_app/inventory/bloc/inventory_state.dart';
-import 'package:inventory_app/inventory/models/part_ui_model.dart';
-import 'package:inventory_app/inventory/models/stock_ui_model.dart';
-import 'package:inventory_app/tags/models/tag_ui_model.dart';
-import 'package:part_repository/part_repository.dart';
+import 'package:inventory_app/use_cases/part_presentation.dart/models/part_presentation.dart';
+import 'package:inventory_app/use_cases/part_presentation.dart/watch_part_presentations.dart';
 
-import 'package:rxdart/rxdart.dart';
 import 'package:stock_repository/stock_repository.dart';
-import 'package:storage_repository/storage_repository.dart';
-import 'package:tag_repository/tag_repository.dart';
 
 part 'inventory_event.dart';
 
 class InventoryBloc extends Bloc<InventoryEvent, InventoryState> {
   InventoryBloc({
-    required PartRepository partRepository,
-    required StorageRepository storageRepository,
+    required WatchPartPresentations watchPartPresentations,
     required StockRepository stockRepository,
-    required TagRepository tagRepository,
-  }) : _partRepository = partRepository,
-       _storageRepository = storageRepository,
-       _stockRepository = stockRepository,
-       _tagRepository = tagRepository,
+  }) : _stockRepository = stockRepository,
        super(const InventoryState()) {
     on<_PartsUpdated>(_onPartsUpdated);
     on<UseStockButtonPressed>(_onUseStockButtonPressed);
 
-    setStreamSubscription();
+    _streamSubscription = watchPartPresentations().listen(
+      (parts) => add(_PartsUpdated(parts: parts)),
+    );
   }
 
-  final PartRepository _partRepository;
   final StockRepository _stockRepository;
-  final StorageRepository _storageRepository;
-  final TagRepository _tagRepository;
-  late final StreamSubscription<List<PartUiModel>> _streamSubscription;
+  late final StreamSubscription<List<PartPresentation>> _streamSubscription;
 
   @override
   Future<void> close() async {
@@ -65,72 +54,5 @@ class InventoryBloc extends Bloc<InventoryEvent, InventoryState> {
     } on Exception catch (_) {
       emit(state.copyWith(bottomSheetStatus: .error));
     }
-  }
-
-  void setStreamSubscription() {
-    _streamSubscription =
-        Rx.combineLatest4<
-              List<Stock>,
-              List<Part>,
-              List<Storage>,
-              List<Tag>,
-              List<PartUiModel>
-            >(
-              _stockRepository.watchStock(),
-              _partRepository.watchParts(),
-              _storageRepository.watchStorages(),
-              _tagRepository.watchTags(),
-              (stocks, parts, storages, tags) {
-                final storagesMap = {
-                  for (final storage in storages) storage.id: storage,
-                };
-                final tagsMap = {
-                  for (final tag in tags) tag.id: tag,
-                };
-                final stockByPart = <String, List<Stock>>{};
-                for (final stock in stocks) {
-                  stockByPart.putIfAbsent(stock.partId, () => []).add(stock);
-                }
-                final uiItems = <PartUiModel>[];
-                for (final part in parts) {
-                  final partStock = stockByPart[part.id] ?? const [];
-                  final storageQuantities = partStock.map((stock) {
-                    final storage = storagesMap[stock.storageId];
-                    return StockUiModel(
-                      storageId: stock.storageId,
-                      storageName: storage?.name ?? 'Unknown',
-                      quantity: stock.quantity,
-                    );
-                  }).toList();
-                  final categoryTag = part.categoryTagId != null
-                      ? tagsMap[part.categoryTagId!]
-                      : null;
-                  final brandTag = part.brandTagId != null
-                      ? tagsMap[part.brandTagId!]
-                      : null;
-                  uiItems.add(
-                    PartUiModel(
-                      partId: part.id ?? '',
-                      name: part.name,
-                      detailNumber: part.detailNumber,
-                      price: part.price,
-                      isRecycled: part.isRecycled,
-                      brandTag: brandTag == null
-                          ? null
-                          : TagUiModel.fromDomainModel(brandTag),
-                      categoryTag: categoryTag == null
-                          ? null
-                          : TagUiModel.fromDomainModel(categoryTag),
-                      description: part.description,
-                      stock: storageQuantities,
-                    ),
-                  );
-                }
-                return uiItems;
-              },
-            )
-            .listen(
-              (parts) => add(_PartsUpdated(parts: parts)),
-            );
   }
 }

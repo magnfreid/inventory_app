@@ -6,10 +6,8 @@ import 'package:inventory_app/inventory/widgets/inventory_drawer.dart';
 import 'package:inventory_app/inventory/widgets/inventory_part_card.dart';
 import 'package:inventory_app/inventory/widgets/inventory_tool_bar.dart';
 import 'package:inventory_app/part_editor/view/part_editor_page.dart';
-import 'package:part_repository/part_repository.dart';
+import 'package:inventory_app/use_cases/part_presentation.dart/watch_part_presentations.dart';
 import 'package:stock_repository/stock_repository.dart';
-import 'package:storage_repository/storage_repository.dart';
-import 'package:tag_repository/tag_repository.dart';
 
 class InventoryPage extends StatelessWidget {
   const InventoryPage({super.key});
@@ -19,9 +17,7 @@ class InventoryPage extends StatelessWidget {
     return BlocProvider(
       create: (context) => InventoryBloc(
         stockRepository: context.read<StockRepository>(),
-        storageRepository: context.read<StorageRepository>(),
-        partRepository: context.read<PartRepository>(),
-        tagRepository: context.read<TagRepository>(),
+        watchPartPresentations: context.read<WatchPartPresentations>(),
       ),
       child: const InventoryView(),
     );

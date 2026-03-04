@@ -1,8 +1,8 @@
-import 'package:inventory_app/inventory/models/stock_ui_model.dart';
-import 'package:inventory_app/tags/models/tag_ui_model.dart';
+import 'package:inventory_app/use_cases/part_presentation.dart/models/stock_presentation.dart';
+import 'package:inventory_app/tags/models/tag_presentation.dart';
 
-class PartUiModel {
-  PartUiModel({
+class PartPresentation {
+  PartPresentation({
     required this.partId,
     required this.name,
     required this.detailNumber,
@@ -20,11 +20,11 @@ class PartUiModel {
   final String detailNumber;
   final double price;
   final bool isRecycled;
-  final TagUiModel? categoryTag;
-  final TagUiModel? brandTag;
-  final List<TagUiModel> generalTags;
+  final TagPresentation? categoryTag;
+  final TagPresentation? brandTag;
+  final List<TagPresentation> generalTags;
   final String? description;
-  final List<StockUiModel> stock;
+  final List<StockPresentation> stock;
 
   int get totalQuantity =>
       stock.fold(0, (sum, element) => sum + element.quantity);

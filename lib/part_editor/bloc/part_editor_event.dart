@@ -11,5 +11,5 @@ final class SaveButtonPressed extends PartEditorEvent {
 
 final class _TagsUpdated extends PartEditorEvent {
   const _TagsUpdated({required this.tags});
-  final List<TagUiModel> tags;
+  final List<TagPresentation> tags;
 }

@@ -14,7 +14,7 @@ T _$identity<T>(T value) => value;
 /// @nodoc
 mixin _$PartEditorState {
 
- PartEditorStatus get status; List<TagUiModel> get brandTags; List<TagUiModel> get categoryTags; List<TagUiModel> get generalTags;
+ PartEditorStatus get status; List<TagPresentation> get brandTags; List<TagPresentation> get categoryTags; List<TagPresentation> get generalTags;
 /// Create a copy of PartEditorState
 /// with the given fields replaced by the non-null parameter values.
 @JsonKey(includeFromJson: false, includeToJson: false)
@@ -45,7 +45,7 @@ abstract mixin class $PartEditorStateCopyWith<$Res>  {
   factory $PartEditorStateCopyWith(PartEditorState value, $Res Function(PartEditorState) _then) = _$PartEditorStateCopyWithImpl;
 @useResult
 $Res call({
- PartEditorStatus status, List<TagUiModel> brandTags, List<TagUiModel> categoryTags, List<TagUiModel> generalTags
+ PartEditorStatus status, List<TagPresentation> brandTags, List<TagPresentation> categoryTags, List<TagPresentation> generalTags
 });
 
 
@@ -66,9 +66,9 @@ class _$PartEditorStateCopyWithImpl<$Res>
   return _then(_self.copyWith(
 status: null == status ? _self.status : status // ignore: cast_nullable_to_non_nullable
 as PartEditorStatus,brandTags: null == brandTags ? _self.brandTags : brandTags // ignore: cast_nullable_to_non_nullable
-as List<TagUiModel>,categoryTags: null == categoryTags ? _self.categoryTags : categoryTags // ignore: cast_nullable_to_non_nullable
-as List<TagUiModel>,generalTags: null == generalTags ? _self.generalTags : generalTags // ignore: cast_nullable_to_non_nullable
-as List<TagUiModel>,
+as List<TagPresentation>,categoryTags: null == categoryTags ? _self.categoryTags : categoryTags // ignore: cast_nullable_to_non_nullable
+as List<TagPresentation>,generalTags: null == generalTags ? _self.generalTags : generalTags // ignore: cast_nullable_to_non_nullable
+as List<TagPresentation>,
   ));
 }
 
@@ -153,7 +153,7 @@ return $default(_that);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function( PartEditorStatus status,  List<TagUiModel> brandTags,  List<TagUiModel> categoryTags,  List<TagUiModel> generalTags)?  $default,{required TResult orElse(),}) {final _that = this;
+@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function( PartEditorStatus status,  List<TagPresentation> brandTags,  List<TagPresentation> categoryTags,  List<TagPresentation> generalTags)?  $default,{required TResult orElse(),}) {final _that = this;
 switch (_that) {
 case _PartEditorState() when $default != null:
 return $default(_that.status,_that.brandTags,_that.categoryTags,_that.generalTags);case _:
@@ -174,7 +174,7 @@ return $default(_that.status,_that.brandTags,_that.categoryTags,_that.generalTag
 /// }
 /// ```
 
-@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function( PartEditorStatus status,  List<TagUiModel> brandTags,  List<TagUiModel> categoryTags,  List<TagUiModel> generalTags)  $default,) {final _that = this;
+@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function( PartEditorStatus status,  List<TagPresentation> brandTags,  List<TagPresentation> categoryTags,  List<TagPresentation> generalTags)  $default,) {final _that = this;
 switch (_that) {
 case _PartEditorState():
 return $default(_that.status,_that.brandTags,_that.categoryTags,_that.generalTags);case _:
@@ -194,7 +194,7 @@ return $default(_that.status,_that.brandTags,_that.categoryTags,_that.generalTag
 /// }
 /// ```
 
-@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function( PartEditorStatus status,  List<TagUiModel> brandTags,  List<TagUiModel> categoryTags,  List<TagUiModel> generalTags)?  $default,) {final _that = this;
+@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function( PartEditorStatus status,  List<TagPresentation> brandTags,  List<TagPresentation> categoryTags,  List<TagPresentation> generalTags)?  $default,) {final _that = this;
 switch (_that) {
 case _PartEditorState() when $default != null:
 return $default(_that.status,_that.brandTags,_that.categoryTags,_that.generalTags);case _:
@@ -209,26 +209,26 @@ return $default(_that.status,_that.brandTags,_that.categoryTags,_that.generalTag
 
 
 class _PartEditorState extends PartEditorState {
-  const _PartEditorState({this.status = PartEditorStatus.idle, final  List<TagUiModel> brandTags = const [], final  List<TagUiModel> categoryTags = const [], final  List<TagUiModel> generalTags = const []}): _brandTags = brandTags,_categoryTags = categoryTags,_generalTags = generalTags,super._();
+  const _PartEditorState({this.status = PartEditorStatus.idle, final  List<TagPresentation> brandTags = const [], final  List<TagPresentation> categoryTags = const [], final  List<TagPresentation> generalTags = const []}): _brandTags = brandTags,_categoryTags = categoryTags,_generalTags = generalTags,super._();
   
 
 @override@JsonKey() final  PartEditorStatus status;
- final  List<TagUiModel> _brandTags;
-@override@JsonKey() List<TagUiModel> get brandTags {
+ final  List<TagPresentation> _brandTags;
+@override@JsonKey() List<TagPresentation> get brandTags {
   if (_brandTags is EqualUnmodifiableListView) return _brandTags;
   // ignore: implicit_dynamic_type
   return EqualUnmodifiableListView(_brandTags);
 }
 
- final  List<TagUiModel> _categoryTags;
-@override@JsonKey() List<TagUiModel> get categoryTags {
+ final  List<TagPresentation> _categoryTags;
+@override@JsonKey() List<TagPresentation> get categoryTags {
   if (_categoryTags is EqualUnmodifiableListView) return _categoryTags;
   // ignore: implicit_dynamic_type
   return EqualUnmodifiableListView(_categoryTags);
 }
 
- final  List<TagUiModel> _generalTags;
-@override@JsonKey() List<TagUiModel> get generalTags {
+ final  List<TagPresentation> _generalTags;
+@override@JsonKey() List<TagPresentation> get generalTags {
   if (_generalTags is EqualUnmodifiableListView) return _generalTags;
   // ignore: implicit_dynamic_type
   return EqualUnmodifiableListView(_generalTags);
@@ -265,7 +265,7 @@ abstract mixin class _$PartEditorStateCopyWith<$Res> implements $PartEditorState
   factory _$PartEditorStateCopyWith(_PartEditorState value, $Res Function(_PartEditorState) _then) = __$PartEditorStateCopyWithImpl;
 @override @useResult
 $Res call({
- PartEditorStatus status, List<TagUiModel> brandTags, List<TagUiModel> categoryTags, List<TagUiModel> generalTags
+ PartEditorStatus status, List<TagPresentation> brandTags, List<TagPresentation> categoryTags, List<TagPresentation> generalTags
 });
 
 
@@ -286,9 +286,9 @@ class __$PartEditorStateCopyWithImpl<$Res>
   return _then(_PartEditorState(
 status: null == status ? _self.status : status // ignore: cast_nullable_to_non_nullable
 as PartEditorStatus,brandTags: null == brandTags ? _self._brandTags : brandTags // ignore: cast_nullable_to_non_nullable
-as List<TagUiModel>,categoryTags: null == categoryTags ? _self._categoryTags : categoryTags // ignore: cast_nullable_to_non_nullable
-as List<TagUiModel>,generalTags: null == generalTags ? _self._generalTags : generalTags // ignore: cast_nullable_to_non_nullable
-as List<TagUiModel>,
+as List<TagPresentation>,categoryTags: null == categoryTags ? _self._categoryTags : categoryTags // ignore: cast_nullable_to_non_nullable
+as List<TagPresentation>,generalTags: null == generalTags ? _self._generalTags : generalTags // ignore: cast_nullable_to_non_nullable
+as List<TagPresentation>,
   ));
 }
 

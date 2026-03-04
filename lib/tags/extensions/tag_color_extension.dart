@@ -16,7 +16,7 @@ extension TagColorX on TagColor {
     .blue => Colors.blue,
     .lightBlue => Colors.lightBlue,
     .indigo => Colors.indigo,
-    .navy => Colors.blue.shade900,
+    .navy => const Color.fromARGB(255, 23, 116, 255),
     .cyan => Colors.cyan,
     .teal => Colors.teal,
     .purple => Colors.purple,

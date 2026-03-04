@@ -2,7 +2,7 @@ import 'dart:async';
 
 import 'package:bloc/bloc.dart';
 import 'package:inventory_app/part_editor/bloc/part_editor_state.dart';
-import 'package:inventory_app/tags/models/tag_ui_model.dart';
+import 'package:inventory_app/tags/models/tag_presentation.dart';
 import 'package:part_repository/part_repository.dart';
 import 'package:tag_repository/tag_repository.dart';
 
@@ -20,7 +20,7 @@ class PartEditorBloc extends Bloc<PartEditorEvent, PartEditorState> {
 
     _subscription = _tagRepository.watchTags().listen(
       (tags) => add(
-        _TagsUpdated(tags: tags.map(TagUiModel.fromDomainModel).toList()),
+        _TagsUpdated(tags: tags.map(TagPresentation.fromDomainModel).toList()),
       ),
     );
   }

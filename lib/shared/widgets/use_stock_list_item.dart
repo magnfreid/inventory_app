@@ -1,6 +1,6 @@
 import 'package:app_ui/app_ui.dart';
 import 'package:flutter/material.dart';
-import 'package:inventory_app/inventory/models/stock_ui_model.dart';
+import 'package:inventory_app/use_cases/part_presentation.dart/models/stock_presentation.dart';
 import 'package:inventory_app/l10n/l10n.dart';
 
 class UseStockListItem extends StatelessWidget {
@@ -11,7 +11,7 @@ class UseStockListItem extends StatelessWidget {
     super.key,
   });
 
-  final StockUiModel stock;
+  final StockPresentation stock;
   final bool isLoading;
   final VoidCallback onPressed;
 

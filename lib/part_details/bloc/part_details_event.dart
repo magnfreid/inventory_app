@@ -4,6 +4,11 @@ sealed class PartDetailsEvent {
   const PartDetailsEvent();
 }
 
+final class _PartUpdated extends PartDetailsEvent {
+  const _PartUpdated({required this.part});
+  final PartPresentation? part;
+}
+
 final class _StoragesUpdated extends PartDetailsEvent {
   _StoragesUpdated({required this.storages});
   final List<Storage> storages;
