@@ -12,16 +12,7 @@ class TagRepository {
       .map((dtos) => dtos.map(Tag.fromDto).toList())
       .shareReplay(maxSize: 1);
 
-  Stream<List<Tag>> watchAllTags() => _allTagsStream;
-  // Stream<List<Tag>> watchBrandTags() => _allTagsStream.map(
-  //   (tags) => tags.where((tag) => tag.type == .brand).toList(),
-  // );
-  // Stream<List<Tag>> watchCategoryTags() => _allTagsStream.map(
-  //   (tags) => tags.where((tag) => tag.type == .category).toList(),
-  // );
-  // Stream<List<Tag>> watchGeneralTags() => _allTagsStream.map(
-  //   (tags) => tags.where((tag) => tag.type == .general).toList(),
-  // );
+  Stream<List<Tag>> watchTags() => _allTagsStream;
 
   Future<Tag> addTag(Tag tag) async {
     final dto = tag.toDto();

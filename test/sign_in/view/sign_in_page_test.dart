@@ -1,3 +1,4 @@
+import 'package:app_ui/app_ui.dart';
 import 'package:bloc_test/bloc_test.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -33,7 +34,7 @@ void main() {
         ),
       );
       expect(find.byType(TextField), findsExactly(2));
-      expect(find.byType(ElevatedButton), findsOneWidget);
+      expect(find.byType(AppButton), findsOneWidget);
       expect(find.byType(Text), findsExactly(3));
       expect(find.byType(CircularProgressIndicator), findsNothing);
     });
@@ -53,7 +54,7 @@ void main() {
         ),
       );
       expect(find.byType(TextField), findsExactly(2));
-      expect(find.byType(ElevatedButton), findsOneWidget);
+      expect(find.byType(AppButton), findsOneWidget);
       expect(find.byType(Text), findsExactly(2));
       expect(find.byType(CircularProgressIndicator), findsOneWidget);
     });
@@ -95,7 +96,7 @@ void main() {
       await tester.enterText(find.byType(TextField).first, 'test@email.com');
       await tester.enterText(find.byType(TextField).last, 'password');
 
-      await tester.tap(find.byType(ElevatedButton));
+      await tester.tap(find.byType(AppButton));
       await tester.pump();
 
       verify(() => bloc.add(any(that: isA<SignInButtonPressed>()))).called(1);

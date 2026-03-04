@@ -10,6 +10,7 @@ import 'package:mocktail/mocktail.dart';
 import 'package:part_repository/part_repository.dart';
 import 'package:stock_repository/stock_repository.dart';
 import 'package:storage_repository/storage_repository.dart';
+import 'package:tag_repository/tag_repository.dart';
 import 'package:user_repository/user_repository.dart';
 
 //Repositories
@@ -22,6 +23,8 @@ class MockStorageRepository extends Mock implements StorageRepository {}
 class MockStockRepository extends Mock implements StockRepository {}
 
 class MockPartRepository extends Mock implements PartRepository {}
+
+class MockTagRepository extends Mock implements TagRepository {}
 
 //Bloc
 class MockAuthenticationCubit extends MockCubit<AuthenticationState>

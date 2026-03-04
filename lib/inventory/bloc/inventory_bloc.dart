@@ -79,7 +79,7 @@ class InventoryBloc extends Bloc<InventoryEvent, InventoryState> {
               _stockRepository.watchStock(),
               _partRepository.watchParts(),
               _storageRepository.watchStorages(),
-              _tagRepository.watchAllTags(),
+              _tagRepository.watchTags(),
               (stocks, parts, storages, tags) {
                 final storagesMap = {
                   for (final storage in storages) storage.id: storage,
