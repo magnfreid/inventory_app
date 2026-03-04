@@ -13,17 +13,17 @@ class TagRepository {
       .shareReplay(maxSize: 1);
 
   Stream<List<Tag>> watchAllTags() => _allTagsStream;
-  Stream<List<Tag>> watchBrandTags() => _allTagsStream.map(
-    (tags) => tags.where((tag) => tag.type == .brand).toList(),
-  );
-  Stream<List<Tag>> watchCategoryTags() => _allTagsStream.map(
-    (tags) => tags.where((tag) => tag.type == .category).toList(),
-  );
-  Stream<List<Tag>> watchGeneralTags() => _allTagsStream.map(
-    (tags) => tags.where((tag) => tag.type == .general).toList(),
-  );
+  // Stream<List<Tag>> watchBrandTags() => _allTagsStream.map(
+  //   (tags) => tags.where((tag) => tag.type == .brand).toList(),
+  // );
+  // Stream<List<Tag>> watchCategoryTags() => _allTagsStream.map(
+  //   (tags) => tags.where((tag) => tag.type == .category).toList(),
+  // );
+  // Stream<List<Tag>> watchGeneralTags() => _allTagsStream.map(
+  //   (tags) => tags.where((tag) => tag.type == .general).toList(),
+  // );
 
-  Future<Tag> addTag(TagCreate tag) async {
+  Future<Tag> addTag(Tag tag) async {
     final dto = tag.toDto();
     final createdDto = await _remote.addTag(dto);
     return Tag.fromDto(createdDto);

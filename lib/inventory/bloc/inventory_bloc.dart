@@ -102,19 +102,25 @@ class InventoryBloc extends Bloc<InventoryEvent, InventoryState> {
                       quantity: stock.quantity,
                     );
                   }).toList();
-                  final mainTag = part.categoryTagId != null
+                  final categoryTag = part.categoryTagId != null
                       ? tagsMap[part.categoryTagId!]
+                      : null;
+                  final brandTag = part.brandTagId != null
+                      ? tagsMap[part.brandTagId!]
                       : null;
                   uiItems.add(
                     PartUiModel(
-                      partId: part.id,
+                      partId: part.id ?? '',
                       name: part.name,
                       detailNumber: part.detailNumber,
                       price: part.price,
                       isRecycled: part.isRecycled,
-                      mainTag: mainTag == null
+                      brandTag: brandTag == null
                           ? null
-                          : TagUiModel.fromDomainModel(mainTag),
+                          : TagUiModel.fromDomainModel(brandTag),
+                      categoryTag: categoryTag == null
+                          ? null
+                          : TagUiModel.fromDomainModel(categoryTag),
                       description: part.description,
                       stock: storageQuantities,
                     ),

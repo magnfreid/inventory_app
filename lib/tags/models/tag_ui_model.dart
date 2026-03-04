@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:inventory_app/tags/extensions/tag_color_extension.dart';
-import 'package:tag_remote/tag_remote.dart';
 import 'package:tag_repository/tag_repository.dart';
 
 class TagUiModel {

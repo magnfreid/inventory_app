@@ -12,13 +12,12 @@ class PartRepository {
     );
   }
 
-  Future<Part> addPart(PartCreate createModel) async {
-    final createDto = createModel.toCreateDto();
-    final dto = await _remote.addPart(createDto);
-    return Part.fromDto(dto);
+  Future<Part> addPart(Part part) async {
+    final dtoWithId = await _remote.addPart(part.toDto());
+    return Part.fromDto(dtoWithId);
   }
 
-  Future<void> editPart(Part updatedPart) async {
-    await _remote.editPart(updatedPart.toDto());
+  Future<void> editPart(Part part) async {
+    await _remote.editPart(part.toDto());
   }
 }

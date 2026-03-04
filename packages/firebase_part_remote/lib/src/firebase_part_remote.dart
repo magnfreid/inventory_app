@@ -13,11 +13,8 @@ class FirebasePartRemote implements PartRemote {
         .collection(partsCollection)
         .withConverter<PartDto>(
           fromFirestore: (snapshot, _) {
-            final data = snapshot.data()!;
-            return PartDto.fromJson({
-              ...data,
-              'id': snapshot.id,
-            });
+            final dto = PartDto.fromJson(snapshot.data()!);
+            return dto.copyWith(id: snapshot.id);
           },
           toFirestore: (dto, _) {
             final json = dto.toJson()..remove('id');
@@ -37,26 +34,16 @@ class FirebasePartRemote implements PartRemote {
   }
 
   @override
-  Future<PartDto> addPart(PartCreateDto createModel) async {
+  Future<PartDto> addPart(PartDto dto) async {
     final docRef = _collection.doc();
-    final dto = PartDto.fromCreateModel(docRef.id, createModel);
-    await docRef.set(dto);
-    return dto;
+    final dtoWithId = dto.copyWith(id: docRef.id);
+    await docRef.set(dtoWithId);
+    return dtoWithId;
   }
 
   @override
   Future<void> editPart(PartDto updatedPart) async {
     final docRef = _collection.doc(updatedPart.id);
-    return docRef.update({
-      'name': updatedPart.name,
-      'detailNumber': updatedPart.detailNumber,
-      'price': updatedPart.price,
-      'isRecycled': updatedPart.isRecycled,
-      'categoryTagId': updatedPart.categoryTagId,
-      'brandTagId': updatedPart.brandTagId,
-      'generalTagIds': updatedPart.generalTagIds,
-      'description': updatedPart.description,
-      'updatedAt': FieldValue.serverTimestamp(),
-    });
+    return docRef.set(updatedPart, SetOptions(merge: true));
   }
 }

@@ -9,9 +9,9 @@ class PartUiModel {
     required this.price,
     required this.isRecycled,
     this.stock = const [],
-    this.mainTag,
+    this.categoryTag,
     this.brandTag,
-    this.standardTags = const [],
+    this.generalTags = const [],
     this.description,
   });
 
@@ -20,9 +20,9 @@ class PartUiModel {
   final String detailNumber;
   final double price;
   final bool isRecycled;
-  final TagUiModel? mainTag;
+  final TagUiModel? categoryTag;
   final TagUiModel? brandTag;
-  final List<TagUiModel> standardTags;
+  final List<TagUiModel> generalTags;
   final String? description;
   final List<StockUiModel> stock;
 

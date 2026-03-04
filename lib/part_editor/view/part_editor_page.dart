@@ -7,13 +7,11 @@ import 'package:inventory_app/inventory/models/part_ui_model.dart';
 import 'package:inventory_app/l10n/l10n.dart';
 import 'package:inventory_app/part_editor/bloc/part_editor_bloc.dart';
 import 'package:inventory_app/part_editor/bloc/part_editor_state.dart';
-import 'package:inventory_app/part_editor/models/part_draft.dart';
 import 'package:inventory_app/part_editor/widgets/part_editor_tag_bottom_sheet.dart';
 import 'package:inventory_app/tags/models/tag_ui_model.dart';
 import 'package:part_repository/part_repository.dart';
 import 'package:stock_repository/stock_repository.dart';
 import 'package:storage_repository/storage_repository.dart';
-import 'package:tag_remote/src/models/tag_dto.dart';
 import 'package:tag_repository/tag_repository.dart';
 
 class PartEditorPage extends StatelessWidget {
@@ -57,8 +55,8 @@ class _PartEditorViewState extends State<PartEditorView> {
   late final TextEditingController _detailNumberController;
   late final TextEditingController _priceController;
   late final TextEditingController _descriptionController;
-  TagUiModel? _selectedBrandTag;
-  TagUiModel? _selectedCategoryTag;
+  late TagUiModel? _selectedBrandTag;
+  late TagUiModel? _selectedCategoryTag;
   List<TagUiModel> selectedGeneralTags = [];
 
   late bool _isRecycled;
@@ -78,6 +76,8 @@ class _PartEditorViewState extends State<PartEditorView> {
     );
     _isRecycled = widget.part?.isRecycled ?? false;
     _canSave = widget.part != null;
+    _selectedBrandTag = widget.part?.brandTag;
+    _selectedCategoryTag = widget.part?.categoryTag;
     super.initState();
   }
 
@@ -103,7 +103,7 @@ class _PartEditorViewState extends State<PartEditorView> {
           title: Text(widget.part?.name ?? l10n.formFieldTitleText),
         ),
         body: Padding(
-          padding: const EdgeInsets.all(24),
+          padding: const .all(24),
           child: Form(
             key: _formKey,
             onChanged: () => setState(
@@ -176,8 +176,8 @@ class _PartEditorViewState extends State<PartEditorView> {
                       setState(() => _selectedBrandTag = selectedTag),
                 ),
                 _TagSelector(
-                  mode: .category,
                   tag: _selectedCategoryTag,
+                  mode: .category,
                   onTagSelected: (selectedTag) =>
                       setState(() => _selectedCategoryTag = selectedTag),
                 ),
@@ -193,7 +193,8 @@ class _PartEditorViewState extends State<PartEditorView> {
                         onPressed: _canSave
                             ? () => context.read<PartEditorBloc>().add(
                                 SaveButtonPressed(
-                                  draft: PartDraft(
+                                  part: Part(
+                                    id: widget.part?.partId,
                                     name: _nameController.text,
                                     detailNumber: _detailNumberController.text,
                                     isRecycled: _isRecycled,

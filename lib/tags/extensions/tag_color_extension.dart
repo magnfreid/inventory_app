@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:tag_remote/tag_remote.dart';
+import 'package:tag_repository/tag_repository.dart';
 
 extension TagColorX on TagColor {
   Color toColor() => switch (this) {

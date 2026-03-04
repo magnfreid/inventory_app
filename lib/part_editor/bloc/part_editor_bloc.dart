@@ -1,9 +1,7 @@
 import 'dart:async';
 
 import 'package:bloc/bloc.dart';
-import 'package:inventory_app/inventory/models/part_ui_model.dart';
 import 'package:inventory_app/part_editor/bloc/part_editor_state.dart';
-import 'package:inventory_app/part_editor/models/part_draft.dart';
 import 'package:inventory_app/tags/models/tag_ui_model.dart';
 import 'package:part_repository/part_repository.dart';
 import 'package:stock_repository/stock_repository.dart';
@@ -43,11 +41,11 @@ class PartEditorBloc extends Bloc<PartEditorEvent, PartEditorState> {
     SaveButtonPressed event,
     Emitter<PartEditorState> emit,
   ) async {
-    final id = event.draft.id;
+    final id = event.part.id;
     if (id != null) {
       emit(state.copyWith(status: .loading));
       try {
-        await _partRepository.editPart(event.draft.toPart(id));
+        await _partRepository.editPart(event.part);
         emit(state.copyWith(status: .success));
       } on Exception catch (exception) {
         emit(state.copyWith(status: .error));
@@ -55,7 +53,7 @@ class PartEditorBloc extends Bloc<PartEditorEvent, PartEditorState> {
     } else {
       emit(state.copyWith(status: .loading));
       try {
-        await _partRepository.addPart(event.draft.toCreateModel());
+        await _partRepository.addPart(event.part);
         emit(state.copyWith(status: .success));
       } on Exception catch (_) {
         emit(state.copyWith(status: .error));

@@ -4,7 +4,6 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:inventory_app/tags/bloc/tags_bloc.dart';
 import 'package:inventory_app/tags/bloc/tags_state.dart';
 import 'package:inventory_app/tags/extensions/tag_color_extension.dart';
-import 'package:tag_remote/tag_remote.dart';
 import 'package:tag_repository/tag_repository.dart';
 
 class TagsBottomSheet extends StatefulWidget {
@@ -96,10 +95,11 @@ class _TagsBottomSheetState extends State<TagsBottomSheet> {
                   if (_labelTextController.text.isEmpty) return;
                   context.read<TagsBloc>().add(
                     SaveButtonPressed(
-                      tag: TagCreate(
+                      tag: Tag(
                         label: _labelTextController.text,
                         color: TagColorX.fromColor(_selectedColor),
                         type: _selectedTagType,
+                        id: '',
                       ),
                     ),
                   );

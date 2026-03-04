@@ -1,30 +1,17 @@
 import 'package:part_remote/part_remote.dart';
-import 'package:part_repository/src/models/part_create.dart';
 
 class Part {
   Part({
-    required this.generalTagIds,
     required this.id,
     required this.name,
     required this.detailNumber,
-    required this.isRecycled,
     required this.price,
+    required this.isRecycled,
+    required this.brandTagId,
     required this.categoryTagId,
+    required this.generalTagIds,
     required this.description,
-    this.brandTagId,
   });
-
-  factory Part.fromCreateModel(String id, PartCreate createModel) => Part(
-    id: id,
-    name: createModel.name,
-    detailNumber: createModel.detailNumber,
-    isRecycled: createModel.isRecycled,
-    price: createModel.price,
-    categoryTagId: createModel.categoryTagId,
-    brandTagId: createModel.brandTagId,
-    generalTagIds: createModel.generalTagIds,
-    description: createModel.description,
-  );
 
   factory Part.fromDto(PartDto dto) => Part(
     id: dto.id,
@@ -50,13 +37,13 @@ class Part {
     generalTagIds: generalTagIds,
   );
 
-  final String id;
+  final String? id;
   final String name;
   final String detailNumber;
-  final bool isRecycled;
   final double price;
-  final String? categoryTagId;
+  final bool isRecycled;
   final String? brandTagId;
-  final List<String>? generalTagIds;
+  final String? categoryTagId;
+  final List<String> generalTagIds;
   final String? description;
 }

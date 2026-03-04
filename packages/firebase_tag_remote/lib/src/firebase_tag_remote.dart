@@ -9,7 +9,7 @@ class FirebaseTagRemote implements TagRemote {
     required String organizationId,
     FirebaseFirestore? firestore,
   }) : _firestore = firestore ?? FirebaseFirestore.instance {
-    _mainTagscollection = _firestore
+    _collection = _firestore
         .collection(organizationsCollection)
         .doc(organizationId)
         .collection(tagsCollection)
@@ -21,32 +21,35 @@ class FirebaseTagRemote implements TagRemote {
               'id': snapshot.id,
             });
           },
-          toFirestore: (dto, _) {
-            final json = dto.toJson()..remove('id');
-            return json;
-          },
+          toFirestore: (dto, _) => dto.toJson(),
         );
   }
   final FirebaseFirestore _firestore;
-  late final CollectionReference<TagDto> _mainTagscollection;
+  late final CollectionReference<TagDto> _collection;
 
   @override
-  Future<TagDto> addTag(TagCreateDto tag) async {
-    final docRef = _mainTagscollection.doc();
-    final dto = TagDto.fromCreateModel(createModel: tag, id: docRef.id);
-    await docRef.set(dto);
-    return dto;
+  Future<TagDto> addTag(TagDto tag) async {
+    final docRef = _collection.doc();
+    final dtoWithId = tag.copyWith(id: docRef.id);
+    await docRef.set(dtoWithId);
+    return dtoWithId;
   }
 
   @override
   Future<void> deleteTag(String id) async {
-    await _mainTagscollection.doc(id).delete();
+    await _collection.doc(id).delete();
   }
 
   @override
   Stream<List<TagDto>> watchTags() {
-    return _mainTagscollection.snapshots().map(
+    return _collection.snapshots().map(
       (snapshot) => snapshot.docs.map((doc) => doc.data()).toList(),
     );
+  }
+
+  @override
+  Future<void> editTag(TagDto tag) async {
+    final docRef = _collection.doc(tag.id);
+    await docRef.update(tag.toJson());
   }
 }

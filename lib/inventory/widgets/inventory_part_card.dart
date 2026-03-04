@@ -4,6 +4,7 @@ import 'package:inventory_app/inventory/bloc/inventory_bloc.dart';
 import 'package:inventory_app/inventory/models/part_ui_model.dart';
 import 'package:inventory_app/inventory/widgets/inventory_stock_bottom_sheet.dart';
 import 'package:inventory_app/part_details/view/part_details_page.dart';
+import 'package:inventory_app/tags/models/tag_ui_model.dart';
 
 class InventoryPartCard extends StatelessWidget {
   const InventoryPartCard({
@@ -29,7 +30,7 @@ class InventoryPartCard extends StatelessWidget {
         child: Stack(
           children: [
             Padding(
-              padding: const EdgeInsets.all(8),
+              padding: const .all(8),
               child: Column(
                 crossAxisAlignment: .start,
                 children: [
@@ -39,14 +40,12 @@ class InventoryPartCard extends StatelessWidget {
                         crossAxisAlignment: .start,
                         children: [
                           Row(
+                            spacing: 4,
                             children: [
-                              if (part.mainTag != null)
-                                Text(
-                                  part.mainTag!.label,
-                                  style: TextStyle(
-                                    color: part.mainTag!.color,
-                                  ),
-                                ),
+                              if (part.brandTag != null)
+                                _TagBadge(tag: part.brandTag!),
+                              if (part.categoryTag != null)
+                                _TagBadge(tag: part.categoryTag!),
                             ],
                           ),
                           Text(
@@ -80,12 +79,12 @@ class InventoryPartCard extends StatelessWidget {
                               context,
                             ).colorScheme.secondaryContainer,
                             child: Padding(
-                              padding: const .all(5),
+                              padding: const .all(3),
                               child: Text(
                                 '${stock.storageName.toUpperCase()}'
-                                ' ${stock.quantity}',
+                                ' (${stock.quantity})',
                                 style: TextStyle(
-                                  fontSize: 12,
+                                  fontSize: 10,
                                   color: Theme.of(
                                     context,
                                   ).colorScheme.onSecondaryContainer,
@@ -111,6 +110,30 @@ class InventoryPartCard extends StatelessWidget {
               ),
           ],
         ),
+      ),
+    );
+  }
+}
+
+class _TagBadge extends StatelessWidget {
+  const _TagBadge({required this.tag, super.key});
+
+  final TagUiModel tag;
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      padding: const .symmetric(vertical: 1, horizontal: 3),
+      decoration: BoxDecoration(
+        border: Border.all(
+          color: tag.color,
+          width: 0.75,
+        ),
+        borderRadius: .circular(4),
+      ),
+      child: Text(
+        tag.label,
+        style: TextStyle(fontSize: 10, color: tag.color),
       ),
     );
   }

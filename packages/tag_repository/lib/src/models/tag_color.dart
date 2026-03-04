@@ -1,16 +1,3 @@
-// enum TagColor {
-//   red,
-//   yellow,
-//   orange,
-//   pink,
-//   purple,
-//   blue,
-//   lightBlue,
-//   cyan,
-//   teal,
-//   green,
-// }
-
 enum TagColor {
   red,
   crimson,

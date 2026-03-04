@@ -11,5 +11,5 @@ final class _TagsUpdated extends TagsEvent {
 
 final class SaveButtonPressed extends TagsEvent {
   const SaveButtonPressed({required this.tag});
-  final TagCreate tag;
+  final Tag tag;
 }

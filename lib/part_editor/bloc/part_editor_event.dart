@@ -5,8 +5,8 @@ sealed class PartEditorEvent {
 }
 
 final class SaveButtonPressed extends PartEditorEvent {
-  const SaveButtonPressed({required this.draft});
-  final PartDraft draft;
+  const SaveButtonPressed({required this.part});
+  final Part part;
 }
 
 final class _TagsUpdated extends PartEditorEvent {
