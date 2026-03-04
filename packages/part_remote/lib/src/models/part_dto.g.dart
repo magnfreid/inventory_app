@@ -7,21 +7,26 @@ part of 'part_dto.dart';
 // **************************************************************************
 
 PartDto _$PartDtoFromJson(Map<String, dynamic> json) => PartDto(
-  id: json['id'] as String,
+  id: json['id'] as String?,
   name: json['name'] as String,
   detailNumber: json['detailNumber'] as String,
   isRecycled: json['isRecycled'] as bool,
   price: (json['price'] as num).toDouble(),
-  brand: json['brand'] as String?,
+  categoryTagId: json['categoryTagId'] as String?,
   description: json['description'] as String?,
+  brandTagId: json['brandTagId'] as String?,
+  generalTagIds: (json['generalTagIds'] as List<dynamic>)
+      .map((e) => e as String)
+      .toList(),
 );
 
 Map<String, dynamic> _$PartDtoToJson(PartDto instance) => <String, dynamic>{
-  'id': instance.id,
   'name': instance.name,
   'detailNumber': instance.detailNumber,
   'isRecycled': instance.isRecycled,
   'price': instance.price,
-  'brand': instance.brand,
+  'categoryTagId': instance.categoryTagId,
+  'brandTagId': instance.brandTagId,
+  'generalTagIds': instance.generalTagIds,
   'description': instance.description,
 };

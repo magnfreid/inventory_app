@@ -1,0 +1,57 @@
+import 'dart:async';
+
+import 'package:bloc/bloc.dart';
+import 'package:inventory_app/tags/bloc/tags_state.dart';
+import 'package:inventory_app/tags/models/tag_ui_model.dart';
+import 'package:tag_repository/tag_repository.dart';
+
+part 'tags_event.dart';
+
+class TagsBloc extends Bloc<TagsEvent, TagsState> {
+  TagsBloc({required TagRepository tagRepository})
+    : _tagRepository = tagRepository,
+      super(const TagsState()) {
+    on<_TagsUpdated>(_onTagsUpdated);
+    on<SaveButtonPressed>(_onSaveButtonPressed);
+
+    _subscription = tagRepository.watchAllTags().listen(
+      (tags) {
+        final uiTags = tags.map(TagUiModel.fromDomainModel).toList();
+        add(_TagsUpdated(tags: uiTags));
+      },
+    );
+  }
+
+  final TagRepository _tagRepository;
+  late final StreamSubscription<List<Tag>> _subscription;
+
+  @override
+  Future<void> close() async {
+    await _subscription.cancel();
+    return super.close();
+  }
+
+  FutureOr<void> _onTagsUpdated(_TagsUpdated event, Emitter<TagsState> emit) {
+    emit(
+      state.copyWith(
+        status: .loaded,
+        brandTags: event.tags.where((tag) => tag.type == .brand).toList(),
+        categoryTags: event.tags.where((tag) => tag.type == .category).toList(),
+        generalTags: event.tags.where((tag) => tag.type == .general).toList(),
+      ),
+    );
+  }
+
+  FutureOr<void> _onSaveButtonPressed(
+    SaveButtonPressed event,
+    Emitter<TagsState> emit,
+  ) async {
+    emit(state.copyWith(bottomSheetStatus: .loading));
+    try {
+      await _tagRepository.addTag(event.tag);
+      emit(state.copyWith(bottomSheetStatus: .success));
+    } on Exception catch (exception) {
+      emit(state.copyWith(bottomSheetStatus: .idle));
+    }
+  }
+}

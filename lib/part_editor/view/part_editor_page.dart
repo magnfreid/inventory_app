@@ -3,19 +3,28 @@ import 'dart:math';
 import 'package:app_ui/app_ui.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:inventory_app/inventory/models/part_ui_model.dart';
 import 'package:inventory_app/l10n/l10n.dart';
 import 'package:inventory_app/part_editor/bloc/part_editor_bloc.dart';
 import 'package:inventory_app/part_editor/bloc/part_editor_state.dart';
+import 'package:inventory_app/part_editor/widgets/part_editor_tag_bottom_sheet.dart';
+import 'package:inventory_app/tags/models/tag_ui_model.dart';
 import 'package:part_repository/part_repository.dart';
 import 'package:stock_repository/stock_repository.dart';
 import 'package:storage_repository/storage_repository.dart';
+import 'package:tag_repository/tag_repository.dart';
 
-class InventoryItemEditorPage extends StatelessWidget {
-  const InventoryItemEditorPage({super.key});
+class PartEditorPage extends StatelessWidget {
+  const PartEditorPage({this.part, super.key});
 
-  static MaterialPageRoute<void> route() => MaterialPageRoute<void>(
-    builder: (context) => const InventoryItemEditorPage(),
-  );
+  static MaterialPageRoute<void> route({PartUiModel? part}) =>
+      MaterialPageRoute<void>(
+        builder: (context) => PartEditorPage(
+          part: part,
+        ),
+      );
+
+  final PartUiModel? part;
 
   @override
   Widget build(BuildContext context) {
@@ -24,36 +33,59 @@ class InventoryItemEditorPage extends StatelessWidget {
         stockRepository: context.read<StockRepository>(),
         storageRepository: context.read<StorageRepository>(),
         partRepository: context.read<PartRepository>(),
+        tagRepository: context.read<TagRepository>(),
       ),
-      child: const InventoryItemEditorView(),
+      child: PartEditorView(part: part),
     );
   }
 }
 
-class InventoryItemEditorView extends StatefulWidget {
-  const InventoryItemEditorView({super.key});
+class PartEditorView extends StatefulWidget {
+  const PartEditorView({this.part, super.key});
+
+  final PartUiModel? part;
 
   @override
-  State<InventoryItemEditorView> createState() =>
-      _InventoryItemEditorViewState();
+  State<PartEditorView> createState() => _PartEditorViewState();
 }
 
-class _InventoryItemEditorViewState extends State<InventoryItemEditorView> {
+class _PartEditorViewState extends State<PartEditorView> {
   final _formKey = GlobalKey<FormState>();
-  final _nameController = TextEditingController();
-  final _detailNumberController = TextEditingController();
-  final _priceController = TextEditingController();
-  final _brandController = TextEditingController();
-  final _descriptionController = TextEditingController();
-  bool _isRecycled = true;
-  bool _canSave = false;
+  late final TextEditingController _nameController;
+  late final TextEditingController _detailNumberController;
+  late final TextEditingController _priceController;
+  late final TextEditingController _descriptionController;
+  late TagUiModel? _selectedBrandTag;
+  late TagUiModel? _selectedCategoryTag;
+  List<TagUiModel> selectedGeneralTags = [];
+
+  late bool _isRecycled;
+  late bool _canSave;
+
+  @override
+  void initState() {
+    _nameController = TextEditingController(text: widget.part?.name ?? '');
+    _detailNumberController = TextEditingController(
+      text: widget.part?.detailNumber ?? '',
+    );
+    _priceController = TextEditingController(
+      text: widget.part?.price.toString() ?? '',
+    );
+    _descriptionController = TextEditingController(
+      text: widget.part?.description ?? '',
+    );
+    _isRecycled = widget.part?.isRecycled ?? false;
+    _canSave = widget.part != null;
+    _selectedBrandTag = widget.part?.brandTag;
+    _selectedCategoryTag = widget.part?.categoryTag;
+    super.initState();
+  }
 
   @override
   void dispose() {
     _nameController.dispose();
     _detailNumberController.dispose();
     _priceController.dispose();
-    _brandController.dispose();
     _descriptionController.dispose();
     super.dispose();
   }
@@ -67,9 +99,11 @@ class _InventoryItemEditorViewState extends State<InventoryItemEditorView> {
         Navigator.of(context).pop();
       },
       child: Scaffold(
-        appBar: AppBar(title: Text(l10n.formFieldTitleText)),
+        appBar: AppBar(
+          title: Text(widget.part?.name ?? l10n.formFieldTitleText),
+        ),
         body: Padding(
-          padding: const EdgeInsets.all(24),
+          padding: const .all(24),
           child: Form(
             key: _formKey,
             onChanged: () => setState(
@@ -107,12 +141,6 @@ class _InventoryItemEditorViewState extends State<InventoryItemEditorView> {
                   ),
                 ),
                 TextFormField(
-                  controller: _brandController,
-                  decoration: InputDecoration(
-                    labelText: '${l10n.formFieldBrandLabelText}:',
-                  ),
-                ),
-                TextFormField(
                   controller: _descriptionController,
                   decoration: InputDecoration(
                     labelText: '${l10n.formFieldDescriptionLabelText}:',
@@ -141,6 +169,18 @@ class _InventoryItemEditorViewState extends State<InventoryItemEditorView> {
                     },
                   ),
                 ),
+                _TagSelector(
+                  tag: _selectedBrandTag,
+                  mode: .brand,
+                  onTagSelected: (selectedTag) =>
+                      setState(() => _selectedBrandTag = selectedTag),
+                ),
+                _TagSelector(
+                  tag: _selectedCategoryTag,
+                  mode: .category,
+                  onTagSelected: (selectedTag) =>
+                      setState(() => _selectedCategoryTag = selectedTag),
+                ),
                 const Spacer(),
                 Padding(
                   padding: const .symmetric(vertical: 8),
@@ -153,7 +193,8 @@ class _InventoryItemEditorViewState extends State<InventoryItemEditorView> {
                         onPressed: _canSave
                             ? () => context.read<PartEditorBloc>().add(
                                 SaveButtonPressed(
-                                  partCreateModel: PartCreate(
+                                  part: Part(
+                                    id: widget.part?.partId,
                                     name: _nameController.text,
                                     detailNumber: _detailNumberController.text,
                                     isRecycled: _isRecycled,
@@ -162,7 +203,9 @@ class _InventoryItemEditorViewState extends State<InventoryItemEditorView> {
                                           _priceController.text,
                                         ) ??
                                         0.0,
-                                    brand: _brandController.text,
+                                    brandTagId: _selectedBrandTag?.id,
+                                    categoryTagId: _selectedCategoryTag?.id,
+                                    generalTagIds: [],
                                     description: _descriptionController.text,
                                   ),
                                 ),
@@ -178,6 +221,49 @@ class _InventoryItemEditorViewState extends State<InventoryItemEditorView> {
           ),
         ),
       ),
+    );
+  }
+}
+
+class _TagSelector extends StatelessWidget {
+  const _TagSelector({
+    required TagUiModel? tag,
+    required TagBottomSheetMode mode,
+    required this.onTagSelected,
+    super.key,
+  }) : _tag = tag,
+       _mode = mode;
+
+  final TagUiModel? _tag;
+  final TagBottomSheetMode _mode;
+  final void Function(TagUiModel selectedTag) onTagSelected;
+
+  @override
+  Widget build(BuildContext context) {
+    final title = switch (_mode) {
+      .brand => 'Brand: ',
+      .category => 'Category: ',
+    };
+    return Row(
+      mainAxisAlignment: .spaceBetween,
+      children: [
+        Text(title),
+        if (_tag == null) const Text('None') else Text(_tag.label),
+        TextButton(
+          onPressed: () async {
+            final selectedTag = await showModalBottomSheet<TagUiModel>(
+              context: context,
+              builder: (_) => BlocProvider.value(
+                value: context.read<PartEditorBloc>(),
+                child: PartEditorSingleTagBottomSheet(mode: _mode),
+              ),
+            );
+            if (selectedTag == null) return;
+            onTagSelected(selectedTag);
+          },
+          child: const Text('Select'),
+        ),
+      ],
     );
   }
 }

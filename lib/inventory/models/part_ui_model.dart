@@ -1,4 +1,5 @@
-import 'package:inventory_app/inventory/models/storage_quantity_model.dart';
+import 'package:inventory_app/inventory/models/stock_ui_model.dart';
+import 'package:inventory_app/tags/models/tag_ui_model.dart';
 
 class PartUiModel {
   PartUiModel({
@@ -8,7 +9,9 @@ class PartUiModel {
     required this.price,
     required this.isRecycled,
     this.stock = const [],
-    this.brand,
+    this.categoryTag,
+    this.brandTag,
+    this.generalTags = const [],
     this.description,
   });
 
@@ -17,9 +20,11 @@ class PartUiModel {
   final String detailNumber;
   final double price;
   final bool isRecycled;
-  final String? brand;
+  final TagUiModel? categoryTag;
+  final TagUiModel? brandTag;
+  final List<TagUiModel> generalTags;
   final String? description;
-  final List<StorageQuantityModel> stock;
+  final List<StockUiModel> stock;
 
   int get totalQuantity =>
       stock.fold(0, (sum, element) => sum + element.quantity);

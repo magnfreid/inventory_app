@@ -7,6 +7,7 @@ import 'package:inventory_app/inventory/view/inventory_page.dart';
 import 'package:part_repository/part_repository.dart';
 import 'package:stock_repository/stock_repository.dart';
 import 'package:storage_repository/storage_repository.dart';
+import 'package:tag_repository/tag_repository.dart';
 
 import 'package:user_repository/user_repository.dart';
 
@@ -16,6 +17,7 @@ class AuthenticatedApp extends StatelessWidget {
     required this.stockRepositoryFactory,
     required this.storageRepositoryFactory,
     required this.partRepositoryFactory,
+    required this.tagRepositoryFactory,
     super.key,
   });
 
@@ -24,6 +26,7 @@ class AuthenticatedApp extends StatelessWidget {
   final StockRepository Function(String orgId) stockRepositoryFactory;
   final StorageRepository Function(String orgId) storageRepositoryFactory;
   final PartRepository Function(String orgId) partRepositoryFactory;
+  final TagRepository Function(String orgId) tagRepositoryFactory;
 
   @override
   Widget build(BuildContext context) {
@@ -50,6 +53,9 @@ class AuthenticatedApp extends StatelessWidget {
               RepositoryProvider<PartRepository>(
                 create: (_) =>
                     partRepositoryFactory(currentUser.organizationId),
+              ),
+              RepositoryProvider<TagRepository>(
+                create: (_) => tagRepositoryFactory(currentUser.organizationId),
               ),
             ],
             child: Navigator(

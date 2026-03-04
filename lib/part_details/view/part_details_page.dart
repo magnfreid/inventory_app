@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:inventory_app/inventory/models/part_ui_model.dart';
-import 'package:inventory_app/l10n/l10n.dart';
 import 'package:inventory_app/part_details/bloc/part_details_bloc.dart';
 import 'package:inventory_app/part_details/bloc/part_details_state.dart';
+import 'package:inventory_app/part_details/widgets/part_details_bottom_sheet.dart';
+import 'package:inventory_app/part_details/widgets/part_details_info.dart';
+import 'package:inventory_app/part_editor/view/part_editor_page.dart';
 import 'package:stock_repository/stock_repository.dart';
 import 'package:storage_repository/storage_repository.dart';
 
@@ -42,6 +44,13 @@ class PartDetailsView extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(
         title: Text(part.name),
+        actions: [
+          IconButton(
+            onPressed: () =>
+                Navigator.push(context, PartEditorPage.route(part: part)),
+            icon: const Icon(Icons.edit),
+          ),
+        ],
       ),
       body: BlocListener<PartDetailsBloc, PartDetailsState>(
         listenWhen: (previous, current) => current.saveStatus == .success,
@@ -54,7 +63,7 @@ class PartDetailsView extends StatelessWidget {
             return Column(
               crossAxisAlignment: .start,
               children: [
-                _Details(part),
+                PartDetailsInfo(part),
                 ElevatedButton(
                   onPressed: () => context.read<PartDetailsBloc>().add(
                     const ShowAddViewButtonPressed(),
@@ -79,7 +88,7 @@ class PartDetailsView extends StatelessWidget {
                                 context: context,
                                 builder: (_) => Padding(
                                   padding: const .all(8),
-                                  child: _BottomSheet(
+                                  child: PartDetailsBottomSheet(
                                     amount: quantity ?? 0,
                                     storage: storage,
                                     onPressed: (amount) {
@@ -115,95 +124,6 @@ class PartDetailsView extends StatelessWidget {
           },
         ),
       ),
-    );
-  }
-}
-
-class _BottomSheet extends StatefulWidget {
-  const _BottomSheet({
-    required this.amount,
-    required this.storage,
-    required this.onPressed,
-  });
-
-  final Storage storage;
-  final int amount;
-  final void Function(int amount) onPressed;
-
-  @override
-  State<_BottomSheet> createState() => _BottomSheetState();
-}
-
-class _BottomSheetState extends State<_BottomSheet> {
-  late final TextEditingController _controller;
-
-  @override
-  void initState() {
-    _controller = TextEditingController(text: widget.amount.toString());
-    super.initState();
-  }
-
-  @override
-  void dispose() {
-    _controller.dispose();
-    super.dispose();
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    final l10n = context.l10n;
-    return Column(
-      children: [
-        Text(l10n.addStockTitleText),
-        Row(
-          children: [
-            Text(widget.storage.name),
-            Expanded(
-              child: TextField(
-                controller: _controller,
-              ),
-            ),
-          ],
-        ),
-        ElevatedButton(
-          onPressed: () {
-            final quantity = int.tryParse(
-              _controller.text,
-            );
-            if (quantity == null || quantity == 0) return;
-            widget.onPressed(quantity);
-          },
-          child: Text(l10n.saveButtonText),
-        ),
-      ],
-    );
-  }
-}
-
-class _Details extends StatelessWidget {
-  const _Details(this.part);
-
-  final PartUiModel part;
-
-  @override
-  Widget build(BuildContext context) {
-    final l10n = context.l10n;
-    return Column(
-      children: [
-        if (part.brand != null)
-          ListTile(
-            title: Text(l10n.formFieldBrandLabelText),
-            trailing: Text(part.brand!),
-          ),
-        ListTile(
-          title: Text(l10n.formFieldDetailNumberLabelText),
-          trailing: Text(part.detailNumber),
-        ),
-        ListTile(
-          title: Text(l10n.formFieldPriceLabelText),
-          trailing: Text(part.price.toString()),
-        ),
-      ],
     );
   }
 }

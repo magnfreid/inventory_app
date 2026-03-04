@@ -1,0 +1,22 @@
+name: tag_repository
+description: A Very Good Project created by Very Good CLI.
+version: 0.1.0+1
+publish_to: none
+
+environment:
+  sdk: ">=3.11.0 <4.0.0"
+
+dependencies:
+  flutter:
+    sdk: flutter
+  rxdart: ^0.28.0
+  tag_remote:
+    path: ../tag_remote
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+  mocktail: ^1.0.4
+  very_good_analysis: ^10.1.0
+
+resolution: workspace
