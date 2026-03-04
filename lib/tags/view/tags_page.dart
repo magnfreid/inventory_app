@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:inventory_app/l10n/l10n.dart';
 import 'package:inventory_app/tags/bloc/tags_bloc.dart';
 import 'package:inventory_app/tags/bloc/tags_state.dart';
 import 'package:inventory_app/tags/models/tag_ui_model.dart';
@@ -32,15 +33,9 @@ class TagsView extends StatefulWidget {
 class _TagsViewState extends State<TagsView> with TickerProviderStateMixin {
   late final TabController _tabController;
 
-  List<Tab> get tabs => [
-    const Tab(child: Text('Brands')),
-    const Tab(child: Text('Category')),
-    const Tab(child: Text('Tags')),
-  ];
-
   @override
   void initState() {
-    _tabController = TabController(length: tabs.length, vsync: this);
+    _tabController = TabController(length: 3, vsync: this);
     super.initState();
   }
 
@@ -52,12 +47,17 @@ class _TagsViewState extends State<TagsView> with TickerProviderStateMixin {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = context.l10n;
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Your tags'),
+        title: Text(l10n.tagPageTitleText),
         bottom: TabBar(
           controller: _tabController,
-          tabs: tabs,
+          tabs: [
+            Tab(child: Text(l10n.tagTabBrandText)),
+            Tab(child: Text(l10n.tagTabCategoryText)),
+            Tab(child: Text(l10n.tagTabGeneralText)),
+          ],
         ),
       ),
 
@@ -75,7 +75,7 @@ class _TagsViewState extends State<TagsView> with TickerProviderStateMixin {
             ),
           ),
         ),
-        label: const Text('New tag'),
+        label: Text(l10n.tagPageFabText),
         icon: const Icon(Icons.add),
       ),
       body: BlocBuilder<TagsBloc, TagsState>(
@@ -101,8 +101,9 @@ class _TabContent extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = context.l10n;
     return tags.isEmpty
-        ? const Center(child: Text('No tags added yet!'))
+        ? Center(child: Text(l10n.tagPageEmptyListText))
         : ListView.builder(
             itemCount: tags.length,
             itemBuilder: (context, index) {

@@ -12,7 +12,6 @@ class PartDetailsBloc extends Bloc<PartDetailsEvent, PartDetailsState> {
     required StockRepository stockRepository,
     required StorageRepository storageRepository,
   }) : _stockRepository = stockRepository,
-       _storageRepository = storageRepository,
        super(const PartDetailsState()) {
     on<_StoragesUpdated>(_onStoragesUpdated);
     on<ShowAddViewButtonPressed>(_onShowAddViewButtonPressed);
@@ -24,7 +23,6 @@ class PartDetailsBloc extends Bloc<PartDetailsEvent, PartDetailsState> {
   }
 
   final StockRepository _stockRepository;
-  final StorageRepository _storageRepository;
   late final StreamSubscription<List<Storage>> _streamSubscription;
 
   @override

@@ -68,6 +68,10 @@
 	"@drawerLocationsLinkText": {
 		"description": "Link to locations page in drawer menu"
 	},
+	"drawerTagsLinkText": "Labels and tags",
+	"@drawerTagsLinkText": {
+		"description": "Link to tags page in drawer menu"
+	},
 	"drawerStatisticsLinkText": "Statistics",
 	"@drawerStatisticsLinkText": {
 		"description": "Link to statistics page in drawer menu"
@@ -103,5 +107,45 @@
 	"storagePageTitle": "Lager",
 	"@storagePageTitle": {
 		"description": "Title text for storage page"
+	},
+	"tagPageTitleText": "Your labels and tags",
+	"@tagPageTitleText": {
+		"description": "Tag page app bar title"
+	},
+	"tagTabBrandText": "Brands",
+	"@tagTabBrandText": {
+		"description": "Brand tag type tab bar label text"
+	},
+	"tagTabCategoryText": "Categories",
+	"@tagTabCategoryText": {
+		"description": "Category tag type tab bar label text"
+	},
+	"tagTabGeneralText": "General",
+	"@tagTabGeneralText": {
+		"description": "General tag type tab bar label text"
+	},
+	"tagPageFabText": "Add",
+	"@tagPageFabText": {
+		"description": "Tag page FAB button text"
+	},
+	"tagPageEmptyListText": "No tag added yet.",
+	"@tagPageEmptyListText": {
+		"description": "Text displayed on screen when a tag type list is empty"
+	},
+	"tagsBottomSheetTitleText": "Create new tag",
+	"@tagsBottomSheetTitleText": {
+		"description": "Title text on bottom sheet for creating a new tag"
+	},
+	"tagsBottomSheetBrandText": "Brand",
+	"@tagsBottomSheetBrandText": {
+		"description": "Label text for brand tag selection."
+	},
+	"tagsBottomSheetCategoryText": "Category",
+	"@tagsBottomSheetCategoryText": {
+		"description": "Label text for category tag selection."
+	},
+	"tagsBottomSheetGeneralText": "General",
+	"@tagsBottomSheetGeneralText": {
+		"description": "Label text for general tag selection."
 	}
 }

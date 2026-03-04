@@ -10,8 +10,6 @@ import 'package:inventory_app/part_editor/bloc/part_editor_state.dart';
 import 'package:inventory_app/part_editor/widgets/part_editor_tag_bottom_sheet.dart';
 import 'package:inventory_app/tags/models/tag_ui_model.dart';
 import 'package:part_repository/part_repository.dart';
-import 'package:stock_repository/stock_repository.dart';
-import 'package:storage_repository/storage_repository.dart';
 import 'package:tag_repository/tag_repository.dart';
 
 class PartEditorPage extends StatelessWidget {
@@ -30,8 +28,6 @@ class PartEditorPage extends StatelessWidget {
   Widget build(BuildContext context) {
     return BlocProvider(
       create: (context) => PartEditorBloc(
-        stockRepository: context.read<StockRepository>(),
-        storageRepository: context.read<StorageRepository>(),
         partRepository: context.read<PartRepository>(),
         tagRepository: context.read<TagRepository>(),
       ),
@@ -74,7 +70,7 @@ class _PartEditorViewState extends State<PartEditorView> {
     _descriptionController = TextEditingController(
       text: widget.part?.description ?? '',
     );
-    _isRecycled = widget.part?.isRecycled ?? false;
+    _isRecycled = widget.part?.isRecycled ?? true;
     _canSave = widget.part != null;
     _selectedBrandTag = widget.part?.brandTag;
     _selectedCategoryTag = widget.part?.categoryTag;

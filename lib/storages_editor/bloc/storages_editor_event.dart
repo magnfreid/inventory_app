@@ -5,6 +5,6 @@ sealed class StorageEditorEvent {
 }
 
 final class SaveButtonPressed extends StorageEditorEvent {
-  const SaveButtonPressed({required this.storageCreateModel});
-  final StorageCreateModel storageCreateModel;
+  const SaveButtonPressed({required this.storage});
+  final Storage storage;
 }

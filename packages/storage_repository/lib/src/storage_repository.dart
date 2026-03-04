@@ -19,17 +19,17 @@ class StorageRepository {
     );
   }
 
-  /// Adds a new storage using the [storageCreateModel].
+  /// Adds a new storage using the [storage].
   ///
   /// Converts the model to a [StorageDto] and sends it to the remote.
   /// Returns the created [Storage] domain model with its assigned ID.
   Future<Storage> addStorage({
-    required StorageCreateModel storageCreateModel,
+    required Storage storage,
   }) async {
     final dto = StorageDto(
-      id: '',
-      name: storageCreateModel.name,
-      description: storageCreateModel.description,
+      id: storage.id,
+      name: storage.name,
+      description: storage.description,
     );
 
     final createdDto = await _remote.addStorage(dto);

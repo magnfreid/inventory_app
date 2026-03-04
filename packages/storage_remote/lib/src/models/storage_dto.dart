@@ -20,7 +20,7 @@ class StorageDto {
   Map<String, dynamic> toJson() => _$StorageDtoToJson(this);
 
   /// The unique ID of the storage.
-  final String id;
+  final String? id;
 
   /// The name of the storage location.
   final String name;
