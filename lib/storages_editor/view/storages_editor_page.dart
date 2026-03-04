@@ -17,13 +17,17 @@ class StoragesEditorPage extends StatelessWidget {
       create: (context) => StoragesEditorBloc(
         storageRepository: context.read<StorageRepository>(),
       ),
-      child: const StoragesEditorView(),
+      child: StoragesEditorView(
+        storage: storage,
+      ),
     );
   }
 }
 
 class StoragesEditorView extends StatefulWidget {
-  const StoragesEditorView({super.key});
+  const StoragesEditorView({this.storage, super.key});
+
+  final Storage? storage;
 
   @override
   State<StoragesEditorView> createState() => _StoragesEditorViewState();
@@ -91,15 +95,16 @@ class _StoragesEditorViewState extends State<StoragesEditorView> {
                       isLoading: state.isLoading,
                       onPressed: canSave
                           ? () {
-                              final location = StorageCreateModel(
+                              final storage = Storage(
                                 name: _nameTextController.text,
                                 description:
                                     _descriptionTextController.text == ''
                                     ? null
                                     : _descriptionTextController.text,
+                                id: widget.storage?.id ?? '',
                               );
                               context.read<StoragesEditorBloc>().add(
-                                SaveButtonPressed(storageCreateModel: location),
+                                SaveButtonPressed(storage: storage),
                               );
                             }
                           : null,

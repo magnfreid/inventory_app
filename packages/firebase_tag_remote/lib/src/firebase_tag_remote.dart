@@ -24,7 +24,7 @@ class FirebaseTagRemote implements TagRemote {
               'id': snapshot.id,
             });
           },
-          toFirestore: (dto, _) => dto.toJson(),
+          toFirestore: (dto, _) => dto.toJson()..remove('id'),
         );
   }
   final FirebaseFirestore _firestore;

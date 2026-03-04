@@ -50,8 +50,7 @@ class PartDto {
     );
   }
 
-  /// Unique identifier of the part. Not included in [toJson].
-  @JsonKey(includeToJson: false)
+  /// Unique identifier of the part.
   final String? id;
 
   /// Name of the part.

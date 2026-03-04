@@ -1,25 +1,34 @@
 import 'package:storage_remote/storage_remote.dart';
-import 'package:storage_repository/src/models/storage_create_model.dart';
 
+/// Domain model representing a storage location.
 class Storage {
-  Storage({required this.id, required this.name, this.description});
+  /// Creates a [Storage] instance.
+  Storage({
+    required this.id,
+    required this.name,
+    this.description,
+  });
 
+  /// Creates a [Storage] from a [StorageDto].
+  ///
+  /// If the DTO's `id` is `null`, an empty string is used.
   factory Storage.fromDto(StorageDto dto) =>
-      Storage(id: dto.id, name: dto.name, description: dto.description);
+      Storage(id: dto.id ?? '', name: dto.name, description: dto.description);
 
-  factory Storage.fromCreateModel({
-    required String id,
-    required StorageCreateModel createModel,
-  }) => Storage(
-    id: id,
-    name: createModel.name,
-    description: createModel.description,
-  );
+  /// Converts this [Storage] to a [StorageDto].
+  StorageDto toDto() =>
+      StorageDto(id: id, name: name, description: description);
 
+  /// Unique identifier of the storage.
   final String id;
+
+  /// Display name of the storage location.
   final String name;
+
+  /// Optional description providing additional details about the storage.
   String? description;
 
+  /// Returns a readable string representation of this [Storage].
   @override
   String toString() =>
       'Storage(id: $id, name: $name, description: $description)';

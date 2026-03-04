@@ -9,7 +9,7 @@ void main() {
   late MockStorageRemote mockRemote;
   late StorageRepository repository;
   late StorageDto dto;
-  late StorageCreateModel createModel;
+  late Storage storage;
 
   setUpAll(() {
     registerFallbackValue(
@@ -22,8 +22,7 @@ void main() {
     repository = StorageRepository(remote: mockRemote);
 
     dto = StorageDto(id: '123', name: 'Storage1', description: 'Desc');
-
-    createModel = StorageCreateModel(name: 'Storage1', description: 'Desc');
+    storage = Storage(id: '123', name: 'Storage1', description: 'Desc');
   });
 
   test('watchStorages maps DTOs to domain models', () async {
@@ -41,12 +40,12 @@ void main() {
   test('addStorage calls remote and returns domain model', () async {
     when(() => mockRemote.addStorage(any())).thenAnswer((_) async => dto);
 
-    final result = await repository.addStorage(storageCreateModel: createModel);
+    final result = await repository.addStorage(storage: storage);
 
     final captured = verify(() => mockRemote.addStorage(captureAny())).captured;
     final capturedDto = captured.first as StorageDto;
-    expect(capturedDto.name, createModel.name);
-    expect(capturedDto.description, createModel.description);
+    expect(capturedDto.name, storage.name);
+    expect(capturedDto.description, storage.description);
 
     expect(result.id, dto.id);
     expect(result.name, dto.name);

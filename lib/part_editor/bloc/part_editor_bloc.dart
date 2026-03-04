@@ -4,21 +4,15 @@ import 'package:bloc/bloc.dart';
 import 'package:inventory_app/part_editor/bloc/part_editor_state.dart';
 import 'package:inventory_app/tags/models/tag_ui_model.dart';
 import 'package:part_repository/part_repository.dart';
-import 'package:stock_repository/stock_repository.dart';
-import 'package:storage_repository/storage_repository.dart';
 import 'package:tag_repository/tag_repository.dart';
 
 part 'part_editor_event.dart';
 
 class PartEditorBloc extends Bloc<PartEditorEvent, PartEditorState> {
   PartEditorBloc({
-    required StockRepository stockRepository,
-    required StorageRepository storageRepository,
     required PartRepository partRepository,
     required TagRepository tagRepository,
-  }) : _stockRepository = stockRepository,
-       _storageRepository = storageRepository,
-       _partRepository = partRepository,
+  }) : _partRepository = partRepository,
        _tagRepository = tagRepository,
        super(const PartEditorState()) {
     on<SaveButtonPressed>(_onSaveButtonPressed);
@@ -31,8 +25,6 @@ class PartEditorBloc extends Bloc<PartEditorEvent, PartEditorState> {
     );
   }
 
-  final StockRepository _stockRepository;
-  final StorageRepository _storageRepository;
   final PartRepository _partRepository;
   final TagRepository _tagRepository;
   late final StreamSubscription<List<Tag>> _subscription;

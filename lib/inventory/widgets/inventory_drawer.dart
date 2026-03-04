@@ -36,6 +36,14 @@ class InventoryDrawer extends StatelessWidget {
               },
             ),
             ListTile(
+              leading: const Icon(Icons.sell),
+              title: Text(l10n.drawerTagsLinkText),
+              onTap: () {
+                Navigator.pop(context);
+                unawaited(Navigator.push(context, TagsPage.route()));
+              },
+            ),
+            ListTile(
               leading: const Icon(Icons.query_stats),
               title: Text(l10n.drawerStatisticsLinkText),
               onTap: () {
@@ -43,14 +51,7 @@ class InventoryDrawer extends StatelessWidget {
                 unawaited(Navigator.push(context, StatisticsPage.route()));
               },
             ),
-            ListTile(
-              leading: const Icon(Icons.tag),
-              title: const Text('Handle tags'),
-              onTap: () {
-                Navigator.pop(context);
-                unawaited(Navigator.push(context, TagsPage.route()));
-              },
-            ),
+
             ListTile(
               leading: const Icon(Icons.settings),
               title: Text(l10n.drawerSettingsLinkText),
@@ -79,7 +80,7 @@ class _ThemeModeSelector extends StatelessWidget {
       segments: const [
         ButtonSegment<AppThemeMode>(
           value: .system,
-          icon: Icon(Icons.system_security_update),
+          icon: Icon(Icons.mobile_friendly),
         ),
         ButtonSegment<AppThemeMode>(
           value: .light,

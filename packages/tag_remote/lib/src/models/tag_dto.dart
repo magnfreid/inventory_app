@@ -19,9 +19,6 @@ class TagDto {
   factory TagDto.fromJson(Map<String, dynamic> json) => _$TagDtoFromJson(json);
 
   /// The remote-assigned ID of the tag.
-  ///
-  /// Not included in JSON serialization.
-  @JsonKey(includeToJson: false)
   final String? id;
 
   /// Label of the tag (human-readable name).

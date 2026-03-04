@@ -22,7 +22,7 @@ class StoragesEditorBloc extends Bloc<StorageEditorEvent, StoragesEditorState> {
     emit(state.copyWith(status: .loading));
     try {
       await _locationRepository.addStorage(
-        storageCreateModel: event.storageCreateModel,
+        storage: event.storage,
       );
       emit(state.copyWith(status: .success));
     } on Exception catch (_) {}

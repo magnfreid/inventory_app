@@ -1,6 +1,7 @@
 import 'package:app_ui/app_ui.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:inventory_app/l10n/l10n.dart';
 import 'package:inventory_app/tags/bloc/tags_bloc.dart';
 import 'package:inventory_app/tags/bloc/tags_state.dart';
 import 'package:inventory_app/tags/extensions/tag_color_extension.dart';
@@ -35,6 +36,7 @@ class _TagsBottomSheetState extends State<TagsBottomSheet> {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = context.l10n;
     return BlocListener<TagsBloc, TagsState>(
       listenWhen: (previous, current) => current.bottomSheetStatus == .success,
       listener: (context, state) => Navigator.pop(context),
@@ -46,35 +48,37 @@ class _TagsBottomSheetState extends State<TagsBottomSheet> {
             mainAxisSize: .min,
             spacing: 20,
             children: [
-              const Align(
+              Align(
                 alignment: .centerStart,
                 child: Text(
-                  'Create new tag:',
-                  style: TextStyle(fontSize: 20),
+                  l10n.tagsBottomSheetTitleText,
+                  style: const TextStyle(fontSize: 20),
                 ),
               ),
               const Divider(),
               TextFormField(
                 controller: _labelTextController,
-                decoration: const InputDecoration(label: Text('Name')),
+                decoration: InputDecoration(
+                  label: Text(l10n.formFieldNameLabelText),
+                ),
               ),
 
               SegmentedButton<TagType>(
-                segments: const [
+                segments: [
                   ButtonSegment(
-                    label: Text('Brand'),
-                    icon: Icon(Icons.business),
+                    label: Text(l10n.tagsBottomSheetBrandText),
+                    icon: const Icon(Icons.business),
                     value: .brand,
                   ),
                   ButtonSegment(
                     value: .category,
-                    icon: Icon(Icons.category),
-                    label: Text('Category'),
+                    icon: const Icon(Icons.category),
+                    label: Text(l10n.tagsBottomSheetCategoryText),
                   ),
                   ButtonSegment(
                     value: .general,
-                    icon: Icon(Icons.sell),
-                    label: Text('General'),
+                    icon: const Icon(Icons.sell),
+                    label: Text(l10n.tagsBottomSheetGeneralText),
                   ),
                 ],
                 selected: {_selectedTagType},
@@ -104,7 +108,7 @@ class _TagsBottomSheetState extends State<TagsBottomSheet> {
                     ),
                   );
                 },
-                label: 'Save',
+                label: l10n.saveButtonText,
               ),
               const Spacer(),
             ],

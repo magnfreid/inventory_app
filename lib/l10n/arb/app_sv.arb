@@ -68,6 +68,10 @@
 	"@drawerLocationsLinkText": {
 		"description": "Link to locations page in drawer menu"
 	},
+	"drawerTagsLinkText": "Etiketter och taggar",
+	"@drawerTagsLinkText": {
+		"description": "Link to tags page in drawer menu"
+	},
 	"drawerStatisticsLinkText": "Statistik",
 	"@drawerStatisticsLinkText": {
 		"description": "Link to statistics page in drawer menu"
@@ -103,5 +107,45 @@
 	"storagePageTitle": "Lager",
 	"@storagePageTitle": {
 		"description": "Title text for storage page"
+	},
+	"tagPageTitleText": "Dina etiketter och taggar",
+	"@tagPageTitleText": {
+		"description": "Tag page app bar title"
+	},
+	"tagTabBrandText": "Varumärken",
+	"@tagTabBrandText": {
+		"description": "Brand tag type tab bar label text"
+	},
+	"tagTabCategoryText": "Kategorier",
+	"@tagTabCategoryText": {
+		"description": "Category tag type tab bar label text"
+	},
+	"tagTabGeneralText": "Taggar",
+	"@tagTabGeneralText": {
+		"description": "General tag type tab bar label text"
+	},
+	"tagPageFabText": "Lägg till",
+	"@tagPageFabText": {
+		"description": "Tag page FAB button text"
+	},
+	"tagPageEmptyListText": "Ingen tagg eller etikett tillagd ännu.",
+	"@tagPageEmptyListText": {
+		"description": "Text displayed on screen when a tag type list is empty"
+	},
+	"tagsBottomSheetTitleText": "Lägg till ny tagg",
+	"@tagsBottomSheetTitleText": {
+		"description": "Title text on bottom sheet for creating a new tag"
+	},
+	"tagsBottomSheetBrandText": "Märke",
+	"@tagsBottomSheetBrandText": {
+		"description": "Label text for brand tag selection."
+	},
+	"tagsBottomSheetCategoryText": "Kategori",
+	"@tagsBottomSheetCategoryText": {
+		"description": "Label text for category tag selection."
+	},
+	"tagsBottomSheetGeneralText": "Tagg",
+	"@tagsBottomSheetGeneralText": {
+		"description": "Label text for general tag selection."
 	}
 }

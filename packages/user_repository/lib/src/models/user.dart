@@ -24,7 +24,7 @@ class User {
   ///
   /// Maps the DTO's role to the domain [UserRole].
   factory User.fromDto(UserDto dto) => User(
-    id: dto.id,
+    id: dto.id ?? '',
     organizationId: dto.organizationId,
     name: dto.name,
     email: dto.email,
