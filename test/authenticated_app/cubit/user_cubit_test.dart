@@ -28,7 +28,7 @@ void main() {
       build: () {
         when(
           () => userRepository.watchUser('123'),
-        ).thenAnswer((_) => Stream.value(testUser));
+        ).thenAnswer((_) => Stream.fromFuture(Future.value(testUser)));
         return UserCubit(userRepository: userRepository, currentUserId: '123');
       },
       expect: () => [
@@ -41,7 +41,7 @@ void main() {
       build: () {
         when(
           () => userRepository.watchUser('123'),
-        ).thenAnswer((_) => Stream.value(null));
+        ).thenAnswer((_) => Stream.fromFuture(Future.value()));
         return UserCubit(userRepository: userRepository, currentUserId: '123');
       },
       expect: () => [
@@ -62,7 +62,7 @@ void main() {
       build: () {
         when(
           () => userRepository.watchUser('123'),
-        ).thenAnswer((_) => Stream<User?>.error('oops'));
+        ).thenAnswer((_) => Stream.fromFuture(Future.error('oops')));
         return UserCubit(userRepository: userRepository, currentUserId: '123');
       },
       expect: () => [
