@@ -8,6 +8,7 @@ import 'package:mocktail/mocktail.dart';
 import 'package:part_repository/part_repository.dart';
 import 'package:stock_repository/stock_repository.dart';
 import 'package:storage_repository/storage_repository.dart';
+import 'package:tag_repository/tag_repository.dart';
 import 'package:user_repository/user_repository.dart';
 
 import '../../helpers/helpers.dart';
@@ -17,6 +18,7 @@ void main() {
   late MockStorageRepository storageRepository;
   late MockStockRepository stockRepository;
   late MockPartRepository partRepository;
+  late MockTagRepository tagRepository;
   late AuthenticatedUser authUser;
   late User user;
 
@@ -25,6 +27,7 @@ void main() {
     storageRepository = MockStorageRepository();
     stockRepository = MockStockRepository();
     partRepository = MockPartRepository();
+    tagRepository = MockTagRepository();
     authUser = AuthenticatedUser(id: '123');
     user = User(
       id: '123',
@@ -52,6 +55,7 @@ void main() {
                 stockRepositoryFactory: (orgId) => stockRepository,
                 storageRepositoryFactory: (orgId) => storageRepository,
                 partRepositoryFactory: (orgId) => partRepository,
+                tagRepositoryFactory: (orgId) => tagRepository,
               ),
             ),
           ),
@@ -79,6 +83,10 @@ void main() {
           () => partRepository.watchParts(),
         ).thenAnswer((_) => Stream.value(<Part>[]));
 
+        when(
+          () => tagRepository.watchTags(),
+        ).thenAnswer((_) => Stream.value(<Tag>[]));
+
         await tester.pumpApp(
           RepositoryProvider<UserRepository>.value(
             value: userRepository,
@@ -87,6 +95,7 @@ void main() {
               stockRepositoryFactory: (orgId) => stockRepository,
               storageRepositoryFactory: (orgId) => storageRepository,
               partRepositoryFactory: (orgId) => partRepository,
+              tagRepositoryFactory: (orgId) => tagRepository,
             ),
           ),
         );

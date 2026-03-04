@@ -53,16 +53,16 @@ class InventoryBloc extends Bloc<InventoryEvent, InventoryState> {
   FutureOr<void> _onUseStockButtonPressed(
     UseStockButtonPressed event,
     Emitter<InventoryState> emit,
-  ) {
+  ) async {
     emit(state.copyWith(bottomSheetStatus: .loading));
     try {
-      _stockRepository.decreaseStock(
+      await _stockRepository.decreaseStock(
         partId: event.partId,
         storageId: event.storageId,
         amount: 1,
       );
       emit(state.copyWith(bottomSheetStatus: .success));
-    } on Exception catch (exception) {
+    } on Exception catch (_) {
       emit(state.copyWith(bottomSheetStatus: .error));
     }
   }
@@ -79,7 +79,7 @@ class InventoryBloc extends Bloc<InventoryEvent, InventoryState> {
               _stockRepository.watchStock(),
               _partRepository.watchParts(),
               _storageRepository.watchStorages(),
-              _tagRepository.watchAllTags(),
+              _tagRepository.watchTags(),
               (stocks, parts, storages, tags) {
                 final storagesMap = {
                   for (final storage in storages) storage.id: storage,

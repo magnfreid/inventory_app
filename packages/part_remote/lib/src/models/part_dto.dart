@@ -3,7 +3,9 @@ import 'package:json_annotation/json_annotation.dart';
 part 'part_dto.g.dart';
 
 @JsonSerializable()
+/// Data Transfer Object representing a `Part` in the system.
 class PartDto {
+  /// Creates a [PartDto] instance.
   PartDto({
     required this.id,
     required this.name,
@@ -16,11 +18,14 @@ class PartDto {
     required this.generalTagIds,
   });
 
+  /// Creates a [PartDto] from a JSON map.
   factory PartDto.fromJson(Map<String, dynamic> json) =>
       _$PartDtoFromJson(json);
 
+  /// Converts this [PartDto] to a JSON map.
   Map<String, dynamic> toJson() => _$PartDtoToJson(this);
 
+  /// Creates a copy of this [PartDto] with optional new values.
   PartDto copyWith({
     String? id,
     String? name,
@@ -45,14 +50,31 @@ class PartDto {
     );
   }
 
+  /// Unique identifier of the part. Not included in [toJson].
   @JsonKey(includeToJson: false)
   final String? id;
+
+  /// Name of the part.
   final String name;
+
+  /// Detail or catalog number of the part.
   final String detailNumber;
+
+  /// Indicates if the part is recycled.
   final bool isRecycled;
+
+  /// Price of the part.
   final double price;
+
+  /// Optional category tag ID associated with the part.
   final String? categoryTagId;
+
+  /// Optional brand tag ID associated with the part.
   final String? brandTagId;
-  final List<String> generalTagIds;
+
+  /// Optional description of the part.
   final String? description;
+
+  /// List of IDs for general tags associated with the part.
+  final List<String> generalTagIds;
 }

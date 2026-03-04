@@ -2,7 +2,10 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_stock_remote/src/constants/constants.dart';
 import 'package:stock_remote/stock_remote.dart';
 
+///Implementation of a Firebase Firestore [StockRemote].
 class FirebaseStockRemote implements StockRemote {
+  ///Creates a [FirebaseStockRemote]. Optional [FirebaseFirestore], used for
+  /// testing.
   FirebaseStockRemote({
     required String organizationId,
     FirebaseFirestore? firestore,

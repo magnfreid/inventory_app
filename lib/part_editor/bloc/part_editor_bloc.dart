@@ -24,7 +24,7 @@ class PartEditorBloc extends Bloc<PartEditorEvent, PartEditorState> {
     on<SaveButtonPressed>(_onSaveButtonPressed);
     on<_TagsUpdated>(_onTagsUpdated);
 
-    _subscription = _tagRepository.watchAllTags().listen(
+    _subscription = _tagRepository.watchTags().listen(
       (tags) => add(
         _TagsUpdated(tags: tags.map(TagUiModel.fromDomainModel).toList()),
       ),
@@ -37,6 +37,12 @@ class PartEditorBloc extends Bloc<PartEditorEvent, PartEditorState> {
   final TagRepository _tagRepository;
   late final StreamSubscription<List<Tag>> _subscription;
 
+  @override
+  Future<void> close() async {
+    await _subscription.cancel();
+    return super.close();
+  }
+
   FutureOr<void> _onSaveButtonPressed(
     SaveButtonPressed event,
     Emitter<PartEditorState> emit,
@@ -47,7 +53,7 @@ class PartEditorBloc extends Bloc<PartEditorEvent, PartEditorState> {
       try {
         await _partRepository.editPart(event.part);
         emit(state.copyWith(status: .success));
-      } on Exception catch (exception) {
+      } on Exception catch (_) {
         emit(state.copyWith(status: .error));
       }
     } else {

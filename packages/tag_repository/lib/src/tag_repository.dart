@@ -2,7 +2,9 @@ import 'package:rxdart/rxdart.dart';
 import 'package:tag_remote/tag_remote.dart';
 import 'package:tag_repository/tag_repository.dart';
 
+/// Repository for managing [Tag]s using a [TagRemote] data source.
 class TagRepository {
+  /// Creates a [TagRepository] with the given [remote] data source.
   TagRepository({required TagRemote remote}) : _remote = remote;
 
   final TagRemote _remote;
@@ -12,17 +14,12 @@ class TagRepository {
       .map((dtos) => dtos.map(Tag.fromDto).toList())
       .shareReplay(maxSize: 1);
 
-  Stream<List<Tag>> watchAllTags() => _allTagsStream;
-  // Stream<List<Tag>> watchBrandTags() => _allTagsStream.map(
-  //   (tags) => tags.where((tag) => tag.type == .brand).toList(),
-  // );
-  // Stream<List<Tag>> watchCategoryTags() => _allTagsStream.map(
-  //   (tags) => tags.where((tag) => tag.type == .category).toList(),
-  // );
-  // Stream<List<Tag>> watchGeneralTags() => _allTagsStream.map(
-  //   (tags) => tags.where((tag) => tag.type == .general).toList(),
-  // );
+  /// Watches all tags as a stream of domain [Tag]s.
+  ///
+  /// New subscribers will immediately receive the latest list due to caching.
+  Stream<List<Tag>> watchTags() => _allTagsStream;
 
+  /// Adds a [tag] via the remote and returns the created [Tag] with ID.
   Future<Tag> addTag(Tag tag) async {
     final dto = tag.toDto();
     final createdDto = await _remote.addTag(dto);

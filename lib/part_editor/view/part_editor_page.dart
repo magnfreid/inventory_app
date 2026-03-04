@@ -230,7 +230,6 @@ class _TagSelector extends StatelessWidget {
     required TagUiModel? tag,
     required TagBottomSheetMode mode,
     required this.onTagSelected,
-    super.key,
   }) : _tag = tag,
        _mode = mode;
 

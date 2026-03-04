@@ -14,7 +14,7 @@ class TagsBloc extends Bloc<TagsEvent, TagsState> {
     on<_TagsUpdated>(_onTagsUpdated);
     on<SaveButtonPressed>(_onSaveButtonPressed);
 
-    _subscription = tagRepository.watchAllTags().listen(
+    _subscription = tagRepository.watchTags().listen(
       (tags) {
         final uiTags = tags.map(TagUiModel.fromDomainModel).toList();
         add(_TagsUpdated(tags: uiTags));
@@ -50,7 +50,7 @@ class TagsBloc extends Bloc<TagsEvent, TagsState> {
     try {
       await _tagRepository.addTag(event.tag);
       emit(state.copyWith(bottomSheetStatus: .success));
-    } on Exception catch (exception) {
+    } on Exception catch (_) {
       emit(state.copyWith(bottomSheetStatus: .idle));
     }
   }

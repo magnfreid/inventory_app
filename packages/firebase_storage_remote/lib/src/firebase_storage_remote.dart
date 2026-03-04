@@ -2,7 +2,10 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_storage_remote/src/constants/constants.dart';
 import 'package:storage_remote/storage_remote.dart';
 
+///Implementation of a Firebase Firestore [StorageRemote].
 class FirebaseStorageRemote implements StorageRemote {
+  ///Creates a [FirebaseStorageRemote]. Optional [FirebaseFirestore], used for
+  /// testing.
   FirebaseStorageRemote({
     required String organizationId,
     FirebaseFirestore? firestore,

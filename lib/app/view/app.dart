@@ -6,6 +6,7 @@ import 'package:inventory_app/authentication/cubit/authentication_cubit.dart';
 import 'package:inventory_app/authentication/view/authentication.dart';
 import 'package:inventory_app/l10n/gen/app_localizations.dart';
 import 'package:inventory_app/theme/cubit/theme_cubit.dart';
+import 'package:inventory_app/theme/extensions/theme_mode_extension.dart';
 import 'package:user_repository/user_repository.dart';
 
 class App extends StatelessWidget {
@@ -48,9 +49,10 @@ class AppView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final themeMode = context.watch<ThemeCubit>().state;
+    final appThemeMode = context.watch<ThemeCubit>().state;
+
     return MaterialApp(
-      themeMode: themeMode,
+      themeMode: appThemeMode.toThemeMode(),
       theme: AppTheme.light().themeData,
       darkTheme: AppTheme.dark().themeData,
       localizationsDelegates: AppLocalizations.localizationsDelegates,
