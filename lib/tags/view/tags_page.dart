@@ -4,7 +4,6 @@ import 'package:inventory_app/tags/bloc/tags_bloc.dart';
 import 'package:inventory_app/tags/bloc/tags_state.dart';
 import 'package:inventory_app/tags/models/tag_ui_model.dart';
 import 'package:inventory_app/tags/widgets/tags_bottom_sheet.dart';
-import 'package:tag_remote/tag_remote.dart';
 import 'package:tag_repository/tag_repository.dart';
 
 class TagsPage extends StatelessWidget {

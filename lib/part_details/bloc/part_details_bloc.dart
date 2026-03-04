@@ -51,16 +51,16 @@ class PartDetailsBloc extends Bloc<PartDetailsEvent, PartDetailsState> {
   FutureOr<void> _onSaveButtonPressed(
     SaveButtonPressed event,
     Emitter<PartDetailsState> emit,
-  ) {
+  ) async {
     emit(state.copyWith(saveStatus: .loading));
     try {
-      _stockRepository.increaseStock(
+      await _stockRepository.increaseStock(
         partId: event.partId,
         storageId: event.storageId,
         amount: event.amount,
       );
       emit(state.copyWith(saveStatus: .success));
-    } on Exception catch (exception) {
+    } on Exception catch (_) {
       emit(state.copyWith(saveStatus: .error));
     }
   }

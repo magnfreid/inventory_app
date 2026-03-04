@@ -1,10 +1,32 @@
 import 'package:flutter/material.dart';
 
-enum AppButtonWidth { wrap, wide }
+///Setting for button width.
+enum AppButtonWidth {
+  ///Takes as little width as possible, depending on child's size.
+  wrap,
 
-enum AppButtonType { elevated, filled, outlined, text }
+  ///Fills the remaining available width.
+  wide,
+}
 
+///Setting for [AppButton] type, matches standard Flutter button styles.
+enum AppButtonType {
+  ///Setting for an elevated [AppButton].
+  elevated,
+
+  ///Setting for a filled [AppButton].
+  filled,
+
+  ///Settting for an outlined [AppButton]
+  outlined,
+
+  ///Setting for a text [AppButton]
+  text,
+}
+
+///Custom button with a loading indicator (replaces label text while loading)
 class AppButton extends StatelessWidget {
+  ///Creates a filled [AppButton]
   const AppButton({
     required this.onPressed,
     required this.label,
@@ -14,6 +36,7 @@ class AppButton extends StatelessWidget {
   }) : _type = .filled,
        _width = width ?? .wide;
 
+  ///Creates an elevated [AppButton]
   const AppButton.elevated({
     required this.onPressed,
     required this.label,
@@ -23,6 +46,7 @@ class AppButton extends StatelessWidget {
   }) : _type = .elevated,
        _width = width ?? .wide;
 
+  ///Creates an outlined [AppButton]
   const AppButton.outlined({
     required this.onPressed,
     required this.label,
@@ -32,6 +56,7 @@ class AppButton extends StatelessWidget {
   }) : _type = .outlined,
        _width = width ?? .wide;
 
+  ///Creates a text [AppButton]
   const AppButton.text({
     required this.onPressed,
     required this.label,
@@ -41,11 +66,17 @@ class AppButton extends StatelessWidget {
   }) : _type = .text,
        _width = width ?? .wide;
 
+  ///Replaced [AppButton] label text with loading indicator when true.
   final bool isLoading;
-  final AppButtonType _type;
-  final AppButtonWidth _width;
+
+  ///Callback for when the [AppButton] is pressed.
   final VoidCallback? onPressed;
+
+  ///The text shown inside the [AppButton].
   final String label;
+
+  final AppButtonWidth _width;
+  final AppButtonType _type;
 
   @override
   Widget build(BuildContext context) {

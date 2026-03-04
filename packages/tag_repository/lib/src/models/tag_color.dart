@@ -1,3 +1,6 @@
+// ignore_for_file: document_ignores, public_member_api_docs
+
+///The color of a tag.
 enum TagColor {
   red,
   crimson,

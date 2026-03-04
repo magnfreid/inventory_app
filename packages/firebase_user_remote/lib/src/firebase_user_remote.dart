@@ -2,7 +2,10 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_user_remote/src/constants/constants.dart';
 import 'package:user_remote/user_remote.dart';
 
+///Implementation of a Firebase Firestore [UserRemote].
 class FirebaseUserRemote implements UserRemote {
+  ///Creates an instance of [FirebaseUserRemote]. Optional [FirebaseFirestore],
+  ///used for testing.
   FirebaseUserRemote({
     FirebaseFirestore? firestore,
   }) : _firestore = firestore ?? FirebaseFirestore.instance {

@@ -116,7 +116,7 @@ class InventoryPartCard extends StatelessWidget {
 }
 
 class _TagBadge extends StatelessWidget {
-  const _TagBadge({required this.tag, super.key});
+  const _TagBadge({required this.tag});
 
   final TagUiModel tag;
 

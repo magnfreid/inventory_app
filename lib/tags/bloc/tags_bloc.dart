@@ -50,7 +50,7 @@ class TagsBloc extends Bloc<TagsEvent, TagsState> {
     try {
       await _tagRepository.addTag(event.tag);
       emit(state.copyWith(bottomSheetStatus: .success));
-    } on Exception catch (exception) {
+    } on Exception catch (_) {
       emit(state.copyWith(bottomSheetStatus: .idle));
     }
   }

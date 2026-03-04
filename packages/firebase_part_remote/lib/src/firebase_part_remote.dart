@@ -2,7 +2,10 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_part_remote/src/constants/constants.dart';
 import 'package:part_remote/part_remote.dart';
 
+///Implementation of Firebase Firestore [PartRemote].
 class FirebasePartRemote implements PartRemote {
+  ///Creates a [FirebasePartRemote]. Optional [FirebaseFirestore]
+  ///instance for testing.
   FirebasePartRemote({
     required String organizationId,
     FirebaseFirestore? firestore,

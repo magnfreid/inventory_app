@@ -69,30 +69,28 @@ class InventoryDrawer extends StatelessWidget {
 }
 
 class _ThemeModeSelector extends StatelessWidget {
-  const _ThemeModeSelector({
-    super.key,
-  });
+  const _ThemeModeSelector();
 
   @override
   Widget build(BuildContext context) {
-    final themeMode = context.watch<ThemeCubit>().state;
-    return SegmentedButton<ThemeMode>(
+    final mode = context.watch<ThemeCubit>().state;
+    return SegmentedButton<AppThemeMode>(
       style: SegmentedButton.styleFrom(),
       segments: const [
-        ButtonSegment<ThemeMode>(
+        ButtonSegment<AppThemeMode>(
           value: .system,
           icon: Icon(Icons.system_security_update),
         ),
-        ButtonSegment<ThemeMode>(
+        ButtonSegment<AppThemeMode>(
           value: .light,
           icon: Icon(Icons.light_mode),
         ),
-        ButtonSegment<ThemeMode>(
+        ButtonSegment<AppThemeMode>(
           value: .dark,
           icon: Icon(Icons.dark_mode),
         ),
       ],
-      selected: {themeMode},
+      selected: {mode},
       onSelectionChanged: (selection) =>
           context.read<ThemeCubit>().themeButtonPressed(selection.first),
     );

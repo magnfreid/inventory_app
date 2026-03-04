@@ -4,7 +4,10 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_tag_remote/src/constants/constants.dart';
 import 'package:tag_remote/tag_remote.dart';
 
+///Implementation of a Firebase Firestore [TagRemote].
 class FirebaseTagRemote implements TagRemote {
+  ///Creates a [FirebaseTagRemote] instance. Optional [FirebaseFirestore], used
+  ///for testing.
   FirebaseTagRemote({
     required String organizationId,
     FirebaseFirestore? firestore,
