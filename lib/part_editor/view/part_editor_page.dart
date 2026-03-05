@@ -3,12 +3,12 @@ import 'dart:math';
 import 'package:app_ui/app_ui.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:inventory_app/use_cases/part_presentation.dart/models/part_presentation.dart';
 import 'package:inventory_app/l10n/l10n.dart';
 import 'package:inventory_app/part_editor/bloc/part_editor_bloc.dart';
 import 'package:inventory_app/part_editor/bloc/part_editor_state.dart';
 import 'package:inventory_app/part_editor/widgets/part_editor_tag_bottom_sheet.dart';
 import 'package:inventory_app/tags/models/tag_presentation.dart';
+import 'package:inventory_app/use_cases/part_presentation.dart/models/part_presentation.dart';
 import 'package:part_repository/part_repository.dart';
 import 'package:tag_repository/tag_repository.dart';
 

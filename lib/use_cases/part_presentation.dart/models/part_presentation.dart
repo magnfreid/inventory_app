@@ -1,5 +1,5 @@
-import 'package:inventory_app/use_cases/part_presentation.dart/models/stock_presentation.dart';
 import 'package:inventory_app/tags/models/tag_presentation.dart';
+import 'package:inventory_app/use_cases/part_presentation.dart/models/stock_presentation.dart';
 
 class PartPresentation {
   PartPresentation({

@@ -14,12 +14,19 @@ final class _StoragesUpdated extends PartDetailsEvent {
   final List<Storage> storages;
 }
 
-final class ShowAddViewButtonPressed extends PartDetailsEvent {
-  const ShowAddViewButtonPressed();
+final class UseButtonPressed extends PartDetailsEvent {
+  const UseButtonPressed({required this.partId, required this.storageId});
+  final String partId;
+  final String storageId;
 }
 
-final class SaveButtonPressed extends PartDetailsEvent {
-  const SaveButtonPressed({
+final class ButtonSegmentPressed extends PartDetailsEvent {
+  const ButtonSegmentPressed({required this.content});
+  final PartDetailsContent content;
+}
+
+final class AddToStockButtonPressed extends PartDetailsEvent {
+  const AddToStockButtonPressed({
     required this.partId,
     required this.storageId,
     required this.amount,

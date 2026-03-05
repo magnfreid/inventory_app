@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
-import 'package:inventory_app/use_cases/part_presentation.dart/models/part_presentation.dart';
 import 'package:inventory_app/l10n/l10n.dart';
 import 'package:inventory_app/shared/widgets/tag_badge.dart';
+import 'package:inventory_app/use_cases/part_presentation.dart/models/part_presentation.dart';
 
 class PartDetailsInfo extends StatelessWidget {
   const PartDetailsInfo(this.part, {super.key});
@@ -14,49 +14,52 @@ class PartDetailsInfo extends StatelessWidget {
     final l10n = context.l10n;
     final description = part.description;
 
-    return Padding(
-      padding: const .all(8),
-      child: Column(
-        children: [
-          _MainTagsRow(part: part),
-          _DetailField(
-            title: l10n.formFieldDetailNumberLabelText,
-            subtitle: part.detailNumber,
-          ),
-          _DetailField(
-            title: l10n.formFieldPriceLabelText,
-            subtitle: NumberFormat.currency(
-              locale: 'sv_SE',
-              symbol: 'kr',
-              decimalDigits: 2,
-            ).format(part.price),
-          ),
-          _DetailField(
-            title: l10n.formFieldRecycledStatusLabelText,
-            subtitle: part.isRecycled
-                ? l10n.formFieldRecycledLabelText
-                : l10n.formFieldNewLabelText,
-          ),
-          if (description != null && description.isNotEmpty)
-            Padding(
-              padding: const .all(16),
-              child: Column(
-                spacing: 8,
-                crossAxisAlignment: .start,
-                children: [
-                  Text(
-                    l10n.formFieldDescriptionLabelText,
-                    style: const TextStyle(fontSize: 18),
-                  ),
-                  Text(
-                    description,
-                    style: const TextStyle(fontSize: 18, color: Colors.grey),
-                  ),
-                ],
-              ),
+    return Column(
+      children: [
+        // _MainTagsRow(part: part),
+        _DetailField(
+          title: l10n.formFieldDetailNumberLabelText,
+          subtitle: part.detailNumber,
+        ),
+        _DetailField(
+          title: l10n.formFieldPriceLabelText,
+          subtitle: NumberFormat.currency(
+            locale: 'sv_SE',
+            symbol: 'kr',
+            decimalDigits: 2,
+          ).format(part.price),
+        ),
+        _DetailField(
+          title: l10n.formFieldRecycledStatusLabelText,
+          subtitle: part.isRecycled
+              ? l10n.formFieldRecycledLabelText
+              : l10n.formFieldNewLabelText,
+        ),
+        _DetailField(title: 'Märke', subtitle: part.brandTag?.label ?? 'Okänt'),
+        _DetailField(
+          title: 'Kategori',
+          subtitle: part.categoryTag?.label ?? 'Ingen',
+        ),
+        _DetailField(title: 'I lager', subtitle: part.totalQuantity.toString()),
+        if (description != null && description.isNotEmpty)
+          Padding(
+            padding: const .symmetric(vertical: 16),
+            child: Column(
+              spacing: 8,
+              crossAxisAlignment: .start,
+              children: [
+                Text(
+                  l10n.formFieldDescriptionLabelText,
+                  style: const TextStyle(fontSize: 18),
+                ),
+                Text(
+                  description,
+                  style: const TextStyle(fontSize: 18, color: Colors.grey),
+                ),
+              ],
             ),
-        ],
-      ),
+          ),
+      ],
     );
   }
 }
@@ -71,9 +74,8 @@ class _MainTagsRow extends StatelessWidget {
     final brandTag = part.brandTag;
     final categoryTag = part.categoryTag;
     return Padding(
-      padding: const .symmetric(horizontal: 16, vertical: 8),
+      padding: const .all(4),
       child: Row(
-        // mainAxisAlignment: .spaceBetween,
         spacing: 12,
         children: [
           if (brandTag != null)
@@ -103,7 +105,7 @@ class _DetailField extends StatelessWidget {
   Widget build(BuildContext context) {
     const double fontSize = 18;
     return Padding(
-      padding: const .all(16),
+      padding: const .symmetric(vertical: 16),
       child: Row(
         children: [
           Expanded(
