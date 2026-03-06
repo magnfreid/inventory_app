@@ -2,7 +2,6 @@ import 'package:app_ui/app_ui.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:inventory_app/l10n/l10n.dart';
-import 'package:inventory_app/shared/widgets/tag_badge.dart';
 import 'package:inventory_app/use_cases/part_presentation.dart/models/part_presentation.dart';
 
 class PartDetailsInfo extends StatelessWidget {
