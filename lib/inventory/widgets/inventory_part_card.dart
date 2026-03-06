@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:inventory_app/inventory/bloc/inventory_bloc.dart';
-import 'package:inventory_app/inventory/models/part_ui_model.dart';
 import 'package:inventory_app/inventory/widgets/inventory_stock_bottom_sheet.dart';
 import 'package:inventory_app/part_details/view/part_details_page.dart';
-import 'package:inventory_app/tags/models/tag_ui_model.dart';
+import 'package:inventory_app/shared/widgets/tag_badge.dart';
+import 'package:inventory_app/use_cases/part_presentation.dart/models/part_presentation.dart';
 
 class InventoryPartCard extends StatelessWidget {
   const InventoryPartCard({
@@ -12,13 +12,14 @@ class InventoryPartCard extends StatelessWidget {
     super.key,
   });
 
-  final PartUiModel part;
+  final PartPresentation part;
 
   @override
   Widget build(BuildContext context) {
     return Card(
       child: InkWell(
-        onTap: () => Navigator.push(context, PartDetailsPage.route(item: part)),
+        onTap: () =>
+            Navigator.push(context, PartDetailsPage.route(partId: part.partId)),
         onLongPress: () => showModalBottomSheet<void>(
           showDragHandle: true,
           context: context,
@@ -40,12 +41,12 @@ class InventoryPartCard extends StatelessWidget {
                         crossAxisAlignment: .start,
                         children: [
                           Row(
-                            spacing: 4,
+                            spacing: 6,
                             children: [
                               if (part.brandTag != null)
-                                _TagBadge(tag: part.brandTag!),
+                                TagBadge(tag: part.brandTag!),
                               if (part.categoryTag != null)
-                                _TagBadge(tag: part.categoryTag!),
+                                TagBadge(tag: part.categoryTag!),
                             ],
                           ),
                           Text(
@@ -110,30 +111,6 @@ class InventoryPartCard extends StatelessWidget {
               ),
           ],
         ),
-      ),
-    );
-  }
-}
-
-class _TagBadge extends StatelessWidget {
-  const _TagBadge({required this.tag});
-
-  final TagUiModel tag;
-
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      padding: const .symmetric(vertical: 1, horizontal: 3),
-      decoration: BoxDecoration(
-        border: Border.all(
-          color: tag.color,
-          width: 0.75,
-        ),
-        borderRadius: .circular(4),
-      ),
-      child: Text(
-        tag.label,
-        style: TextStyle(fontSize: 10, color: tag.color),
       ),
     );
   }

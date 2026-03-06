@@ -18,6 +18,7 @@ dependencies:
   bloc: ^9.2.0
   bloc_concurrency: ^0.3.0
   bloc_test: ^10.0.0
+  collection: ^1.19.1
   firebase_authentication_service:
     path: packages/firebase_authentication_service
   firebase_core: ^4.4.0

@@ -1,5 +1,5 @@
-class StockUiModel {
-  StockUiModel({
+class StockPresentation {
+  StockPresentation({
     required this.storageId,
     required this.storageName,
     required this.quantity,

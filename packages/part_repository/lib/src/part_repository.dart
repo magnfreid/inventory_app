@@ -29,7 +29,13 @@ class PartRepository {
   /// Updates an existing [part] via [_remote].
   ///
   /// Converts the [Part] to a [PartDto] before sending it to the remote.
-  Future<void> editPart(Part part) async {
+  Future<Part> editPart(Part part) async {
     await _remote.editPart(part.toDto());
+    return part;
+  }
+
+  /// Deletes an existing [PartDto] via [_remote]
+  Future<void> deletePart(String partId) async {
+    await _remote.deletePart(partId);
   }
 }

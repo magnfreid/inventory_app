@@ -14,7 +14,7 @@ T _$identity<T>(T value) => value;
 /// @nodoc
 mixin _$TagsState {
 
- TagsStateStatus get status; TagsStateBottomSheetStatus get bottomSheetStatus; List<TagUiModel> get brandTags; List<TagUiModel> get categoryTags; List<TagUiModel> get generalTags;
+ TagsStateStatus get status; TagsStateBottomSheetStatus get bottomSheetStatus; List<TagPresentation> get brandTags; List<TagPresentation> get categoryTags; List<TagPresentation> get generalTags;
 /// Create a copy of TagsState
 /// with the given fields replaced by the non-null parameter values.
 @JsonKey(includeFromJson: false, includeToJson: false)
@@ -45,7 +45,7 @@ abstract mixin class $TagsStateCopyWith<$Res>  {
   factory $TagsStateCopyWith(TagsState value, $Res Function(TagsState) _then) = _$TagsStateCopyWithImpl;
 @useResult
 $Res call({
- TagsStateStatus status, TagsStateBottomSheetStatus bottomSheetStatus, List<TagUiModel> brandTags, List<TagUiModel> categoryTags, List<TagUiModel> generalTags
+ TagsStateStatus status, TagsStateBottomSheetStatus bottomSheetStatus, List<TagPresentation> brandTags, List<TagPresentation> categoryTags, List<TagPresentation> generalTags
 });
 
 
@@ -67,9 +67,9 @@ class _$TagsStateCopyWithImpl<$Res>
 status: null == status ? _self.status : status // ignore: cast_nullable_to_non_nullable
 as TagsStateStatus,bottomSheetStatus: null == bottomSheetStatus ? _self.bottomSheetStatus : bottomSheetStatus // ignore: cast_nullable_to_non_nullable
 as TagsStateBottomSheetStatus,brandTags: null == brandTags ? _self.brandTags : brandTags // ignore: cast_nullable_to_non_nullable
-as List<TagUiModel>,categoryTags: null == categoryTags ? _self.categoryTags : categoryTags // ignore: cast_nullable_to_non_nullable
-as List<TagUiModel>,generalTags: null == generalTags ? _self.generalTags : generalTags // ignore: cast_nullable_to_non_nullable
-as List<TagUiModel>,
+as List<TagPresentation>,categoryTags: null == categoryTags ? _self.categoryTags : categoryTags // ignore: cast_nullable_to_non_nullable
+as List<TagPresentation>,generalTags: null == generalTags ? _self.generalTags : generalTags // ignore: cast_nullable_to_non_nullable
+as List<TagPresentation>,
   ));
 }
 
@@ -154,7 +154,7 @@ return $default(_that);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function( TagsStateStatus status,  TagsStateBottomSheetStatus bottomSheetStatus,  List<TagUiModel> brandTags,  List<TagUiModel> categoryTags,  List<TagUiModel> generalTags)?  $default,{required TResult orElse(),}) {final _that = this;
+@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function( TagsStateStatus status,  TagsStateBottomSheetStatus bottomSheetStatus,  List<TagPresentation> brandTags,  List<TagPresentation> categoryTags,  List<TagPresentation> generalTags)?  $default,{required TResult orElse(),}) {final _that = this;
 switch (_that) {
 case _TagsState() when $default != null:
 return $default(_that.status,_that.bottomSheetStatus,_that.brandTags,_that.categoryTags,_that.generalTags);case _:
@@ -175,7 +175,7 @@ return $default(_that.status,_that.bottomSheetStatus,_that.brandTags,_that.categ
 /// }
 /// ```
 
-@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function( TagsStateStatus status,  TagsStateBottomSheetStatus bottomSheetStatus,  List<TagUiModel> brandTags,  List<TagUiModel> categoryTags,  List<TagUiModel> generalTags)  $default,) {final _that = this;
+@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function( TagsStateStatus status,  TagsStateBottomSheetStatus bottomSheetStatus,  List<TagPresentation> brandTags,  List<TagPresentation> categoryTags,  List<TagPresentation> generalTags)  $default,) {final _that = this;
 switch (_that) {
 case _TagsState():
 return $default(_that.status,_that.bottomSheetStatus,_that.brandTags,_that.categoryTags,_that.generalTags);case _:
@@ -195,7 +195,7 @@ return $default(_that.status,_that.bottomSheetStatus,_that.brandTags,_that.categ
 /// }
 /// ```
 
-@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function( TagsStateStatus status,  TagsStateBottomSheetStatus bottomSheetStatus,  List<TagUiModel> brandTags,  List<TagUiModel> categoryTags,  List<TagUiModel> generalTags)?  $default,) {final _that = this;
+@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function( TagsStateStatus status,  TagsStateBottomSheetStatus bottomSheetStatus,  List<TagPresentation> brandTags,  List<TagPresentation> categoryTags,  List<TagPresentation> generalTags)?  $default,) {final _that = this;
 switch (_that) {
 case _TagsState() when $default != null:
 return $default(_that.status,_that.bottomSheetStatus,_that.brandTags,_that.categoryTags,_that.generalTags);case _:
@@ -210,27 +210,27 @@ return $default(_that.status,_that.bottomSheetStatus,_that.brandTags,_that.categ
 
 
 class _TagsState extends TagsState {
-  const _TagsState({this.status = TagsStateStatus.loading, this.bottomSheetStatus = TagsStateBottomSheetStatus.idle, final  List<TagUiModel> brandTags = const [], final  List<TagUiModel> categoryTags = const [], final  List<TagUiModel> generalTags = const []}): _brandTags = brandTags,_categoryTags = categoryTags,_generalTags = generalTags,super._();
+  const _TagsState({this.status = TagsStateStatus.loading, this.bottomSheetStatus = TagsStateBottomSheetStatus.idle, final  List<TagPresentation> brandTags = const [], final  List<TagPresentation> categoryTags = const [], final  List<TagPresentation> generalTags = const []}): _brandTags = brandTags,_categoryTags = categoryTags,_generalTags = generalTags,super._();
   
 
 @override@JsonKey() final  TagsStateStatus status;
 @override@JsonKey() final  TagsStateBottomSheetStatus bottomSheetStatus;
- final  List<TagUiModel> _brandTags;
-@override@JsonKey() List<TagUiModel> get brandTags {
+ final  List<TagPresentation> _brandTags;
+@override@JsonKey() List<TagPresentation> get brandTags {
   if (_brandTags is EqualUnmodifiableListView) return _brandTags;
   // ignore: implicit_dynamic_type
   return EqualUnmodifiableListView(_brandTags);
 }
 
- final  List<TagUiModel> _categoryTags;
-@override@JsonKey() List<TagUiModel> get categoryTags {
+ final  List<TagPresentation> _categoryTags;
+@override@JsonKey() List<TagPresentation> get categoryTags {
   if (_categoryTags is EqualUnmodifiableListView) return _categoryTags;
   // ignore: implicit_dynamic_type
   return EqualUnmodifiableListView(_categoryTags);
 }
 
- final  List<TagUiModel> _generalTags;
-@override@JsonKey() List<TagUiModel> get generalTags {
+ final  List<TagPresentation> _generalTags;
+@override@JsonKey() List<TagPresentation> get generalTags {
   if (_generalTags is EqualUnmodifiableListView) return _generalTags;
   // ignore: implicit_dynamic_type
   return EqualUnmodifiableListView(_generalTags);
@@ -267,7 +267,7 @@ abstract mixin class _$TagsStateCopyWith<$Res> implements $TagsStateCopyWith<$Re
   factory _$TagsStateCopyWith(_TagsState value, $Res Function(_TagsState) _then) = __$TagsStateCopyWithImpl;
 @override @useResult
 $Res call({
- TagsStateStatus status, TagsStateBottomSheetStatus bottomSheetStatus, List<TagUiModel> brandTags, List<TagUiModel> categoryTags, List<TagUiModel> generalTags
+ TagsStateStatus status, TagsStateBottomSheetStatus bottomSheetStatus, List<TagPresentation> brandTags, List<TagPresentation> categoryTags, List<TagPresentation> generalTags
 });
 
 
@@ -289,9 +289,9 @@ class __$TagsStateCopyWithImpl<$Res>
 status: null == status ? _self.status : status // ignore: cast_nullable_to_non_nullable
 as TagsStateStatus,bottomSheetStatus: null == bottomSheetStatus ? _self.bottomSheetStatus : bottomSheetStatus // ignore: cast_nullable_to_non_nullable
 as TagsStateBottomSheetStatus,brandTags: null == brandTags ? _self._brandTags : brandTags // ignore: cast_nullable_to_non_nullable
-as List<TagUiModel>,categoryTags: null == categoryTags ? _self._categoryTags : categoryTags // ignore: cast_nullable_to_non_nullable
-as List<TagUiModel>,generalTags: null == generalTags ? _self._generalTags : generalTags // ignore: cast_nullable_to_non_nullable
-as List<TagUiModel>,
+as List<TagPresentation>,categoryTags: null == categoryTags ? _self._categoryTags : categoryTags // ignore: cast_nullable_to_non_nullable
+as List<TagPresentation>,generalTags: null == generalTags ? _self._generalTags : generalTags // ignore: cast_nullable_to_non_nullable
+as List<TagPresentation>,
   ));
 }
 

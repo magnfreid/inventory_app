@@ -3,26 +3,26 @@ import 'dart:math';
 import 'package:app_ui/app_ui.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:inventory_app/inventory/models/part_ui_model.dart';
 import 'package:inventory_app/l10n/l10n.dart';
 import 'package:inventory_app/part_editor/bloc/part_editor_bloc.dart';
 import 'package:inventory_app/part_editor/bloc/part_editor_state.dart';
 import 'package:inventory_app/part_editor/widgets/part_editor_tag_bottom_sheet.dart';
-import 'package:inventory_app/tags/models/tag_ui_model.dart';
+import 'package:inventory_app/tags/models/tag_presentation.dart';
+import 'package:inventory_app/use_cases/part_presentation.dart/models/part_presentation.dart';
 import 'package:part_repository/part_repository.dart';
 import 'package:tag_repository/tag_repository.dart';
 
 class PartEditorPage extends StatelessWidget {
   const PartEditorPage({this.part, super.key});
 
-  static MaterialPageRoute<void> route({PartUiModel? part}) =>
+  static MaterialPageRoute<void> route({PartPresentation? part}) =>
       MaterialPageRoute<void>(
         builder: (context) => PartEditorPage(
           part: part,
         ),
       );
 
-  final PartUiModel? part;
+  final PartPresentation? part;
 
   @override
   Widget build(BuildContext context) {
@@ -39,7 +39,7 @@ class PartEditorPage extends StatelessWidget {
 class PartEditorView extends StatefulWidget {
   const PartEditorView({this.part, super.key});
 
-  final PartUiModel? part;
+  final PartPresentation? part;
 
   @override
   State<PartEditorView> createState() => _PartEditorViewState();
@@ -51,9 +51,9 @@ class _PartEditorViewState extends State<PartEditorView> {
   late final TextEditingController _detailNumberController;
   late final TextEditingController _priceController;
   late final TextEditingController _descriptionController;
-  late TagUiModel? _selectedBrandTag;
-  late TagUiModel? _selectedCategoryTag;
-  List<TagUiModel> selectedGeneralTags = [];
+  late TagPresentation? _selectedBrandTag;
+  late TagPresentation? _selectedCategoryTag;
+  List<TagPresentation> selectedGeneralTags = [];
 
   late bool _isRecycled;
   late bool _canSave;
@@ -223,15 +223,15 @@ class _PartEditorViewState extends State<PartEditorView> {
 
 class _TagSelector extends StatelessWidget {
   const _TagSelector({
-    required TagUiModel? tag,
+    required TagPresentation? tag,
     required TagBottomSheetMode mode,
     required this.onTagSelected,
   }) : _tag = tag,
        _mode = mode;
 
-  final TagUiModel? _tag;
+  final TagPresentation? _tag;
   final TagBottomSheetMode _mode;
-  final void Function(TagUiModel selectedTag) onTagSelected;
+  final void Function(TagPresentation selectedTag) onTagSelected;
 
   @override
   Widget build(BuildContext context) {
@@ -246,7 +246,7 @@ class _TagSelector extends StatelessWidget {
         if (_tag == null) const Text('None') else Text(_tag.label),
         TextButton(
           onPressed: () async {
-            final selectedTag = await showModalBottomSheet<TagUiModel>(
+            final selectedTag = await showModalBottomSheet<TagPresentation>(
               context: context,
               builder: (_) => BlocProvider.value(
                 value: context.read<PartEditorBloc>(),

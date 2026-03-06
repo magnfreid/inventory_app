@@ -2,7 +2,7 @@ import 'dart:async';
 
 import 'package:bloc/bloc.dart';
 import 'package:inventory_app/tags/bloc/tags_state.dart';
-import 'package:inventory_app/tags/models/tag_ui_model.dart';
+import 'package:inventory_app/tags/models/tag_presentation.dart';
 import 'package:tag_repository/tag_repository.dart';
 
 part 'tags_event.dart';
@@ -16,7 +16,7 @@ class TagsBloc extends Bloc<TagsEvent, TagsState> {
 
     _subscription = tagRepository.watchTags().listen(
       (tags) {
-        final uiTags = tags.map(TagUiModel.fromDomainModel).toList();
+        final uiTags = tags.map(TagPresentation.fromDomainModel).toList();
         add(_TagsUpdated(tags: uiTags));
       },
     );

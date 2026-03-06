@@ -1,5 +1,5 @@
 import 'package:freezed_annotation/freezed_annotation.dart';
-import 'package:inventory_app/inventory/models/part_ui_model.dart';
+import 'package:inventory_app/use_cases/part_presentation.dart/models/part_presentation.dart';
 
 part 'inventory_state.freezed.dart';
 
@@ -13,7 +13,7 @@ abstract class InventoryState with _$InventoryState {
     @Default(InventoryStateStatus.loading) InventoryStateStatus status,
     @Default(InventoryStateBottomSheetStatus.idle)
     InventoryStateBottomSheetStatus bottomSheetStatus,
-    @Default([]) List<PartUiModel> parts,
+    @Default([]) List<PartPresentation> parts,
   }) = _InventoryState;
   const InventoryState._();
 

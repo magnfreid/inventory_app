@@ -4,6 +4,8 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:inventory_app/authenticated_app/cubit/user_cubit.dart';
 import 'package:inventory_app/authenticated_app/cubit/user_state.dart';
 import 'package:inventory_app/inventory/view/inventory_page.dart';
+import 'package:inventory_app/use_cases/part_presentation.dart/watch_part_presentations.dart';
+import 'package:inventory_app/use_cases/part_presentation.dart/watch_single_part_presentation.dart';
 import 'package:part_repository/part_repository.dart';
 import 'package:stock_repository/stock_repository.dart';
 import 'package:storage_repository/storage_repository.dart';
@@ -56,6 +58,20 @@ class AuthenticatedApp extends StatelessWidget {
               ),
               RepositoryProvider<TagRepository>(
                 create: (_) => tagRepositoryFactory(currentUser.organizationId),
+              ),
+              RepositoryProvider<WatchPartPresentations>(
+                create: (context) => WatchPartPresentations(
+                  partRepository: context.read<PartRepository>(),
+                  storageRepository: context.read<StorageRepository>(),
+                  stockRepository: context.read<StockRepository>(),
+                  tagRepository: context.read<TagRepository>(),
+                ),
+              ),
+              RepositoryProvider<WatchSinglePartPresentation>(
+                create: (context) => WatchSinglePartPresentation(
+                  watchPartPresentations: context
+                      .read<WatchPartPresentations>(),
+                ),
               ),
             ],
             child: Navigator(
