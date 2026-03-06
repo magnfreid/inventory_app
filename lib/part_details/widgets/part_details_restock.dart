@@ -1,5 +1,6 @@
 import 'dart:math';
 
+import 'package:app_ui/app_ui.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:inventory_app/l10n/l10n.dart';
@@ -35,7 +36,7 @@ class PartDetailsRestock extends StatelessWidget {
                   children: [
                     Text(
                       '${l10n.restockSelectStorageText}:',
-                      style: const TextStyle(fontSize: 18),
+                      style: context.text.titleMedium,
                     ),
                     Expanded(
                       child: ListView.builder(
@@ -68,8 +69,14 @@ class PartDetailsRestock extends StatelessWidget {
                                 child: Row(
                                   mainAxisAlignment: .spaceBetween,
                                   children: [
-                                    Text(storage.name),
-                                    Text(quantity.toString()),
+                                    Text(
+                                      storage.name,
+                                      style: context.text.bodyLarge,
+                                    ),
+                                    Text(
+                                      quantity.toString(),
+                                      style: context.text.bodyLarge,
+                                    ),
                                   ],
                                 ),
                               ),
@@ -125,21 +132,21 @@ class _BottomSheetState extends State<_BottomSheet> {
               children: [
                 Text(
                   l10n.restockAddStockSheetTitleText,
-                  style: const TextStyle(fontSize: 18),
+                  style: context.text.bodyLarge,
                 ),
                 const Icon(Icons.arrow_right_alt),
                 Text(
                   widget.storage.name,
-                  style: const TextStyle(fontSize: 18),
+                  style: context.text.bodyLarge,
                 ),
               ],
             ),
             Padding(
-              padding: const EdgeInsets.all(8),
+              padding: const .all(8),
               child: Column(
                 children: [
                   Padding(
-                    padding: const .symmetric(vertical: 16),
+                    padding: const .symmetric(vertical: 20),
                     child: Row(
                       spacing: 10,
                       mainAxisAlignment: .center,
@@ -155,6 +162,7 @@ class _BottomSheetState extends State<_BottomSheet> {
                         SizedBox(
                           width: 70,
                           child: TextField(
+                            style: context.text.bodyLarge,
                             textInputAction: .done,
                             keyboardType: .number,
                             textAlign: .center,
@@ -169,16 +177,20 @@ class _BottomSheetState extends State<_BottomSheet> {
                           icon: const Icon(Icons.add),
                         ),
                         Expanded(
-                          child: IconButton.filled(
-                            onPressed: () =>
-                                context.read<PartDetailsBloc>().add(
-                                  AddToStockButtonPressed(
-                                    partId: widget.partId,
-                                    storageId: widget.storage.id,
-                                    amount: value,
-                                  ),
-                                ),
-                            icon: const Icon(Icons.done),
+                          child: Row(
+                            children: [
+                              IconButton.filled(
+                                onPressed: () =>
+                                    context.read<PartDetailsBloc>().add(
+                                      AddToStockButtonPressed(
+                                        partId: widget.partId,
+                                        storageId: widget.storage.id,
+                                        amount: value,
+                                      ),
+                                    ),
+                                icon: const Icon(Icons.done),
+                              ),
+                            ],
                           ),
                         ),
                       ],

@@ -27,11 +27,11 @@ class PartDetailsInStock extends StatelessWidget {
                 children: [
                   Text(
                     '${l10n.inStockTotalText}:',
-                    style: const TextStyle(fontSize: 18),
+                    style: context.text.bodyLarge,
                   ),
                   Text(
                     part.totalQuantity.toString(),
-                    style: const TextStyle(fontSize: 18),
+                    style: context.text.bodyLarge,
                   ),
                 ],
               ),
@@ -48,12 +48,10 @@ class PartDetailsInStock extends StatelessWidget {
                           children: [
                             Text(
                               stock.storageName,
-                              style: const TextStyle(fontSize: 18),
                             ),
                             const Spacer(),
                             Text(
                               stock.quantity.toString(),
-                              style: const TextStyle(fontSize: 18),
                             ),
                             AppButton.text(
                               width: .wrap,

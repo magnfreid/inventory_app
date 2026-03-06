@@ -32,6 +32,8 @@ class AppButton extends StatelessWidget {
     required this.label,
     AppButtonWidth? width,
     this.isLoading = false,
+    this.textStyle,
+    this.lowerCased = false,
     super.key,
   }) : _type = .filled,
        _width = width ?? .wrap;
@@ -42,6 +44,9 @@ class AppButton extends StatelessWidget {
     required this.label,
     AppButtonWidth? width,
     this.isLoading = false,
+    this.textStyle,
+    this.lowerCased = false,
+
     super.key,
   }) : _type = .elevated,
        _width = width ?? .wide;
@@ -52,6 +57,8 @@ class AppButton extends StatelessWidget {
     required this.label,
     AppButtonWidth? width,
     this.isLoading = false,
+    this.textStyle,
+    this.lowerCased = false,
     super.key,
   }) : _type = .outlined,
        _width = width ?? .wide;
@@ -62,6 +69,8 @@ class AppButton extends StatelessWidget {
     required this.label,
     AppButtonWidth? width,
     this.isLoading = false,
+    this.textStyle,
+    this.lowerCased = false,
     super.key,
   }) : _type = .text,
        _width = width ?? .wide;
@@ -74,6 +83,12 @@ class AppButton extends StatelessWidget {
 
   ///The text shown inside the [AppButton].
   final String label;
+
+  //Optional text style for the button text
+  final TextStyle? textStyle;
+
+  ///Can be set to true to override the default uppercased text
+  final bool lowerCased;
 
   final AppButtonWidth _width;
   final AppButtonType _type;
@@ -88,7 +103,7 @@ class AppButton extends StatelessWidget {
               child: CircularProgressIndicator.adaptive(),
             ),
           )
-        : Text(label.toUpperCase());
+        : Text(lowerCased ? label : label.toUpperCase(), style: textStyle);
 
     final button = switch (_type) {
       .elevated => ElevatedButton(onPressed: onPressed, child: child),

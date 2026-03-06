@@ -1,3 +1,4 @@
+import 'package:app_ui/app_ui.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:inventory_app/l10n/l10n.dart';
@@ -56,11 +57,13 @@ class PartDetailsInfo extends StatelessWidget {
               children: [
                 Text(
                   l10n.formFieldDescriptionLabelText,
-                  style: const TextStyle(fontSize: 18),
+                  style: context.text.bodyLarge,
                 ),
                 Text(
                   description,
-                  style: const TextStyle(fontSize: 18, color: Colors.grey),
+                  style: context.text.bodyLarge?.copyWith(
+                    color: Colors.blueGrey,
+                  ),
                 ),
               ],
             ),
@@ -109,9 +112,9 @@ class _DetailField extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    const double fontSize = 18;
+    final textStyle = context.text.bodyLarge;
     return Padding(
-      padding: const .symmetric(vertical: 16),
+      padding: const .symmetric(vertical: 8),
       child: Row(
         children: [
           Expanded(
@@ -120,7 +123,7 @@ class _DetailField extends StatelessWidget {
               children: [
                 Text(
                   title,
-                  style: const TextStyle(fontSize: fontSize),
+                  style: textStyle,
                 ),
               ],
             ),
@@ -131,10 +134,7 @@ class _DetailField extends StatelessWidget {
               children: [
                 Text(
                   subtitle,
-                  style: const TextStyle(
-                    fontSize: fontSize,
-                    color: Colors.grey,
-                  ),
+                  style: textStyle?.copyWith(color: Colors.blueGrey),
                 ),
               ],
             ),
