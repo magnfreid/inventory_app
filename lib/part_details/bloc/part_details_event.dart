@@ -25,6 +25,11 @@ final class ButtonSegmentPressed extends PartDetailsEvent {
   final PartDetailsContent content;
 }
 
+final class ConfirmDeleteButtonPressed extends PartDetailsEvent {
+  const ConfirmDeleteButtonPressed({required this.partId});
+  final String partId;
+}
+
 final class AddToStockButtonPressed extends PartDetailsEvent {
   const AddToStockButtonPressed({
     required this.partId,

@@ -82,6 +82,7 @@ class _SignInViewState extends State<SignInView> {
                   ),
                   const Spacer(),
                   AppButton(
+                    width: .wide,
                     isLoading: state.isLoading,
                     onPressed: () => context.read<SignInBloc>().add(
                       SignInButtonPressed(

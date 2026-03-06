@@ -34,7 +34,7 @@ class AppButton extends StatelessWidget {
     this.isLoading = false,
     super.key,
   }) : _type = .filled,
-       _width = width ?? .wide;
+       _width = width ?? .wrap;
 
   ///Creates an elevated [AppButton]
   const AppButton.elevated({

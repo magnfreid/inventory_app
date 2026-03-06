@@ -2,6 +2,7 @@ import 'dart:math';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:inventory_app/l10n/l10n.dart';
 import 'package:inventory_app/part_details/bloc/part_details_bloc.dart';
 import 'package:inventory_app/part_details/bloc/part_details_state.dart';
 import 'package:storage_repository/storage_repository.dart';
@@ -11,6 +12,7 @@ class PartDetailsRestock extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = context.l10n;
     return BlocListener<PartDetailsBloc, PartDetailsState>(
       listenWhen: (previous, current) =>
           previous.saveStatus != current.saveStatus &&
@@ -31,9 +33,9 @@ class PartDetailsRestock extends StatelessWidget {
                   spacing: 12,
                   crossAxisAlignment: .start,
                   children: [
-                    const Text(
-                      'Välj ett lager:',
-                      style: TextStyle(fontSize: 18),
+                    Text(
+                      '${l10n.restockSelectStorageText}:',
+                      style: const TextStyle(fontSize: 18),
                     ),
                     Expanded(
                       child: ListView.builder(
@@ -52,7 +54,6 @@ class PartDetailsRestock extends StatelessWidget {
                             child: InkWell(
                               onTap: () => showModalBottomSheet<void>(
                                 showDragHandle: true,
-                                barrierLabel: 'Barrier',
                                 context: context,
                                 builder: (_) => BlocProvider.value(
                                   value: context.read<PartDetailsBloc>(),
@@ -109,6 +110,7 @@ class _BottomSheetState extends State<_BottomSheet> {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = context.l10n;
     return SingleChildScrollView(
       padding: EdgeInsets.only(
         bottom: MediaQuery.of(context).viewInsets.bottom,
@@ -121,9 +123,9 @@ class _BottomSheetState extends State<_BottomSheet> {
             Row(
               mainAxisAlignment: .spaceEvenly,
               children: [
-                const Text(
-                  'Lägg till i',
-                  style: TextStyle(fontSize: 18),
+                Text(
+                  l10n.restockAddStockSheetTitleText,
+                  style: const TextStyle(fontSize: 18),
                 ),
                 const Icon(Icons.arrow_right_alt),
                 Text(

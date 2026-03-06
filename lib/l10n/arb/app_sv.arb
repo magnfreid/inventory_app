@@ -52,6 +52,14 @@
 	"@formFieldRecycledStatusLabelText": {
 		"description": "Label text for recycled status title"
 	},
+	"formFieldCategoryLabelText": "Kategori",
+	"@formFieldCategoryLabelText": {
+		"description": "Label text for recycled status title"
+	},
+	"formFieldInStockLabelText": "I lager",
+	"@formFieldInStockLabelText": {
+		"description": "Label text for recycled status title"
+	},
 	"formSaveButtonText": "Spara",
 	"@formSaveButtonText": {
 		"description": "Text for save button in catalogue form"
@@ -151,5 +159,49 @@
 	"tagsBottomSheetGeneralText": "Tagg",
 	"@tagsBottomSheetGeneralText": {
 		"description": "Label text for general tag selection."
+	},
+	"partDetailsSelectorDetails": "Detaljer",
+	"@partDetailsSelectorDetails": {
+		"description": "Label text for details selection in part details content selector."
+	},
+	"partDetailsSelectorInStock": "I lager",
+	"@partDetailsSelectorInStock": {
+		"description": "Label text for current stock selection in part details content selector."
+	},
+	"partDetailsSelectorRestock": "Fyll på",
+	"@partDetailsSelectorRestock": {
+		"description": "Label text for restock selection in part details content selector."
+	},
+	"restockSelectStorageText": "Välj lager",
+	"@restockSelectStorageText": {
+		"description": "Title text for restock page avilable storages list."
+	},
+	"restockAddStockSheetTitleText": "Lägg till i",
+	"@restockAddStockSheetTitleText": {
+		"description": "Title text for restock page bottom sheet."
+	},
+	"inStockEmptyListText": "Ej i lager",
+	"@inStockEmptyListText": {
+		"description": "Text shown in place of an empty list of stocks in in stock page."
+	},
+	"inStockTotalText": "Totalt",
+	"@inStockTotalText": {
+		"description": "Title text for total stock in stock page."
+	},
+	"inStockUseButtonLabelText": "Förbruka",
+	"@inStockUseButtonLabelText": {
+		"description": "Button text for using an item in stock page."
+	},
+	"deletePartSheetTitleText": "Är du säker på att du vill radera artikeln?",
+	"@deletePartSheetTitleText": {
+		"description": "Bottom sheet title for delete part confirmation."
+	},
+	"deletePartSheetConfirmText": "Radera",
+	"@deletePartSheetConfirmText": {
+		"description": "Bottom sheet confirm button text for delete part confirmation."
+	},
+	"deletePartSheetCancelText": "Avbryt",
+	"@deletePartSheetCancelText": {
+		"description": "Bottom sheet cancel button text for delete part confirmation."
 	}
 }

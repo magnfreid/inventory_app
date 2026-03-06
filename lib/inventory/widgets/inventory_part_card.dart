@@ -18,7 +18,8 @@ class InventoryPartCard extends StatelessWidget {
   Widget build(BuildContext context) {
     return Card(
       child: InkWell(
-        onTap: () => Navigator.push(context, PartDetailsPage.route(item: part)),
+        onTap: () =>
+            Navigator.push(context, PartDetailsPage.route(partId: part.partId)),
         onLongPress: () => showModalBottomSheet<void>(
           showDragHandle: true,
           context: context,

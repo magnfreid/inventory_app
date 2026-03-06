@@ -35,12 +35,18 @@ class PartDetailsInfo extends StatelessWidget {
               ? l10n.formFieldRecycledLabelText
               : l10n.formFieldNewLabelText,
         ),
-        _DetailField(title: 'Märke', subtitle: part.brandTag?.label ?? 'Okänt'),
         _DetailField(
-          title: 'Kategori',
-          subtitle: part.categoryTag?.label ?? 'Ingen',
+          title: l10n.formFieldBrandLabelText,
+          subtitle: part.brandTag?.label ?? '-',
         ),
-        _DetailField(title: 'I lager', subtitle: part.totalQuantity.toString()),
+        _DetailField(
+          title: l10n.formFieldCategoryLabelText,
+          subtitle: part.categoryTag?.label ?? '_',
+        ),
+        _DetailField(
+          title: l10n.formFieldInStockLabelText,
+          subtitle: part.totalQuantity.toString(),
+        ),
         if (description != null && description.isNotEmpty)
           Padding(
             padding: const .symmetric(vertical: 16),

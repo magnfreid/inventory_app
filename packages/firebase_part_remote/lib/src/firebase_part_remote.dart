@@ -50,4 +50,9 @@ class FirebasePartRemote implements PartRemote {
     await docRef.set(updatedPart, SetOptions(merge: true));
     return updatedPart;
   }
+
+  @override
+  Future<void> deletePart(String partId) async {
+    await _collection.doc(partId).delete();
+  }
 }

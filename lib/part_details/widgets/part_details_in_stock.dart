@@ -1,10 +1,9 @@
 import 'package:app_ui/app_ui.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:inventory_app/l10n/l10n.dart';
 import 'package:inventory_app/part_details/bloc/part_details_bloc.dart';
-import 'package:inventory_app/shared/widgets/use_stock_list_item.dart';
 import 'package:inventory_app/use_cases/part_presentation.dart/models/part_presentation.dart';
-import 'package:inventory_app/use_cases/part_presentation.dart/models/stock_presentation.dart';
 
 class PartDetailsInStock extends StatelessWidget {
   const PartDetailsInStock({required this.part, super.key});
@@ -13,10 +12,11 @@ class PartDetailsInStock extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = context.l10n;
     final stocks = part.stock.where((stock) => stock.quantity > 0).toList();
     return stocks.isEmpty
-        ? const Center(
-            child: Text('Finns ej i lager.'),
+        ? Center(
+            child: Text(l10n.inStockEmptyListText),
           )
         : Column(
             spacing: 12,
@@ -25,9 +25,9 @@ class PartDetailsInStock extends StatelessWidget {
               Row(
                 mainAxisAlignment: .spaceEvenly,
                 children: [
-                  const Text(
-                    'Total:',
-                    style: TextStyle(fontSize: 18),
+                  Text(
+                    '${l10n.inStockTotalText}:',
+                    style: const TextStyle(fontSize: 18),
                   ),
                   Text(
                     part.totalQuantity.toString(),
@@ -64,7 +64,7 @@ class PartDetailsInStock extends StatelessWidget {
                                       storageId: stock.storageId,
                                     ),
                                   ),
-                              label: 'Förbruka',
+                              label: l10n.inStockUseButtonLabelText,
                             ),
                           ],
                         ),

@@ -10,4 +10,7 @@ abstract interface class PartRemote {
 
   ///Edits an existing [PartDto] on the remote data source.
   Future<PartDto> editPart(PartDto dto);
+
+  ///Deletes an existing [PartDto] from the remote data source.
+  Future<void> deletePart(String partId);
 }

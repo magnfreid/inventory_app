@@ -33,4 +33,8 @@ class PartRepository {
     await _remote.editPart(part.toDto());
     return part;
   }
+
+  Future<void> deletePart(String partId) async {
+    await _remote.deletePart(partId);
+  }
 }
