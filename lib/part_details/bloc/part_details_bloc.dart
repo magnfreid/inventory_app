@@ -74,10 +74,10 @@ class PartDetailsBloc extends Bloc<PartDetailsEvent, PartDetailsState> {
   FutureOr<void> _onUseButtonPressed(
     UseButtonPressed event,
     Emitter<PartDetailsState> emit,
-  ) {
+  ) async {
     emit(state.copyWith(saveStatus: .loading));
     try {
-      _stockRepository.decreaseStock(
+      await _stockRepository.decreaseStock(
         partId: event.partId,
         storageId: event.storageId,
         amount: 1,

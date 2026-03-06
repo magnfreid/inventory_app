@@ -73,37 +73,6 @@ class PartDetailsInfo extends StatelessWidget {
   }
 }
 
-class _MainTagsRow extends StatelessWidget {
-  const _MainTagsRow({required this.part});
-
-  final PartPresentation part;
-
-  @override
-  Widget build(BuildContext context) {
-    final brandTag = part.brandTag;
-    final categoryTag = part.categoryTag;
-    return Padding(
-      padding: const .all(4),
-      child: Row(
-        spacing: 12,
-        children: [
-          if (brandTag != null)
-            TagBadge(
-              tag: brandTag,
-              fontSize: 16,
-            ),
-
-          if (categoryTag != null)
-            TagBadge(
-              tag: categoryTag,
-              fontSize: 16,
-            ),
-        ],
-      ),
-    );
-  }
-}
-
 class _DetailField extends StatelessWidget {
   const _DetailField({required this.title, required this.subtitle});
 
@@ -144,3 +113,34 @@ class _DetailField extends StatelessWidget {
     );
   }
 }
+
+// class _MainTagsRow extends StatelessWidget {
+//   const _MainTagsRow({required this.part});
+
+//   final PartPresentation part;
+
+//   @override
+//   Widget build(BuildContext context) {
+//     final brandTag = part.brandTag;
+//     final categoryTag = part.categoryTag;
+//     return Padding(
+//       padding: const .all(4),
+//       child: Row(
+//         spacing: 12,
+//         children: [
+//           if (brandTag != null)
+//             TagBadge(
+//               tag: brandTag,
+//               fontSize: 16,
+//             ),
+
+//           if (categoryTag != null)
+//             TagBadge(
+//               tag: categoryTag,
+//               fontSize: 16,
+//             ),
+//         ],
+//       ),
+//     );
+//   }
+// }

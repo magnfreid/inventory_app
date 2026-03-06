@@ -84,7 +84,7 @@ class AppButton extends StatelessWidget {
   ///The text shown inside the [AppButton].
   final String label;
 
-  //Optional text style for the button text
+  ///Optional text style for the button text
   final TextStyle? textStyle;
 
   ///Can be set to true to override the default uppercased text
