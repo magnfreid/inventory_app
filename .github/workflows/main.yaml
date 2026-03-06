@@ -6,34 +6,8 @@ on:
       - main
 
 jobs:
-  flutter_app:
+  flutter_ci:
     uses: VeryGoodOpenSource/very_good_workflows/.github/workflows/flutter_package.yml@v1
     with:
       flutter_version: "3.41.x"
       run_bloc_lint: true
-
-  dart_packages:
-    strategy:
-      matrix:
-        package:
-          - packages/authentication_service
-          - packages/firebase_authentication_service
-          - packages/firebase_part_remote
-          - packages/firebase_stock_remote
-          - packages/firebase_storage_remote
-          - packages/firebase_tag_remote
-          - packages/firebase_user_remote
-          - packages/part_remote
-          - packages/part_repository
-          - packages/stock_remote
-          - packages/stock_repository
-          - packages/storage_remote
-          - packages/storage_repository
-          - packages/tag_remote
-          - packages/tag_repository
-          - packages/user_remote
-          - packages/user_repostitory
-
-    uses: VeryGoodOpenSource/very_good_workflows/.github/workflows/dart_package.yml@v1
-    with:
-      working_directory: ${{ matrix.package }}
