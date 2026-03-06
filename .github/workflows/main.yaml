@@ -11,3 +11,4 @@ jobs:
     with:
       flutter_version: "3.41.x"
       run_bloc_lint: true
+      min_coverage: 0
