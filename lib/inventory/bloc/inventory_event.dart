@@ -25,9 +25,8 @@ final class UseStockButtonPressed extends InventoryEvent {
   final String storageId;
 }
 
-final class QuantityFilterChipPressed extends InventoryEvent {
-  const QuantityFilterChipPressed({required this.quantityFilter});
-  final QuantityFilter quantityFilter;
+final class HideEmptyStockSwitchPressed extends InventoryEvent {
+  const HideEmptyStockSwitchPressed();
 }
 
 final class ClearBrandFilterChipPressed extends InventoryEvent {
@@ -35,8 +34,8 @@ final class ClearBrandFilterChipPressed extends InventoryEvent {
 }
 
 final class BrandFilterChipPressed extends InventoryEvent {
-  const BrandFilterChipPressed({required this.brandTag});
-  final TagPresentation brandTag;
+  const BrandFilterChipPressed({required this.tagId});
+  final String tagId;
 }
 
 final class ClearCategoryFilterChipPressed extends InventoryEvent {
@@ -44,15 +43,19 @@ final class ClearCategoryFilterChipPressed extends InventoryEvent {
 }
 
 final class CategoryFilterChipPressed extends InventoryEvent {
-  const CategoryFilterChipPressed({required this.categoryTag});
-  final TagPresentation categoryTag;
+  const CategoryFilterChipPressed({required this.categoryId});
+  final String categoryId;
 }
 
 final class StorageFilterChipPressed extends InventoryEvent {
-  const StorageFilterChipPressed({required this.storage});
-  final Storage storage;
+  const StorageFilterChipPressed({required this.storageId});
+  final String storageId;
 }
 
 final class ClearStorageFilterChipPressed extends InventoryEvent {
   const ClearStorageFilterChipPressed();
+}
+
+final class ClearAllFiltersButtonPressed extends InventoryEvent {
+  const ClearAllFiltersButtonPressed();
 }

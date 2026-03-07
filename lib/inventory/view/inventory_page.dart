@@ -45,19 +45,41 @@ class InventoryView extends StatelessWidget {
       body: BlocBuilder<InventoryBloc, InventoryState>(
         builder: (context, state) {
           final parts = state.filteredParts;
-          return Column(
-            children: [
-              Expanded(
-                child: Padding(
-                  padding: const EdgeInsets.all(8),
+          return Padding(
+            padding: const .symmetric(horizontal: 8),
+            child: Column(
+              children: [
+                Padding(
+                  padding: const .fromLTRB(12, 0, 0, 0),
+                  child: Row(
+                    children: [
+                      Text(
+                        'Total items: '
+                        '${state.filteredParts.length}',
+                      ),
+                      const Spacer(),
+                      const Text('Show empty stock:'),
+                      Transform.scale(
+                        scale: 0.55,
+                        child: Switch(
+                          value: state.filter.quantityFilter == .all,
+                          onChanged: (_) => context.read<InventoryBloc>().add(
+                            const HideEmptyStockSwitchPressed(),
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+                Expanded(
                   child: ListView.builder(
                     itemCount: parts.length,
                     itemBuilder: (context, index) =>
                         InventoryPartCard(part: parts[index]),
                   ),
                 ),
-              ),
-            ],
+              ],
+            ),
           );
         },
       ),

@@ -37,19 +37,19 @@ abstract class InventoryState with _$InventoryState {
       }
 
       if (filter.brandFilters.isNotEmpty &&
-          !filter.brandFilters.contains(part.brandTag)) {
+          !filter.brandFilters.contains(part.brandTag?.id)) {
         return false;
       }
 
       if (filter.categoryFilters.isNotEmpty &&
-          !filter.categoryFilters.contains(part.categoryTag)) {
+          !filter.categoryFilters.contains(part.categoryTag?.id)) {
         return false;
       }
 
       if (filter.storageFilters.isNotEmpty &&
           !part.stock.any(
             (stock) => filter.storageFilters.any(
-              (storage) => storage.id == stock.storageId && stock.quantity > 0,
+              (id) => id == stock.storageId && stock.quantity > 0,
             ),
           )) {
         return false;

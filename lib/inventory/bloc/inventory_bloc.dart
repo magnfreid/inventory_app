@@ -27,13 +27,14 @@ class InventoryBloc extends Bloc<InventoryEvent, InventoryState> {
     on<_TagsUpdated>(_onTagsUpdated);
     on<_StoragesUpdated>(_onStoragesUpdated);
     on<UseStockButtonPressed>(_onUseStockButtonPressed);
-    on<QuantityFilterChipPressed>(_onQuantityFilterChipPressed);
+    on<HideEmptyStockSwitchPressed>(_onHideEmptyStockSwitchPressed);
     on<BrandFilterChipPressed>(_onBrandFilterChipPressed);
     on<ClearBrandFilterChipPressed>(_onClearBrandFilterChipPressed);
     on<CategoryFilterChipPressed>(_onCategoryFilterChipPressed);
     on<ClearCategoryFilterChipPressed>(_onClearCategoryFilterChipPressed);
     on<StorageFilterChipPressed>(_onStorageFilterChipPressed);
     on<ClearStorageFilterChipPressed>(_onClearStorageFilterChipPressed);
+    on<ClearAllFiltersButtonPressed>(_onClearAllFiltersButtonPressed);
 
     _partsStreamSubscription = watchPartPresentations().listen(
       (parts) => add(_PartsUpdated(parts: parts)),
@@ -100,26 +101,26 @@ class InventoryBloc extends Bloc<InventoryEvent, InventoryState> {
     }
   }
 
-  FutureOr<void> _onQuantityFilterChipPressed(
-    QuantityFilterChipPressed event,
+  FutureOr<void> _onHideEmptyStockSwitchPressed(
+    HideEmptyStockSwitchPressed event,
     Emitter<InventoryState> emit,
   ) {
-    var quantityFilter = event.quantityFilter;
-    final currentQuantityFilter = state.filter.quantityFilter;
-    if (currentQuantityFilter != .all &&
-        quantityFilter == currentQuantityFilter) {
-      quantityFilter = .all;
-    }
-    final newFilter = state.filter.copyWith(quantityFilter: quantityFilter);
+    final currentFilter = state.filter.quantityFilter;
 
-    emit(state.copyWith(filter: newFilter));
+    emit(
+      state.copyWith(
+        filter: state.filter.copyWith(
+          quantityFilter: currentFilter == .all ? .inStock : .all,
+        ),
+      ),
+    );
   }
 
   FutureOr<void> _onBrandFilterChipPressed(
     BrandFilterChipPressed event,
     Emitter<InventoryState> emit,
   ) {
-    final brandTag = event.brandTag;
+    final brandTag = event.tagId;
     final brandFilters = state.filter.brandFilters.toSet();
     if (brandFilters.contains(brandTag)) {
       brandFilters.remove(brandTag);
@@ -138,7 +139,7 @@ class InventoryBloc extends Bloc<InventoryEvent, InventoryState> {
     CategoryFilterChipPressed event,
     Emitter<InventoryState> emit,
   ) {
-    final categoryTag = event.categoryTag;
+    final categoryTag = event.categoryId;
     final categoryFilters = state.filter.categoryFilters.toSet();
     if (categoryFilters.contains(categoryTag)) {
       categoryFilters.remove(categoryTag);
@@ -180,7 +181,7 @@ class InventoryBloc extends Bloc<InventoryEvent, InventoryState> {
     StorageFilterChipPressed event,
     Emitter<InventoryState> emit,
   ) {
-    final storage = event.storage;
+    final storage = event.storageId;
     final storageFilters = state.filter.storageFilters.toSet();
     if (storageFilters.contains(storage)) {
       storageFilters.remove(storage);
@@ -202,5 +203,20 @@ class InventoryBloc extends Bloc<InventoryEvent, InventoryState> {
     Emitter<InventoryState> emit,
   ) {
     emit(state.copyWith(filter: state.filter.copyWith(storageFilters: {})));
+  }
+
+  FutureOr<void> _onClearAllFiltersButtonPressed(
+    ClearAllFiltersButtonPressed event,
+    Emitter<InventoryState> emit,
+  ) {
+    emit(
+      state.copyWith(
+        filter: state.filter.copyWith(
+          brandFilters: {},
+          categoryFilters: {},
+          storageFilters: {},
+        ),
+      ),
+    );
   }
 }

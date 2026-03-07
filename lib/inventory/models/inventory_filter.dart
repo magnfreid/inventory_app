@@ -1,6 +1,3 @@
-import 'package:inventory_app/tags/models/tag_presentation.dart';
-import 'package:storage_repository/storage_repository.dart';
-
 final class InventoryFilter {
   const InventoryFilter({
     this.quantityFilter = .all,
@@ -10,15 +7,18 @@ final class InventoryFilter {
   });
 
   final QuantityFilter quantityFilter;
-  final Set<TagPresentation> brandFilters;
-  final Set<TagPresentation> categoryFilters;
-  final Set<Storage> storageFilters;
+  final Set<String> brandFilters;
+  final Set<String> categoryFilters;
+  final Set<String> storageFilters;
+
+  int get totalActiveFilters =>
+      brandFilters.length + categoryFilters.length + storageFilters.length;
 
   InventoryFilter copyWith({
     QuantityFilter? quantityFilter,
-    Set<TagPresentation>? brandFilters,
-    Set<TagPresentation>? categoryFilters,
-    Set<Storage>? storageFilters,
+    Set<String>? brandFilters,
+    Set<String>? categoryFilters,
+    Set<String>? storageFilters,
   }) => InventoryFilter(
     quantityFilter: quantityFilter ?? this.quantityFilter,
     brandFilters: brandFilters ?? this.brandFilters,

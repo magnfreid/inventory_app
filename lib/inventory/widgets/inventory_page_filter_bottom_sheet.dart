@@ -12,9 +12,10 @@ class InventoryPageFilterBottomSheet extends StatelessWidget {
     return BlocBuilder<InventoryBloc, InventoryState>(
       builder: (context, state) {
         final filter = state.filter;
+        final bloc = context.read<InventoryBloc>();
         return SafeArea(
           child: FractionallySizedBox(
-            heightFactor: 0.8,
+            heightFactor: 0.7,
             child: SingleChildScrollView(
               child: Padding(
                 padding: const .fromLTRB(24, 0, 24, 24),
@@ -23,65 +24,43 @@ class InventoryPageFilterBottomSheet extends StatelessWidget {
                   crossAxisAlignment: .start,
                   mainAxisSize: .min,
                   children: [
-                    const SizedBox(width: double.infinity),
-                    Text(
-                      'Filter by',
-                      style: context.text.bodyLarge?.copyWith(
-                        fontWeight: .bold,
-                      ),
-                    ),
-                    const Text('Stock:'),
-                    Wrap(
-                      spacing: 10,
+                    Row(
+                      mainAxisAlignment: .spaceBetween,
                       children: [
-                        FilterChip(
-                          label: const Text('All'),
-                          selected: filter.quantityFilter == .all,
-                          onSelected: (value) {
-                            context.read<InventoryBloc>().add(
-                              const QuantityFilterChipPressed(
-                                quantityFilter: .all,
-                              ),
-                            );
-                          },
+                        Text(
+                          'Filter by',
+                          style: context.text.bodyLarge?.copyWith(
+                            fontWeight: .bold,
+                          ),
                         ),
-                        FilterChip(
-                          showCheckmark: false,
-                          selected: filter.quantityFilter == .inStock,
-                          label: const Text('In stock'),
-                          onSelected: (value) {
-                            context.read<InventoryBloc>().add(
-                              const QuantityFilterChipPressed(
-                                quantityFilter: .inStock,
-                              ),
-                            );
-                          },
+                        AppButton.text(
+                          onPressed: () =>
+                              bloc.add(const ClearAllFiltersButtonPressed()),
+                          label: 'Clear all (${filter.totalActiveFilters})',
                         ),
                       ],
                     ),
                     const Text('Category:'),
                     Wrap(
-                      spacing: 10,
+                      spacing: 8,
                       children: [
                         FilterChip(
                           label: const Text('All'),
                           selected: state.filter.categoryFilters.isEmpty,
                           onSelected: (selected) {
-                            context.read<InventoryBloc>().add(
-                              const ClearCategoryFilterChipPressed(),
-                            );
+                            bloc.add(const ClearCategoryFilterChipPressed());
                           },
                         ),
                         ...state.categoryTags.map(
                           (tag) => FilterChip(
                             showCheckmark: false,
                             selected: state.filter.categoryFilters.contains(
-                              tag,
+                              tag.id,
                             ),
                             label: Text(tag.label),
                             onSelected: (selected) {
-                              context.read<InventoryBloc>().add(
-                                CategoryFilterChipPressed(categoryTag: tag),
+                              bloc.add(
+                                CategoryFilterChipPressed(categoryId: tag.id),
                               );
                             },
                           ),
@@ -90,26 +69,22 @@ class InventoryPageFilterBottomSheet extends StatelessWidget {
                     ),
                     const Text('Brand:'),
                     Wrap(
-                      spacing: 10,
+                      spacing: 8,
                       children: [
                         FilterChip(
                           label: const Text('All'),
                           selected: filter.brandFilters.isEmpty,
                           onSelected: (selected) {
-                            context.read<InventoryBloc>().add(
-                              const ClearBrandFilterChipPressed(),
-                            );
+                            bloc.add(const ClearBrandFilterChipPressed());
                           },
                         ),
                         ...state.brandTags.map(
                           (tag) => FilterChip(
                             showCheckmark: false,
                             label: Text(tag.label),
-                            selected: filter.brandFilters.contains(tag),
+                            selected: filter.brandFilters.contains(tag.id),
                             onSelected: (selected) {
-                              context.read<InventoryBloc>().add(
-                                BrandFilterChipPressed(brandTag: tag),
-                              );
+                              bloc.add(BrandFilterChipPressed(tagId: tag.id));
                             },
                           ),
                         ),
@@ -117,21 +92,25 @@ class InventoryPageFilterBottomSheet extends StatelessWidget {
                     ),
                     const Text('Storage:'),
                     Wrap(
-                      spacing: 10,
+                      spacing: 8,
                       children: [
                         FilterChip(
                           selected: filter.storageFilters.isEmpty,
                           label: const Text('All'),
-                          onSelected: (selection) {},
+                          onSelected: (selection) {
+                            bloc.add(const ClearStorageFilterChipPressed());
+                          },
                         ),
                         ...state.storages.map(
                           (storage) => FilterChip(
                             showCheckmark: false,
                             label: Text(storage.name),
-                            selected: filter.storageFilters.contains(storage),
+                            selected: filter.storageFilters.contains(
+                              storage.id,
+                            ),
                             onSelected: (selection) {
-                              context.read<InventoryBloc>().add(
-                                StorageFilterChipPressed(storage: storage),
+                              bloc.add(
+                                StorageFilterChipPressed(storageId: storage.id),
                               );
                             },
                           ),
