@@ -25,7 +25,8 @@ class PartDetailsRestock extends StatelessWidget {
       child: BlocBuilder<PartDetailsBloc, PartDetailsState>(
         builder: (context, state) {
           final part = state.part;
-          final storages = state.storages;
+          final storages = state.storages.toList()
+            ..sort((a, b) => a.name.compareTo(b.name));
           return part == null
               ? const Center(
                   child: CircularProgressIndicator.adaptive(),
@@ -34,10 +35,16 @@ class PartDetailsRestock extends StatelessWidget {
                   spacing: 12,
                   crossAxisAlignment: .start,
                   children: [
-                    Text(
-                      '${l10n.restockSelectStorageText}:',
-                      style: context.text.titleMedium,
+                    ListTile(
+                      title: Row(
+                        children: [
+                          Text('${l10n.inStockTotalText}:'),
+                          const Spacer(),
+                          Text(part.totalQuantity.toString()),
+                        ],
+                      ),
                     ),
+                    const Divider(),
                     Expanded(
                       child: ListView.builder(
                         itemCount: storages.length,
@@ -51,9 +58,17 @@ class PartDetailsRestock extends StatelessWidget {
                                   .firstOrNull
                                   ?.quantity ??
                               0;
-                          return Card(
-                            child: InkWell(
-                              onTap: () => showModalBottomSheet<void>(
+                          return ListTile(
+                            title: Row(
+                              children: [
+                                Text(storage.name),
+                                const Spacer(),
+                                Text(quantity.toString()),
+                              ],
+                            ),
+                            trailing: AppButton.text(
+                              width: .wrap,
+                              onPressed: () => showModalBottomSheet<void>(
                                 showDragHandle: true,
                                 context: context,
                                 builder: (_) => BlocProvider.value(
@@ -64,24 +79,31 @@ class PartDetailsRestock extends StatelessWidget {
                                   ),
                                 ),
                               ),
-                              child: Padding(
-                                padding: const .all(8),
-                                child: Row(
-                                  mainAxisAlignment: .spaceBetween,
-                                  children: [
-                                    Text(
-                                      storage.name,
-                                      style: context.text.bodyLarge,
-                                    ),
-                                    Text(
-                                      quantity.toString(),
-                                      style: context.text.bodyLarge,
-                                    ),
-                                  ],
-                                ),
-                              ),
+                              label: 'Välj',
                             ),
                           );
+                          // return Card(
+                          //   child: InkWell(
+                          //     onTap:
+
+                          //     child: Padding(
+                          //       padding: const .all(8),
+                          //       child: Row(
+                          //         mainAxisAlignment: .spaceBetween,
+                          //         children: [
+                          //           Text(
+                          //             storage.name,
+                          //             style: context.text.bodyLarge,
+                          //           ),
+                          //           Text(
+                          //             quantity.toString(),
+                          //             style: context.text.bodyLarge,
+                          //           ),
+                          //         ],
+                          //       ),
+                          //     ),
+                          //   ),
+                          // );
                         },
                       ),
                     ),

@@ -49,7 +49,7 @@ class AppButton extends StatelessWidget {
 
     super.key,
   }) : _type = .elevated,
-       _width = width ?? .wide;
+       _width = width ?? .wrap;
 
   ///Creates an outlined [AppButton]
   const AppButton.outlined({
@@ -61,7 +61,7 @@ class AppButton extends StatelessWidget {
     this.lowerCased = false,
     super.key,
   }) : _type = .outlined,
-       _width = width ?? .wide;
+       _width = width ?? .wrap;
 
   ///Creates a text [AppButton]
   const AppButton.text({
@@ -73,7 +73,7 @@ class AppButton extends StatelessWidget {
     this.lowerCased = false,
     super.key,
   }) : _type = .text,
-       _width = width ?? .wide;
+       _width = width ?? .wrap;
 
   ///Replaced [AppButton] label text with loading indicator when true.
   final bool isLoading;

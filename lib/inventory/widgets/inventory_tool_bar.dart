@@ -1,4 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:inventory_app/inventory/bloc/inventory_bloc.dart';
+import 'package:inventory_app/inventory/widgets/inventory_page_filter_bottom_sheet.dart';
 
 class InventoryToolBar extends StatelessWidget {
   const InventoryToolBar({super.key});
@@ -20,7 +23,15 @@ class InventoryToolBar extends StatelessWidget {
             icon: const Icon(Icons.arrow_downward),
           ),
           IconButton(
-            onPressed: () {},
+            onPressed: () => showModalBottomSheet<void>(
+              showDragHandle: true,
+              isScrollControlled: true,
+              context: context,
+              builder: (_) => BlocProvider.value(
+                value: context.read<InventoryBloc>(),
+                child: const InventoryPageFilterBottomSheet(),
+              ),
+            ),
             icon: const Icon(Icons.filter_list),
           ),
         ],

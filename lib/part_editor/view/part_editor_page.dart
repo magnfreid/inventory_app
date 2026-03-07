@@ -98,48 +98,62 @@ class _PartEditorViewState extends State<PartEditorView> {
         appBar: AppBar(
           title: Text(widget.part?.name ?? l10n.formFieldTitleText),
         ),
-        body: Padding(
-          padding: const .all(24),
-          child: Form(
-            key: _formKey,
-            onChanged: () => setState(
-              () => _canSave = _formKey.currentState?.validate() ?? false,
-            ),
+        body: SingleChildScrollView(
+          child: Padding(
+            padding: const .symmetric(horizontal: 24),
             child: Column(
-              spacing: 10,
-              mainAxisSize: .min,
               children: [
-                TextFormField(
-                  controller: _nameController,
-                  decoration: InputDecoration(
-                    labelText: '${l10n.formFieldNameLabelText}:',
-                  ),
-                  autovalidateMode: .onUserInteraction,
-                  validator: (value) => value == null || value.isEmpty
-                      ? l10n.validationRequired
-                      : null,
-                ),
-                TextFormField(
-                  controller: _priceController,
-                  decoration: InputDecoration(
-                    labelText: '${l10n.formFieldPriceLabelText}:',
-                  ),
-                  autovalidateMode: .onUserInteraction,
-                  keyboardType: TextInputType.number,
-                  validator: (value) => double.tryParse(value ?? '') == null
-                      ? l10n.validationEnterNumber
-                      : null,
-                ),
-                TextFormField(
-                  controller: _detailNumberController,
-                  decoration: InputDecoration(
-                    labelText: '${l10n.formFieldDetailNumberLabelText}:',
-                  ),
-                ),
-                TextFormField(
-                  controller: _descriptionController,
-                  decoration: InputDecoration(
-                    labelText: '${l10n.formFieldDescriptionLabelText}:',
+                Padding(
+                  padding: const .symmetric(vertical: 24),
+                  child: Form(
+                    key: _formKey,
+                    onChanged: () => setState(
+                      () =>
+                          _canSave = _formKey.currentState?.validate() ?? false,
+                    ),
+                    child: Column(
+                      spacing: 10,
+                      mainAxisSize: .min,
+                      children: [
+                        TextFormField(
+                          textCapitalization: .sentences,
+                          controller: _nameController,
+                          decoration: InputDecoration(
+                            labelText: '${l10n.formFieldNameLabelText}*',
+                          ),
+                          autovalidateMode: .onUserInteraction,
+                          validator: (value) => value == null || value.isEmpty
+                              ? l10n.validationRequired
+                              : null,
+                        ),
+                        TextFormField(
+                          controller: _priceController,
+                          decoration: InputDecoration(
+                            labelText: '${l10n.formFieldPriceLabelText}*',
+                          ),
+                          autovalidateMode: .onUserInteraction,
+                          keyboardType: TextInputType.number,
+                          validator: (value) =>
+                              double.tryParse(value ?? '') == null
+                              ? l10n.validationEnterNumber
+                              : null,
+                        ),
+                        TextFormField(
+                          textCapitalization: .sentences,
+                          controller: _detailNumberController,
+                          decoration: InputDecoration(
+                            labelText: l10n.formFieldDetailNumberLabelText,
+                          ),
+                        ),
+                        TextFormField(
+                          textCapitalization: .sentences,
+                          controller: _descriptionController,
+                          decoration: InputDecoration(
+                            labelText: l10n.formFieldDescriptionLabelText,
+                          ),
+                        ),
+                      ],
+                    ),
                   ),
                 ),
                 Padding(
@@ -177,7 +191,6 @@ class _PartEditorViewState extends State<PartEditorView> {
                   onTagSelected: (selectedTag) =>
                       setState(() => _selectedCategoryTag = selectedTag),
                 ),
-                const Spacer(),
                 Padding(
                   padding: const .symmetric(vertical: 8),
                   child: BlocBuilder<PartEditorBloc, PartEditorState>(

@@ -57,6 +57,7 @@ class _TagsBottomSheetState extends State<TagsBottomSheet> {
               ),
               const Divider(),
               TextFormField(
+                textCapitalization: .sentences,
                 controller: _labelTextController,
                 decoration: InputDecoration(
                   label: Text(l10n.formFieldNameLabelText),

@@ -59,7 +59,7 @@ abstract class AppTheme {
   ColorScheme get _colorScheme =>
       ColorScheme.fromSeed(seedColor: _color, brightness: _brightness);
 
-  TextTheme get _textTheme => GoogleFonts.ubuntuTextTheme(
+  TextTheme get _textTheme => GoogleFonts.oswaldTextTheme(
     ThemeData.from(colorScheme: _colorScheme).textTheme,
   );
 }
