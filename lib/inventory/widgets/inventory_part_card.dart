@@ -1,3 +1,5 @@
+import 'package:app_ui/app_ui.dart';
+import 'package:collection/collection.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:inventory_app/inventory/bloc/inventory_bloc.dart';
@@ -16,6 +18,8 @@ class InventoryPartCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final stocks = part.stock.where((stock) => stock.quantity > 0)
+      ..sorted((a, b) => b.storageName.compareTo(a.storageName));
     return Card(
       child: InkWell(
         onTap: () =>
@@ -40,6 +44,7 @@ class InventoryPartCard extends StatelessWidget {
                       Column(
                         crossAxisAlignment: .start,
                         children: [
+                          Text(part.name),
                           Row(
                             spacing: 6,
                             children: [
@@ -50,13 +55,9 @@ class InventoryPartCard extends StatelessWidget {
                             ],
                           ),
                           Text(
-                            part.name,
-                            style: const TextStyle(fontSize: 16),
-                          ),
-                          Text(
                             part.detailNumber,
-                            style: const TextStyle(
-                              color: Colors.blueGrey,
+                            style: context.text.bodySmall?.copyWith(
+                              color: context.colors.onSurfaceVariant,
                             ),
                           ),
                         ],
@@ -64,33 +65,34 @@ class InventoryPartCard extends StatelessWidget {
                       const Spacer(),
                       Text(
                         part.totalQuantity.toString(),
-                        style: const TextStyle(fontSize: 20),
+                        // style: const TextStyle(fontSize: 20),
                       ),
                     ],
                   ),
-                  const Divider(
-                    thickness: 0.3,
-                  ),
+                  // const Divider(
+                  //   thickness: 0.3,
+                  // ),
                   Wrap(
-                    children: part.stock
-                        .where((stock) => stock.quantity > 0)
+                    children: stocks
                         .map(
-                          (stock) => Card.outlined(
-                            color: Theme.of(
-                              context,
-                            ).colorScheme.secondaryContainer,
-                            child: Padding(
-                              padding: const .all(3),
-                              child: Text(
-                                '${stock.storageName.toUpperCase()}'
-                                ' (${stock.quantity})',
-                                style: TextStyle(
-                                  fontSize: 10,
-                                  color: Theme.of(
-                                    context,
-                                  ).colorScheme.onSecondaryContainer,
+                          (stock) => Padding(
+                            padding: const .all(3),
+                            child: Row(
+                              spacing: 8,
+                              mainAxisSize: .min,
+                              children: [
+                                Text(
+                                  stock.storageName,
+                                  style: context.text.labelSmall,
                                 ),
-                              ),
+                                Text(
+                                  '${stock.quantity}',
+                                  style: context.text.labelSmall?.copyWith(
+                                    color: Colors.blueAccent,
+                                  ),
+                                ),
+                                const Divider(),
+                              ],
                             ),
                           ),
                         )

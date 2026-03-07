@@ -77,13 +77,16 @@ class PartDetailsView extends StatelessWidget {
                 ? const Center(
                     child: CircularProgressIndicator.adaptive(),
                   )
-                : Padding(
-                    padding: const .symmetric(vertical: 16, horizontal: 32),
-                    child: Column(
-                      children: [
-                        const _SegmentedButton(),
-                        const SizedBox(height: 20),
-                        Expanded(
+                : Column(
+                    children: [
+                      const SizedBox(height: 24),
+                      const _SegmentedButton(),
+                      const SizedBox(height: 24),
+                      Expanded(
+                        child: Padding(
+                          padding: const .symmetric(
+                            horizontal: 28,
+                          ),
                           child: AnimatedSwitcher(
                             duration: const Duration(milliseconds: 200),
                             child: switch (state.content) {
@@ -101,8 +104,8 @@ class PartDetailsView extends StatelessWidget {
                             },
                           ),
                         ),
-                      ],
-                    ),
+                      ),
+                    ],
                   );
           },
         ),
@@ -140,37 +143,33 @@ class _DeleteButton extends StatelessWidget {
       onPressed: () => showModalBottomSheet<void>(
         context: context,
         builder: (_) => SafeArea(
-          child: Padding(
-            padding: const .all(16),
-            child: Column(
-              mainAxisSize: .min,
-              children: [
-                Text(l10n.deletePartSheetTitleText),
-                Row(
-                  mainAxisAlignment: .spaceBetween,
-                  children: [
-                    AppButton.elevated(
-                      width: .wrap,
-                      onPressed: () => Navigator.pop(context),
-                      label: l10n.deletePartSheetCancelText,
+          child: Column(
+            mainAxisSize: .min,
+            children: [
+              Text(l10n.deletePartSheetTitleText),
+              Row(
+                mainAxisAlignment: .spaceBetween,
+                children: [
+                  AppButton.elevated(
+                    width: .wrap,
+                    onPressed: () => Navigator.pop(context),
+                    label: l10n.deletePartSheetCancelText,
+                  ),
+                  AppButton(
+                    width: .wrap,
+                    onPressed: () => context.read<PartDetailsBloc>().add(
+                      ConfirmDeleteButtonPressed(partId: partId),
                     ),
-                    AppButton(
-                      width: .wrap,
-                      onPressed: () => context.read<PartDetailsBloc>().add(
-                        ConfirmDeleteButtonPressed(partId: partId),
-                      ),
-                      label: l10n.deletePartSheetConfirmText,
-                    ),
-                  ],
-                ),
-              ],
-            ),
+                    label: l10n.deletePartSheetConfirmText,
+                  ),
+                ],
+              ),
+            ],
           ),
         ),
       ),
       icon: const Icon(
         Icons.delete,
-        color: Colors.redAccent,
       ),
     );
   }
@@ -186,17 +185,28 @@ class _SegmentedButton extends StatelessWidget {
       segments: [
         ButtonSegment<PartDetailsContent>(
           value: .details,
-          label: Text(l10n.partDetailsSelectorDetails),
+          label: Text(
+            l10n.partDetailsSelectorDetails,
+            style: context.text.bodySmall,
+          ),
           icon: const Icon(Icons.list_alt),
         ),
         ButtonSegment<PartDetailsContent>(
           value: .inStock,
-          label: Text(l10n.partDetailsSelectorInStock),
+          label: Text(
+            l10n.partDetailsSelectorInStock,
+            style: context.text.bodySmall,
+          ),
           icon: const Icon(Icons.search),
         ),
         ButtonSegment<PartDetailsContent>(
           value: .restock,
-          label: Center(child: Text(l10n.partDetailsSelectorRestock)),
+          label: Center(
+            child: Text(
+              l10n.partDetailsSelectorRestock,
+              style: context.text.bodySmall,
+            ),
+          ),
           icon: const Icon(Icons.shelves),
         ),
       ],

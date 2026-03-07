@@ -13,7 +13,8 @@ class PartDetailsInStock extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final l10n = context.l10n;
-    final stocks = part.stock.where((stock) => stock.quantity > 0).toList();
+    final stocks = part.stock.where((stock) => stock.quantity > 0).toList()
+      ..sort((a, b) => a.storageName.compareTo(b.storageName));
     return stocks.isEmpty
         ? Center(
             child: Text(l10n.inStockEmptyListText),
@@ -22,50 +23,38 @@ class PartDetailsInStock extends StatelessWidget {
             spacing: 12,
             crossAxisAlignment: .end,
             children: [
-              Row(
-                mainAxisAlignment: .spaceEvenly,
-                children: [
-                  Text(
-                    '${l10n.inStockTotalText}:',
-                    style: context.text.bodyLarge,
-                  ),
-                  Text(
-                    part.totalQuantity.toString(),
-                    style: context.text.bodyLarge,
-                  ),
-                ],
+              ListTile(
+                title: Row(
+                  children: [
+                    Text('${l10n.inStockTotalText}:'),
+                    const Spacer(),
+                    Text(part.totalQuantity.toString()),
+                  ],
+                ),
               ),
+              const Divider(),
               Expanded(
                 child: ListView.builder(
+                  physics: const ClampingScrollPhysics(),
                   itemCount: stocks.length,
                   itemBuilder: (context, index) {
                     final stock = stocks[index];
-                    return Card(
-                      child: Padding(
-                        padding: const .all(8),
-                        child: Row(
-                          spacing: 20,
-                          children: [
-                            Text(
-                              stock.storageName,
-                            ),
-                            const Spacer(),
-                            Text(
-                              stock.quantity.toString(),
-                            ),
-                            AppButton.text(
-                              width: .wrap,
-                              onPressed: () =>
-                                  context.read<PartDetailsBloc>().add(
-                                    UseButtonPressed(
-                                      partId: part.partId,
-                                      storageId: stock.storageId,
-                                    ),
-                                  ),
-                              label: l10n.inStockUseButtonLabelText,
-                            ),
-                          ],
+                    return ListTile(
+                      title: Row(
+                        children: [
+                          Text(stock.storageName),
+                          const Spacer(),
+                          Text(stock.quantity.toString()),
+                        ],
+                      ),
+                      trailing: AppButton.text(
+                        onPressed: () => context.read<PartDetailsBloc>().add(
+                          UseButtonPressed(
+                            partId: part.partId,
+                            storageId: stock.storageId,
+                          ),
                         ),
+                        label: l10n.inStockUseButtonLabelText,
                       ),
                     );
                   },

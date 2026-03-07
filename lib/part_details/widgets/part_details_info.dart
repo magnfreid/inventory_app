@@ -48,24 +48,29 @@ class PartDetailsInfo extends StatelessWidget {
           subtitle: part.totalQuantity.toString(),
         ),
         if (description != null && description.isNotEmpty)
-          Padding(
-            padding: const .symmetric(vertical: 16),
-            child: Column(
-              spacing: 8,
-              crossAxisAlignment: .start,
-              children: [
-                Text(
-                  l10n.formFieldDescriptionLabelText,
-                  style: context.text.bodyLarge,
+          Column(
+            children: [
+              const Divider(),
+              Padding(
+                padding: const .symmetric(vertical: 16),
+                child: Column(
+                  spacing: 8,
+                  crossAxisAlignment: .start,
+                  children: [
+                    Text(
+                      l10n.formFieldDescriptionLabelText,
+                      style: context.text.bodyLarge,
+                    ),
+                    Text(
+                      description,
+                      style: context.text.bodyLarge?.copyWith(
+                        color: context.colors.onSurfaceVariant,
+                      ),
+                    ),
+                  ],
                 ),
-                Text(
-                  description,
-                  style: context.text.bodyLarge?.copyWith(
-                    color: Colors.blueGrey,
-                  ),
-                ),
-              ],
-            ),
+              ),
+            ],
           ),
       ],
     );
@@ -102,7 +107,9 @@ class _DetailField extends StatelessWidget {
               children: [
                 Text(
                   subtitle,
-                  style: textStyle?.copyWith(color: Colors.blueGrey),
+                  style: textStyle?.copyWith(
+                    color: context.colors.onSurfaceVariant,
+                  ),
                 ),
               ],
             ),

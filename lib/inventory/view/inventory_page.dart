@@ -8,6 +8,8 @@ import 'package:inventory_app/inventory/widgets/inventory_tool_bar.dart';
 import 'package:inventory_app/part_editor/view/part_editor_page.dart';
 import 'package:inventory_app/use_cases/part_presentation.dart/watch_part_presentations.dart';
 import 'package:stock_repository/stock_repository.dart';
+import 'package:storage_repository/storage_repository.dart';
+import 'package:tag_repository/tag_repository.dart';
 
 class InventoryPage extends StatelessWidget {
   const InventoryPage({super.key});
@@ -16,8 +18,10 @@ class InventoryPage extends StatelessWidget {
   Widget build(BuildContext context) {
     return BlocProvider(
       create: (context) => InventoryBloc(
-        stockRepository: context.read<StockRepository>(),
         watchPartPresentations: context.read<WatchPartPresentations>(),
+        stockRepository: context.read<StockRepository>(),
+        tagRepository: context.read<TagRepository>(),
+        storageRepository: context.read<StorageRepository>(),
       ),
       child: const InventoryView(),
     );
@@ -40,17 +44,42 @@ class InventoryView extends StatelessWidget {
       floatingActionButtonLocation: .endContained,
       body: BlocBuilder<InventoryBloc, InventoryState>(
         builder: (context, state) {
-          final parts = state.parts;
-          return Column(
-            children: [
-              Expanded(
-                child: ListView.builder(
-                  itemCount: parts.length,
-                  itemBuilder: (context, index) =>
-                      InventoryPartCard(part: parts[index]),
+          final parts = state.filteredParts;
+          return Padding(
+            padding: const .symmetric(horizontal: 8),
+            child: Column(
+              children: [
+                Padding(
+                  padding: const .fromLTRB(12, 0, 0, 0),
+                  child: Row(
+                    children: [
+                      Text(
+                        'Total items: '
+                        '${state.filteredParts.length}',
+                      ),
+                      const Spacer(),
+                      const Text('Show empty stock:'),
+                      Transform.scale(
+                        scale: 0.55,
+                        child: Switch(
+                          value: state.filter.quantityFilter == .all,
+                          onChanged: (_) => context.read<InventoryBloc>().add(
+                            const HideEmptyStockSwitchPressed(),
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
                 ),
-              ),
-            ],
+                Expanded(
+                  child: ListView.builder(
+                    itemCount: parts.length,
+                    itemBuilder: (context, index) =>
+                        InventoryPartCard(part: parts[index]),
+                  ),
+                ),
+              ],
+            ),
           );
         },
       ),
