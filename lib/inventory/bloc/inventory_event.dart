@@ -14,6 +14,11 @@ final class _TagsUpdated extends InventoryEvent {
   final List<TagPresentation> tags;
 }
 
+final class _StoragesUpdated extends InventoryEvent {
+  const _StoragesUpdated({required this.storages});
+  final List<Storage> storages;
+}
+
 final class UseStockButtonPressed extends InventoryEvent {
   const UseStockButtonPressed({required this.partId, required this.storageId});
   final String partId;
@@ -41,4 +46,13 @@ final class ClearCategoryFilterChipPressed extends InventoryEvent {
 final class CategoryFilterChipPressed extends InventoryEvent {
   const CategoryFilterChipPressed({required this.categoryTag});
   final TagPresentation categoryTag;
+}
+
+final class StorageFilterChipPressed extends InventoryEvent {
+  const StorageFilterChipPressed({required this.storage});
+  final Storage storage;
+}
+
+final class ClearStorageFilterChipPressed extends InventoryEvent {
+  const ClearStorageFilterChipPressed();
 }

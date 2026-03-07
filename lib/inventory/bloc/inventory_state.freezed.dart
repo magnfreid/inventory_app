@@ -14,7 +14,7 @@ T _$identity<T>(T value) => value;
 /// @nodoc
 mixin _$InventoryState {
 
- InventoryStateStatus get status; List<PartPresentation> get parts; InventoryFilter get filter; List<TagPresentation> get brandTags; List<TagPresentation> get categoryTags; InventoryStateBottomSheetStatus get bottomSheetStatus;
+ InventoryStateStatus get status; List<PartPresentation> get parts; InventoryFilter get filter; List<TagPresentation> get brandTags; List<TagPresentation> get categoryTags; List<Storage> get storages; InventoryStateBottomSheetStatus get bottomSheetStatus;
 /// Create a copy of InventoryState
 /// with the given fields replaced by the non-null parameter values.
 @JsonKey(includeFromJson: false, includeToJson: false)
@@ -25,16 +25,16 @@ $InventoryStateCopyWith<InventoryState> get copyWith => _$InventoryStateCopyWith
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is InventoryState&&(identical(other.status, status) || other.status == status)&&const DeepCollectionEquality().equals(other.parts, parts)&&(identical(other.filter, filter) || other.filter == filter)&&const DeepCollectionEquality().equals(other.brandTags, brandTags)&&const DeepCollectionEquality().equals(other.categoryTags, categoryTags)&&(identical(other.bottomSheetStatus, bottomSheetStatus) || other.bottomSheetStatus == bottomSheetStatus));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is InventoryState&&(identical(other.status, status) || other.status == status)&&const DeepCollectionEquality().equals(other.parts, parts)&&(identical(other.filter, filter) || other.filter == filter)&&const DeepCollectionEquality().equals(other.brandTags, brandTags)&&const DeepCollectionEquality().equals(other.categoryTags, categoryTags)&&const DeepCollectionEquality().equals(other.storages, storages)&&(identical(other.bottomSheetStatus, bottomSheetStatus) || other.bottomSheetStatus == bottomSheetStatus));
 }
 
 
 @override
-int get hashCode => Object.hash(runtimeType,status,const DeepCollectionEquality().hash(parts),filter,const DeepCollectionEquality().hash(brandTags),const DeepCollectionEquality().hash(categoryTags),bottomSheetStatus);
+int get hashCode => Object.hash(runtimeType,status,const DeepCollectionEquality().hash(parts),filter,const DeepCollectionEquality().hash(brandTags),const DeepCollectionEquality().hash(categoryTags),const DeepCollectionEquality().hash(storages),bottomSheetStatus);
 
 @override
 String toString() {
-  return 'InventoryState(status: $status, parts: $parts, filter: $filter, brandTags: $brandTags, categoryTags: $categoryTags, bottomSheetStatus: $bottomSheetStatus)';
+  return 'InventoryState(status: $status, parts: $parts, filter: $filter, brandTags: $brandTags, categoryTags: $categoryTags, storages: $storages, bottomSheetStatus: $bottomSheetStatus)';
 }
 
 
@@ -45,7 +45,7 @@ abstract mixin class $InventoryStateCopyWith<$Res>  {
   factory $InventoryStateCopyWith(InventoryState value, $Res Function(InventoryState) _then) = _$InventoryStateCopyWithImpl;
 @useResult
 $Res call({
- InventoryStateStatus status, List<PartPresentation> parts, InventoryFilter filter, List<TagPresentation> brandTags, List<TagPresentation> categoryTags, InventoryStateBottomSheetStatus bottomSheetStatus
+ InventoryStateStatus status, List<PartPresentation> parts, InventoryFilter filter, List<TagPresentation> brandTags, List<TagPresentation> categoryTags, List<Storage> storages, InventoryStateBottomSheetStatus bottomSheetStatus
 });
 
 
@@ -62,14 +62,15 @@ class _$InventoryStateCopyWithImpl<$Res>
 
 /// Create a copy of InventoryState
 /// with the given fields replaced by the non-null parameter values.
-@pragma('vm:prefer-inline') @override $Res call({Object? status = null,Object? parts = null,Object? filter = null,Object? brandTags = null,Object? categoryTags = null,Object? bottomSheetStatus = null,}) {
+@pragma('vm:prefer-inline') @override $Res call({Object? status = null,Object? parts = null,Object? filter = null,Object? brandTags = null,Object? categoryTags = null,Object? storages = null,Object? bottomSheetStatus = null,}) {
   return _then(_self.copyWith(
 status: null == status ? _self.status : status // ignore: cast_nullable_to_non_nullable
 as InventoryStateStatus,parts: null == parts ? _self.parts : parts // ignore: cast_nullable_to_non_nullable
 as List<PartPresentation>,filter: null == filter ? _self.filter : filter // ignore: cast_nullable_to_non_nullable
 as InventoryFilter,brandTags: null == brandTags ? _self.brandTags : brandTags // ignore: cast_nullable_to_non_nullable
 as List<TagPresentation>,categoryTags: null == categoryTags ? _self.categoryTags : categoryTags // ignore: cast_nullable_to_non_nullable
-as List<TagPresentation>,bottomSheetStatus: null == bottomSheetStatus ? _self.bottomSheetStatus : bottomSheetStatus // ignore: cast_nullable_to_non_nullable
+as List<TagPresentation>,storages: null == storages ? _self.storages : storages // ignore: cast_nullable_to_non_nullable
+as List<Storage>,bottomSheetStatus: null == bottomSheetStatus ? _self.bottomSheetStatus : bottomSheetStatus // ignore: cast_nullable_to_non_nullable
 as InventoryStateBottomSheetStatus,
   ));
 }
@@ -155,10 +156,10 @@ return $default(_that);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function( InventoryStateStatus status,  List<PartPresentation> parts,  InventoryFilter filter,  List<TagPresentation> brandTags,  List<TagPresentation> categoryTags,  InventoryStateBottomSheetStatus bottomSheetStatus)?  $default,{required TResult orElse(),}) {final _that = this;
+@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function( InventoryStateStatus status,  List<PartPresentation> parts,  InventoryFilter filter,  List<TagPresentation> brandTags,  List<TagPresentation> categoryTags,  List<Storage> storages,  InventoryStateBottomSheetStatus bottomSheetStatus)?  $default,{required TResult orElse(),}) {final _that = this;
 switch (_that) {
 case _InventoryState() when $default != null:
-return $default(_that.status,_that.parts,_that.filter,_that.brandTags,_that.categoryTags,_that.bottomSheetStatus);case _:
+return $default(_that.status,_that.parts,_that.filter,_that.brandTags,_that.categoryTags,_that.storages,_that.bottomSheetStatus);case _:
   return orElse();
 
 }
@@ -176,10 +177,10 @@ return $default(_that.status,_that.parts,_that.filter,_that.brandTags,_that.cate
 /// }
 /// ```
 
-@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function( InventoryStateStatus status,  List<PartPresentation> parts,  InventoryFilter filter,  List<TagPresentation> brandTags,  List<TagPresentation> categoryTags,  InventoryStateBottomSheetStatus bottomSheetStatus)  $default,) {final _that = this;
+@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function( InventoryStateStatus status,  List<PartPresentation> parts,  InventoryFilter filter,  List<TagPresentation> brandTags,  List<TagPresentation> categoryTags,  List<Storage> storages,  InventoryStateBottomSheetStatus bottomSheetStatus)  $default,) {final _that = this;
 switch (_that) {
 case _InventoryState():
-return $default(_that.status,_that.parts,_that.filter,_that.brandTags,_that.categoryTags,_that.bottomSheetStatus);case _:
+return $default(_that.status,_that.parts,_that.filter,_that.brandTags,_that.categoryTags,_that.storages,_that.bottomSheetStatus);case _:
   throw StateError('Unexpected subclass');
 
 }
@@ -196,10 +197,10 @@ return $default(_that.status,_that.parts,_that.filter,_that.brandTags,_that.cate
 /// }
 /// ```
 
-@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function( InventoryStateStatus status,  List<PartPresentation> parts,  InventoryFilter filter,  List<TagPresentation> brandTags,  List<TagPresentation> categoryTags,  InventoryStateBottomSheetStatus bottomSheetStatus)?  $default,) {final _that = this;
+@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function( InventoryStateStatus status,  List<PartPresentation> parts,  InventoryFilter filter,  List<TagPresentation> brandTags,  List<TagPresentation> categoryTags,  List<Storage> storages,  InventoryStateBottomSheetStatus bottomSheetStatus)?  $default,) {final _that = this;
 switch (_that) {
 case _InventoryState() when $default != null:
-return $default(_that.status,_that.parts,_that.filter,_that.brandTags,_that.categoryTags,_that.bottomSheetStatus);case _:
+return $default(_that.status,_that.parts,_that.filter,_that.brandTags,_that.categoryTags,_that.storages,_that.bottomSheetStatus);case _:
   return null;
 
 }
@@ -211,7 +212,7 @@ return $default(_that.status,_that.parts,_that.filter,_that.brandTags,_that.cate
 
 
 class _InventoryState extends InventoryState {
-  const _InventoryState({this.status = InventoryStateStatus.loading, final  List<PartPresentation> parts = const [], this.filter = const InventoryFilter(), final  List<TagPresentation> brandTags = const [], final  List<TagPresentation> categoryTags = const [], this.bottomSheetStatus = InventoryStateBottomSheetStatus.idle}): _parts = parts,_brandTags = brandTags,_categoryTags = categoryTags,super._();
+  const _InventoryState({this.status = InventoryStateStatus.loading, final  List<PartPresentation> parts = const [], this.filter = const InventoryFilter(), final  List<TagPresentation> brandTags = const [], final  List<TagPresentation> categoryTags = const [], final  List<Storage> storages = const [], this.bottomSheetStatus = InventoryStateBottomSheetStatus.idle}): _parts = parts,_brandTags = brandTags,_categoryTags = categoryTags,_storages = storages,super._();
   
 
 @override@JsonKey() final  InventoryStateStatus status;
@@ -237,6 +238,13 @@ class _InventoryState extends InventoryState {
   return EqualUnmodifiableListView(_categoryTags);
 }
 
+ final  List<Storage> _storages;
+@override@JsonKey() List<Storage> get storages {
+  if (_storages is EqualUnmodifiableListView) return _storages;
+  // ignore: implicit_dynamic_type
+  return EqualUnmodifiableListView(_storages);
+}
+
 @override@JsonKey() final  InventoryStateBottomSheetStatus bottomSheetStatus;
 
 /// Create a copy of InventoryState
@@ -249,16 +257,16 @@ _$InventoryStateCopyWith<_InventoryState> get copyWith => __$InventoryStateCopyW
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is _InventoryState&&(identical(other.status, status) || other.status == status)&&const DeepCollectionEquality().equals(other._parts, _parts)&&(identical(other.filter, filter) || other.filter == filter)&&const DeepCollectionEquality().equals(other._brandTags, _brandTags)&&const DeepCollectionEquality().equals(other._categoryTags, _categoryTags)&&(identical(other.bottomSheetStatus, bottomSheetStatus) || other.bottomSheetStatus == bottomSheetStatus));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is _InventoryState&&(identical(other.status, status) || other.status == status)&&const DeepCollectionEquality().equals(other._parts, _parts)&&(identical(other.filter, filter) || other.filter == filter)&&const DeepCollectionEquality().equals(other._brandTags, _brandTags)&&const DeepCollectionEquality().equals(other._categoryTags, _categoryTags)&&const DeepCollectionEquality().equals(other._storages, _storages)&&(identical(other.bottomSheetStatus, bottomSheetStatus) || other.bottomSheetStatus == bottomSheetStatus));
 }
 
 
 @override
-int get hashCode => Object.hash(runtimeType,status,const DeepCollectionEquality().hash(_parts),filter,const DeepCollectionEquality().hash(_brandTags),const DeepCollectionEquality().hash(_categoryTags),bottomSheetStatus);
+int get hashCode => Object.hash(runtimeType,status,const DeepCollectionEquality().hash(_parts),filter,const DeepCollectionEquality().hash(_brandTags),const DeepCollectionEquality().hash(_categoryTags),const DeepCollectionEquality().hash(_storages),bottomSheetStatus);
 
 @override
 String toString() {
-  return 'InventoryState(status: $status, parts: $parts, filter: $filter, brandTags: $brandTags, categoryTags: $categoryTags, bottomSheetStatus: $bottomSheetStatus)';
+  return 'InventoryState(status: $status, parts: $parts, filter: $filter, brandTags: $brandTags, categoryTags: $categoryTags, storages: $storages, bottomSheetStatus: $bottomSheetStatus)';
 }
 
 
@@ -269,7 +277,7 @@ abstract mixin class _$InventoryStateCopyWith<$Res> implements $InventoryStateCo
   factory _$InventoryStateCopyWith(_InventoryState value, $Res Function(_InventoryState) _then) = __$InventoryStateCopyWithImpl;
 @override @useResult
 $Res call({
- InventoryStateStatus status, List<PartPresentation> parts, InventoryFilter filter, List<TagPresentation> brandTags, List<TagPresentation> categoryTags, InventoryStateBottomSheetStatus bottomSheetStatus
+ InventoryStateStatus status, List<PartPresentation> parts, InventoryFilter filter, List<TagPresentation> brandTags, List<TagPresentation> categoryTags, List<Storage> storages, InventoryStateBottomSheetStatus bottomSheetStatus
 });
 
 
@@ -286,14 +294,15 @@ class __$InventoryStateCopyWithImpl<$Res>
 
 /// Create a copy of InventoryState
 /// with the given fields replaced by the non-null parameter values.
-@override @pragma('vm:prefer-inline') $Res call({Object? status = null,Object? parts = null,Object? filter = null,Object? brandTags = null,Object? categoryTags = null,Object? bottomSheetStatus = null,}) {
+@override @pragma('vm:prefer-inline') $Res call({Object? status = null,Object? parts = null,Object? filter = null,Object? brandTags = null,Object? categoryTags = null,Object? storages = null,Object? bottomSheetStatus = null,}) {
   return _then(_InventoryState(
 status: null == status ? _self.status : status // ignore: cast_nullable_to_non_nullable
 as InventoryStateStatus,parts: null == parts ? _self._parts : parts // ignore: cast_nullable_to_non_nullable
 as List<PartPresentation>,filter: null == filter ? _self.filter : filter // ignore: cast_nullable_to_non_nullable
 as InventoryFilter,brandTags: null == brandTags ? _self._brandTags : brandTags // ignore: cast_nullable_to_non_nullable
 as List<TagPresentation>,categoryTags: null == categoryTags ? _self._categoryTags : categoryTags // ignore: cast_nullable_to_non_nullable
-as List<TagPresentation>,bottomSheetStatus: null == bottomSheetStatus ? _self.bottomSheetStatus : bottomSheetStatus // ignore: cast_nullable_to_non_nullable
+as List<TagPresentation>,storages: null == storages ? _self._storages : storages // ignore: cast_nullable_to_non_nullable
+as List<Storage>,bottomSheetStatus: null == bottomSheetStatus ? _self.bottomSheetStatus : bottomSheetStatus // ignore: cast_nullable_to_non_nullable
 as InventoryStateBottomSheetStatus,
   ));
 }
