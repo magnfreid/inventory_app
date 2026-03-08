@@ -203,5 +203,49 @@
 	"deletePartSheetCancelText": "Avbryt",
 	"@deletePartSheetCancelText": {
 		"description": "Bottom sheet cancel button text for delete part confirmation."
+	},
+	"brand": "Märke",
+	"@brand": {
+		"description": "General singular brand text."
+	},
+	"category": "Kategori",
+	"@category": {
+		"description": "General singular category text."
+	},
+	"storage": "Lager",
+	"@storage": {
+		"description": "General singular storage text."
+	},
+	"brands": "Märken",
+	"@brands": {
+		"description": "General plural brand text."
+	},
+	"categories": "Kategorier",
+	"@categories": {
+		"description": "General plural category text."
+	},
+	"storages": "Lager",
+	"@storages": {
+		"description": "General plural storage text."
+	},
+	"all": "Alla",
+	"@all": {
+		"description": "General all text."
+	},
+	"filterSheetTitleText": "Filtrera efter",
+	"@filterSheetTitleText": {
+		"description": "Title of filter bottom sheet."
+	},
+	"filterSheetClearAllText": "Rensa alla",
+	"@filterSheetClearAllText": {
+		"description": "Title of filter bottom sheet."
+	},
+	"inventoryTotalPartsText": "Antal artiklar",
+	"@inventoryTotalPartsText": {
+		"description": "Title text for total parts count in Inventory top bar."
+	},
+	"inventoryShowEmptyStockText": "Visa ej i lager",
+	"@inventoryShowEmptyStockText": {
+		"description": "Text for switch to show empty stock in Inventory top bar."
 	}
 }

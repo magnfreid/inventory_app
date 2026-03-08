@@ -3,12 +3,14 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:inventory_app/inventory/bloc/inventory_bloc.dart';
 import 'package:inventory_app/inventory/bloc/inventory_state.dart';
+import 'package:inventory_app/l10n/l10n.dart';
 
 class InventoryPageFilterBottomSheet extends StatelessWidget {
   const InventoryPageFilterBottomSheet({super.key});
 
   @override
   Widget build(BuildContext context) {
+    final l10n = context.l10n;
     return BlocBuilder<InventoryBloc, InventoryState>(
       builder: (context, state) {
         final filter = state.filter;
@@ -28,7 +30,7 @@ class InventoryPageFilterBottomSheet extends StatelessWidget {
                       mainAxisAlignment: .spaceBetween,
                       children: [
                         Text(
-                          'Filter by',
+                          l10n.filterSheetTitleText,
                           style: context.text.bodyLarge?.copyWith(
                             fontWeight: .bold,
                           ),
@@ -36,19 +38,22 @@ class InventoryPageFilterBottomSheet extends StatelessWidget {
                         AppButton.text(
                           onPressed: () =>
                               bloc.add(const ClearAllFiltersButtonPressed()),
-                          label: 'Clear all (${filter.totalActiveFilters})',
+                          label:
+                              '${l10n.filterSheetClearAllText} (${filter.totalActiveFilters})',
                         ),
                       ],
                     ),
-                    const Text('Category:'),
+                    Text(l10n.formFieldCategoryLabelText),
                     Wrap(
                       spacing: 8,
                       children: [
                         FilterChip(
-                          label: const Text('All'),
+                          label: Text(l10n.all),
                           selected: state.filter.categoryFilters.isEmpty,
                           onSelected: (selected) {
-                            bloc.add(const ClearCategoryFilterChipPressed());
+                            bloc.add(
+                              const ClearFilterChipPressed(type: .category),
+                            );
                           },
                         ),
                         ...state.categoryTags.map(
@@ -60,22 +65,27 @@ class InventoryPageFilterBottomSheet extends StatelessWidget {
                             label: Text(tag.label),
                             onSelected: (selected) {
                               bloc.add(
-                                CategoryFilterChipPressed(categoryId: tag.id),
+                                FilterChipPressed(
+                                  type: .category,
+                                  itemId: tag.id,
+                                ),
                               );
                             },
                           ),
                         ),
                       ],
                     ),
-                    const Text('Brand:'),
+                    Text(l10n.brand),
                     Wrap(
                       spacing: 8,
                       children: [
                         FilterChip(
-                          label: const Text('All'),
+                          label: Text(l10n.all),
                           selected: filter.brandFilters.isEmpty,
                           onSelected: (selected) {
-                            bloc.add(const ClearBrandFilterChipPressed());
+                            bloc.add(
+                              const ClearFilterChipPressed(type: .brand),
+                            );
                           },
                         ),
                         ...state.brandTags.map(
@@ -84,21 +94,25 @@ class InventoryPageFilterBottomSheet extends StatelessWidget {
                             label: Text(tag.label),
                             selected: filter.brandFilters.contains(tag.id),
                             onSelected: (selected) {
-                              bloc.add(BrandFilterChipPressed(tagId: tag.id));
+                              bloc.add(
+                                FilterChipPressed(type: .brand, itemId: tag.id),
+                              );
                             },
                           ),
                         ),
                       ],
                     ),
-                    const Text('Storage:'),
+                    Text(l10n.storage),
                     Wrap(
                       spacing: 8,
                       children: [
                         FilterChip(
                           selected: filter.storageFilters.isEmpty,
-                          label: const Text('All'),
+                          label: Text(l10n.all),
                           onSelected: (selection) {
-                            bloc.add(const ClearStorageFilterChipPressed());
+                            bloc.add(
+                              const ClearFilterChipPressed(type: .storage),
+                            );
                           },
                         ),
                         ...state.storages.map(
@@ -110,7 +124,10 @@ class InventoryPageFilterBottomSheet extends StatelessWidget {
                             ),
                             onSelected: (selection) {
                               bloc.add(
-                                StorageFilterChipPressed(storageId: storage.id),
+                                FilterChipPressed(
+                                  type: .storage,
+                                  itemId: storage.id,
+                                ),
                               );
                             },
                           ),

@@ -203,5 +203,49 @@
 	"deletePartSheetCancelText": "Cancel",
 	"@deletePartSheetCancelText": {
 		"description": "Bottom sheet cancel button text for delete part confirmation."
+	},
+	"brand": "Brand",
+	"@brand": {
+		"description": "General singular brand text."
+	},
+	"category": "Category",
+	"@category": {
+		"description": "General singular category text."
+	},
+	"storage": "Storage",
+	"@storage": {
+		"description": "General singular storage text."
+	},
+	"brands": "Brands",
+	"@brands": {
+		"description": "General plural brand text."
+	},
+	"categories": "Categories",
+	"@categories": {
+		"description": "General plural category text."
+	},
+	"storages": "Storages",
+	"@storages": {
+		"description": "General plural storage text."
+	},
+	"all": "All",
+	"@all": {
+		"description": "General all text."
+	},
+	"filterSheetTitleText": "Filter by",
+	"@filterSheetTitleText": {
+		"description": "Title of filter bottom sheet."
+	},
+	"filterSheetClearAllText": "Clear all",
+	"@filterSheetClearAllText": {
+		"description": "Title of filter bottom sheet."
+	},
+	"inventoryTotalPartsText": "Total items",
+	"@inventoryTotalPartsText": {
+		"description": "Title text for total parts count in Inventory top bar."
+	},
+	"inventoryShowEmptyStockText": "Show empty stock",
+	"@inventoryShowEmptyStockText": {
+		"description": "Text for switch to show empty stock in Inventory top bar."
 	}
 }

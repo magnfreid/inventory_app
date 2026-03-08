@@ -5,6 +5,7 @@ import 'package:inventory_app/inventory/bloc/inventory_state.dart';
 import 'package:inventory_app/inventory/widgets/inventory_drawer.dart';
 import 'package:inventory_app/inventory/widgets/inventory_part_card.dart';
 import 'package:inventory_app/inventory/widgets/inventory_tool_bar.dart';
+import 'package:inventory_app/l10n/l10n.dart';
 import 'package:inventory_app/part_editor/view/part_editor_page.dart';
 import 'package:inventory_app/use_cases/part_presentation.dart/watch_part_presentations.dart';
 import 'package:stock_repository/stock_repository.dart';
@@ -33,6 +34,7 @@ class InventoryView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = context.l10n;
     return Scaffold(
       appBar: AppBar(),
       drawer: const InventoryDrawer(),
@@ -54,11 +56,11 @@ class InventoryView extends StatelessWidget {
                   child: Row(
                     children: [
                       Text(
-                        'Total items: '
+                        '${l10n.inventoryTotalPartsText}: '
                         '${state.filteredParts.length}',
                       ),
                       const Spacer(),
-                      const Text('Show empty stock:'),
+                      Text(l10n.inventoryShowEmptyStockText),
                       Transform.scale(
                         scale: 0.55,
                         child: Switch(

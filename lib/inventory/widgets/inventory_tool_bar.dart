@@ -29,11 +29,7 @@ class InventoryToolBar extends StatelessWidget {
           ),
           Badge.count(
             isLabelVisible: activeFilters > 0,
-            count: context
-                .watch<InventoryBloc>()
-                .state
-                .filter
-                .totalActiveFilters,
+            count: activeFilters,
             child: IconButton(
               onPressed: () => showModalBottomSheet<void>(
                 showDragHandle: true,
