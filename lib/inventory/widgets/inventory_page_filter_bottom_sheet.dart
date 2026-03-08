@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:inventory_app/inventory/bloc/inventory_bloc.dart';
 import 'package:inventory_app/inventory/bloc/inventory_state.dart';
+import 'package:inventory_app/inventory/extensions/list_sorting_extension.dart';
 import 'package:inventory_app/l10n/l10n.dart';
 
 class InventoryPageFilterBottomSheet extends StatelessWidget {
@@ -39,7 +40,8 @@ class InventoryPageFilterBottomSheet extends StatelessWidget {
                           onPressed: () =>
                               bloc.add(const ClearAllFiltersButtonPressed()),
                           label:
-                              '${l10n.filterSheetClearAllText} (${filter.totalActiveFilters})',
+                              '${l10n.filterSheetClearAllText} '
+                              '(${filter.totalActiveFilters})',
                         ),
                       ],
                     ),
@@ -56,7 +58,7 @@ class InventoryPageFilterBottomSheet extends StatelessWidget {
                             );
                           },
                         ),
-                        ...state.categoryTags.map(
+                        ...state.categoryTags.sortedByLabel().map(
                           (tag) => FilterChip(
                             showCheckmark: false,
                             selected: state.filter.categoryFilters.contains(
@@ -88,7 +90,7 @@ class InventoryPageFilterBottomSheet extends StatelessWidget {
                             );
                           },
                         ),
-                        ...state.brandTags.map(
+                        ...state.brandTags.sortedByLabel().map(
                           (tag) => FilterChip(
                             showCheckmark: false,
                             label: Text(tag.label),
@@ -115,7 +117,7 @@ class InventoryPageFilterBottomSheet extends StatelessWidget {
                             );
                           },
                         ),
-                        ...state.storages.map(
+                        ...state.storages.sortedByName().map(
                           (storage) => FilterChip(
                             showCheckmark: false,
                             label: Text(storage.name),
