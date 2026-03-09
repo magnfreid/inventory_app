@@ -43,3 +43,8 @@ final class ClearAllFiltersButtonPressed extends InventoryEvent {
 final class HideEmptyStockSwitchPressed extends InventoryEvent {
   const HideEmptyStockSwitchPressed();
 }
+
+final class SearchQueryUpdated extends InventoryEvent {
+  const SearchQueryUpdated({required this.searchString});
+  final String searchString;
+}

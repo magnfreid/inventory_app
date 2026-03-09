@@ -31,6 +31,7 @@ class InventoryBloc extends Bloc<InventoryEvent, InventoryState> {
     on<ClearAllFiltersButtonPressed>(_onClearAllFiltersButtonPressed);
     on<FilterChipPressed>(_onFilterChipPressed);
     on<ClearFilterChipPressed>(_onClearFilterChipPressed);
+    on<SearchQueryUpdated>(_onSearchQueryUpdated);
 
     _partsStreamSubscription = watchPartPresentations().listen(
       (parts) => add(_PartsUpdated(parts: parts)),
@@ -193,6 +194,17 @@ class InventoryBloc extends Bloc<InventoryEvent, InventoryState> {
       case .storage:
         emit(state.copyWith(filter: state.filter.copyWith(storageFilters: {})));
     }
+  }
+
+  FutureOr<void> _onSearchQueryUpdated(
+    SearchQueryUpdated event,
+    Emitter<InventoryState> emit,
+  ) {
+    emit(
+      state.copyWith(
+        filter: state.filter.copyWith(searchText: event.searchString),
+      ),
+    );
   }
 
   void _toggleFilterIdInSet(String filterId, Set<String> set) {

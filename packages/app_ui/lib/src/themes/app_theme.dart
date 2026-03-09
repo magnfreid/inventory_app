@@ -50,6 +50,10 @@ abstract class AppTheme {
     bottomSheetTheme: BottomSheetThemeData(
       shape: _defaultShape,
     ),
+
+    searchBarTheme: SearchBarThemeData(
+      shape: WidgetStatePropertyAll(_defaultShape),
+    ),
   );
 
   Color get _color;
@@ -68,7 +72,9 @@ final class _LightTheme extends AppTheme {
   const _LightTheme();
 
   @override
-  Color get _color => Colors.tealAccent;
+  // Color get _color => Colors.tealAccent;
+  Color get _color => Colors.blueGrey;
+  // Color get _color => const Color.fromARGB(235, 2, 249, 204);
 
   @override
   Brightness get _brightness => .light;
@@ -79,6 +85,7 @@ final class _DarkTheme extends AppTheme {
 
   @override
   Color get _color => Colors.blueAccent;
+  // Color get _color => Colors.blueGrey;
 
   @override
   Brightness get _brightness => .dark;

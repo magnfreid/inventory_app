@@ -2,10 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:inventory_app/inventory/bloc/inventory_bloc.dart';
 import 'package:inventory_app/inventory/bloc/inventory_state.dart';
+import 'package:inventory_app/inventory/extensions/part_filtering_extension.dart';
 import 'package:inventory_app/inventory/widgets/inventory_drawer.dart';
 import 'package:inventory_app/inventory/widgets/inventory_part_card.dart';
 import 'package:inventory_app/inventory/widgets/inventory_tool_bar.dart';
-import 'package:inventory_app/l10n/l10n.dart';
 import 'package:inventory_app/part_editor/view/part_editor_page.dart';
 import 'package:inventory_app/use_cases/part_presentation.dart/watch_part_presentations.dart';
 import 'package:stock_repository/stock_repository.dart';
@@ -34,11 +34,12 @@ class InventoryView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final l10n = context.l10n;
     return Scaffold(
-      appBar: AppBar(),
+      appBar: AppBar(
+        centerTitle: true,
+        title: const Text('All parts'),
+      ),
       drawer: const InventoryDrawer(),
-      bottomNavigationBar: const InventoryToolBar(),
       floatingActionButton: FloatingActionButton.small(
         onPressed: () => Navigator.push(context, PartEditorPage.route()),
         child: const Icon(Icons.add),
@@ -47,41 +48,19 @@ class InventoryView extends StatelessWidget {
       body: BlocBuilder<InventoryBloc, InventoryState>(
         builder: (context, state) {
           final parts = state.filteredParts;
-          return Padding(
-            padding: const .symmetric(horizontal: 8),
-            child: Column(
-              children: [
-                Padding(
-                  padding: const .fromLTRB(12, 0, 0, 0),
-                  child: Row(
-                    children: [
-                      Text(
-                        '${l10n.inventoryTotalPartsText}: '
-                        '${state.filteredParts.length}',
-                      ),
-                      const Spacer(),
-                      Text(l10n.inventoryShowEmptyStockText),
-                      Transform.scale(
-                        scale: 0.55,
-                        child: Switch(
-                          value: state.filter.quantityFilter == .all,
-                          onChanged: (_) => context.read<InventoryBloc>().add(
-                            const HideEmptyStockSwitchPressed(),
-                          ),
-                        ),
-                      ),
-                    ],
-                  ),
+          return Stack(
+            children: [
+              Padding(
+                padding: const .symmetric(horizontal: 8),
+                child: ListView.builder(
+                  padding: const .only(bottom: 140),
+                  itemCount: parts.length,
+                  itemBuilder: (context, index) =>
+                      InventoryPartCard(part: parts[index]),
                 ),
-                Expanded(
-                  child: ListView.builder(
-                    itemCount: parts.length,
-                    itemBuilder: (context, index) =>
-                        InventoryPartCard(part: parts[index]),
-                  ),
-                ),
-              ],
-            ),
+              ),
+              const InventoryToolBar(),
+            ],
           );
         },
       ),
