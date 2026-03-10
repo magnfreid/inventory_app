@@ -14,7 +14,8 @@ on:
 jobs:
   flutter_ci:
     uses: VeryGoodOpenSource/very_good_workflows/.github/workflows/flutter_package.yml@v1
-    # with:
+    with:
+      coverage_excludes: "**/*.g.dart **/*.freezed.dart **/*.gen.dart **/l10n/*.dart **/l10n/**/*.dart **/bootstrap.dart"
     # setup: flutter test ./test/ensure_build_test.dart --run-skipped
     # flutter_version: "3.41.x"
     # run_bloc_lint: true
