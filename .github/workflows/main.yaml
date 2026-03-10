@@ -1,3 +1,17 @@
+# name: ci
+
+# on:
+#   pull_request:
+#     branches:
+#       - main
+
+# jobs:
+#   flutter_ci:
+#     uses: VeryGoodOpenSource/very_good_workflows/.github/workflows/flutter_package.yml@v1
+#     with:
+#       flutter_version: "3.41.x"
+#       run_bloc_lint: true
+
 name: ci
 
 on:
@@ -6,8 +20,13 @@ on:
       - main
 
 jobs:
-  flutter_ci:
-    uses: VeryGoodOpenSource/very_good_workflows/.github/workflows/flutter_package.yml@v1
-    with:
-      flutter_version: "3.41.x"
-      run_bloc_lint: true
+  ci:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: subosito/flutter-action@v2
+        with:
+          flutter-version: "3.41.x"
+      - run: dart pub global activate melos
+      - run: melos bootstrap
+      - run: melos run test

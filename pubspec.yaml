@@ -88,3 +88,9 @@ melos:
     l10n:
       description: "Generate Flutter localization"
       run: fvm flutter gen-l10n
+    test:flutter:
+      run: melos exec --flutter --dir-exists=test -- flutter test
+    test:dart:
+      run: melos exec --no-flutter --dir-exists=test -- dart test
+    test:
+      run: melos run test:dart && melos run test:flutter
