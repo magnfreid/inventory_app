@@ -214,7 +214,9 @@ class InventoryBloc extends Bloc<InventoryEvent, InventoryState> {
     SortByChipPressed event,
     Emitter<InventoryState> emit,
   ) {
-    emit(state.copyWith(filter: state.filter.copyWith(sortBy: event.sortBy)));
+    emit(
+      state.copyWith(filter: state.filter.copyWith(sortByType: event.sortBy)),
+    );
   }
 
   FutureOr<void> _sortOrderButtonPressed(

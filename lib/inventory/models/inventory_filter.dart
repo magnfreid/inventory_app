@@ -30,7 +30,7 @@ final class InventoryFilter {
     Set<String>? categoryFilters,
     Set<String>? storageFilters,
     String? searchQuery,
-    SortByType? sortBy,
+    SortByType? sortByType,
     bool? isSortedAscending,
   }) => InventoryFilter(
     quantityFilter: quantityFilter ?? this.quantityFilter,
@@ -38,7 +38,7 @@ final class InventoryFilter {
     categoryFilters: categoryFilters ?? this.categoryFilters,
     storageFilters: storageFilters ?? this.storageFilters,
     searchQuery: searchQuery ?? this.searchQuery,
-    sortByType: sortBy ?? this.sortByType,
+    sortByType: sortByType ?? this.sortByType,
     isSortedAscending: isSortedAscending ?? this.isSortedAscending,
   );
 }
