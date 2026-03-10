@@ -65,13 +65,10 @@ class InventoryPartCard extends StatelessWidget {
                       const Spacer(),
                       Text(
                         part.totalQuantity.toString(),
-                        // style: const TextStyle(fontSize: 20),
                       ),
                     ],
                   ),
-                  // const Divider(
-                  //   thickness: 0.3,
-                  // ),
+
                   Wrap(
                     children: stocks
                         .map(

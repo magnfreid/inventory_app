@@ -26,36 +26,4 @@ abstract class InventoryState with _$InventoryState {
 
   bool get isLoading => status == .loading;
   bool get isLoadingBottomSheet => bottomSheetStatus == .loading;
-  List<PartPresentation> get filteredParts {
-    return parts.where((part) {
-      if (filter.quantityFilter == .inStock && part.totalQuantity == 0) {
-        return false;
-      }
-
-      if (filter.quantityFilter == .outOfStock && part.totalQuantity > 0) {
-        return false;
-      }
-
-      if (filter.brandFilters.isNotEmpty &&
-          !filter.brandFilters.contains(part.brandTag?.id)) {
-        return false;
-      }
-
-      if (filter.categoryFilters.isNotEmpty &&
-          !filter.categoryFilters.contains(part.categoryTag?.id)) {
-        return false;
-      }
-
-      if (filter.storageFilters.isNotEmpty &&
-          !part.stock.any(
-            (stock) => filter.storageFilters.any(
-              (id) => id == stock.storageId && stock.quantity > 0,
-            ),
-          )) {
-        return false;
-      }
-
-      return true;
-    }).toList();
-  }
 }
