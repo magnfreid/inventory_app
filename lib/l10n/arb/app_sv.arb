@@ -224,6 +224,14 @@
 	"@categories": {
 		"description": "General plural category text."
 	},
+	"name": "Namn",
+	"@name": {
+		"description": "General singular name text."
+	},
+	"quantity": "Antal",
+	"@quantity": {
+		"description": "General singular quantity text."
+	},
 	"storages": "Lager",
 	"@storages": {
 		"description": "General plural storage text."
@@ -244,8 +252,12 @@
 	"@inventoryTotalPartsText": {
 		"description": "Title text for total parts count in Inventory top bar."
 	},
-	"inventoryShowEmptyStockText": "Visa ej i lager",
+	"inventoryShowEmptyStockText": "Dölj ej i lager",
 	"@inventoryShowEmptyStockText": {
 		"description": "Text for switch to show empty stock in Inventory top bar."
+	},
+	"sortSheetTitleText": "Sortera efter",
+	"@sortSheetTitleText": {
+		"description": "Title text for sorting bottom sheet."
 	}
 }

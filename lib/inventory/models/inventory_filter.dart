@@ -1,3 +1,7 @@
+enum QuantityFilter { all, inStock, outOfStock }
+
+enum SortByType { name, brand, category, quantity }
+
 final class InventoryFilter {
   const InventoryFilter({
     this.quantityFilter = .all,
@@ -5,6 +9,8 @@ final class InventoryFilter {
     this.categoryFilters = const {},
     this.storageFilters = const {},
     this.searchQuery = '',
+    this.sortByType = .name,
+    this.isSortedAscending = true,
   });
 
   final QuantityFilter quantityFilter;
@@ -12,6 +18,8 @@ final class InventoryFilter {
   final Set<String> categoryFilters;
   final Set<String> storageFilters;
   final String searchQuery;
+  final SortByType sortByType;
+  final bool isSortedAscending;
 
   int get totalActiveFilters =>
       brandFilters.length + categoryFilters.length + storageFilters.length;
@@ -21,14 +29,16 @@ final class InventoryFilter {
     Set<String>? brandFilters,
     Set<String>? categoryFilters,
     Set<String>? storageFilters,
-    String? searchText,
+    String? searchQuery,
+    SortByType? sortBy,
+    bool? isSortedAscending,
   }) => InventoryFilter(
     quantityFilter: quantityFilter ?? this.quantityFilter,
     brandFilters: brandFilters ?? this.brandFilters,
     categoryFilters: categoryFilters ?? this.categoryFilters,
     storageFilters: storageFilters ?? this.storageFilters,
-    searchQuery: searchText ?? this.searchQuery,
+    searchQuery: searchQuery ?? this.searchQuery,
+    sortByType: sortBy ?? this.sortByType,
+    isSortedAscending: isSortedAscending ?? this.isSortedAscending,
   );
 }
-
-enum QuantityFilter { all, inStock, outOfStock }

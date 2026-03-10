@@ -1,12 +1,13 @@
 import 'package:inventory_app/inventory/bloc/inventory_state.dart';
+import 'package:inventory_app/inventory/extensions/list_sorting_extension.dart';
 import 'package:inventory_app/use_cases/part_presentation.dart/models/part_presentation.dart';
 
 extension PartFiltering on InventoryState {
   List<PartPresentation> get filteredParts {
     final query = filter.searchQuery.toLowerCase();
 
-    if (query.isNotEmpty) {
-      return parts.where((part) {
+    final result = parts.where((part) {
+      if (query.isNotEmpty) {
         final matchesName = part.name.toLowerCase().contains(query);
         final matchesDetail = part.detailNumber.toLowerCase().contains(query);
         final matchesBrand =
@@ -15,10 +16,8 @@ extension PartFiltering on InventoryState {
             part.categoryTag?.label.toLowerCase().contains(query) ?? false;
 
         return matchesName || matchesDetail || matchesBrand || matchesCategory;
-      }).toList();
-    }
+      }
 
-    return parts.where((part) {
       if (filter.quantityFilter == .inStock && part.totalQuantity == 0) {
         return false;
       }
@@ -47,6 +46,8 @@ extension PartFiltering on InventoryState {
       }
 
       return true;
-    }).toList();
+    }).toList()..sortBy(filter.sortByType);
+
+    return filter.isSortedAscending ? result : result.reversed.toList();
   }
 }

@@ -216,6 +216,10 @@
 	"@storage": {
 		"description": "General singular storage text."
 	},
+	"quantity": "Quantity",
+	"@quantity": {
+		"description": "General singular quantity text."
+	},
 	"brands": "Brands",
 	"@brands": {
 		"description": "General plural brand text."
@@ -223,6 +227,10 @@
 	"categories": "Categories",
 	"@categories": {
 		"description": "General plural category text."
+	},
+	"name": "Name",
+	"@name": {
+		"description": "General singular name text."
 	},
 	"storages": "Storages",
 	"@storages": {
@@ -247,5 +255,9 @@
 	"inventoryShowEmptyStockText": "Show empty stock",
 	"@inventoryShowEmptyStockText": {
 		"description": "Text for switch to show empty stock in Inventory top bar."
+	},
+	"sortSheetTitleText": "Sort by",
+	"@sortSheetTitleText": {
+		"description": "Title text for sorting bottom sheet."
 	}
 }

@@ -48,3 +48,12 @@ final class SearchQueryUpdated extends InventoryEvent {
   const SearchQueryUpdated({required this.searchString});
   final String searchString;
 }
+
+final class SortByChipPressed extends InventoryEvent {
+  const SortByChipPressed({required this.sortBy});
+  final SortByType sortBy;
+}
+
+final class SortOrderButtonPressed extends InventoryEvent {
+  const SortOrderButtonPressed();
+}

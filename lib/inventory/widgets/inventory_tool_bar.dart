@@ -4,6 +4,8 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:inventory_app/inventory/bloc/inventory_bloc.dart';
 import 'package:inventory_app/inventory/bloc/inventory_state.dart';
 import 'package:inventory_app/inventory/widgets/inventory_page_filter_bottom_sheet.dart';
+import 'package:inventory_app/inventory/widgets/inventory_page_sort_bottom_sheet.dart';
+import 'package:inventory_app/part_editor/view/part_editor_page.dart';
 
 class InventoryToolBar extends StatefulWidget {
   const InventoryToolBar({super.key});
@@ -48,62 +50,69 @@ class _InventoryToolBarState extends State<InventoryToolBar> {
         return Align(
           alignment: .bottomCenter,
           child: Padding(
-            padding: .only(
-              bottom: _focusNode.hasFocus && _searchBarVisible ? 8 : 26,
-            ),
-            child: Card(
-              elevation: 1,
-              color: context.colors.secondaryContainer,
-              child: AnimatedSwitcher(
-                duration: const Duration(milliseconds: 400),
-                child: _searchBarVisible
-                    ? FractionallySizedBox(
-                        widthFactor: _widthFactor(),
-                        child: SearchBar(
-                          backgroundColor: WidgetStatePropertyAll(
-                            containerColor,
-                          ),
-                          focusNode: _focusNode,
-                          onChanged: (value) => bloc.add(
-                            SearchQueryUpdated(searchString: value),
-                          ),
-                          controller: _controller,
-                          leading: Icon(Icons.search, color: onContainerColor),
-                          trailing: [
-                            if (searchQuery.isEmpty || !_focusNode.hasFocus)
-                              IconButton(
-                                onPressed: () {
-                                  _controller.clear();
-                                  bloc.add(
-                                    const SearchQueryUpdated(
-                                      searchString: '',
-                                    ),
-                                  );
-                                  setState(_focusNode.unfocus);
-                                  _searchBarVisible = false;
-                                },
-                                icon: Icon(
-                                  Icons.cancel,
-                                  color: onContainerColor,
-                                ),
-                              )
-                            else
-                              IconButton(
-                                onPressed: () {
-                                  _controller.clear();
-                                  bloc.add(
-                                    const SearchQueryUpdated(searchString: ''),
-                                  );
-                                },
-                                icon: Icon(
-                                  Icons.backspace,
-                                  color: onContainerColor,
-                                ),
-                              ),
-                          ],
+            padding: const .symmetric(horizontal: 16),
+            child: AnimatedSwitcher(
+              transitionBuilder: (child, animation) {
+                return ScaleTransition(
+                  scale: animation,
+                  child: child,
+                );
+              },
+              duration: const Duration(milliseconds: 300),
+              child: _searchBarVisible
+                  ? Card(
+                      key: const ValueKey('searchbar'),
+                      color: context.colors.secondaryContainer,
+                      elevation: 1,
+                      child: SearchBar(
+                        backgroundColor: WidgetStatePropertyAll(
+                          containerColor,
                         ),
-                      )
-                    : Row(
+                        focusNode: _focusNode,
+                        onChanged: (value) => bloc.add(
+                          SearchQueryUpdated(searchString: value),
+                        ),
+                        controller: _controller,
+                        leading: Icon(Icons.search, color: onContainerColor),
+                        trailing: [
+                          if (searchQuery.isEmpty || !_focusNode.hasFocus)
+                            IconButton(
+                              onPressed: () {
+                                _controller.clear();
+                                bloc.add(
+                                  const SearchQueryUpdated(
+                                    searchString: '',
+                                  ),
+                                );
+                                setState(_focusNode.unfocus);
+                                _searchBarVisible = false;
+                              },
+                              icon: Icon(
+                                Icons.cancel,
+                                color: onContainerColor,
+                              ),
+                            )
+                          else
+                            IconButton(
+                              onPressed: () {
+                                _controller.clear();
+                                bloc.add(
+                                  const SearchQueryUpdated(searchString: ''),
+                                );
+                              },
+                              icon: Icon(
+                                Icons.backspace,
+                                color: onContainerColor,
+                              ),
+                            ),
+                        ],
+                      ),
+                    )
+                  : Card(
+                      key: const ValueKey('toolbar'),
+                      color: context.colors.secondaryContainer,
+                      elevation: 1,
+                      child: Row(
                         mainAxisSize: .min,
                         children: [
                           IconButton(
@@ -116,11 +125,20 @@ class _InventoryToolBarState extends State<InventoryToolBar> {
                             icon: Icon(Icons.search, color: onContainerColor),
                           ),
                           IconButton(
-                            onPressed: () {},
-                            icon: Icon(
-                              Icons.arrow_downward,
-                              color: onContainerColor,
+                            onPressed: () => showModalBottomSheet<void>(
+                              showDragHandle: true,
+                              context: context,
+                              builder: (_) => BlocProvider.value(
+                                value: bloc,
+                                child: const InventoryPageSortBottomSheet(),
+                              ),
                             ),
+                            icon: const Icon(Icons.sort),
+                          ),
+                          FloatingActionButton.small(
+                            onPressed: () =>
+                                Navigator.push(context, PartEditorPage.route()),
+                            child: const Icon(Icons.add),
                           ),
                           Badge.count(
                             isLabelVisible: activeFilters > 0,
@@ -131,7 +149,7 @@ class _InventoryToolBarState extends State<InventoryToolBar> {
                                 isScrollControlled: true,
                                 context: context,
                                 builder: (_) => BlocProvider.value(
-                                  value: context.read<InventoryBloc>(),
+                                  value: bloc,
                                   child: const InventoryPageFilterBottomSheet(),
                                 ),
                               ),
@@ -141,19 +159,23 @@ class _InventoryToolBarState extends State<InventoryToolBar> {
                               ),
                             ),
                           ),
+                          IconButton(
+                            onPressed: () =>
+                                bloc.add(const SortOrderButtonPressed()),
+                            icon: Icon(
+                              state.filter.isSortedAscending
+                                  ? Icons.arrow_upward
+                                  : Icons.arrow_downward,
+                              color: onContainerColor,
+                            ),
+                          ),
                         ],
                       ),
-              ),
+                    ),
             ),
           ),
         );
       },
     );
-  }
-
-  double? _widthFactor() {
-    if (!_searchBarVisible) return null;
-    if (_searchBarVisible && !_focusNode.hasFocus) return 0.6;
-    return 0.9;
   }
 }

@@ -2,6 +2,7 @@ import 'dart:async';
 
 import 'package:bloc/bloc.dart';
 import 'package:inventory_app/inventory/bloc/inventory_state.dart';
+import 'package:inventory_app/inventory/models/inventory_filter.dart';
 import 'package:inventory_app/inventory/models/inventory_filter_type.dart';
 import 'package:inventory_app/tags/models/tag_presentation.dart';
 import 'package:inventory_app/use_cases/part_presentation.dart/models/part_presentation.dart';
@@ -32,6 +33,8 @@ class InventoryBloc extends Bloc<InventoryEvent, InventoryState> {
     on<FilterChipPressed>(_onFilterChipPressed);
     on<ClearFilterChipPressed>(_onClearFilterChipPressed);
     on<SearchQueryUpdated>(_onSearchQueryUpdated);
+    on<SortByChipPressed>(_onSortByChipPressed);
+    on<SortOrderButtonPressed>(_sortOrderButtonPressed);
 
     _partsStreamSubscription = watchPartPresentations().listen(
       (parts) => add(_PartsUpdated(parts: parts)),
@@ -202,7 +205,26 @@ class InventoryBloc extends Bloc<InventoryEvent, InventoryState> {
   ) {
     emit(
       state.copyWith(
-        filter: state.filter.copyWith(searchText: event.searchString),
+        filter: state.filter.copyWith(searchQuery: event.searchString),
+      ),
+    );
+  }
+
+  FutureOr<void> _onSortByChipPressed(
+    SortByChipPressed event,
+    Emitter<InventoryState> emit,
+  ) {
+    emit(state.copyWith(filter: state.filter.copyWith(sortBy: event.sortBy)));
+  }
+
+  FutureOr<void> _sortOrderButtonPressed(
+    SortOrderButtonPressed event,
+    Emitter<InventoryState> emit,
+  ) {
+    final isAscending = state.filter.isSortedAscending;
+    emit(
+      state.copyWith(
+        filter: state.filter.copyWith(isSortedAscending: !isAscending),
       ),
     );
   }

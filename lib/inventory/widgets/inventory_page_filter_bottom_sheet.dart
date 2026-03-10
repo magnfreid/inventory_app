@@ -45,6 +45,20 @@ class InventoryPageFilterBottomSheet extends StatelessWidget {
                         ),
                       ],
                     ),
+                    Row(
+                      mainAxisAlignment: .spaceBetween,
+                      children: [
+                        Text(l10n.inventoryShowEmptyStockText),
+                        ScaleTransition(
+                          scale: const AlwaysStoppedAnimation(0.8),
+                          child: Switch(
+                            value: state.filter.quantityFilter == .inStock,
+                            onChanged: (_) =>
+                                bloc.add(const HideEmptyStockSwitchPressed()),
+                          ),
+                        ),
+                      ],
+                    ),
                     Text(l10n.formFieldCategoryLabelText),
                     Wrap(
                       spacing: 8,

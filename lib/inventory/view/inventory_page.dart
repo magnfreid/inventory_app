@@ -6,7 +6,6 @@ import 'package:inventory_app/inventory/extensions/part_filtering_extension.dart
 import 'package:inventory_app/inventory/widgets/inventory_drawer.dart';
 import 'package:inventory_app/inventory/widgets/inventory_part_card.dart';
 import 'package:inventory_app/inventory/widgets/inventory_tool_bar.dart';
-import 'package:inventory_app/part_editor/view/part_editor_page.dart';
 import 'package:inventory_app/use_cases/part_presentation.dart/watch_part_presentations.dart';
 import 'package:stock_repository/stock_repository.dart';
 import 'package:storage_repository/storage_repository.dart';
@@ -40,27 +39,19 @@ class InventoryView extends StatelessWidget {
         title: const Text('All parts'),
       ),
       drawer: const InventoryDrawer(),
-      floatingActionButton: FloatingActionButton.small(
-        onPressed: () => Navigator.push(context, PartEditorPage.route()),
-        child: const Icon(Icons.add),
-      ),
-      floatingActionButtonLocation: .endContained,
+      floatingActionButton: const InventoryToolBar(),
+      floatingActionButtonLocation: .centerFloat,
       body: BlocBuilder<InventoryBloc, InventoryState>(
         builder: (context, state) {
           final parts = state.filteredParts;
-          return Stack(
-            children: [
-              Padding(
-                padding: const .symmetric(horizontal: 8),
-                child: ListView.builder(
-                  padding: const .only(bottom: 140),
-                  itemCount: parts.length,
-                  itemBuilder: (context, index) =>
-                      InventoryPartCard(part: parts[index]),
-                ),
-              ),
-              const InventoryToolBar(),
-            ],
+          return Padding(
+            padding: const .symmetric(horizontal: 8),
+            child: ListView.builder(
+              padding: const .only(bottom: 140),
+              itemCount: parts.length,
+              itemBuilder: (context, index) =>
+                  InventoryPartCard(part: parts[index]),
+            ),
           );
         },
       ),
