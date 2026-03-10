@@ -24,6 +24,7 @@ workspace:
   - packages/part_repository
   - packages/stock_remote
   - packages/stock_repository
+  - packages/storage_remote
   - packages/storage_repository
   - packages/tag_remote
   - packages/tag_repository
