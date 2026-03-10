@@ -89,8 +89,11 @@ melos:
       description: "Generate Flutter localization"
       run: fvm flutter gen-l10n
     test:flutter:
-      run: melos exec --flutter --dir-exists=test -- flutter test
+      description: "Run Flutter tests"
+      run: melos exec --dir-exists=test --depends-on=flutter_test --flutter -- flutter test
     test:dart:
-      run: melos exec --no-flutter --dir-exists=test -- dart test
+      description: "Run Dart-only tests"
+      run: melos exec --dir-exists=test --no-flutter -- dart test
     test:
+      description: "Run all tests"
       run: melos run test:dart && melos run test:flutter
