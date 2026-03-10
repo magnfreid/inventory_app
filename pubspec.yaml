@@ -8,8 +8,27 @@ environment:
   # sdk: ^3.11.0
   # flutter: ^3.41.1
 
+# workspace:
+#   - packages/*
+
 workspace:
-  - packages/*
+  - packages/app_ui
+  - packages/authentication_service
+  - packages/firebase_authentication_service
+  - packages/firebase_part_remote
+  - packages/firebase_stock_remote
+  - packages/firebase_storage_remote
+  - packages/firebase_tag_remote
+  - packages/firebase_user_remote
+  - packages/part_remote
+  - packages/part_repository
+  - packages/stock_remote
+  - packages/stock_repository
+  - packages/storage_repository
+  - packages/tag_remote
+  - packages/tag_repository
+  - packages/user_remote
+  - packages/user_repository
 
 dependencies:
   app_ui:
