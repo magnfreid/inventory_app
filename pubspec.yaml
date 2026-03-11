@@ -4,11 +4,27 @@ version: 1.0.0+1
 publish_to: none
 
 environment:
-  sdk: ^3.11.0
-  flutter: ^3.41.1
+  sdk: ">=3.11.0 <4.0.0"
 
 workspace:
-  - packages/**
+  - packages/app_ui
+  - packages/authentication_service
+  - packages/firebase_authentication_service
+  - packages/firebase_part_remote
+  - packages/firebase_stock_remote
+  - packages/firebase_storage_remote
+  - packages/firebase_tag_remote
+  - packages/firebase_user_remote
+  - packages/part_remote
+  - packages/part_repository
+  - packages/stock_remote
+  - packages/stock_repository
+  - packages/storage_remote
+  - packages/storage_repository
+  - packages/tag_remote
+  - packages/tag_repository
+  - packages/user_remote
+  - packages/user_repository
 
 dependencies:
   app_ui:
@@ -79,6 +95,16 @@ melos:
     boot:
       description: "Bootstrap the repo via FVM"
       run: fvm dart run melos bootstrap
+    coverage:
+      run: |
+        flutter test --coverage
+        lcov --remove coverage/lcov.info \
+          '**/*.g.dart' \
+          '**/*.freezed.dart' \
+          '**/*.gen.dart' \
+          --ignore-errors unused \
+          -o coverage/lcov_filtered.info
+        genhtml coverage/lcov_filtered.info -o coverage/html
     gen:
       description: "Run build_runner in the app (lib)"
       run: fvm dart run build_runner build --delete-conflicting-outputs
@@ -88,3 +114,12 @@ melos:
     l10n:
       description: "Generate Flutter localization"
       run: fvm flutter gen-l10n
+    test:flutter:
+      description: "Run Flutter tests"
+      run: melos exec --dir-exists=test --depends-on=flutter_test --flutter -- flutter test
+    test:dart:
+      description: "Run Dart-only tests"
+      run: melos exec --dir-exists=test --no-flutter -- dart test
+    test:
+      description: "Run all tests"
+      run: melos run test:dart && melos run test:flutter

@@ -4,10 +4,15 @@ on:
   pull_request:
     branches:
       - main
+    paths:
+      - "lib/**"
+      - "test/**"
+      - "packages/**"
+      - "pubspec.yaml"
+      - ".github/workflows/main.yaml"
 
 jobs:
   flutter_ci:
     uses: VeryGoodOpenSource/very_good_workflows/.github/workflows/flutter_package.yml@v1
     with:
-      flutter_version: "3.41.x"
-      run_bloc_lint: true
+      coverage_excludes: "**/*.g.dart **/*.freezed.dart **/*.gen.dart **/l10n/*.dart **/l10n/**/*.dart **/bootstrap.dart"
