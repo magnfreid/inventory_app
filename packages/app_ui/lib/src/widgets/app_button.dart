@@ -1,3 +1,4 @@
+import 'package:app_ui/app_ui.dart';
 import 'package:flutter/material.dart';
 
 ///Setting for button width.
@@ -95,15 +96,29 @@ class AppButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final child = isLoading
-        ? const Center(
-            child: SizedBox(
-              height: 16,
-              width: 16,
-              child: CircularProgressIndicator.adaptive(),
+    final child = Stack(
+      alignment: Alignment.center,
+      children: [
+        Opacity(
+          opacity: isLoading ? 0 : 1,
+          child: Text(
+            lowerCased ? label : label.toUpperCase(),
+            style: textStyle,
+          ),
+        ),
+        if (isLoading)
+          SizedBox(
+            height: 16,
+            width: 16,
+            child: CircularProgressIndicator.adaptive(
+              valueColor: AlwaysStoppedAnimation(
+                context.colors.onPrimary,
+              ),
+              strokeWidth: 2,
             ),
-          )
-        : Text(lowerCased ? label : label.toUpperCase(), style: textStyle);
+          ),
+      ],
+    );
 
     final button = switch (_type) {
       .elevated => ElevatedButton(onPressed: onPressed, child: child),

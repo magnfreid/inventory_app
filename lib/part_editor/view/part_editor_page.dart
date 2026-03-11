@@ -98,135 +98,144 @@ class _PartEditorViewState extends State<PartEditorView> {
         appBar: AppBar(
           title: Text(widget.part?.name ?? l10n.formFieldTitleText),
         ),
-        body: SingleChildScrollView(
-          child: Padding(
-            padding: const .symmetric(horizontal: 24),
-            child: Column(
-              children: [
-                Padding(
-                  padding: const .symmetric(vertical: 24),
-                  child: Form(
-                    key: _formKey,
-                    onChanged: () => setState(
-                      () =>
-                          _canSave = _formKey.currentState?.validate() ?? false,
-                    ),
-                    child: Column(
-                      spacing: 10,
-                      mainAxisSize: .min,
-                      children: [
-                        TextFormField(
-                          textCapitalization: .sentences,
-                          controller: _nameController,
-                          decoration: InputDecoration(
-                            labelText: '${l10n.formFieldNameLabelText}*',
+        body: SafeArea(
+          child: Column(
+            children: [
+              SingleChildScrollView(
+                child: Padding(
+                  padding: const .symmetric(horizontal: 24),
+                  child: Column(
+                    children: [
+                      Padding(
+                        padding: const .symmetric(vertical: 24),
+                        child: Form(
+                          key: _formKey,
+                          onChanged: () => setState(
+                            () => _canSave =
+                                _formKey.currentState?.validate() ?? false,
                           ),
-                          autovalidateMode: .onUserInteraction,
-                          validator: (value) => value == null || value.isEmpty
-                              ? l10n.validationRequired
-                              : null,
-                        ),
-                        TextFormField(
-                          controller: _priceController,
-                          decoration: InputDecoration(
-                            labelText: '${l10n.formFieldPriceLabelText}*',
+                          child: Column(
+                            spacing: 10,
+                            mainAxisSize: .min,
+                            children: [
+                              TextFormField(
+                                textCapitalization: .sentences,
+                                controller: _nameController,
+                                decoration: InputDecoration(
+                                  labelText: '${l10n.formFieldNameLabelText}*',
+                                ),
+                                autovalidateMode: .onUserInteraction,
+                                validator: (value) =>
+                                    value == null || value.isEmpty
+                                    ? l10n.validationRequired
+                                    : null,
+                              ),
+                              TextFormField(
+                                controller: _priceController,
+                                decoration: InputDecoration(
+                                  labelText: '${l10n.formFieldPriceLabelText}*',
+                                ),
+                                autovalidateMode: .onUserInteraction,
+                                keyboardType: TextInputType.number,
+                                validator: (value) =>
+                                    double.tryParse(value ?? '') == null
+                                    ? l10n.validationEnterNumber
+                                    : null,
+                              ),
+                              TextFormField(
+                                textCapitalization: .sentences,
+                                controller: _detailNumberController,
+                                decoration: InputDecoration(
+                                  labelText:
+                                      l10n.formFieldDetailNumberLabelText,
+                                ),
+                              ),
+                              TextFormField(
+                                textCapitalization: .sentences,
+                                controller: _descriptionController,
+                                decoration: InputDecoration(
+                                  labelText: l10n.formFieldDescriptionLabelText,
+                                ),
+                              ),
+                            ],
                           ),
-                          autovalidateMode: .onUserInteraction,
-                          keyboardType: TextInputType.number,
-                          validator: (value) =>
-                              double.tryParse(value ?? '') == null
-                              ? l10n.validationEnterNumber
-                              : null,
                         ),
-                        TextFormField(
-                          textCapitalization: .sentences,
-                          controller: _detailNumberController,
-                          decoration: InputDecoration(
-                            labelText: l10n.formFieldDetailNumberLabelText,
-                          ),
-                        ),
-                        TextFormField(
-                          textCapitalization: .sentences,
-                          controller: _descriptionController,
-                          decoration: InputDecoration(
-                            labelText: l10n.formFieldDescriptionLabelText,
-                          ),
-                        ),
-                      ],
-                    ),
-                  ),
-                ),
-                Padding(
-                  padding: const .symmetric(vertical: 24),
-                  child: SegmentedButton<bool>(
-                    segments: [
-                      ButtonSegment<bool>(
-                        value: false,
-                        label: Text(l10n.formFieldNewLabelText),
-                        icon: const Icon(Icons.inventory_outlined),
                       ),
-                      ButtonSegment<bool>(
-                        value: true,
-                        label: Text(l10n.formFieldRecycledLabelText),
-                        icon: const Icon(Icons.eco),
+                      Padding(
+                        padding: const .symmetric(vertical: 24),
+                        child: SegmentedButton<bool>(
+                          segments: [
+                            ButtonSegment<bool>(
+                              value: false,
+                              label: Text(l10n.formFieldNewLabelText),
+                              icon: const Icon(Icons.inventory_outlined),
+                            ),
+                            ButtonSegment<bool>(
+                              value: true,
+                              label: Text(l10n.formFieldRecycledLabelText),
+                              icon: const Icon(Icons.eco),
+                            ),
+                          ],
+                          selected: {_isRecycled},
+                          onSelectionChanged: (selection) {
+                            setState(() {
+                              _isRecycled = selection.first;
+                            });
+                          },
+                        ),
+                      ),
+                      _TagSelector(
+                        tag: _selectedBrandTag,
+                        mode: .brand,
+                        onTagSelected: (selectedTag) =>
+                            setState(() => _selectedBrandTag = selectedTag),
+                      ),
+                      _TagSelector(
+                        tag: _selectedCategoryTag,
+                        mode: .category,
+                        onTagSelected: (selectedTag) =>
+                            setState(() => _selectedCategoryTag = selectedTag),
                       ),
                     ],
-                    selected: {_isRecycled},
-                    onSelectionChanged: (selection) {
-                      setState(() {
-                        _isRecycled = selection.first;
-                      });
-                    },
                   ),
                 ),
-                _TagSelector(
-                  tag: _selectedBrandTag,
-                  mode: .brand,
-                  onTagSelected: (selectedTag) =>
-                      setState(() => _selectedBrandTag = selectedTag),
-                ),
-                _TagSelector(
-                  tag: _selectedCategoryTag,
-                  mode: .category,
-                  onTagSelected: (selectedTag) =>
-                      setState(() => _selectedCategoryTag = selectedTag),
-                ),
-                Padding(
-                  padding: const .symmetric(vertical: 8),
-                  child: BlocBuilder<PartEditorBloc, PartEditorState>(
-                    buildWhen: (previous, current) =>
-                        previous.isLoading != current.isLoading,
-                    builder: (context, state) {
-                      return AppButton(
-                        isLoading: state.isLoading,
-                        onPressed: _canSave
-                            ? () => context.read<PartEditorBloc>().add(
-                                SaveButtonPressed(
-                                  part: Part(
-                                    id: widget.part?.partId,
-                                    name: _nameController.text,
-                                    detailNumber: _detailNumberController.text,
-                                    isRecycled: _isRecycled,
-                                    price:
-                                        double.tryParse(
-                                          _priceController.text,
-                                        ) ??
-                                        0.0,
-                                    brandTagId: _selectedBrandTag?.id,
-                                    categoryTagId: _selectedCategoryTag?.id,
-                                    generalTagIds: [],
-                                    description: _descriptionController.text,
-                                  ),
+              ),
+              const Spacer(),
+              Padding(
+                padding: const .symmetric(vertical: 16),
+                child: BlocBuilder<PartEditorBloc, PartEditorState>(
+                  buildWhen: (previous, current) =>
+                      previous.isLoading != current.isLoading,
+                  builder: (context, state) {
+                    return AppButton(
+                      isLoading: state.isLoading,
+                      onPressed: _canSave
+                          ? () => context.read<PartEditorBloc>().add(
+                              SaveButtonPressed(
+                                part: Part(
+                                  id: widget.part?.partId,
+                                  name: _nameController.text,
+                                  detailNumber: _detailNumberController.text,
+                                  isRecycled: _isRecycled,
+                                  price:
+                                      double.tryParse(
+                                        _priceController.text,
+                                      ) ??
+                                      0.0,
+                                  brandTagId: _selectedBrandTag?.id,
+                                  categoryTagId: _selectedCategoryTag?.id,
+                                  generalTagIds: [],
+                                  description: _descriptionController.text,
                                 ),
-                              )
-                            : null,
-                        label: l10n.formSaveButtonText,
-                      );
-                    },
-                  ),
+                              ),
+                            )
+                          : null,
+                      label: l10n.formSaveButtonText,
+                    );
+                  },
                 ),
-              ],
-            ),
+              ),
+            ],
           ),
         ),
       ),
@@ -236,42 +245,49 @@ class _PartEditorViewState extends State<PartEditorView> {
 
 class _TagSelector extends StatelessWidget {
   const _TagSelector({
-    required TagPresentation? tag,
-    required TagBottomSheetMode mode,
+    required this.mode,
     required this.onTagSelected,
-  }) : _tag = tag,
-       _mode = mode;
+    required this.tag,
+  });
 
-  final TagPresentation? _tag;
-  final TagBottomSheetMode _mode;
-  final void Function(TagPresentation selectedTag) onTagSelected;
+  final TagPresentation? tag;
+  final TagBottomSheetMode mode;
+  final void Function(TagPresentation? selectedTag) onTagSelected;
 
   @override
   Widget build(BuildContext context) {
-    final title = switch (_mode) {
-      .brand => 'Brand: ',
-      .category => 'Category: ',
+    final l10n = context.l10n;
+    final title = switch (mode) {
+      .brand => l10n.brand,
+      .category => l10n.category,
     };
-    return Row(
-      mainAxisAlignment: .spaceBetween,
-      children: [
-        Text(title),
-        if (_tag == null) const Text('None') else Text(_tag.label),
-        TextButton(
-          onPressed: () async {
-            final selectedTag = await showModalBottomSheet<TagPresentation>(
-              context: context,
-              builder: (_) => BlocProvider.value(
-                value: context.read<PartEditorBloc>(),
-                child: PartEditorSingleTagBottomSheet(mode: _mode),
+    return ListTile(
+      title: Text(title),
+      trailing: tag == null
+          ? TextButton(
+              onPressed: () => _showSelectSingleTagBottomSheet(context),
+              child: Text(l10n.select),
+            )
+          : InputChip(
+              onDeleted: () => onTagSelected(null),
+              label: Text(tag!.label),
+              avatar: Icon(
+                Icons.tag,
+                color: tag!.color,
               ),
-            );
-            if (selectedTag == null) return;
-            onTagSelected(selectedTag);
-          },
-          child: const Text('Select'),
-        ),
-      ],
+            ),
     );
+  }
+
+  Future<void> _showSelectSingleTagBottomSheet(BuildContext context) async {
+    final selectedTag = await showModalBottomSheet<TagPresentation>(
+      context: context,
+      builder: (_) => BlocProvider.value(
+        value: context.read<PartEditorBloc>(),
+        child: PartEditorSingleTagBottomSheet(mode: mode),
+      ),
+    );
+    if (selectedTag == null) return;
+    onTagSelected(selectedTag);
   }
 }

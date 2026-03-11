@@ -212,6 +212,10 @@
 	"@category": {
 		"description": "General singular category text."
 	},
+	"select": "Välj",
+	"@select": {
+		"description": "General singular select text."
+	},
 	"storage": "Lager",
 	"@storage": {
 		"description": "General singular storage text."
@@ -235,6 +239,14 @@
 	"storages": "Lager",
 	"@storages": {
 		"description": "General plural storage text."
+	},
+	"chooseBrand": "Välj märke",
+	"@chooseBrand": {
+		"description": "Title text for selecting a brand."
+	},
+	"chooseCategory": "Välj kategori",
+	"@chooseCategory": {
+		"description": "Title text for selecting a category."
 	},
 	"all": "Alla",
 	"@all": {
