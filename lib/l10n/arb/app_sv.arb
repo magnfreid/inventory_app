@@ -196,13 +196,13 @@
 	"@deletePartSheetTitleText": {
 		"description": "Bottom sheet title for delete part confirmation."
 	},
-	"deletePartSheetConfirmText": "Radera",
-	"@deletePartSheetConfirmText": {
-		"description": "Bottom sheet confirm button text for delete part confirmation."
+	"delete": "Radera",
+	"@delete": {
+		"description": "General delete confirmation."
 	},
-	"deletePartSheetCancelText": "Avbryt",
-	"@deletePartSheetCancelText": {
-		"description": "Bottom sheet cancel button text for delete part confirmation."
+	"cancel": "Avbryt",
+	"@cancel": {
+		"description": "General cancel confirmation."
 	},
 	"brand": "Märke",
 	"@brand": {
@@ -271,5 +271,17 @@
 	"sortSheetTitleText": "Sortera efter",
 	"@sortSheetTitleText": {
 		"description": "Title text for sorting bottom sheet."
+	},
+	"storageNoDescriptionText": "Ingen beskrivning",
+	"@storageNoDescriptionText": {
+		"description": "Shown when a storage has no description text."
+	},
+	"deleteStorageConfirmationTitle": "Är du säker på att du vill radera",
+	"@deleteStorageConfirmationTitle": {
+		"description": "Title text for storage deletion confirmation."
+	},
+	"deleteStorageConfirmationWarning": "Varning! Radering av detta lager kommer permanent ta bort statusen för lagerförda artiklar!",
+	"@deleteStorageConfirmationWarning": {
+		"description": "Title text for storage deletion confirmation."
 	}
 }

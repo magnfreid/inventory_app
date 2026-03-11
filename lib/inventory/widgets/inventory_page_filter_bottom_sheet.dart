@@ -3,8 +3,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:inventory_app/inventory/bloc/inventory_bloc.dart';
 import 'package:inventory_app/inventory/bloc/inventory_state.dart';
-import 'package:inventory_app/inventory/extensions/list_sorting_extension.dart';
 import 'package:inventory_app/l10n/l10n.dart';
+import 'package:inventory_app/shared/extensions/list_sorting_extension.dart';
 
 class InventoryPageFilterBottomSheet extends StatelessWidget {
   const InventoryPageFilterBottomSheet({super.key});
@@ -142,7 +142,7 @@ class InventoryPageFilterBottomSheet extends StatelessWidget {
                               bloc.add(
                                 FilterChipPressed(
                                   type: .storage,
-                                  itemId: storage.id,
+                                  itemId: storage.id ?? '',
                                 ),
                               );
                             },

@@ -36,4 +36,14 @@ class StorageRepository {
 
     return Storage.fromDto(createdDto);
   }
+
+  /// Edits and existing [Storage] using the [storage]
+  ///
+  /// Converts the model to a [StorageDto] and sends it to the remote.
+  /// Returns the edited [Storage] domain model with its updated values.
+  Future<Storage> editStorage({required Storage storage}) async {
+    final dto = storage.toDto();
+    final result = await _remote.editStorage(dto);
+    return Storage.fromDto(result);
+  }
 }

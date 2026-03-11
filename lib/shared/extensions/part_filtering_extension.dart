@@ -1,5 +1,5 @@
 import 'package:inventory_app/inventory/bloc/inventory_state.dart';
-import 'package:inventory_app/inventory/extensions/list_sorting_extension.dart';
+import 'package:inventory_app/shared/extensions/list_sorting_extension.dart';
 import 'package:inventory_app/use_cases/part_presentation.dart/models/part_presentation.dart';
 
 extension PartFiltering on InventoryState {

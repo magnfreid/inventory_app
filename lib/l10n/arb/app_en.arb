@@ -196,13 +196,13 @@
 	"@deletePartSheetTitleText": {
 		"description": "Bottom sheet title for delete part confirmation."
 	},
-	"deletePartSheetConfirmText": "Delete",
-	"@deletePartSheetConfirmText": {
-		"description": "Bottom sheet confirm button text for delete part confirmation."
+	"delete": "Delete",
+	"@delete": {
+		"description": "General delete confirmation."
 	},
-	"deletePartSheetCancelText": "Cancel",
-	"@deletePartSheetCancelText": {
-		"description": "Bottom sheet cancel button text for delete part confirmation."
+	"cancel": "Cancel",
+	"@cancel": {
+		"description": "General cancel confirmation."
 	},
 	"brand": "Brand",
 	"@brand": {
@@ -271,5 +271,17 @@
 	"sortSheetTitleText": "Sort by",
 	"@sortSheetTitleText": {
 		"description": "Title text for sorting bottom sheet."
+	},
+	"storageNoDescriptionText": "No description",
+	"@storageNoDescriptionText": {
+		"description": "Shown when a storage has no description text."
+	},
+	"deleteStorageConfirmationTitle": "Are you sure you want to delete",
+	"@deleteStorageConfirmationTitle": {
+		"description": "Title text for storage deletion confirmation."
+	},
+	"deleteStorageConfirmationWarning": "Warning! Deleting this storage will also permanently delete its stock!",
+	"@deleteStorageConfirmationWarning": {
+		"description": "Title text for storage deletion confirmation."
 	}
 }

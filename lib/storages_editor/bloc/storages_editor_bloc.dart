@@ -8,22 +8,27 @@ part 'storages_editor_event.dart';
 
 class StoragesEditorBloc extends Bloc<StorageEditorEvent, StoragesEditorState> {
   StoragesEditorBloc({required StorageRepository storageRepository})
-    : _locationRepository = storageRepository,
+    : _storageRepository = storageRepository,
       super(const StoragesEditorState()) {
     on<SaveButtonPressed>(_onSaveButtonPressed);
   }
 
-  final StorageRepository _locationRepository;
+  final StorageRepository _storageRepository;
 
   FutureOr<void> _onSaveButtonPressed(
     SaveButtonPressed event,
     Emitter<StoragesEditorState> emit,
   ) async {
+    final storage = event.storage;
     emit(state.copyWith(status: .loading));
     try {
-      await _locationRepository.addStorage(
-        storage: event.storage,
-      );
+      if (storage.id == null) {
+        await _storageRepository.addStorage(
+          storage: storage,
+        );
+      } else {
+        await _storageRepository.editStorage(storage: storage);
+      }
       emit(state.copyWith(status: .success));
     } on Exception catch (_) {}
   }

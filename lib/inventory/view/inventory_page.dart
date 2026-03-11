@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:inventory_app/inventory/bloc/inventory_bloc.dart';
 import 'package:inventory_app/inventory/bloc/inventory_state.dart';
-import 'package:inventory_app/inventory/extensions/part_filtering_extension.dart';
+import 'package:inventory_app/shared/extensions/part_filtering_extension.dart';
 import 'package:inventory_app/inventory/widgets/inventory_drawer.dart';
 import 'package:inventory_app/inventory/widgets/inventory_part_card.dart';
 import 'package:inventory_app/inventory/widgets/inventory_tool_bar.dart';

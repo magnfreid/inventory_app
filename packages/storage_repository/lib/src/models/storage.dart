@@ -20,7 +20,7 @@ class Storage {
       StorageDto(id: id, name: name, description: description);
 
   /// Unique identifier of the storage.
-  final String id;
+  final String? id;
 
   /// Display name of the storage location.
   final String name;

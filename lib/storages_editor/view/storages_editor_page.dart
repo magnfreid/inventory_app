@@ -11,6 +11,9 @@ class StoragesEditorPage extends StatelessWidget {
 
   final Storage? storage;
 
+  static MaterialPageRoute<void> route({Storage? storage}) =>
+      MaterialPageRoute(builder: (_) => StoragesEditorPage(storage: storage));
+
   @override
   Widget build(BuildContext context) {
     return BlocProvider(
@@ -42,8 +45,10 @@ class _StoragesEditorViewState extends State<StoragesEditorView> {
   @override
   void initState() {
     _formKey = GlobalKey<FormState>();
-    _nameTextController = TextEditingController();
-    _descriptionTextController = TextEditingController();
+    _nameTextController = TextEditingController(text: widget.storage?.name);
+    _descriptionTextController = TextEditingController(
+      text: widget.storage?.description,
+    );
     super.initState();
   }
 
@@ -60,61 +65,76 @@ class _StoragesEditorViewState extends State<StoragesEditorView> {
     return BlocListener<StoragesEditorBloc, StoragesEditorState>(
       listenWhen: (previous, current) => current.isSuccess,
       listener: (context, state) => Navigator.of(context).pop(),
-      child: Form(
-        key: _formKey,
-        child: Padding(
-          padding: const EdgeInsets.symmetric(vertical: 8, horizontal: 24),
-          child: Column(
-            children: [
-              Text(l10n.addStorageBottomSheetTitle),
-              TextFormField(
-                decoration: InputDecoration(
-                  label: Text(l10n.formFieldNameLabelText),
-                ),
-                controller: _nameTextController,
-                autovalidateMode: .always,
-                validator: (value) => value == null || value.isEmpty
-                    ? l10n.validationRequired
-                    : null,
-                onChanged: (value) => setState(() {
-                  canSave = value.isNotEmpty;
-                }),
+      child: Scaffold(
+        appBar: AppBar(
+          title: widget.storage == null
+              ? Text(l10n.addStorageBottomSheetTitle)
+              : Text(widget.storage!.name),
+        ),
+        body: SafeArea(
+          child: Form(
+            key: _formKey,
+            child: Padding(
+              padding: const EdgeInsets.symmetric(vertical: 8, horizontal: 24),
+              child: Column(
+                spacing: 10,
+                children: [
+                  TextFormField(
+                    decoration: InputDecoration(
+                      label: Text(l10n.formFieldNameLabelText),
+                    ),
+                    controller: _nameTextController,
+                    autovalidateMode: .onUserInteraction,
+                    validator: (value) => value == null || value.isEmpty
+                        ? l10n.validationRequired
+                        : null,
+                    onChanged: (value) => setState(() {
+                      canSave = value.isNotEmpty;
+                    }),
+                  ),
+                  TextFormField(
+                    decoration: InputDecoration(
+                      label: Text(l10n.formFieldDescriptionLabelText),
+                    ),
+                    controller: _descriptionTextController,
+                    onChanged: (value) => setState(() {
+                      canSave = _nameTextController.text.isNotEmpty;
+                    }),
+                    minLines: 3,
+                    maxLines: 5,
+                    maxLength: 120,
+                  ),
+                  const Spacer(),
+                  SizedBox(
+                    width: double.infinity,
+                    child: BlocBuilder<StoragesEditorBloc, StoragesEditorState>(
+                      builder: (context, state) {
+                        return AppButton(
+                          isLoading: state.isLoading,
+                          onPressed: canSave
+                              ? () {
+                                  final storage = Storage(
+                                    name: _nameTextController.text,
+                                    description:
+                                        _descriptionTextController.text == ''
+                                        ? null
+                                        : _descriptionTextController.text,
+                                    id: widget.storage?.id,
+                                  );
+                                  context.read<StoragesEditorBloc>().add(
+                                    SaveButtonPressed(storage: storage),
+                                  );
+                                }
+                              : null,
+                          label: l10n.formSaveButtonText,
+                        );
+                      },
+                    ),
+                  ),
+                  const Spacer(),
+                ],
               ),
-              TextFormField(
-                decoration: InputDecoration(
-                  label: Text(l10n.formFieldDescriptionLabelText),
-                ),
-                controller: _descriptionTextController,
-              ),
-              const Spacer(),
-              SizedBox(
-                width: double.infinity,
-                child: BlocBuilder<StoragesEditorBloc, StoragesEditorState>(
-                  builder: (context, state) {
-                    return AppButton(
-                      isLoading: state.isLoading,
-                      onPressed: canSave
-                          ? () {
-                              final storage = Storage(
-                                name: _nameTextController.text,
-                                description:
-                                    _descriptionTextController.text == ''
-                                    ? null
-                                    : _descriptionTextController.text,
-                                id: widget.storage?.id ?? '',
-                              );
-                              context.read<StoragesEditorBloc>().add(
-                                SaveButtonPressed(storage: storage),
-                              );
-                            }
-                          : null,
-                      label: l10n.formSaveButtonText,
-                    );
-                  },
-                ),
-              ),
-              const Spacer(),
-            ],
+            ),
           ),
         ),
       ),

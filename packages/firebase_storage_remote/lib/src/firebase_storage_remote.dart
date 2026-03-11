@@ -50,4 +50,11 @@ class FirebaseStorageRemote implements StorageRemote {
     await docRef.set(dtoWithId);
     return dtoWithId;
   }
+
+  @override
+  Future<StorageDto> editStorage(StorageDto updatedStorage) async {
+    final docRef = _collection.doc(updatedStorage.id);
+    final result = await docRef.set(updatedStorage, SetOptions(merge: true));
+    return updatedStorage;
+  }
 }

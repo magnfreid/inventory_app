@@ -206,7 +206,7 @@ class _BottomSheetState extends State<_BottomSheet> {
                                     context.read<PartDetailsBloc>().add(
                                       AddToStockButtonPressed(
                                         partId: widget.partId,
-                                        storageId: widget.storage.id,
+                                        storageId: widget.storage.id ?? '',
                                         amount: value,
                                       ),
                                     ),

@@ -7,4 +7,6 @@ extension ThemeExtension on BuildContext {
 
   /// Getter for the current color scheme.
   ColorScheme get colors => ColorScheme.of(this);
+
+  ThemeData get theme => Theme.of(this);
 }
