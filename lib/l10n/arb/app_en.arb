@@ -72,7 +72,7 @@
 	"@validationEnterNumber": {
 		"description": "Validation message when numeric input is invalid"
 	},
-	"drawerHeaderText": "Settings",
+	"drawerHeaderText": "Explore",
 	"@drawerHeaderText": {
 		"description": "The title text for the drawer menu"
 	},

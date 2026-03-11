@@ -2,6 +2,7 @@ import 'dart:math';
 
 import 'package:app_ui/app_ui.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:inventory_app/l10n/l10n.dart';
 import 'package:inventory_app/part_editor/bloc/part_editor_bloc.dart';
@@ -95,94 +96,94 @@ class _PartEditorViewState extends State<PartEditorView> {
         Navigator.of(context).pop();
       },
       child: Scaffold(
+        resizeToAvoidBottomInset: false,
         appBar: AppBar(
           title: Text(widget.part?.name ?? l10n.formFieldTitleText),
         ),
         body: SafeArea(
-          child: Column(
+          child: Stack(
             children: [
-              SingleChildScrollView(
-                child: Padding(
-                  padding: const .symmetric(horizontal: 24),
+              Padding(
+                padding: const .all(24),
+                child: SingleChildScrollView(
                   child: Column(
+                    spacing: 16,
                     children: [
-                      Padding(
-                        padding: const .symmetric(vertical: 24),
-                        child: Form(
-                          key: _formKey,
-                          onChanged: () => setState(
-                            () => _canSave =
-                                _formKey.currentState?.validate() ?? false,
-                          ),
-                          child: Column(
-                            spacing: 10,
-                            mainAxisSize: .min,
-                            children: [
-                              TextFormField(
-                                textCapitalization: .sentences,
-                                controller: _nameController,
-                                decoration: InputDecoration(
-                                  labelText: '${l10n.formFieldNameLabelText}*',
-                                ),
-                                autovalidateMode: .onUserInteraction,
-                                validator: (value) =>
-                                    value == null || value.isEmpty
-                                    ? l10n.validationRequired
-                                    : null,
-                              ),
-                              TextFormField(
-                                controller: _priceController,
-                                decoration: InputDecoration(
-                                  labelText: '${l10n.formFieldPriceLabelText}*',
-                                ),
-                                autovalidateMode: .onUserInteraction,
-                                keyboardType: TextInputType.number,
-                                validator: (value) =>
-                                    double.tryParse(value ?? '') == null
-                                    ? l10n.validationEnterNumber
-                                    : null,
-                              ),
-                              TextFormField(
-                                textCapitalization: .sentences,
-                                controller: _detailNumberController,
-                                decoration: InputDecoration(
-                                  labelText:
-                                      l10n.formFieldDetailNumberLabelText,
-                                ),
-                              ),
-                              TextFormField(
-                                textCapitalization: .sentences,
-                                controller: _descriptionController,
-                                decoration: InputDecoration(
-                                  labelText: l10n.formFieldDescriptionLabelText,
-                                ),
-                              ),
-                            ],
-                          ),
+                      Form(
+                        key: _formKey,
+                        onChanged: () => setState(
+                          () => _canSave =
+                              _formKey.currentState?.validate() ?? false,
                         ),
-                      ),
-                      Padding(
-                        padding: const .symmetric(vertical: 24),
-                        child: SegmentedButton<bool>(
-                          segments: [
-                            ButtonSegment<bool>(
-                              value: false,
-                              label: Text(l10n.formFieldNewLabelText),
-                              icon: const Icon(Icons.inventory_outlined),
+                        child: Column(
+                          spacing: 10,
+                          mainAxisSize: .min,
+                          children: [
+                            TextFormField(
+                              textCapitalization: .sentences,
+                              controller: _nameController,
+                              decoration: InputDecoration(
+                                labelText: '${l10n.formFieldNameLabelText}*',
+                              ),
+                              autovalidateMode: .onUserInteraction,
+                              validator: (value) =>
+                                  value == null || value.isEmpty
+                                  ? l10n.validationRequired
+                                  : null,
                             ),
-                            ButtonSegment<bool>(
-                              value: true,
-                              label: Text(l10n.formFieldRecycledLabelText),
-                              icon: const Icon(Icons.eco),
+                            TextFormField(
+                              controller: _priceController,
+                              decoration: InputDecoration(
+                                labelText: '${l10n.formFieldPriceLabelText}*',
+                              ),
+                              autovalidateMode: .onUserInteraction,
+                              keyboardType: const .numberWithOptions(
+                                decimal: true,
+                              ),
+                              onChanged: (value) {
+                                final normalized = value.replaceAll(',', '.');
+                                _priceController.value = TextEditingValue(
+                                  text: normalized,
+                                );
+                              },
+                              validator: (value) =>
+                                  double.tryParse(value ?? '') == null
+                                  ? l10n.validationEnterNumber
+                                  : null,
+                            ),
+                            TextFormField(
+                              textCapitalization: .sentences,
+                              controller: _detailNumberController,
+                              decoration: InputDecoration(
+                                labelText: l10n.formFieldDetailNumberLabelText,
+                              ),
+                            ),
+                            TextFormField(
+                              textCapitalization: .sentences,
+                              controller: _descriptionController,
+                              decoration: InputDecoration(
+                                labelText: l10n.formFieldDescriptionLabelText,
+                              ),
                             ),
                           ],
-                          selected: {_isRecycled},
-                          onSelectionChanged: (selection) {
-                            setState(() {
-                              _isRecycled = selection.first;
-                            });
-                          },
                         ),
+                      ),
+                      SegmentedButton<bool>(
+                        segments: [
+                          ButtonSegment<bool>(
+                            value: false,
+                            label: Text(l10n.formFieldNewLabelText),
+                            icon: const Icon(Icons.inventory_outlined),
+                          ),
+                          ButtonSegment<bool>(
+                            value: true,
+                            label: Text(l10n.formFieldRecycledLabelText),
+                            icon: const Icon(Icons.eco),
+                          ),
+                        ],
+                        selected: {_isRecycled},
+                        onSelectionChanged: (selection) =>
+                            setState(() => _isRecycled = selection.first),
                       ),
                       _TagSelector(
                         tag: _selectedBrandTag,
@@ -200,9 +201,10 @@ class _PartEditorViewState extends State<PartEditorView> {
                   ),
                 ),
               ),
-              const Spacer(),
-              Padding(
-                padding: const .symmetric(vertical: 16),
+
+              Align(
+                alignment: .bottomCenter,
+
                 child: BlocBuilder<PartEditorBloc, PartEditorState>(
                   buildWhen: (previous, current) =>
                       previous.isLoading != current.isLoading,
@@ -290,4 +292,6 @@ class _TagSelector extends StatelessWidget {
     if (selectedTag == null) return;
     onTagSelected(selectedTag);
   }
+
+  void _onSaveButtonPressed() {}
 }

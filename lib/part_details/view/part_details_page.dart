@@ -88,7 +88,8 @@ class PartDetailsView extends StatelessWidget {
                             horizontal: 28,
                           ),
                           child: AnimatedSwitcher(
-                            duration: const Duration(milliseconds: 200),
+                            duration: const Duration(milliseconds: 50),
+
                             child: switch (state.content) {
                               .details => PartDetailsInfo(
                                 key: const ValueKey('details'),
@@ -143,28 +144,41 @@ class _DeleteButton extends StatelessWidget {
       onPressed: () => showModalBottomSheet<void>(
         context: context,
         builder: (_) => SafeArea(
-          child: Column(
-            mainAxisSize: .min,
-            children: [
-              Text(l10n.deletePartSheetTitleText),
-              Row(
-                mainAxisAlignment: .spaceBetween,
-                children: [
-                  AppButton.elevated(
-                    width: .wrap,
-                    onPressed: () => Navigator.pop(context),
-                    label: l10n.deletePartSheetCancelText,
-                  ),
-                  AppButton(
-                    width: .wrap,
-                    onPressed: () => context.read<PartDetailsBloc>().add(
-                      ConfirmDeleteButtonPressed(partId: partId),
+          child: Padding(
+            padding: const .all(24),
+            child: Column(
+              spacing: 20,
+              mainAxisSize: .min,
+              children: [
+                Text(
+                  l10n.deletePartSheetTitleText,
+                  style: context.text.bodyLarge,
+                ),
+                Row(
+                  mainAxisAlignment: .spaceBetween,
+                  children: [
+                    AppButton.elevated(
+                      width: .wrap,
+                      onPressed: () => Navigator.pop(context),
+                      label: l10n.deletePartSheetCancelText,
                     ),
-                    label: l10n.deletePartSheetConfirmText,
-                  ),
-                ],
-              ),
-            ],
+                    AppButton(
+                      width: .wrap,
+                      onPressed: () => context.read<PartDetailsBloc>().add(
+                        ConfirmDeleteButtonPressed(partId: partId),
+                      ),
+                      label: l10n.deletePartSheetConfirmText,
+                      buttonStyle: ElevatedButton.styleFrom(
+                        backgroundColor: context.colors.error,
+                      ),
+                      textStyle: context.text.bodyMedium?.copyWith(
+                        color: context.colors.onError,
+                      ),
+                    ),
+                  ],
+                ),
+              ],
+            ),
           ),
         ),
       ),

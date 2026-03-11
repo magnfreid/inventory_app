@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:inventory_app/inventory/bloc/inventory_bloc.dart';
 import 'package:inventory_app/inventory/bloc/inventory_state.dart';
-import 'package:inventory_app/shared/widgets/use_stock_list_item.dart';
+import 'package:inventory_app/shared/widgets/stock_list_tile.dart';
 import 'package:inventory_app/use_cases/part_presentation.dart/models/part_presentation.dart';
 
 class InventoryStockBottomSheet extends StatelessWidget {
@@ -52,9 +52,9 @@ class InventoryStockBottomSheet extends StatelessWidget {
                       itemCount: stocks.length,
                       itemBuilder: (context, index) {
                         final stock = stocks[index];
-                        return UseStockListItem(
+                        return StockListTile(
                           stock: stock,
-                          isLoading: state.isLoadingBottomSheet,
+                          part: part,
                           onPressed: () => context.read<InventoryBloc>().add(
                             UseStockButtonPressed(
                               partId: part.partId,

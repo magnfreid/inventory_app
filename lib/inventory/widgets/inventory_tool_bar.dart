@@ -63,7 +63,7 @@ class _InventoryToolBarState extends State<InventoryToolBar> {
                   ? Card(
                       key: const ValueKey('searchbar'),
                       color: context.colors.secondaryContainer,
-                      elevation: 1,
+                      elevation: 2,
                       child: SearchBar(
                         backgroundColor: WidgetStatePropertyAll(
                           containerColor,
@@ -111,7 +111,7 @@ class _InventoryToolBarState extends State<InventoryToolBar> {
                   : Card(
                       key: const ValueKey('toolbar'),
                       color: context.colors.secondaryContainer,
-                      elevation: 1,
+                      elevation: 2,
                       child: Row(
                         mainAxisSize: .min,
                         children: [
@@ -136,6 +136,7 @@ class _InventoryToolBarState extends State<InventoryToolBar> {
                             icon: const Icon(Icons.sort),
                           ),
                           FloatingActionButton.small(
+                            elevation: 1,
                             onPressed: () =>
                                 Navigator.push(context, PartEditorPage.route()),
                             child: const Icon(Icons.add),

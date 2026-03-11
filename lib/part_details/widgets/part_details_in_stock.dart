@@ -1,8 +1,8 @@
-import 'package:app_ui/app_ui.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:inventory_app/l10n/l10n.dart';
 import 'package:inventory_app/part_details/bloc/part_details_bloc.dart';
+import 'package:inventory_app/shared/widgets/stock_list_tile.dart';
 import 'package:inventory_app/use_cases/part_presentation.dart/models/part_presentation.dart';
 
 class PartDetailsInStock extends StatelessWidget {
@@ -39,22 +39,14 @@ class PartDetailsInStock extends StatelessWidget {
                   itemCount: stocks.length,
                   itemBuilder: (context, index) {
                     final stock = stocks[index];
-                    return ListTile(
-                      title: Row(
-                        children: [
-                          Text(stock.storageName),
-                          const Spacer(),
-                          Text(stock.quantity.toString()),
-                        ],
-                      ),
-                      trailing: AppButton.text(
-                        onPressed: () => context.read<PartDetailsBloc>().add(
-                          UseButtonPressed(
-                            partId: part.partId,
-                            storageId: stock.storageId,
-                          ),
+                    return StockListTile(
+                      stock: stock,
+                      part: part,
+                      onPressed: () => context.read<PartDetailsBloc>().add(
+                        UseButtonPressed(
+                          partId: part.partId,
+                          storageId: stock.storageId,
                         ),
-                        label: l10n.inStockUseButtonLabelText,
                       ),
                     );
                   },

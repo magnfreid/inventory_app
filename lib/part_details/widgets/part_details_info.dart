@@ -19,7 +19,7 @@ class PartDetailsInfo extends StatelessWidget {
         // _MainTagsRow(part: part),
         _DetailField(
           title: l10n.formFieldDetailNumberLabelText,
-          subtitle: part.detailNumber,
+          subtitle: part.detailNumber.isEmpty ? '-' : part.detailNumber,
         ),
         _DetailField(
           title: l10n.formFieldPriceLabelText,
@@ -51,24 +51,22 @@ class PartDetailsInfo extends StatelessWidget {
           Column(
             children: [
               const Divider(),
-              Padding(
-                padding: const .symmetric(vertical: 16),
-                child: Column(
-                  spacing: 8,
-                  crossAxisAlignment: .start,
-                  children: [
-                    Text(
-                      l10n.formFieldDescriptionLabelText,
-                      style: context.text.bodyLarge,
+              Column(
+                spacing: 8,
+                crossAxisAlignment: .start,
+                children: [
+                  const SizedBox(width: double.infinity),
+                  Text(
+                    l10n.formFieldDescriptionLabelText,
+                    style: context.text.bodyLarge,
+                  ),
+                  Text(
+                    description,
+                    style: context.text.bodyLarge?.copyWith(
+                      color: context.colors.onSurfaceVariant,
                     ),
-                    Text(
-                      description,
-                      style: context.text.bodyLarge?.copyWith(
-                        color: context.colors.onSurfaceVariant,
-                      ),
-                    ),
-                  ],
-                ),
+                  ),
+                ],
               ),
             ],
           ),
