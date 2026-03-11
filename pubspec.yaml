@@ -5,11 +5,6 @@ publish_to: none
 
 environment:
   sdk: ">=3.11.0 <4.0.0"
-  # sdk: ^3.11.0
-  # flutter: ^3.41.1
-
-# workspace:
-#   - packages/*
 
 workspace:
   - packages/app_ui
@@ -100,6 +95,16 @@ melos:
     boot:
       description: "Bootstrap the repo via FVM"
       run: fvm dart run melos bootstrap
+    coverage:
+      run: |
+        flutter test --coverage
+        lcov --remove coverage/lcov.info \
+          '**/*.g.dart' \
+          '**/*.freezed.dart' \
+          '**/*.gen.dart' \
+          --ignore-errors unused \
+          -o coverage/lcov_filtered.info
+        genhtml coverage/lcov_filtered.info -o coverage/html
     gen:
       description: "Run build_runner in the app (lib)"
       run: fvm dart run build_runner build --delete-conflicting-outputs
