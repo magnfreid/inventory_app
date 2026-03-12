@@ -1,6 +1,7 @@
 import 'dart:async';
 
 import 'package:bloc/bloc.dart';
+import 'package:inventory_app/shared/utilities/bloc_transformers.dart';
 import 'package:inventory_app/tags/bloc/tags_state.dart';
 import 'package:inventory_app/tags/models/tag_presentation.dart';
 import 'package:tag_repository/tag_repository.dart';
@@ -11,8 +12,14 @@ class TagsBloc extends Bloc<TagsEvent, TagsState> {
   TagsBloc({required TagRepository tagRepository})
     : _tagRepository = tagRepository,
       super(const TagsState()) {
-    on<_TagsUpdated>(_onTagsUpdated);
-    on<SaveButtonPressed>(_onSaveButtonPressed);
+    on<_TagsUpdated>(
+      _onTagsUpdated,
+      transformer: debounceRestartable(const Duration(milliseconds: 500)),
+    );
+    on<SaveButtonPressed>(
+      _onSaveButtonPressed,
+      transformer: throttle(const Duration(milliseconds: 500)),
+    );
 
     _subscription = tagRepository.watchTags().listen(
       (tags) {

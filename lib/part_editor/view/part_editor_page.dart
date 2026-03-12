@@ -2,6 +2,7 @@ import 'dart:math';
 
 import 'package:app_ui/app_ui.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:inventory_app/l10n/l10n.dart';
 import 'package:inventory_app/part_editor/bloc/part_editor_bloc.dart';
@@ -139,12 +140,24 @@ class _PartEditorViewState extends State<PartEditorView> {
                               keyboardType: const .numberWithOptions(
                                 decimal: true,
                               ),
-                              onChanged: (value) {
-                                final normalized = value.replaceAll(',', '.');
-                                _priceController.value = TextEditingValue(
-                                  text: normalized,
-                                );
-                              },
+                              inputFormatters: [
+                                TextInputFormatter.withFunction((
+                                  oldValue,
+                                  newValue,
+                                ) {
+                                  final normalized = newValue.text.replaceAll(
+                                    ',',
+                                    '.',
+                                  );
+
+                                  return newValue.copyWith(
+                                    text: normalized,
+                                    selection: TextSelection.collapsed(
+                                      offset: normalized.length,
+                                    ),
+                                  );
+                                }),
+                              ],
                               validator: (value) =>
                                   double.tryParse(value ?? '') == null
                                   ? l10n.validationEnterNumber

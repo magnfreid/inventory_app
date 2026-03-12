@@ -1,6 +1,7 @@
 import 'dart:async';
 
 import 'package:bloc/bloc.dart';
+import 'package:bloc_concurrency/bloc_concurrency.dart';
 import 'package:inventory_app/storages_editor/bloc/storages_editor_state.dart';
 import 'package:storage_repository/storage_repository.dart';
 
@@ -10,7 +11,7 @@ class StoragesEditorBloc extends Bloc<StorageEditorEvent, StoragesEditorState> {
   StoragesEditorBloc({required StorageRepository storageRepository})
     : _storageRepository = storageRepository,
       super(const StoragesEditorState()) {
-    on<SaveButtonPressed>(_onSaveButtonPressed);
+    on<SaveButtonPressed>(_onSaveButtonPressed, transformer: droppable());
   }
 
   final StorageRepository _storageRepository;

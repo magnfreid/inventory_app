@@ -1,6 +1,7 @@
 import 'dart:async';
 
 import 'package:bloc/bloc.dart';
+import 'package:inventory_app/shared/utilities/bloc_transformers.dart';
 import 'package:inventory_app/storages/bloc/storages_state.dart';
 import 'package:storage_repository/storage_repository.dart';
 
@@ -10,7 +11,10 @@ class StoragesBloc extends Bloc<LocationsEvent, StoragesState> {
   StoragesBloc({required StorageRepository storageRepository})
     : _storageRepository = storageRepository,
       super(const StoragesState()) {
-    on<_StoragesUpdated>(_onStoragesUpdated);
+    on<_StoragesUpdated>(
+      _onStoragesUpdated,
+      transformer: throttle(const Duration(milliseconds: 500)),
+    );
 
     _streamSubscription = _storageRepository.watchStorages().listen(
       (data) => add(_StoragesUpdated(storages: data)),

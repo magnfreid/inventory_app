@@ -1,7 +1,9 @@
 import 'dart:async';
 
 import 'package:bloc/bloc.dart';
+import 'package:bloc_concurrency/bloc_concurrency.dart';
 import 'package:inventory_app/part_details/bloc/part_details_state.dart';
+import 'package:inventory_app/shared/utilities/bloc_transformers.dart';
 import 'package:inventory_app/use_cases/part_presentation.dart/models/part_presentation.dart';
 import 'package:inventory_app/use_cases/part_presentation.dart/watch_single_part_presentation.dart';
 import 'package:part_repository/part_repository.dart';
@@ -21,12 +23,20 @@ class PartDetailsBloc extends Bloc<PartDetailsEvent, PartDetailsState> {
        _partRepository = partRepository,
        super(const PartDetailsState()) {
     on<_StoragesUpdated>(_onStoragesUpdated);
-    on<_PartUpdated>(_onPartUpdated);
+    on<_PartUpdated>(
+      _onPartUpdated,
+      transformer: debounceRestartable(const Duration(milliseconds: 500)),
+    );
     on<ButtonSegmentPressed>(_onButtonSegmentPressed);
-    //TODO(magnfreid): Add throttle!
-    on<UseButtonPressed>(_onUseButtonPressed);
-    on<AddToStockButtonPressed>(_onAddToStockButtonPressed);
-    on<ConfirmDeleteButtonPressed>(_onConfirmDeleteButtonPressed);
+    on<UseButtonPressed>(_onUseButtonPressed, transformer: droppable());
+    on<AddToStockButtonPressed>(
+      _onAddToStockButtonPressed,
+      transformer: droppable(),
+    );
+    on<ConfirmDeleteButtonPressed>(
+      _onConfirmDeleteButtonPressed,
+      transformer: droppable(),
+    );
 
     _storagesStreamSubscription = storageRepository.watchStorages().listen(
       (data) => add(_StoragesUpdated(storages: data)),
