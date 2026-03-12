@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:inventory_app/authenticated_app/cubit/user_cubit.dart';
 import 'package:inventory_app/inventory/bloc/inventory_bloc.dart';
 import 'package:inventory_app/inventory/bloc/inventory_state.dart';
 import 'package:inventory_app/inventory/widgets/inventory_drawer.dart';
@@ -37,7 +38,7 @@ class InventoryView extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(
         centerTitle: true,
-        title: const Text('All parts'),
+        // title:  Text(context.watch<UserCubit>()),
       ),
       drawer: const InventoryDrawer(),
       floatingActionButton: const InventoryToolBar(),

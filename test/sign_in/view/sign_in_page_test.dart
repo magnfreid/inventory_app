@@ -55,7 +55,7 @@ void main() {
       );
       expect(find.byType(TextField), findsExactly(2));
       expect(find.byType(AppButton), findsOneWidget);
-      expect(find.byType(Text), findsExactly(2));
+      expect(find.byType(Text), findsExactly(3));
       expect(find.byType(CircularProgressIndicator), findsOneWidget);
     });
 
