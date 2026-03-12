@@ -144,8 +144,12 @@
 	"@tagPageEmptyListText": {
 		"description": "Text displayed on screen when a tag type list is empty"
 	},
-	"tagsBottomSheetTitleText": "Lägg till ny tagg",
-	"@tagsBottomSheetTitleText": {
+	"tagsBottomSheetCreateTitleText": "Lägg till ny tagg",
+	"@tagsBottomSheetCreateTitleText": {
+		"description": "Title text on bottom sheet for creating a new tag"
+	},
+	"tagsBottomSheetEditTitleText": "Uppdatera tagg",
+	"@tagsBottomSheetEditTitleText": {
 		"description": "Title text on bottom sheet for creating a new tag"
 	},
 	"tagsBottomSheetBrandText": "Märke",
@@ -283,5 +287,9 @@
 	"deleteStorageConfirmationWarning": "Varning! Radering av detta lager kommer permanent ta bort statusen för lagerförda artiklar!",
 	"@deleteStorageConfirmationWarning": {
 		"description": "Title text for storage deletion confirmation."
+	},
+	"workInProgress": "Arbete pågår!",
+	"@workInProgress": {
+		"description": "Text for features that are not done yet."
 	}
 }

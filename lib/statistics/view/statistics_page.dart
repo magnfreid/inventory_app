@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:inventory_app/l10n/l10n.dart';
 
 class StatisticsPage extends StatelessWidget {
   const StatisticsPage({super.key});
@@ -8,11 +9,12 @@ class StatisticsPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = context.l10n;
     return Scaffold(
       appBar: AppBar(),
-      body: const Placeholder(
+      body: Placeholder(
         child: Center(
-          child: Text('Statistics Page'),
+          child: Text(l10n.workInProgress),
         ),
       ),
     );

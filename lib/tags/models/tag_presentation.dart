@@ -11,7 +11,7 @@ class TagPresentation {
   });
 
   factory TagPresentation.fromDomainModel(Tag domainModel) => TagPresentation(
-    id: domainModel.id,
+    id: domainModel.id ?? '',
     label: domainModel.label,
     color: domainModel.color.toColor(),
     type: domainModel.type,

@@ -7,7 +7,7 @@ part of 'storage_dto.dart';
 // **************************************************************************
 
 StorageDto _$StorageDtoFromJson(Map<String, dynamic> json) => StorageDto(
-  id: json['id'] as String,
+  id: json['id'] as String?,
   name: json['name'] as String,
   description: json['description'] as String?,
 );

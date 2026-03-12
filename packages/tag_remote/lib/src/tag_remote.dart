@@ -12,5 +12,5 @@ abstract interface class TagRemote {
   Future<void> deleteTag(String id);
 
   ///Edit an existing [TagDto] on the remote data source.
-  Future<void> editTag(TagDto tag);
+  Future<void> editTag(TagDto dto);
 }
