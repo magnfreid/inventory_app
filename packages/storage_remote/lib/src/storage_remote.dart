@@ -7,4 +7,7 @@ abstract interface class StorageRemote {
 
   ///Adds a new [StorageDto] to the remote database.
   Future<StorageDto> addStorage(StorageDto dto);
+
+  ///Edits an existing [StorageDto] on the remote.
+  Future<StorageDto> editStorage(StorageDto updatedStorage);
 }

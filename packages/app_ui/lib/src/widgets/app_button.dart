@@ -1,3 +1,4 @@
+import 'package:app_ui/app_ui.dart';
 import 'package:flutter/material.dart';
 
 ///Setting for button width.
@@ -33,6 +34,7 @@ class AppButton extends StatelessWidget {
     AppButtonWidth? width,
     this.isLoading = false,
     this.textStyle,
+    this.buttonStyle,
     this.lowerCased = false,
     super.key,
   }) : _type = .filled,
@@ -45,6 +47,7 @@ class AppButton extends StatelessWidget {
     AppButtonWidth? width,
     this.isLoading = false,
     this.textStyle,
+    this.buttonStyle,
     this.lowerCased = false,
 
     super.key,
@@ -58,6 +61,7 @@ class AppButton extends StatelessWidget {
     AppButtonWidth? width,
     this.isLoading = false,
     this.textStyle,
+    this.buttonStyle,
     this.lowerCased = false,
     super.key,
   }) : _type = .outlined,
@@ -70,24 +74,28 @@ class AppButton extends StatelessWidget {
     AppButtonWidth? width,
     this.isLoading = false,
     this.textStyle,
+    this.buttonStyle,
     this.lowerCased = false,
     super.key,
   }) : _type = .text,
        _width = width ?? .wrap;
 
-  ///Replaced [AppButton] label text with loading indicator when true.
+  /// Replaced [AppButton] label text with loading indicator when true.
   final bool isLoading;
 
-  ///Callback for when the [AppButton] is pressed.
+  /// Callback for when the [AppButton] is pressed.
   final VoidCallback? onPressed;
 
-  ///The text shown inside the [AppButton].
+  /// The text shown inside the [AppButton].
   final String label;
 
-  ///Optional text style for the button text
+  /// Optional text style for the button text.
   final TextStyle? textStyle;
 
-  ///Can be set to true to override the default uppercased text
+  /// Optional button style.
+  final ButtonStyle? buttonStyle;
+
+  /// Can be set to true to override the default uppercased text
   final bool lowerCased;
 
   final AppButtonWidth _width;
@@ -95,21 +103,51 @@ class AppButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final child = isLoading
-        ? const Center(
-            child: SizedBox(
-              height: 16,
-              width: 16,
-              child: CircularProgressIndicator.adaptive(),
+    final child = Stack(
+      alignment: Alignment.center,
+      children: [
+        Opacity(
+          opacity: isLoading ? 0 : 1,
+          child: Text(
+            lowerCased ? label : label.toUpperCase(),
+            style: textStyle,
+          ),
+        ),
+        if (isLoading)
+          SizedBox(
+            height: 16,
+            width: 16,
+            child: CircularProgressIndicator.adaptive(
+              valueColor: AlwaysStoppedAnimation(
+                context.colors.onPrimary,
+              ),
+              strokeWidth: 2,
             ),
-          )
-        : Text(lowerCased ? label : label.toUpperCase(), style: textStyle);
+          ),
+      ],
+    );
 
     final button = switch (_type) {
-      .elevated => ElevatedButton(onPressed: onPressed, child: child),
-      .filled => FilledButton(onPressed: onPressed, child: child),
-      .outlined => OutlinedButton(onPressed: onPressed, child: child),
-      .text => TextButton(onPressed: onPressed, child: child),
+      .elevated => ElevatedButton(
+        onPressed: onPressed,
+        style: buttonStyle,
+        child: child,
+      ),
+      .filled => FilledButton(
+        onPressed: onPressed,
+        style: buttonStyle,
+        child: child,
+      ),
+      .outlined => OutlinedButton(
+        onPressed: onPressed,
+        style: buttonStyle,
+        child: child,
+      ),
+      .text => TextButton(
+        onPressed: onPressed,
+        style: buttonStyle,
+        child: child,
+      ),
     };
 
     return switch (_width) {

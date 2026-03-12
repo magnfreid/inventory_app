@@ -19,13 +19,17 @@ class InventoryDrawer extends StatelessWidget {
       child: SafeArea(
         child: Column(
           children: [
+            const Padding(
+              padding: .only(top: 36),
+              child: _ThemeModeSelector(),
+            ),
+
             DrawerHeader(
               child: Align(
                 alignment: .bottomLeft,
                 child: Text(l10n.drawerHeaderText),
               ),
             ),
-            const _ThemeModeSelector(),
 
             ListTile(
               leading: const Icon(Icons.shelves),
@@ -50,11 +54,6 @@ class InventoryDrawer extends StatelessWidget {
                 Navigator.pop(context);
                 unawaited(Navigator.push(context, StatisticsPage.route()));
               },
-            ),
-
-            ListTile(
-              leading: const Icon(Icons.settings),
-              title: Text(l10n.drawerSettingsLinkText),
             ),
             const Spacer(),
             ListTile(
