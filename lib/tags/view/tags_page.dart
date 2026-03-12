@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:inventory_app/l10n/l10n.dart';
+import 'package:inventory_app/shared/extensions/list_sorting_extension.dart';
 import 'package:inventory_app/tags/bloc/tags_bloc.dart';
 import 'package:inventory_app/tags/bloc/tags_state.dart';
 import 'package:inventory_app/tags/models/tag_presentation.dart';
@@ -69,7 +70,7 @@ class _TagsViewState extends State<TagsView> with TickerProviderStateMixin {
           builder: (_) => BlocProvider.value(
             value: context.read<TagsBloc>(),
             child: SafeArea(
-              child: TagsBottomSheet(
+              child: TagsBottomSheet.create(
                 initialBrand: TagType.values[_tabController.index],
               ),
             ),
@@ -104,16 +105,32 @@ class _TabContent extends StatelessWidget {
     final l10n = context.l10n;
     return tags.isEmpty
         ? Center(child: Text(l10n.tagPageEmptyListText))
-        : ListView.builder(
-            itemCount: tags.length,
-            itemBuilder: (context, index) {
-              final tag = tags[index];
-              return ListTile(
-                title: Text(tag.label),
-                iconColor: tag.color,
-                trailing: const Icon(Icons.label),
-              );
-            },
+        : Padding(
+            padding: const EdgeInsets.all(16),
+            child: Wrap(
+              spacing: 10,
+              children: tags
+                  .sortedByLabel()
+                  .map(
+                    (tag) => ActionChip(
+                      label: Text(tag.label),
+                      avatar: Icon(
+                        Icons.tag,
+                        color: tag.color,
+                      ),
+                      onPressed: () => showModalBottomSheet<void>(
+                        showDragHandle: true,
+                        isScrollControlled: true,
+                        context: context,
+                        builder: (_) => BlocProvider.value(
+                          value: context.read<TagsBloc>(),
+                          child: TagsBottomSheet.edit(tag: tag),
+                        ),
+                      ),
+                    ),
+                  )
+                  .toList(),
+            ),
           );
   }
 }

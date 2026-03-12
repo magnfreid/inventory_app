@@ -25,4 +25,10 @@ class TagRepository {
     final createdDto = await _remote.addTag(dto);
     return Tag.fromDto(createdDto);
   }
+
+  /// Edits an existing [tag] on the remote.
+  Future<void> editTag(Tag tag) async {
+    final dto = tag.toDto();
+    return _remote.editTag(dto);
+  }
 }

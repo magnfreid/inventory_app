@@ -51,8 +51,8 @@ class FirebaseTagRemote implements TagRemote {
   }
 
   @override
-  Future<void> editTag(TagDto tag) async {
-    final docRef = _collection.doc(tag.id);
-    await docRef.update(tag.toJson());
+  Future<void> editTag(TagDto dto) async {
+    final docRef = _collection.doc(dto.id);
+    await docRef.set(dto, SetOptions(merge: true));
   }
 }

@@ -21,12 +21,13 @@ PartDto _$PartDtoFromJson(Map<String, dynamic> json) => PartDto(
 );
 
 Map<String, dynamic> _$PartDtoToJson(PartDto instance) => <String, dynamic>{
+  'id': instance.id,
   'name': instance.name,
   'detailNumber': instance.detailNumber,
   'isRecycled': instance.isRecycled,
   'price': instance.price,
   'categoryTagId': instance.categoryTagId,
   'brandTagId': instance.brandTagId,
-  'generalTagIds': instance.generalTagIds,
   'description': instance.description,
+  'generalTagIds': instance.generalTagIds,
 };

@@ -46,9 +46,14 @@ class TagsBloc extends Bloc<TagsEvent, TagsState> {
     SaveButtonPressed event,
     Emitter<TagsState> emit,
   ) async {
+    final tag = event.tag;
     emit(state.copyWith(bottomSheetStatus: .loading));
     try {
-      await _tagRepository.addTag(event.tag);
+      if (tag.id == null) {
+        await _tagRepository.addTag(tag);
+      } else {
+        await _tagRepository.editTag(tag);
+      }
       emit(state.copyWith(bottomSheetStatus: .success));
     } on Exception catch (_) {
       emit(state.copyWith(bottomSheetStatus: .idle));

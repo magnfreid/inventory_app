@@ -25,7 +25,7 @@ class Tag {
       (val) => val.name == dto.type,
       orElse: () => TagType.general,
     );
-    return Tag(id: dto.id ?? '', label: dto.label, color: color, type: type);
+    return Tag(id: dto.id, label: dto.label, color: color, type: type);
   }
 
   /// Converts this [Tag] to a [TagDto].
@@ -33,7 +33,7 @@ class Tag {
       TagDto(id: id, label: label, color: color.name, type: type.name);
 
   /// Unique ID of the tag.
-  final String id;
+  final String? id;
 
   /// Display label of the tag.
   final String label;

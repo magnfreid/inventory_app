@@ -5,12 +5,19 @@ import 'package:inventory_app/l10n/l10n.dart';
 import 'package:inventory_app/tags/bloc/tags_bloc.dart';
 import 'package:inventory_app/tags/bloc/tags_state.dart';
 import 'package:inventory_app/tags/extensions/tag_color_extension.dart';
+import 'package:inventory_app/tags/models/tag_presentation.dart';
 import 'package:tag_repository/tag_repository.dart';
 
 class TagsBottomSheet extends StatefulWidget {
-  const TagsBottomSheet({this.initialBrand = .brand, super.key});
+  const TagsBottomSheet.create({TagType initialBrand = .brand, super.key})
+    : _initialBrand = initialBrand,
+      _tag = null;
+  TagsBottomSheet.edit({required TagPresentation tag, super.key})
+    : _tag = tag,
+      _initialBrand = tag.type;
 
-  final TagType initialBrand;
+  final TagType _initialBrand;
+  final TagPresentation? _tag;
 
   @override
   State<TagsBottomSheet> createState() => _TagsBottomSheetState();
@@ -18,13 +25,14 @@ class TagsBottomSheet extends StatefulWidget {
 
 class _TagsBottomSheetState extends State<TagsBottomSheet> {
   late final TextEditingController _labelTextController;
-  Color _selectedColor = TagColor.values.first.toColor();
+  late Color _selectedColor;
   late TagType _selectedTagType;
 
   @override
   void initState() {
-    _selectedTagType = widget.initialBrand;
-    _labelTextController = TextEditingController();
+    _selectedTagType = widget._initialBrand;
+    _labelTextController = TextEditingController(text: widget._tag?.label);
+    _selectedColor = widget._tag?.color ?? TagColor.values.first.toColor();
     super.initState();
   }
 
@@ -51,7 +59,9 @@ class _TagsBottomSheetState extends State<TagsBottomSheet> {
               Align(
                 alignment: .centerStart,
                 child: Text(
-                  l10n.tagsBottomSheetTitleText,
+                  widget._tag?.id == null
+                      ? l10n.tagsBottomSheetCreateTitleText
+                      : l10n.tagsBottomSheetEditTitleText,
                   style: const TextStyle(fontSize: 20),
                 ),
               ),
@@ -91,6 +101,8 @@ class _TagsBottomSheetState extends State<TagsBottomSheet> {
                 colors: TagColor.values
                     .map((tagColor) => tagColor.toColor())
                     .toList(),
+                initialColor:
+                    widget._tag?.color ?? TagColor.values.first.toColor(),
                 onTap: (color) => _selectedColor = color,
               ),
               const Divider(),
@@ -104,7 +116,7 @@ class _TagsBottomSheetState extends State<TagsBottomSheet> {
                         label: _labelTextController.text,
                         color: TagColorX.fromColor(_selectedColor),
                         type: _selectedTagType,
-                        id: '',
+                        id: widget._tag?.id,
                       ),
                     ),
                   );
@@ -121,9 +133,14 @@ class _TagsBottomSheetState extends State<TagsBottomSheet> {
 }
 
 class _ColorSelector extends StatefulWidget {
-  const _ColorSelector({required this.colors, required this.onTap});
+  const _ColorSelector({
+    required this.colors,
+    required this.onTap,
+    this.initialColor,
+  });
 
   final List<Color> colors;
+  final Color? initialColor;
   final void Function(Color selectedColor) onTap;
 
   @override
@@ -135,7 +152,7 @@ class _ColorSelectorState extends State<_ColorSelector> {
 
   @override
   void initState() {
-    selectedColor = widget.colors.first;
+    selectedColor = widget.initialColor ?? widget.colors.first;
     super.initState();
   }
 
@@ -159,7 +176,7 @@ class _ColorSelectorState extends State<_ColorSelector> {
                     color: color,
                     border: color == selectedColor
                         ? Border.all(
-                            color: Colors.white,
+                            color: context.colors.onPrimaryContainer,
                             width: 4,
                           )
                         : null,
