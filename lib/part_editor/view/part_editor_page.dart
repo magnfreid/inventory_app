@@ -2,7 +2,6 @@ import 'dart:math';
 
 import 'package:app_ui/app_ui.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:inventory_app/l10n/l10n.dart';
 import 'package:inventory_app/part_editor/bloc/part_editor_bloc.dart';
@@ -292,6 +291,4 @@ class _TagSelector extends StatelessWidget {
     if (selectedTag == null) return;
     onTagSelected(selectedTag);
   }
-
-  void _onSaveButtonPressed() {}
 }

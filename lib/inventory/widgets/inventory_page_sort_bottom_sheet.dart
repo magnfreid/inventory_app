@@ -3,9 +3,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:inventory_app/inventory/bloc/inventory_bloc.dart';
 import 'package:inventory_app/inventory/bloc/inventory_state.dart';
-import 'package:inventory_app/shared/extensions/sort_by_extensions.dart';
 import 'package:inventory_app/inventory/models/inventory_filter.dart';
 import 'package:inventory_app/l10n/l10n.dart';
+import 'package:inventory_app/shared/extensions/sort_by_extensions.dart';
 
 class InventoryPageSortBottomSheet extends StatelessWidget {
   const InventoryPageSortBottomSheet({super.key});
