@@ -43,7 +43,12 @@ class InventoryPartCard extends StatelessWidget {
                             spacing: 2,
                             children: [
                               Text(part.name),
-                              if (part.isRecycled) const _EcoIndicator(),
+                              if (part.isRecycled)
+                                const Icon(
+                                  Icons.eco,
+                                  color: Colors.green,
+                                  size: 16,
+                                ),
                             ],
                           ),
                           Text(
@@ -149,22 +154,22 @@ class _InStockBadges extends StatelessWidget {
   }
 }
 
-class _EcoIndicator extends StatelessWidget {
-  const _EcoIndicator();
+// class _EcoIndicator extends StatelessWidget {
+//   const _EcoIndicator();
 
-  @override
-  Widget build(BuildContext context) {
-    return const Positioned(
-      top: 3,
-      right: 3,
-      child: Icon(
-        size: 16,
-        Icons.eco,
-        color: Colors.green,
-      ),
-    );
-  }
-}
+//   @override
+//   Widget build(BuildContext context) {
+//     return const Positioned(
+//       top: 3,
+//       right: 3,
+//       child: Icon(
+//         size: 16,
+//         Icons.eco,
+//         color: Colors.green,
+//       ),
+//     );
+//   }
+// }
 
 class _Tags extends StatelessWidget {
   const _Tags({required this.part});

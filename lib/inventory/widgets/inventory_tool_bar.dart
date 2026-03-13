@@ -116,11 +116,9 @@ class _InventoryToolBarState extends State<InventoryToolBar> {
                         mainAxisSize: .min,
                         children: [
                           IconButton(
-                            onPressed: () async {
+                            onPressed: () {
                               setState(() => _searchBarVisible = true);
-                              await Future.microtask(
-                                _focusNode.requestFocus,
-                              );
+                              _focusNode.requestFocus();
                             },
                             icon: Icon(Icons.search, color: onContainerColor),
                           ),
