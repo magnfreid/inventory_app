@@ -6,6 +6,7 @@ import 'package:inventory_app/authentication/cubit/authentication_state.dart';
 
 import 'package:inventory_app/sign_in/bloc/sign_in_bloc.dart';
 import 'package:inventory_app/sign_in/bloc/sign_in_state.dart';
+import 'package:inventory_app/use_cases/part_presentation.dart/watch_part_presentations.dart';
 
 import 'package:mocktail/mocktail.dart';
 import 'package:part_repository/part_repository.dart';
@@ -26,6 +27,9 @@ class MockStockRepository extends Mock implements StockRepository {}
 class MockPartRepository extends Mock implements PartRepository {}
 
 class MockTagRepository extends Mock implements TagRepository {}
+
+class MockWatchPartPresentations extends Mock
+    implements WatchPartPresentations {}
 
 //Bloc
 class MockAuthenticationCubit extends MockCubit<AuthenticationState>

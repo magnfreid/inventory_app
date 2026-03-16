@@ -61,7 +61,8 @@ EventTransformer<Event> throttle<Event>(Duration duration) {
   return (events, mapper) => events.throttleTime(duration).flatMap(mapper);
 }
 
-/// Returns an [EventTransformer] that combines **debounce + restartable behavior**.
+/// Returns an [EventTransformer] that combines **debounce + restartable
+/// behavior**.
 ///
 /// First, events are **debounced** for the specified [duration].
 /// Then, if a new event arrives while the previous handler is still running,
