@@ -1,6 +1,7 @@
 import 'dart:async';
 
-import 'package:bloc/bloc.dart';
+import 'package:collection/collection.dart';
+import 'package:hydrated_bloc/hydrated_bloc.dart' hide Storage;
 import 'package:inventory_app/inventory/bloc/inventory_state.dart';
 import 'package:inventory_app/inventory/models/inventory_filter.dart';
 import 'package:inventory_app/inventory/models/inventory_filter_type.dart';
@@ -15,7 +16,7 @@ import 'package:tag_repository/tag_repository.dart';
 
 part 'inventory_event.dart';
 
-class InventoryBloc extends Bloc<InventoryEvent, InventoryState> {
+class InventoryBloc extends HydratedBloc<InventoryEvent, InventoryState> {
   InventoryBloc({
     required WatchPartPresentations watchPartPresentations,
     required StockRepository stockRepository,
@@ -259,5 +260,21 @@ class InventoryBloc extends Bloc<InventoryEvent, InventoryState> {
     } else {
       set.add(filterId);
     }
+  }
+
+  @override
+  InventoryState? fromJson(Map<String, dynamic> json) {
+    return InventoryState(
+      filter: InventoryFilter.fromJson(
+        json['filter'] as Map<String, dynamic>,
+      ),
+    );
+  }
+
+  @override
+  Map<String, dynamic>? toJson(InventoryState state) {
+    return {
+      'filter': state.filter.toJson(),
+    };
   }
 }

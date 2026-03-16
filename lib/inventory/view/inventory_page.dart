@@ -1,11 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:inventory_app/authenticated_app/cubit/user_cubit.dart';
+import 'package:inventory_app/authenticated_app/cubit/user_state.dart';
 import 'package:inventory_app/inventory/bloc/inventory_bloc.dart';
 import 'package:inventory_app/inventory/bloc/inventory_state.dart';
 import 'package:inventory_app/inventory/widgets/inventory_drawer.dart';
 import 'package:inventory_app/inventory/widgets/inventory_part_card.dart';
 import 'package:inventory_app/inventory/widgets/inventory_tool_bar.dart';
+import 'package:inventory_app/l10n/l10n.dart';
 import 'package:inventory_app/shared/extensions/part_filtering_extension.dart';
 
 import 'package:inventory_app/use_cases/part_presentation.dart/watch_part_presentations.dart';
@@ -35,27 +37,39 @@ class InventoryView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final userName = context.watch<UserCubit>().state.maybeWhen(
+      loaded: (currentUser) => currentUser.name,
+      orElse: () => '',
+    );
     return Scaffold(
       appBar: AppBar(
         centerTitle: true,
-        // title:  Text(context.watch<UserCubit>()),
+        title: Text(userName),
       ),
       drawer: const InventoryDrawer(),
       floatingActionButton: const InventoryToolBar(),
-      floatingActionButtonLocation: .centerFloat,
-      body: BlocBuilder<InventoryBloc, InventoryState>(
-        builder: (context, state) {
-          final parts = state.filteredParts;
-          return Padding(
-            padding: const .symmetric(horizontal: 8),
-            child: ListView.builder(
-              padding: const .only(bottom: 140),
-              itemCount: parts.length,
-              itemBuilder: (context, index) =>
-                  InventoryPartCard(part: parts[index]),
-            ),
-          );
-        },
+      floatingActionButtonLocation: .miniCenterFloat,
+      body: SafeArea(
+        top: false,
+        child: BlocBuilder<InventoryBloc, InventoryState>(
+          builder: (context, state) {
+            final l10n = context.l10n;
+            final parts = state.filteredParts;
+            return parts.isEmpty
+                ? const Center(
+                    child: Text('Nothing added yet!'),
+                  )
+                : Padding(
+                    padding: const .symmetric(horizontal: 8),
+                    child: ListView.builder(
+                      padding: const .only(bottom: 140),
+                      itemCount: parts.length,
+                      itemBuilder: (context, index) =>
+                          InventoryPartCard(part: parts[index]),
+                    ),
+                  );
+          },
+        ),
       ),
     );
   }
