@@ -1,7 +1,12 @@
+import 'package:freezed_annotation/freezed_annotation.dart';
+
+part 'inventory_filter.g.dart';
+
 enum QuantityFilter { all, inStock, outOfStock }
 
 enum SortByType { name, brand, category, quantity }
 
+@JsonSerializable()
 final class InventoryFilter {
   const InventoryFilter({
     this.quantityFilter = .all,
@@ -12,11 +17,14 @@ final class InventoryFilter {
     this.sortByType = .name,
     this.isSortedAscending = true,
   });
+  factory InventoryFilter.fromJson(Map<String, dynamic> json) =>
+      _$InventoryFilterFromJson(json);
 
   final QuantityFilter quantityFilter;
   final Set<String> brandFilters;
   final Set<String> categoryFilters;
   final Set<String> storageFilters;
+  @JsonKey(includeFromJson: false, includeToJson: false)
   final String searchQuery;
   final SortByType sortByType;
   final bool isSortedAscending;
@@ -41,4 +49,6 @@ final class InventoryFilter {
     sortByType: sortByType ?? this.sortByType,
     isSortedAscending: isSortedAscending ?? this.isSortedAscending,
   );
+
+  Map<String, dynamic> toJson() => _$InventoryFilterToJson(this);
 }

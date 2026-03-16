@@ -1,9 +1,11 @@
 import 'dart:async';
 
-import 'package:bloc/bloc.dart';
+import 'package:collection/collection.dart';
+import 'package:hydrated_bloc/hydrated_bloc.dart' hide Storage;
 import 'package:inventory_app/inventory/bloc/inventory_state.dart';
 import 'package:inventory_app/inventory/models/inventory_filter.dart';
 import 'package:inventory_app/inventory/models/inventory_filter_type.dart';
+import 'package:inventory_app/shared/utilities/bloc_transformers.dart';
 import 'package:inventory_app/tags/models/tag_presentation.dart';
 import 'package:inventory_app/use_cases/part_presentation.dart/models/part_presentation.dart';
 import 'package:inventory_app/use_cases/part_presentation.dart/watch_part_presentations.dart';
@@ -14,7 +16,7 @@ import 'package:tag_repository/tag_repository.dart';
 
 part 'inventory_event.dart';
 
-class InventoryBloc extends Bloc<InventoryEvent, InventoryState> {
+class InventoryBloc extends HydratedBloc<InventoryEvent, InventoryState> {
   InventoryBloc({
     required WatchPartPresentations watchPartPresentations,
     required StockRepository stockRepository,
@@ -24,17 +26,35 @@ class InventoryBloc extends Bloc<InventoryEvent, InventoryState> {
        _tagRepository = tagRepository,
        _storageRepository = storageRepository,
        super(const InventoryState()) {
-    on<_PartsUpdated>(_onPartsUpdated);
-    on<_TagsUpdated>(_onTagsUpdated);
-    on<_StoragesUpdated>(_onStoragesUpdated);
+    on<_PartsUpdated>(
+      _onPartsUpdated,
+      transformer: throttle(_streamThrottleDuration),
+    );
+    on<_TagsUpdated>(
+      _onTagsUpdated,
+      transformer: throttle(_streamThrottleDuration),
+    );
+    on<_StoragesUpdated>(
+      _onStoragesUpdated,
+      transformer: throttle(_streamThrottleDuration),
+    );
     on<UseStockButtonPressed>(_onUseStockButtonPressed);
     on<HideEmptyStockSwitchPressed>(_onHideEmptyStockSwitchPressed);
     on<ClearAllFiltersButtonPressed>(_onClearAllFiltersButtonPressed);
-    on<FilterChipPressed>(_onFilterChipPressed);
+    on<FilterChipPressed>(
+      _onFilterChipPressed,
+      transformer: throttle(_uiThrottleDuration),
+    );
     on<ClearFilterChipPressed>(_onClearFilterChipPressed);
     on<SearchQueryUpdated>(_onSearchQueryUpdated);
-    on<SortByChipPressed>(_onSortByChipPressed);
-    on<SortOrderButtonPressed>(_sortOrderButtonPressed);
+    on<SortByChipPressed>(
+      _onSortByChipPressed,
+      transformer: throttle(_uiThrottleDuration),
+    );
+    on<SortOrderButtonPressed>(
+      _sortOrderButtonPressed,
+      transformer: throttle(_uiThrottleDuration),
+    );
 
     _partsStreamSubscription = watchPartPresentations().listen(
       (parts) => add(_PartsUpdated(parts: parts)),
@@ -57,6 +77,9 @@ class InventoryBloc extends Bloc<InventoryEvent, InventoryState> {
   _partsStreamSubscription;
   late final StreamSubscription<List<Tag>> _tagsStreamSubscription;
   late final StreamSubscription<List<Storage>> _storagesStreamSubscription;
+
+  final Duration _streamThrottleDuration = const Duration(milliseconds: 500);
+  final Duration _uiThrottleDuration = const Duration(milliseconds: 200);
 
   @override
   Future<void> close() async {
@@ -237,5 +260,21 @@ class InventoryBloc extends Bloc<InventoryEvent, InventoryState> {
     } else {
       set.add(filterId);
     }
+  }
+
+  @override
+  InventoryState? fromJson(Map<String, dynamic> json) {
+    return InventoryState(
+      filter: InventoryFilter.fromJson(
+        json['filter'] as Map<String, dynamic>,
+      ),
+    );
+  }
+
+  @override
+  Map<String, dynamic>? toJson(InventoryState state) {
+    return {
+      'filter': state.filter.toJson(),
+    };
   }
 }

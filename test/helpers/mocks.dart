@@ -1,5 +1,6 @@
 import 'package:authentication_service/authentication_service.dart';
 import 'package:bloc_test/bloc_test.dart';
+import 'package:hydrated_bloc/hydrated_bloc.dart';
 import 'package:inventory_app/authentication/cubit/authentication_cubit.dart';
 import 'package:inventory_app/authentication/cubit/authentication_state.dart';
 
@@ -9,7 +10,7 @@ import 'package:inventory_app/sign_in/bloc/sign_in_state.dart';
 import 'package:mocktail/mocktail.dart';
 import 'package:part_repository/part_repository.dart';
 import 'package:stock_repository/stock_repository.dart';
-import 'package:storage_repository/storage_repository.dart';
+import 'package:storage_repository/storage_repository.dart' hide Storage;
 import 'package:tag_repository/tag_repository.dart';
 import 'package:user_repository/user_repository.dart';
 
@@ -32,3 +33,5 @@ class MockAuthenticationCubit extends MockCubit<AuthenticationState>
 
 class MockSignInBloc extends MockBloc<SignInEvent, SignInState>
     implements SignInBloc {}
+
+class MockStorage extends Mock implements Storage {}

@@ -160,14 +160,14 @@ class _DeleteButton extends StatelessWidget {
                     AppButton.elevated(
                       width: .wrap,
                       onPressed: () => Navigator.pop(context),
-                      label: l10n.delete,
+                      label: l10n.cancel,
                     ),
                     AppButton(
                       width: .wrap,
                       onPressed: () => context.read<PartDetailsBloc>().add(
                         ConfirmDeleteButtonPressed(partId: partId),
                       ),
-                      label: l10n.cancel,
+                      label: l10n.delete,
                       buttonStyle: ElevatedButton.styleFrom(
                         backgroundColor: context.colors.error,
                       ),

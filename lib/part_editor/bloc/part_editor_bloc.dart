@@ -2,6 +2,7 @@ import 'dart:async';
 
 import 'package:bloc/bloc.dart';
 import 'package:inventory_app/part_editor/bloc/part_editor_state.dart';
+import 'package:inventory_app/shared/utilities/bloc_transformers.dart';
 import 'package:inventory_app/tags/models/tag_presentation.dart';
 import 'package:part_repository/part_repository.dart';
 import 'package:tag_repository/tag_repository.dart';
@@ -16,7 +17,10 @@ class PartEditorBloc extends Bloc<PartEditorEvent, PartEditorState> {
        _tagRepository = tagRepository,
        super(const PartEditorState()) {
     on<SaveButtonPressed>(_onSaveButtonPressed);
-    on<_TagsUpdated>(_onTagsUpdated);
+    on<_TagsUpdated>(
+      _onTagsUpdated,
+      transformer: debounceRestartable(const Duration(milliseconds: 500)),
+    );
 
     _subscription = _tagRepository.watchTags().listen(
       (tags) => add(
