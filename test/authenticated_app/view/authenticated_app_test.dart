@@ -2,6 +2,7 @@ import 'package:authentication_service/authentication_service.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:hydrated_bloc/hydrated_bloc.dart' as hydrated;
 import 'package:inventory_app/authenticated_app/view/authenticated_app.dart';
 import 'package:inventory_app/inventory/view/inventory_page.dart';
 import 'package:mocktail/mocktail.dart';
@@ -68,6 +69,13 @@ void main() {
     testWidgets(
       'renders InventoryPage when user loads',
       (tester) async {
+        final storage = MockStorage();
+        when(
+          () => storage.write(any(), any<dynamic>()),
+        ).thenAnswer((_) async {});
+
+        hydrated.HydratedBloc.storage = storage;
+
         when(
           () => userRepository.watchUser('123'),
         ).thenAnswer((_) => Stream.value(user));
@@ -87,20 +95,22 @@ void main() {
           () => tagRepository.watchTags(),
         ).thenAnswer((_) => Stream.value(<Tag>[]));
 
-        await tester.pumpApp(
-          RepositoryProvider<UserRepository>.value(
-            value: userRepository,
-            child: AuthenticatedApp(
-              authUser: authUser,
-              stockRepositoryFactory: (orgId) => stockRepository,
-              storageRepositoryFactory: (orgId) => storageRepository,
-              partRepositoryFactory: (orgId) => partRepository,
-              tagRepositoryFactory: (orgId) => tagRepository,
+        await tester.runAsync(() async {
+          await tester.pumpApp(
+            RepositoryProvider<UserRepository>.value(
+              value: userRepository,
+              child: AuthenticatedApp(
+                authUser: authUser,
+                stockRepositoryFactory: (orgId) => stockRepository,
+                storageRepositoryFactory: (orgId) => storageRepository,
+                partRepositoryFactory: (orgId) => partRepository,
+                tagRepositoryFactory: (orgId) => tagRepository,
+              ),
             ),
-          ),
-        );
+          );
 
-        await tester.pump();
+          await tester.pumpAndSettle();
+        });
 
         expect(find.byType(InventoryPage), findsOneWidget);
       },
