@@ -96,12 +96,16 @@ flutter:
 
 melos:
   scripts:
+    analyze:
+      run: melos exec -- fvm flutter analyze .
+      description: Run `dart analyze` in all packages.
     boot:
       description: "Bootstrap the repo via FVM"
       run: fvm dart run melos bootstrap
     coverage:
       run: |
-        flutter test --coverage
+        rm -rf coverage
+        fvm flutter test --coverage --fail-fast
         lcov --remove coverage/lcov.info \
           '**/*.g.dart' '**/*.freezed.dart' '**/*.gen.dart' \
           '**/generated_plugin_registrant.dart' \

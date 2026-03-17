@@ -1,5 +1,6 @@
 import 'package:authentication_service/authentication_service.dart';
 import 'package:bloc_test/bloc_test.dart';
+import 'package:flutter/material.dart';
 import 'package:hydrated_bloc/hydrated_bloc.dart';
 import 'package:inventory_app/authenticated_app/cubit/user_cubit.dart';
 import 'package:inventory_app/authenticated_app/cubit/user_state.dart';
@@ -12,6 +13,10 @@ import 'package:inventory_app/part_details/bloc/part_details_state.dart';
 
 import 'package:inventory_app/sign_in/bloc/sign_in_bloc.dart';
 import 'package:inventory_app/sign_in/bloc/sign_in_state.dart';
+import 'package:inventory_app/storages/bloc/storages_bloc.dart';
+import 'package:inventory_app/storages/bloc/storages_state.dart';
+import 'package:inventory_app/storages_editor/bloc/storages_editor_bloc.dart';
+import 'package:inventory_app/storages_editor/bloc/storages_editor_state.dart';
 import 'package:inventory_app/use_cases/part_presentation.dart/models/part_presentation.dart';
 import 'package:inventory_app/use_cases/part_presentation.dart/watch_part_presentations.dart';
 import 'package:inventory_app/use_cases/part_presentation.dart/watch_single_part_presentation.dart';
@@ -23,9 +28,11 @@ import 'package:storage_repository/storage_repository.dart' hide Storage;
 import 'package:tag_repository/tag_repository.dart';
 import 'package:user_repository/user_repository.dart';
 
-//Objects
-
 class MockPartPresentation extends Mock implements PartPresentation {}
+
+class MockNavigatorObserver extends Mock implements NavigatorObserver {}
+
+class FakeRoute extends Fake implements Route<dynamic> {}
 
 //Repositories
 class MockAuthRepository extends Mock implements AuthenticationService {}
@@ -60,5 +67,12 @@ class MockInventoryBloc extends MockBloc<InventoryEvent, InventoryState>
 
 class MockPartDetailsBloc extends MockBloc<PartDetailsEvent, PartDetailsState>
     implements PartDetailsBloc {}
+
+class MockStoragesBloc extends MockBloc<StoragesEvent, StoragesState>
+    implements StoragesBloc {}
+
+class MockStorageEditorBloc
+    extends MockBloc<StoragesEditorEvent, StoragesEditorState>
+    implements StoragesEditorBloc {}
 
 class MockHydratedBlocStorage extends Mock implements Storage {}
