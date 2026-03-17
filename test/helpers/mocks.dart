@@ -7,11 +7,14 @@ import 'package:inventory_app/authentication/cubit/authentication_cubit.dart';
 import 'package:inventory_app/authentication/cubit/authentication_state.dart';
 import 'package:inventory_app/inventory/bloc/inventory_bloc.dart';
 import 'package:inventory_app/inventory/bloc/inventory_state.dart';
+import 'package:inventory_app/part_details/bloc/part_details_bloc.dart';
+import 'package:inventory_app/part_details/bloc/part_details_state.dart';
 
 import 'package:inventory_app/sign_in/bloc/sign_in_bloc.dart';
 import 'package:inventory_app/sign_in/bloc/sign_in_state.dart';
 import 'package:inventory_app/use_cases/part_presentation.dart/models/part_presentation.dart';
 import 'package:inventory_app/use_cases/part_presentation.dart/watch_part_presentations.dart';
+import 'package:inventory_app/use_cases/part_presentation.dart/watch_single_part_presentation.dart';
 
 import 'package:mocktail/mocktail.dart';
 import 'package:part_repository/part_repository.dart';
@@ -40,6 +43,9 @@ class MockTagRepository extends Mock implements TagRepository {}
 class MockWatchPartPresentations extends Mock
     implements WatchPartPresentations {}
 
+class MockWatchSinglePartsPresentation extends Mock
+    implements WatchSinglePartPresentation {}
+
 //Bloc
 class MockAuthenticationCubit extends MockCubit<AuthenticationState>
     implements AuthenticationCubit {}
@@ -51,5 +57,8 @@ class MockSignInBloc extends MockBloc<SignInEvent, SignInState>
 
 class MockInventoryBloc extends MockBloc<InventoryEvent, InventoryState>
     implements InventoryBloc {}
+
+class MockPartDetailsBloc extends MockBloc<PartDetailsEvent, PartDetailsState>
+    implements PartDetailsBloc {}
 
 class MockHydratedBlocStorage extends Mock implements Storage {}

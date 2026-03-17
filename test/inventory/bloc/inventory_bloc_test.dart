@@ -89,6 +89,12 @@ void main() {
     ).thenAnswer((_) => partController.stream);
   });
 
+  tearDown(() async {
+    await partController.close();
+    await storageController.close();
+    await tagController.close();
+  });
+
   group('InventoryBloc', () {
     test('initial state test', () {
       final bloc = InventoryBloc(
