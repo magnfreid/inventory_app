@@ -10,6 +10,8 @@ import 'package:inventory_app/inventory/bloc/inventory_bloc.dart';
 import 'package:inventory_app/inventory/bloc/inventory_state.dart';
 import 'package:inventory_app/part_details/bloc/part_details_bloc.dart';
 import 'package:inventory_app/part_details/bloc/part_details_state.dart';
+import 'package:inventory_app/part_editor/bloc/part_editor_bloc.dart';
+import 'package:inventory_app/part_editor/bloc/part_editor_state.dart';
 
 import 'package:inventory_app/sign_in/bloc/sign_in_bloc.dart';
 import 'package:inventory_app/sign_in/bloc/sign_in_state.dart';
@@ -74,5 +76,8 @@ class MockStoragesBloc extends MockBloc<StoragesEvent, StoragesState>
 class MockStorageEditorBloc
     extends MockBloc<StoragesEditorEvent, StoragesEditorState>
     implements StoragesEditorBloc {}
+
+class MockPartEditorBloc extends MockBloc<PartEditorEvent, PartEditorState>
+    implements PartEditorBloc {}
 
 class MockHydratedBlocStorage extends Mock implements Storage {}
