@@ -16,3 +16,5 @@ jobs:
     uses: VeryGoodOpenSource/very_good_workflows/.github/workflows/flutter_package.yml@v1
     with:
       coverage_excludes: "**/*.g.dart **/*.freezed.dart **/*.gen.dart **/l10n/*.dart **/l10n/**/*.dart **/bootstrap.dart"
+      test_flags: "--coverage --no-fail"
+      coverage-min: 80
