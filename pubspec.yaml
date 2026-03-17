@@ -103,15 +103,8 @@ melos:
       description: "Bootstrap the repo via FVM"
       run: fvm dart run melos bootstrap
     coverage:
-      run: |
-        rm -rf coverage
-        fvm flutter test --coverage --fail-fast
-        lcov --remove coverage/lcov.info \
-          '**/*.g.dart' '**/*.freezed.dart' '**/*.gen.dart' \
-          '**/generated_plugin_registrant.dart' \
-          --ignore-errors unused \
-          -o coverage/lcov_filtered.info
-        genhtml coverage/lcov_filtered.info -o coverage/html
+      description: "Run all tests with coverage"
+      run: ./run_coverage.sh
     gen:
       description: "Run build_runner in the app (lib)"
       run: fvm dart run build_runner build --delete-conflicting-outputs
