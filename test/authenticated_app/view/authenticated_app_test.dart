@@ -69,7 +69,7 @@ void main() {
     testWidgets(
       'renders InventoryPage when user loads',
       (tester) async {
-        final storage = MockStorage();
+        final storage = MockHydratedBlocStorage();
         when(
           () => storage.write(any(), any<dynamic>()),
         ).thenAnswer((_) async {});

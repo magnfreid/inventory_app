@@ -34,7 +34,7 @@ void main() {
   late Storage storage;
 
   setUp(() {
-    hydratedBlocStorage = MockStorage();
+    hydratedBlocStorage = MockHydratedBlocStorage();
     partRepository = MockPartRepository();
     stockRepository = MockStockRepository();
     tagRepository = MockTagRepository();
