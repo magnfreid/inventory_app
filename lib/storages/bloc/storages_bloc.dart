@@ -7,7 +7,7 @@ import 'package:storage_repository/storage_repository.dart';
 
 part 'storages_event.dart';
 
-class StoragesBloc extends Bloc<LocationsEvent, StoragesState> {
+class StoragesBloc extends Bloc<StoragesEvent, StoragesState> {
   StoragesBloc({required StorageRepository storageRepository})
     : _storageRepository = storageRepository,
       super(const StoragesState()) {

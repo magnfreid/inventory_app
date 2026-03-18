@@ -1,10 +1,10 @@
 part of 'storages_editor_bloc.dart';
 
-sealed class StorageEditorEvent {
-  const StorageEditorEvent();
+sealed class StoragesEditorEvent {
+  const StoragesEditorEvent();
 }
 
-final class SaveButtonPressed extends StorageEditorEvent {
+class SaveButtonPressed extends StoragesEditorEvent {
   const SaveButtonPressed({required this.storage});
   final Storage storage;
 }

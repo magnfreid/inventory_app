@@ -1,6 +1,5 @@
 import 'dart:async';
 
-import 'package:collection/collection.dart';
 import 'package:hydrated_bloc/hydrated_bloc.dart' hide Storage;
 import 'package:inventory_app/inventory/bloc/inventory_state.dart';
 import 'package:inventory_app/inventory/models/inventory_filter.dart';
@@ -93,7 +92,7 @@ class InventoryBloc extends HydratedBloc<InventoryEvent, InventoryState> {
     _PartsUpdated event,
     Emitter<InventoryState> emit,
   ) {
-    emit(state.copyWith(parts: event.parts));
+    emit(state.copyWith(status: .loaded, parts: event.parts));
   }
 
   FutureOr<void> _onTagsUpdated(

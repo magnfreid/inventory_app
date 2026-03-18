@@ -96,19 +96,15 @@ flutter:
 
 melos:
   scripts:
+    analyze:
+      run: melos exec -- fvm flutter analyze .
+      description: Run `dart analyze` in all packages.
     boot:
       description: "Bootstrap the repo via FVM"
       run: fvm dart run melos bootstrap
     coverage:
-      run: |
-        flutter test --coverage
-        lcov --remove coverage/lcov.info \
-          '**/*.g.dart' \
-          '**/*.freezed.dart' \
-          '**/*.gen.dart' \
-          --ignore-errors unused \
-          -o coverage/lcov_filtered.info
-        genhtml coverage/lcov_filtered.info -o coverage/html
+      description: "Run all tests with coverage"
+      run: ./run_coverage.sh
     gen:
       description: "Run build_runner in the app (lib)"
       run: fvm dart run build_runner build --delete-conflicting-outputs
@@ -118,12 +114,3 @@ melos:
     l10n:
       description: "Generate Flutter localization"
       run: fvm flutter gen-l10n
-    test:flutter:
-      description: "Run Flutter tests"
-      run: melos exec --dir-exists=test --depends-on=flutter_test --flutter -- flutter test
-    test:dart:
-      description: "Run Dart-only tests"
-      run: melos exec --dir-exists=test --no-flutter -- dart test
-    test:
-      description: "Run all tests"
-      run: melos run test:dart && melos run test:flutter

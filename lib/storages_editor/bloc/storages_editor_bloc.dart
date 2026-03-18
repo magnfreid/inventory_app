@@ -7,7 +7,8 @@ import 'package:storage_repository/storage_repository.dart';
 
 part 'storages_editor_event.dart';
 
-class StoragesEditorBloc extends Bloc<StorageEditorEvent, StoragesEditorState> {
+class StoragesEditorBloc
+    extends Bloc<StoragesEditorEvent, StoragesEditorState> {
   StoragesEditorBloc({required StorageRepository storageRepository})
     : _storageRepository = storageRepository,
       super(const StoragesEditorState()) {
@@ -31,6 +32,8 @@ class StoragesEditorBloc extends Bloc<StorageEditorEvent, StoragesEditorState> {
         await _storageRepository.editStorage(storage: storage);
       }
       emit(state.copyWith(status: .success));
-    } on Exception catch (_) {}
+    } on Exception catch (_) {
+      emit(state.copyWith(status: .idle));
+    }
   }
 }

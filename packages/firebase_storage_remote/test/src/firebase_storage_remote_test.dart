@@ -1,5 +1,5 @@
 import 'package:fake_cloud_firestore/fake_cloud_firestore.dart';
-import 'package:firebase_storage_remote/src/firebase_storage_remote.dart';
+import 'package:firebase_storage_remote/firebase_storage_remote.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:storage_remote/storage_remote.dart';
 
