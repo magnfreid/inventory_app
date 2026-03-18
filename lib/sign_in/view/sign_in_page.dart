@@ -32,10 +32,10 @@ class _SignInViewState extends State<SignInView> {
 
   @override
   void initState() {
-    _emailTextController = TextEditingController(text: 'test@test.com');
-    // _emailTextController = TextEditingController();
-    _passwordTextController = TextEditingController(text: 'testpassword');
-    // _passwordTextController = TextEditingController();
+    // _emailTextController = TextEditingController(text: 'test@test.com');
+    _emailTextController = TextEditingController();
+    // _passwordTextController = TextEditingController(text: 'testpassword');
+    _passwordTextController = TextEditingController();
     super.initState();
   }
 

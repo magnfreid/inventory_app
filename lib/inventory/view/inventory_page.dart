@@ -59,6 +59,7 @@ class InventoryView extends StatelessWidget {
               enabled: state.isLoading,
               child: parts.isEmpty
                   ? const Center(
+                      //TODO(magnfreid): Add l10n
                       child: Text('Nothing added yet!'),
                     )
                   : Padding(

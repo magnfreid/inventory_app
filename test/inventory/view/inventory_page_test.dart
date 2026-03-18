@@ -10,9 +10,11 @@ import 'package:inventory_app/inventory/bloc/inventory_bloc.dart';
 import 'package:inventory_app/inventory/bloc/inventory_state.dart';
 import 'package:inventory_app/inventory/view/inventory_page.dart';
 import 'package:inventory_app/inventory/widgets/inventory_part_card.dart';
+import 'package:inventory_app/shared/utilities/bone_mocks.dart';
 import 'package:inventory_app/use_cases/part_presentation.dart/models/part_presentation.dart';
 import 'package:inventory_app/use_cases/part_presentation.dart/models/stock_presentation.dart';
 import 'package:mocktail/mocktail.dart';
+import 'package:skeletonizer/skeletonizer.dart';
 import 'package:user_repository/user_repository.dart';
 import '../../helpers/helpers.dart';
 
@@ -68,13 +70,18 @@ void main() {
     expect(find.text('Test User'), findsOneWidget);
   });
 
-  testWidgets('shows loading indicator when state is loading', (tester) async {
+  testWidgets('shows skeletons when state is loading', (tester) async {
     when(() => inventoryBloc.state).thenReturn(
       const InventoryState(),
     );
 
     await tester.pumpWidget(pumpInventoryView());
-    expect(find.byType(CircularProgressIndicator), findsOneWidget);
+    await tester.pump();
+
+    final skeletonFinder = find.byWidgetPredicate(
+      (widget) => widget is Skeletonizer && widget.enabled,
+    );
+    expect(skeletonFinder, findsOneWidget);
   });
 
   testWidgets('shows empty message when loaded with no parts', (tester) async {

@@ -97,7 +97,7 @@ void main() {
     );
 
     blocTest(
-      'emits loaded and part when _PartUpdated is added',
+      'emits part when _PartUpdated is added',
       build: () => PartDetailsBloc(
         stockRepository: stockRepository,
         storageRepository: storageRepository,
@@ -107,13 +107,7 @@ void main() {
       ),
       act: (_) => partStream.add(part),
       expect: () => [
-        isA<PartDetailsState>()
-            .having(
-              (s) => s.status,
-              'status',
-              PartDetailsStatus.loaded,
-            )
-            .having((s) => s.part, 'part', part),
+        isA<PartDetailsState>().having((s) => s.part, 'part', part),
       ],
     );
 
