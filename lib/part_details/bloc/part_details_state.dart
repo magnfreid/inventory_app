@@ -4,7 +4,7 @@ import 'package:storage_repository/storage_repository.dart';
 
 part 'part_details_state.freezed.dart';
 
-enum PartDetailsStatus { loading, loaded }
+// enum PartDetailsStatus { loading, loaded }
 
 enum PartDetailsContent { details, inStock, restock }
 
@@ -15,7 +15,7 @@ enum PartDetailsDeleteStatus { idle, loading, success, error }
 @freezed
 abstract class PartDetailsState with _$PartDetailsState {
   const factory PartDetailsState({
-    @Default(PartDetailsStatus.loading) PartDetailsStatus status,
+    // @Default(PartDetailsStatus.loading) PartDetailsStatus status,
     @Default(PartDetailsContent.details) PartDetailsContent content,
     PartPresentation? part,
     @Default(PartDetailsSaveStatus.idle) PartDetailsSaveStatus saveStatus,
@@ -24,4 +24,6 @@ abstract class PartDetailsState with _$PartDetailsState {
     // @Default(false) bool showAddView,
   }) = _PartDetailsState;
   const PartDetailsState._();
+
+  bool get isLoading => part == null;
 }

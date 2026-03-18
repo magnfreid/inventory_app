@@ -53,7 +53,6 @@ class InventoryView extends StatelessWidget {
         child: BlocBuilder<InventoryBloc, InventoryState>(
           builder: (context, state) {
             final parts = state.filteredParts;
-
             return switch (state.status) {
               .loading => const Center(
                 child: CircularProgressIndicator.adaptive(),

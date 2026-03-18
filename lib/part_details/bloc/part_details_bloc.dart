@@ -71,7 +71,7 @@ class PartDetailsBloc extends Bloc<PartDetailsEvent, PartDetailsState> {
     _PartUpdated event,
     Emitter<PartDetailsState> emit,
   ) {
-    emit(state.copyWith(status: .loaded, part: event.part));
+    emit(state.copyWith(part: event.part));
   }
 
   FutureOr<void> _onButtonSegmentPressed(
