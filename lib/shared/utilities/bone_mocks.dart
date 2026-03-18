@@ -23,3 +23,14 @@ final boneMockPartPresentation = PartPresentation(
     type: .category,
   ),
 );
+
+final List<PartPresentation> boneMockParts = List.filled(
+  10,
+  PartPresentation(
+    partId: '',
+    name: BoneMock.subtitle,
+    detailNumber: BoneMock.subtitle,
+    price: 10,
+    isRecycled: false,
+  ),
+);

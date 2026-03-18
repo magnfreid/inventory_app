@@ -4,7 +4,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:inventory_app/l10n/l10n.dart';
 import 'package:inventory_app/part_details/bloc/part_details_bloc.dart';
 import 'package:inventory_app/part_details/bloc/part_details_state.dart';
-import 'package:inventory_app/part_details/utils/bone_mock_part_presentation.dart';
+import 'package:inventory_app/shared/utilities/bone_mocks.dart';
 import 'package:inventory_app/part_details/widgets/part_details_in_stock.dart';
 import 'package:inventory_app/part_details/widgets/part_details_info.dart';
 import 'package:inventory_app/part_details/widgets/part_details_restock.dart';
