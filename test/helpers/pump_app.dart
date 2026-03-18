@@ -7,18 +7,20 @@ extension PumpApp on WidgetTester {
   Future<void> pumpApp(
     Widget widget, {
     List<NavigatorObserver>? observers,
-    List<RepositoryProvider<dynamic>>? providers,
+    List<RepositoryProvider<dynamic>>? repositoryProviders,
+    RouteFactory? onGenerateRoute,
   }) {
     Widget app = MaterialApp(
       navigatorObservers: observers ?? [],
       localizationsDelegates: AppLocalizations.localizationsDelegates,
       supportedLocales: AppLocalizations.supportedLocales,
       home: widget,
+      onGenerateRoute: onGenerateRoute,
     );
 
-    if (providers != null && providers.isNotEmpty) {
+    if (repositoryProviders != null && repositoryProviders.isNotEmpty) {
       app = MultiRepositoryProvider(
-        providers: providers,
+        providers: repositoryProviders,
         child: app,
       );
     }

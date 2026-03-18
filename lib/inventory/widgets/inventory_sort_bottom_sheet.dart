@@ -7,8 +7,8 @@ import 'package:inventory_app/inventory/models/inventory_filter.dart';
 import 'package:inventory_app/l10n/l10n.dart';
 import 'package:inventory_app/shared/extensions/sort_by_extensions.dart';
 
-class InventoryPageSortBottomSheet extends StatelessWidget {
-  const InventoryPageSortBottomSheet({super.key});
+class InventorySortBottomSheet extends StatelessWidget {
+  const InventorySortBottomSheet({super.key});
 
   @override
   Widget build(BuildContext context) {

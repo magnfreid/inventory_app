@@ -90,7 +90,7 @@ void main() {
 
       await tester.pumpApp(
         observers: [observer],
-        providers: [
+        repositoryProviders: [
           RepositoryProvider<StorageRepository>.value(value: storageRepo),
         ],
         storagesView(),
@@ -118,7 +118,7 @@ void main() {
 
         await tester.pumpApp(
           observers: [observer],
-          providers: [
+          repositoryProviders: [
             RepositoryProvider<StorageRepository>.value(value: storageRepo),
           ],
           storagesView(),
@@ -151,7 +151,7 @@ void main() {
 
         await tester.pumpApp(
           observers: [observer],
-          providers: [
+          repositoryProviders: [
             RepositoryProvider<StorageRepository>.value(value: storageRepo),
           ],
           storagesView(),

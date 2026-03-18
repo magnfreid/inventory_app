@@ -19,6 +19,7 @@ import 'package:inventory_app/storages/bloc/storages_bloc.dart';
 import 'package:inventory_app/storages/bloc/storages_state.dart';
 import 'package:inventory_app/storages_editor/bloc/storages_editor_bloc.dart';
 import 'package:inventory_app/storages_editor/bloc/storages_editor_state.dart';
+import 'package:inventory_app/theme/cubit/theme_cubit.dart';
 import 'package:inventory_app/use_cases/part_presentation.dart/models/part_presentation.dart';
 import 'package:inventory_app/use_cases/part_presentation.dart/watch_part_presentations.dart';
 import 'package:inventory_app/use_cases/part_presentation.dart/watch_single_part_presentation.dart';
@@ -79,5 +80,7 @@ class MockStorageEditorBloc
 
 class MockPartEditorBloc extends MockBloc<PartEditorEvent, PartEditorState>
     implements PartEditorBloc {}
+
+class MockThemeCubit extends MockCubit<AppThemeMode> implements ThemeCubit {}
 
 class MockHydratedBlocStorage extends Mock implements Storage {}

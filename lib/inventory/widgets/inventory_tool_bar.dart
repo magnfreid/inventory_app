@@ -3,8 +3,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:inventory_app/inventory/bloc/inventory_bloc.dart';
 import 'package:inventory_app/inventory/bloc/inventory_state.dart';
-import 'package:inventory_app/inventory/widgets/inventory_page_filter_bottom_sheet.dart';
-import 'package:inventory_app/inventory/widgets/inventory_page_sort_bottom_sheet.dart';
+import 'package:inventory_app/inventory/widgets/inventory_filter_bottom_sheet.dart';
+import 'package:inventory_app/inventory/widgets/inventory_sort_bottom_sheet.dart';
 import 'package:inventory_app/part_editor/view/part_editor_page.dart';
 
 class InventoryToolBar extends StatefulWidget {
@@ -126,7 +126,7 @@ class _InventoryToolBarState extends State<InventoryToolBar> {
                             context: context,
                             builder: (_) => BlocProvider.value(
                               value: bloc,
-                              child: const InventoryPageSortBottomSheet(),
+                              child: const InventorySortBottomSheet(),
                             ),
                           ),
                           icon: const Icon(Icons.sort),
@@ -147,7 +147,7 @@ class _InventoryToolBarState extends State<InventoryToolBar> {
                               context: context,
                               builder: (_) => BlocProvider.value(
                                 value: bloc,
-                                child: const InventoryPageFilterBottomSheet(),
+                                child: const InventoryFilterBottomSheet(),
                               ),
                             ),
                             icon: Icon(
