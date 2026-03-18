@@ -1,4 +1,4 @@
-name: part_repository
+name: firebase_shared
 description: A Very Good Project created by Very Good CLI.
 version: 0.1.0+1
 publish_to: none
@@ -7,17 +7,11 @@ environment:
   sdk: ">=3.11.0 <4.0.0"
 
 dependencies:
+  cloud_firestore: ^6.1.2
   core_remote:
     path: ../core_remote
-  flutter:
-    sdk: flutter
-  json_annotation: ^4.11.0
-  json_serializable: ^6.13.0
-  part_remote:
-    path: ../part_remote
 
 dev_dependencies:
-  build_runner: ^2.11.1
   mocktail: ^1.0.4
   test: ^1.29.0
   very_good_analysis: ^10.2.0

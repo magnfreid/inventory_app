@@ -1,5 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_part_remote/src/constants/constants.dart';
+import 'package:firebase_shared/firebase_shared.dart';
 import 'package:part_remote/part_remote.dart';
 
 ///Implementation of Firebase Firestore [PartRemote].
@@ -31,28 +32,47 @@ class FirebasePartRemote implements PartRemote {
 
   @override
   Stream<List<PartDto>> watchParts() {
-    return _collection.snapshots().map(
-      (snapshot) => snapshot.docs.map((doc) => doc.data()).toList(),
-    );
+    return _collection
+        .snapshots()
+        .map(
+          (snapshot) => snapshot.docs.map((doc) => doc.data()).toList(),
+        )
+        .handleError((e) {
+          if (e is FirebaseException) {
+            throw mapFirebaseException(e);
+          }
+        });
   }
 
   @override
   Future<PartDto> addPart(PartDto dto) async {
     final docRef = _collection.doc();
     final dtoWithId = dto.copyWith(id: docRef.id);
-    await docRef.set(dtoWithId);
-    return dtoWithId;
+    try {
+      await docRef.set(dtoWithId);
+      return dtoWithId;
+    } on FirebaseException catch (e) {
+      throw mapFirebaseException(e);
+    }
   }
 
   @override
   Future<PartDto> editPart(PartDto updatedPart) async {
     final docRef = _collection.doc(updatedPart.id);
-    await docRef.set(updatedPart, SetOptions(merge: true));
-    return updatedPart;
+    try {
+      await docRef.set(updatedPart, SetOptions(merge: true));
+      return updatedPart;
+    } on FirebaseException catch (e) {
+      throw mapFirebaseException(e);
+    }
   }
 
   @override
   Future<void> deletePart(String partId) async {
-    await _collection.doc(partId).delete();
+    try {
+      await _collection.doc(partId).delete();
+    } on FirebaseException catch (e) {
+      throw mapFirebaseException(e);
+    }
   }
 }

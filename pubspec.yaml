@@ -9,8 +9,10 @@ environment:
 workspace:
   - packages/app_ui
   - packages/authentication_service
+  - packages/core_remote
   - packages/firebase_authentication_service
   - packages/firebase_part_remote
+  - packages/firebase_shared
   - packages/firebase_stock_remote
   - packages/firebase_storage_remote
   - packages/firebase_tag_remote
@@ -35,11 +37,15 @@ dependencies:
   bloc_concurrency: ^0.3.0
   bloc_test: ^10.0.0
   collection: ^1.19.1
+  core_remote:
+    path: packages/core_remote
   firebase_authentication_service:
     path: packages/firebase_authentication_service
   firebase_core: ^4.4.0
   firebase_part_remote:
     path: packages/firebase_part_remote
+  firebase_shared:
+    path: packages/firebase_shared
   firebase_stock_remote:
     path: packages/firebase_stock_remote
   firebase_storage_remote:
