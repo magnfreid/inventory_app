@@ -9,6 +9,7 @@ import 'package:inventory_app/part_details/widgets/part_details_info.dart';
 import 'package:inventory_app/part_details/widgets/part_details_restock.dart';
 import 'package:inventory_app/use_cases/part_presentation.dart/models/part_presentation.dart';
 import 'package:mocktail/mocktail.dart';
+import 'package:skeletonizer/skeletonizer.dart';
 
 import '../../helpers/helpers.dart';
 
@@ -37,12 +38,15 @@ void main() {
     }
 
     group('PartDetailsView', () {
-      testWidgets('shows loading indicator when part is null', (tester) async {
+      testWidgets('shows skeleton when part is null', (tester) async {
         when(() => bloc.state).thenReturn(const PartDetailsState());
 
         await tester.pumpApp(pumpView());
 
-        expect(find.byType(CircularProgressIndicator), findsOneWidget);
+        final skeletonFinder = find.byWidgetPredicate(
+          (widget) => widget is Skeletonizer && widget.enabled,
+        );
+        expect(skeletonFinder, findsExactly(4));
       });
 
       testWidgets('shows part name in AppBar when loaded', (tester) async {

@@ -8,8 +8,10 @@ import 'package:inventory_app/inventory/widgets/inventory_drawer.dart';
 import 'package:inventory_app/inventory/widgets/inventory_part_card.dart';
 import 'package:inventory_app/inventory/widgets/inventory_tool_bar.dart';
 import 'package:inventory_app/shared/extensions/part_filtering_extension.dart';
+import 'package:inventory_app/shared/utilities/bone_mocks.dart';
 
 import 'package:inventory_app/use_cases/part_presentation.dart/watch_part_presentations.dart';
+import 'package:skeletonizer/skeletonizer.dart';
 import 'package:stock_repository/stock_repository.dart';
 import 'package:storage_repository/storage_repository.dart';
 import 'package:tag_repository/tag_repository.dart';
@@ -52,27 +54,24 @@ class InventoryView extends StatelessWidget {
         top: false,
         child: BlocBuilder<InventoryBloc, InventoryState>(
           builder: (context, state) {
-            final parts = state.filteredParts;
-
-            return switch (state.status) {
-              .loading => const Center(
-                child: CircularProgressIndicator.adaptive(),
-              ),
-              .loaded =>
-                parts.isEmpty
-                    ? const Center(
-                        child: Text('Nothing added yet!'),
-                      )
-                    : Padding(
-                        padding: const .symmetric(horizontal: 8),
-                        child: ListView.builder(
-                          padding: const .only(bottom: 140),
-                          itemCount: parts.length,
-                          itemBuilder: (context, index) =>
-                              InventoryPartCard(part: parts[index]),
-                        ),
+            final parts = state.isLoading ? boneMockParts : state.filteredParts;
+            return Skeletonizer(
+              enabled: state.isLoading,
+              child: parts.isEmpty
+                  ? const Center(
+                      //TODO(magnfreid): Add l10n
+                      child: Text('Nothing added yet!'),
+                    )
+                  : Padding(
+                      padding: const .symmetric(horizontal: 8),
+                      child: ListView.builder(
+                        padding: const .only(bottom: 140),
+                        itemCount: parts.length,
+                        itemBuilder: (context, index) =>
+                            InventoryPartCard(part: parts[index]),
                       ),
-            };
+                    ),
+            );
           },
         ),
       ),

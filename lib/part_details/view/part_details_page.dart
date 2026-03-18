@@ -8,8 +8,10 @@ import 'package:inventory_app/part_details/widgets/part_details_in_stock.dart';
 import 'package:inventory_app/part_details/widgets/part_details_info.dart';
 import 'package:inventory_app/part_details/widgets/part_details_restock.dart';
 import 'package:inventory_app/part_editor/view/part_editor_page.dart';
+import 'package:inventory_app/shared/utilities/bone_mocks.dart';
 import 'package:inventory_app/use_cases/part_presentation.dart/watch_single_part_presentation.dart';
 import 'package:part_repository/part_repository.dart';
+import 'package:skeletonizer/skeletonizer.dart';
 import 'package:stock_repository/stock_repository.dart';
 import 'package:storage_repository/storage_repository.dart';
 
@@ -55,15 +57,31 @@ class PartDetailsView extends StatelessWidget {
       appBar: AppBar(
         centerTitle: true,
         title: BlocBuilder<PartDetailsBloc, PartDetailsState>(
+          buildWhen: (prev, curr) => prev.part != curr.part,
           builder: (context, state) {
-            final part = state.part;
-            final title = part == null ? '' : part.name;
-            return Text(title);
+            final title = state.part?.name ?? BoneMock.title;
+            return Skeletonizer(enabled: state.isLoading, child: Text(title));
           },
         ),
         actions: [
-          _DeleteButton(partId: partId),
-          const _EditButton(),
+          BlocBuilder<PartDetailsBloc, PartDetailsState>(
+            buildWhen: (prev, curr) => prev.part != curr.part,
+            builder: (context, state) {
+              return Skeletonizer(
+                enabled: state.isLoading,
+                child: _DeleteButton(partId: partId),
+              );
+            },
+          ),
+          BlocBuilder<PartDetailsBloc, PartDetailsState>(
+            buildWhen: (prev, curr) => prev.part != curr.part,
+            builder: (context, state) {
+              return Skeletonizer(
+                enabled: state.isLoading,
+                child: const _EditButton(),
+              );
+            },
+          ),
         ],
       ),
       body: BlocListener<PartDetailsBloc, PartDetailsState>(
@@ -72,42 +90,41 @@ class PartDetailsView extends StatelessWidget {
             Navigator.of(context).popUntil((route) => route.isFirst),
         child: BlocBuilder<PartDetailsBloc, PartDetailsState>(
           builder: (context, state) {
-            final part = state.part;
-            return part == null
-                ? const Center(
-                    child: CircularProgressIndicator.adaptive(),
-                  )
-                : Column(
-                    children: [
-                      const SizedBox(height: 24),
-                      const _SegmentedButton(),
-                      const SizedBox(height: 24),
-                      Expanded(
-                        child: Padding(
-                          padding: const .symmetric(
-                            horizontal: 28,
-                          ),
-                          child: AnimatedSwitcher(
-                            duration: const Duration(milliseconds: 50),
-
-                            child: switch (state.content) {
-                              .details => PartDetailsInfo(
-                                key: const ValueKey('details'),
-                                part,
-                              ),
-                              .inStock => PartDetailsInStock(
-                                key: const ValueKey('stock'),
-                                part: part,
-                              ),
-                              .restock => const PartDetailsRestock(
-                                key: ValueKey('restock'),
-                              ),
-                            },
-                          ),
-                        ),
+            final part = state.part ?? boneMockPartPresentation;
+            return Skeletonizer(
+              enabled: state.isLoading,
+              child: Column(
+                children: [
+                  const SizedBox(height: 24),
+                  const Skeleton.ignore(child: _SegmentedButton()),
+                  const SizedBox(height: 24),
+                  Expanded(
+                    child: Padding(
+                      padding: const .symmetric(
+                        horizontal: 28,
                       ),
-                    ],
-                  );
+                      child: AnimatedSwitcher(
+                        duration: const Duration(milliseconds: 50),
+
+                        child: switch (state.content) {
+                          .details => PartDetailsInfo(
+                            key: const ValueKey('details'),
+                            part,
+                          ),
+                          .inStock => PartDetailsInStock(
+                            key: const ValueKey('stock'),
+                            part: part,
+                          ),
+                          .restock => const PartDetailsRestock(
+                            key: ValueKey('restock'),
+                          ),
+                        },
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+            );
           },
         ),
       ),

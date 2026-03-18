@@ -33,6 +33,7 @@ void main() {
           child: const SignInView(),
         ),
       );
+
       expect(find.byType(TextField), findsExactly(2));
       expect(find.byType(AppButton), findsOneWidget);
       expect(find.byType(Text), findsExactly(3));
@@ -100,6 +101,24 @@ void main() {
       await tester.pump();
 
       verify(() => bloc.add(any(that: isA<SignInButtonPressed>()))).called(1);
+    });
+
+    testWidgets('text fields are empty initially', (tester) async {
+      when(() => bloc.state).thenReturn(const SignInState());
+      whenListen(bloc, const Stream<SignInState>.empty());
+
+      await tester.pumpApp(
+        BlocProvider.value(
+          value: bloc,
+          child: const SignInView(),
+        ),
+      );
+
+      final textFields = tester.widgetList<TextField>(find.byType(TextField));
+
+      for (final textField in textFields) {
+        expect(textField.controller?.text ?? '', isEmpty);
+      }
     });
   });
 }
