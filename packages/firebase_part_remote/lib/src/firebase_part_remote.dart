@@ -32,6 +32,7 @@ class FirebasePartRemote implements PartRemote {
 
   @override
   Stream<List<PartDto>> watchParts() {
+    // return Stream.error(FirebaseException(plugin: 'not-found'));
     return _collection
         .snapshots()
         .map(

@@ -1,5 +1,6 @@
 import 'dart:async';
 
+import 'package:core_remote/core_remote.dart';
 import 'package:hydrated_bloc/hydrated_bloc.dart' hide Storage;
 import 'package:inventory_app/inventory/bloc/inventory_state.dart';
 import 'package:inventory_app/inventory/models/inventory_filter.dart';
@@ -54,9 +55,16 @@ class InventoryBloc extends HydratedBloc<InventoryEvent, InventoryState> {
       _sortOrderButtonPressed,
       transformer: throttle(_uiThrottleDuration),
     );
+    on<_OnError>(_onError);
 
     _partsStreamSubscription = watchPartPresentations().listen(
       (parts) => add(_PartsUpdated(parts: parts)),
+      onError: (e) {
+        final error = (e is RemoteException)
+            ? e
+            : const UnknownRemoteException();
+        add(_OnError(error: error));
+      },
     );
     _tagsStreamSubscription = _tagRepository.watchTags().listen((tags) {
       final tagPresentations = tags
@@ -92,7 +100,7 @@ class InventoryBloc extends HydratedBloc<InventoryEvent, InventoryState> {
     _PartsUpdated event,
     Emitter<InventoryState> emit,
   ) {
-    emit(state.copyWith(status: .loaded, parts: event.parts));
+    emit(state.copyWith(status: .loaded, parts: event.parts, error: null));
   }
 
   FutureOr<void> _onTagsUpdated(
@@ -275,5 +283,9 @@ class InventoryBloc extends HydratedBloc<InventoryEvent, InventoryState> {
     return {
       'filter': state.filter.toJson(),
     };
+  }
+
+  FutureOr<void> _onError(_OnError event, Emitter<InventoryState> emit) {
+    emit(state.copyWith(error: event.error));
   }
 }

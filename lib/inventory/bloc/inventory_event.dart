@@ -19,6 +19,11 @@ final class _StoragesUpdated extends InventoryEvent {
   final List<Storage> storages;
 }
 
+final class _OnError extends InventoryEvent {
+  const _OnError({required this.error});
+  final RemoteException error;
+}
+
 final class UseStockButtonPressed extends InventoryEvent {
   const UseStockButtonPressed({required this.partId, required this.storageId});
   final String partId;

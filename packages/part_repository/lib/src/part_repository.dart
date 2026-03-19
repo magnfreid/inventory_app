@@ -1,8 +1,6 @@
 import 'package:core_remote/core_remote.dart';
 import 'package:part_remote/part_remote.dart';
 import 'package:part_repository/part_repository.dart';
-import 'package:part_repository/src/exceptions/part_exceptions.dart';
-import 'package:part_repository/src/exceptions/remote_exceptions_mapper.dart';
 
 /// Repository responsible for fetching, adding, and editing [Part] domain
 ///  models.
@@ -26,9 +24,9 @@ class PartRepository {
         // ignore: inference_failure_on_untyped_parameter
         .handleError((e) {
           if (e is RemoteException) {
-            throw mapRemoteToRepositoryException(e);
+            throw e;
           } else {
-            throw const PartUnknownError('Unknown error');
+            throw const UnknownRemoteException();
           }
         });
   }
@@ -39,10 +37,10 @@ class PartRepository {
     try {
       final dtoWithId = await _remote.addPart(part.toDto());
       return Part.fromDto(dtoWithId);
-    } on RemoteException catch (e) {
-      throw mapRemoteToRepositoryException(e);
+    } on RemoteException catch (_) {
+      rethrow;
     } on Exception catch (_) {
-      throw const UnknownRemoteException('Unknown error');
+      throw const UnknownRemoteException();
     }
   }
 
@@ -53,10 +51,10 @@ class PartRepository {
     try {
       await _remote.editPart(part.toDto());
       return part;
-    } on RemoteException catch (e) {
-      throw mapRemoteToRepositoryException(e);
+    } on RemoteException catch (_) {
+      rethrow;
     } on Exception catch (_) {
-      throw const UnknownRemoteException('Unknown error');
+      throw const UnknownRemoteException();
     }
   }
 
@@ -64,10 +62,10 @@ class PartRepository {
   Future<void> deletePart(String partId) async {
     try {
       await _remote.deletePart(partId);
-    } on RemoteException catch (e) {
-      throw mapRemoteToRepositoryException(e);
+    } on RemoteException catch (_) {
+      rethrow;
     } on Exception catch (_) {
-      throw const UnknownRemoteException('Unknown error');
+      throw const UnknownRemoteException();
     }
   }
 }

@@ -291,5 +291,29 @@
 	"workInProgress": "Arbete pågår!",
 	"@workInProgress": {
 		"description": "Text for features that are not done yet."
+	},
+	"remoteExceptionPermissionDenied": "Fel: Åtkomst nekad.",
+	"@remoteExceptionPermissionDenied": {
+		"description": "Visas när användaren saknar behörighet att utföra en åtgärd."
+	},
+	"remoteExceptionNotFound": "Fel: Resursen kunde inte hittas.",
+	"@remoteExceptionNotFound": {
+		"description": "Visas när en efterfrågad resurs inte finns."
+	},
+	"remoteExceptionAlreadyExists": "Fel: Resursen finns redan.",
+	"@remoteExceptionAlreadyExists": {
+		"description": "Visas när man försöker skapa något som redan finns."
+	},
+	"remoteExceptionNetwork": "Nätverksfel. Kontrollera din anslutning.",
+	"@remoteExceptionNetwork": {
+		"description": "Visas vid problem med nätverksanslutningen."
+	},
+	"remoteExceptionTimeout": "Begäran tog för lång tid. Försök igen.",
+	"@remoteExceptionTimeout": {
+		"description": "Visas när en begäran tar för lång tid."
+	},
+	"remoteExceptionUnknown": "Ett okänt fel uppstod. Försök igen.",
+	"@remoteExceptionUnknown": {
+		"description": "Fallback-meddelande för oväntade fel."
 	}
 }

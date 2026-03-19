@@ -23,6 +23,5 @@ class TimeoutException extends RemoteException {
 }
 
 class UnknownRemoteException extends RemoteException {
-  const UnknownRemoteException(this.message);
-  final String message;
+  const UnknownRemoteException();
 }

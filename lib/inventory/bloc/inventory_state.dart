@@ -1,3 +1,4 @@
+import 'package:core_remote/core_remote.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:inventory_app/inventory/models/inventory_filter.dart';
 import 'package:inventory_app/tags/models/tag_presentation.dart';
@@ -21,9 +22,11 @@ abstract class InventoryState with _$InventoryState {
     @Default([]) List<Storage> storages,
     @Default(InventoryStateBottomSheetStatus.idle)
     InventoryStateBottomSheetStatus bottomSheetStatus,
+    RemoteException? error,
   }) = _InventoryState;
   const InventoryState._();
 
   bool get isLoading => status == .loading;
+  bool get hasError => error != null;
   bool get isLoadingBottomSheet => bottomSheetStatus == .loading;
 }

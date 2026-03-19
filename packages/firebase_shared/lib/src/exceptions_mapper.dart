@@ -30,8 +30,6 @@ RemoteException mapFirebaseException(FirebaseException e) {
       return const PermissionDeniedException();
 
     default:
-      return UnknownRemoteException(
-        e.message ?? 'Unknown Firebase error: ${e.code}',
-      );
+      return const UnknownRemoteException();
   }
 }
