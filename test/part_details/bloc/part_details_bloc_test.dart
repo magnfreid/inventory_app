@@ -160,7 +160,7 @@ void main() {
         isA<PartDetailsState>().having(
           (s) => s.saveStatus,
           'saveStatus',
-          PartDetailsSaveStatus.success,
+          PartDetailsSaveStatus.done,
         ),
       ],
     );
@@ -231,7 +231,7 @@ void main() {
         isA<PartDetailsState>().having(
           (s) => s.saveStatus,
           'saveStatus',
-          PartDetailsSaveStatus.success,
+          PartDetailsSaveStatus.done,
         ),
       ],
     );
@@ -295,7 +295,7 @@ void main() {
         isA<PartDetailsState>().having(
           (s) => s.deleteStatus,
           'deleteStatus',
-          PartDetailsDeleteStatus.success,
+          PartDetailsDeleteStatus.done,
         ),
       ],
     );

@@ -2,6 +2,7 @@ import 'dart:async';
 
 import 'package:bloc/bloc.dart';
 import 'package:bloc_concurrency/bloc_concurrency.dart';
+import 'package:core_remote/core_remote.dart';
 import 'package:inventory_app/part_details/bloc/part_details_state.dart';
 import 'package:inventory_app/shared/utilities/bloc_transformers.dart';
 import 'package:inventory_app/use_cases/part_presentation.dart/models/part_presentation.dart';
@@ -37,14 +38,20 @@ class PartDetailsBloc extends Bloc<PartDetailsEvent, PartDetailsState> {
       _onConfirmDeleteButtonPressed,
       transformer: droppable(),
     );
+    on<_OnStreamError>(_onStreamError);
 
     _storagesStreamSubscription = storageRepository.watchStorages().listen(
       (data) => add(_StoragesUpdated(storages: data)),
+      onError: _handleStreamError,
     );
 
-    _partStreamSubscription = watchSinglePartPresentation(
-      partId,
-    ).listen((part) => add(_PartUpdated(part: part)));
+    _partStreamSubscription =
+        watchSinglePartPresentation(
+          partId,
+        ).listen(
+          (part) => add(_PartUpdated(part: part)),
+          onError: _handleStreamError,
+        );
   }
 
   final StockRepository _stockRepository;
@@ -85,16 +92,16 @@ class PartDetailsBloc extends Bloc<PartDetailsEvent, PartDetailsState> {
     UseButtonPressed event,
     Emitter<PartDetailsState> emit,
   ) async {
-    emit(state.copyWith(saveStatus: .loading));
+    emit(state.copyWith(saveStatus: .loading, error: null));
     try {
       await _stockRepository.decreaseStock(
         partId: event.partId,
         storageId: event.storageId,
         amount: 1,
       );
-      emit(state.copyWith(saveStatus: .success));
-    } on Exception catch (_) {
-      emit(state.copyWith(saveStatus: .error));
+      emit(state.copyWith(saveStatus: .done));
+    } on Exception catch (e) {
+      emit(state.copyWith(saveStatus: .done, error: e));
     }
   }
 
@@ -102,16 +109,16 @@ class PartDetailsBloc extends Bloc<PartDetailsEvent, PartDetailsState> {
     AddToStockButtonPressed event,
     Emitter<PartDetailsState> emit,
   ) async {
-    emit(state.copyWith(saveStatus: .loading));
+    emit(state.copyWith(saveStatus: .loading, error: null));
     try {
       await _stockRepository.increaseStock(
         partId: event.partId,
         storageId: event.storageId,
         amount: event.amount,
       );
-      emit(state.copyWith(saveStatus: .success));
-    } on Exception catch (_) {
-      emit(state.copyWith(saveStatus: .error));
+      emit(state.copyWith(saveStatus: .done));
+    } on Exception catch (e) {
+      emit(state.copyWith(saveStatus: .done, error: e));
     }
   }
 
@@ -122,9 +129,21 @@ class PartDetailsBloc extends Bloc<PartDetailsEvent, PartDetailsState> {
     emit(state.copyWith(deleteStatus: .loading));
     try {
       await _partRepository.deletePart(event.partId);
-      emit(state.copyWith(deleteStatus: .success));
-    } on Exception catch (_) {
-      emit(state.copyWith(deleteStatus: .error));
+      emit(state.copyWith(deleteStatus: .done));
+    } on Exception catch (e) {
+      emit(state.copyWith(deleteStatus: .done, error: e));
     }
+  }
+
+  FutureOr<void> _onStreamError(
+    _OnStreamError event,
+    Emitter<PartDetailsState> emit,
+  ) {
+    emit(state.copyWith(error: event.error));
+  }
+
+  void _handleStreamError(dynamic e) {
+    final error = (e is RemoteException) ? e : const UnknownRemoteException();
+    add(_OnStreamError(error: error));
   }
 }

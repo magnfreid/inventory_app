@@ -55,15 +55,17 @@ class InventoryBloc extends HydratedBloc<InventoryEvent, InventoryState> {
       _sortOrderButtonPressed,
       transformer: throttle(_uiThrottleDuration),
     );
-    on<_OnError>(_onError);
+    on<_OnStreamError>(_onStreamError);
 
     _partsStreamSubscription = watchPartPresentations().listen(
       (parts) => add(_PartsUpdated(parts: parts)),
+      //
+      // ignore: inference_failure_on_untyped_parameter
       onError: (e) {
         final error = (e is RemoteException)
             ? e
             : const UnknownRemoteException();
-        add(_OnError(error: error));
+        add(_OnStreamError(error: error));
       },
     );
     _tagsStreamSubscription = _tagRepository.watchTags().listen((tags) {
@@ -118,16 +120,16 @@ class InventoryBloc extends HydratedBloc<InventoryEvent, InventoryState> {
     UseStockButtonPressed event,
     Emitter<InventoryState> emit,
   ) async {
-    emit(state.copyWith(bottomSheetStatus: .loading));
+    emit(state.copyWith(bottomSheetStatus: .loading, error: null));
     try {
       await _stockRepository.decreaseStock(
         partId: event.partId,
         storageId: event.storageId,
         amount: 1,
       );
-      emit(state.copyWith(bottomSheetStatus: .success));
-    } on Exception catch (_) {
-      emit(state.copyWith(bottomSheetStatus: .error));
+      emit(state.copyWith(bottomSheetStatus: .done));
+    } on RemoteException catch (e) {
+      emit(state.copyWith(bottomSheetStatus: .done, error: e));
     }
   }
 
@@ -285,7 +287,10 @@ class InventoryBloc extends HydratedBloc<InventoryEvent, InventoryState> {
     };
   }
 
-  FutureOr<void> _onError(_OnError event, Emitter<InventoryState> emit) {
+  FutureOr<void> _onStreamError(
+    _OnStreamError event,
+    Emitter<InventoryState> emit,
+  ) {
     emit(state.copyWith(error: event.error));
   }
 }

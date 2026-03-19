@@ -38,6 +38,8 @@ class FirebasePartRemote implements PartRemote {
         .map(
           (snapshot) => snapshot.docs.map((doc) => doc.data()).toList(),
         )
+        //
+        // ignore: inference_failure_on_untyped_parameter
         .handleError((e) {
           if (e is FirebaseException) {
             throw mapFirebaseException(e);

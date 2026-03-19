@@ -1,3 +1,4 @@
+import 'package:core_remote/core_remote.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:inventory_app/authenticated_app/cubit/user_cubit.dart';
@@ -9,6 +10,7 @@ import 'package:inventory_app/inventory/widgets/inventory_part_card.dart';
 import 'package:inventory_app/inventory/widgets/inventory_tool_bar.dart';
 import 'package:inventory_app/l10n/l10n.dart';
 import 'package:inventory_app/shared/extensions/part_filtering_extension.dart';
+import 'package:inventory_app/shared/extensions/show_snack_bar_extensions.dart';
 import 'package:inventory_app/shared/utilities/bone_mocks.dart';
 
 import 'package:inventory_app/use_cases/part_presentation.dart/watch_part_presentations.dart';
@@ -57,11 +59,7 @@ class InventoryView extends StatelessWidget {
           listenWhen: (previous, current) => previous.error != current.error,
           listener: (context, state) {
             final error = state.error;
-            if (error != null) {
-              ScaffoldMessenger.of(
-                context,
-              ).showSnackBar(SnackBar(content: Text(error.toL10n(context))));
-            }
+            if (error != null) context.showErrorSnackBar(error);
           },
           child: BlocBuilder<InventoryBloc, InventoryState>(
             builder: (context, state) {
@@ -72,7 +70,7 @@ class InventoryView extends StatelessWidget {
                 padding: const .symmetric(horizontal: 8),
                 child: Column(
                   children: [
-                    if (state.hasError)
+                    if (state.hasError && state.error is NetworkException)
                       Row(
                         children: [
                           const Padding(

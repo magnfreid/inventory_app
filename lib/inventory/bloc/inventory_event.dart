@@ -19,8 +19,8 @@ final class _StoragesUpdated extends InventoryEvent {
   final List<Storage> storages;
 }
 
-final class _OnError extends InventoryEvent {
-  const _OnError({required this.error});
+final class _OnStreamError extends InventoryEvent {
+  const _OnStreamError({required this.error});
   final RemoteException error;
 }
 

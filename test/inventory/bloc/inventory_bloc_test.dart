@@ -200,7 +200,7 @@ void main() {
         isA<InventoryState>().having(
           (s) => s.bottomSheetStatus,
           'bottomSheetStatus',
-          InventoryStateBottomSheetStatus.success,
+          InventoryStateBottomSheetStatus.done,
         ),
       ],
       verify: (_) => verify(

@@ -14,14 +14,17 @@ class PartDetailsRestock extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final l10n = context.l10n;
-    return BlocListener<PartDetailsBloc, PartDetailsState>(
-      listenWhen: (previous, current) =>
-          previous.saveStatus != current.saveStatus &&
-              current.saveStatus == .success ||
-          current.saveStatus == .error,
-      listener: (context, state) {
-        Navigator.pop(context);
-      },
+    return MultiBlocListener(
+      listeners: [
+        BlocListener<PartDetailsBloc, PartDetailsState>(
+          listenWhen: (previous, current) =>
+              previous.saveStatus != current.saveStatus &&
+              current.saveStatus == .done,
+          listener: (context, state) {
+            Navigator.pop(context);
+          },
+        ),
+      ],
       child: BlocBuilder<PartDetailsBloc, PartDetailsState>(
         builder: (context, state) {
           final part = state.part;
@@ -38,7 +41,7 @@ class PartDetailsRestock extends StatelessWidget {
                     ListTile(
                       title: Row(
                         children: [
-                          Text('${l10n.inStockTotalText}:'),
+                          Text('//${l10n.inStockTotalText}:'),
                           const Spacer(),
                           Text(part.totalQuantity.toString()),
                         ],

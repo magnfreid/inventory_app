@@ -9,6 +9,9 @@ class WatchSinglePartPresentation {
 
   final WatchPartPresentations _watchPartPresentations;
 
+  //TODO(magnfreid): Does this create a new stream, or use an existing one?
+  //Why so "long" loading time?
+
   Stream<PartPresentation?> call(String partId) {
     return _watchPartPresentations().map((parts) {
       return parts.firstWhereOrNull((part) => part.partId == partId);

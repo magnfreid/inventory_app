@@ -9,7 +9,7 @@ part 'inventory_state.freezed.dart';
 
 enum InventoryStateStatus { loading, loaded }
 
-enum InventoryStateBottomSheetStatus { idle, loading, success, error }
+enum InventoryStateBottomSheetStatus { idle, loading, done }
 
 @freezed
 abstract class InventoryState with _$InventoryState {
