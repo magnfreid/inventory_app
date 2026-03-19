@@ -121,3 +121,9 @@ melos:
     l10n:
       description: "Generate Flutter localization"
       run: fvm flutter gen-l10n
+    build-web:
+      run: fvm flutter build web -t lib/main_development.dart --release --wasm
+    start-server:
+      run: dhttpd --path build/web
+    deploy-firebase:
+      run: firebase deploy --only hosting
