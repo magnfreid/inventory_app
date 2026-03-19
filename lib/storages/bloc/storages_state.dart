@@ -10,6 +10,7 @@ abstract class StoragesState with _$StoragesState {
   const factory StoragesState({
     @Default(StoragesStateStatus.loading) StoragesStateStatus status,
     @Default([]) List<Storage> storages,
+    Exception? error,
   }) = _StoragesState;
   const StoragesState._();
 }

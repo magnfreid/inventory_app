@@ -13,6 +13,7 @@ class StoragesEditorBloc
     : _storageRepository = storageRepository,
       super(const StoragesEditorState()) {
     on<SaveButtonPressed>(_onSaveButtonPressed, transformer: droppable());
+    on<_OnStreamError>(_onStreamError);
   }
 
   final StorageRepository _storageRepository;
@@ -22,7 +23,7 @@ class StoragesEditorBloc
     Emitter<StoragesEditorState> emit,
   ) async {
     final storage = event.storage;
-    emit(state.copyWith(status: .loading));
+    emit(state.copyWith(status: .loading, error: null));
     try {
       if (storage.id == null) {
         await _storageRepository.addStorage(
@@ -32,8 +33,15 @@ class StoragesEditorBloc
         await _storageRepository.editStorage(storage: storage);
       }
       emit(state.copyWith(status: .success));
-    } on Exception catch (_) {
-      emit(state.copyWith(status: .idle));
+    } on Exception catch (e) {
+      emit(state.copyWith(status: .idle, error: e));
     }
+  }
+
+  FutureOr<void> _onStreamError(
+    _OnStreamError event,
+    Emitter<StoragesEditorState> emit,
+  ) {
+    emit(state.copyWith(error: event.error));
   }
 }

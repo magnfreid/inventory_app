@@ -102,7 +102,7 @@ void main() {
         isA<PartEditorState>().having(
           (s) => s.status,
           'status',
-          PartEditorStatus.success,
+          PartEditorStatus.done,
         ),
       ],
       verify: (_) {
@@ -130,7 +130,7 @@ void main() {
         isA<PartEditorState>().having(
           (s) => s.status,
           'status',
-          PartEditorStatus.success,
+          PartEditorStatus.done,
         ),
       ],
       verify: (_) {

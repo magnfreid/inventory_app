@@ -1,6 +1,7 @@
 import 'dart:async';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_shared/firebase_shared.dart';
 import 'package:firebase_tag_remote/src/constants/constants.dart';
 import 'package:tag_remote/tag_remote.dart';
 
@@ -34,25 +35,46 @@ class FirebaseTagRemote implements TagRemote {
   Future<TagDto> addTag(TagDto tag) async {
     final docRef = _collection.doc();
     final dtoWithId = tag.copyWith(id: docRef.id);
-    await docRef.set(dtoWithId);
-    return dtoWithId;
+    try {
+      await docRef.set(dtoWithId);
+      return dtoWithId;
+    } on FirebaseException catch (e) {
+      throw mapFirebaseException(e);
+    }
   }
 
   @override
   Future<void> deleteTag(String id) async {
-    await _collection.doc(id).delete();
+    try {
+      await _collection.doc(id).delete();
+    } on FirebaseException catch (e) {
+      throw mapFirebaseException(e);
+    }
   }
 
   @override
   Stream<List<TagDto>> watchTags() {
-    return _collection.snapshots().map(
-      (snapshot) => snapshot.docs.map((doc) => doc.data()).toList(),
-    );
+    return _collection
+        .snapshots()
+        .map(
+          (snapshot) => snapshot.docs.map((doc) => doc.data()).toList(),
+        )
+        //
+        // ignore: inference_failure_on_untyped_parameter
+        .handleError((e) {
+          if (e is FirebaseException) {
+            throw mapFirebaseException(e);
+          }
+        });
   }
 
   @override
   Future<void> editTag(TagDto dto) async {
     final docRef = _collection.doc(dto.id);
-    await docRef.set(dto, SetOptions(merge: true));
+    try {
+      await docRef.set(dto, SetOptions(merge: true));
+    } on FirebaseException catch (e) {
+      mapFirebaseException(e);
+    }
   }
 }

@@ -13,6 +13,8 @@ class StockRepository {
 
   final StockRemote _remote;
 
+  //TODO(magnfreid): Add sharedReplay!
+
   /// Returns a [Stream] of all [Stock] entries.
   ///
   /// Maps the [StockDto]s from [_remote] to [Stock] domain models.

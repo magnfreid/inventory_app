@@ -11,6 +11,8 @@ class PartRepository {
 
   final PartRemote _remote;
 
+  //TODO(magnfreid): Add sharedReplay!
+
   /// Returns a [Stream] of all [Part]s.
   ///
   /// Maps the [PartDto]s from [_remote] to [Part] domain models.

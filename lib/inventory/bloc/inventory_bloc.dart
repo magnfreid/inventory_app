@@ -52,30 +52,24 @@ class InventoryBloc extends HydratedBloc<InventoryEvent, InventoryState> {
       transformer: throttle(_uiThrottleDuration),
     );
     on<SortOrderButtonPressed>(
-      _sortOrderButtonPressed,
+      _onSortOrderButtonPressed,
       transformer: throttle(_uiThrottleDuration),
     );
     on<_OnStreamError>(_onStreamError);
 
     _partsStreamSubscription = watchPartPresentations().listen(
       (parts) => add(_PartsUpdated(parts: parts)),
-      //
-      // ignore: inference_failure_on_untyped_parameter
-      onError: (e) {
-        final error = (e is RemoteException)
-            ? e
-            : const UnknownRemoteException();
-        add(_OnStreamError(error: error));
-      },
+      onError: _handleStreamError,
     );
     _tagsStreamSubscription = _tagRepository.watchTags().listen((tags) {
       final tagPresentations = tags
           .map(TagPresentation.fromDomainModel)
           .toList();
       add(_TagsUpdated(tags: tagPresentations));
-    });
+    }, onError: _handleStreamError);
     _storagesStreamSubscription = _storageRepository.watchStorages().listen(
       (storages) => add(_StoragesUpdated(storages: storages)),
+      onError: _handleStreamError,
     );
   }
 
@@ -251,7 +245,7 @@ class InventoryBloc extends HydratedBloc<InventoryEvent, InventoryState> {
     );
   }
 
-  FutureOr<void> _sortOrderButtonPressed(
+  FutureOr<void> _onSortOrderButtonPressed(
     SortOrderButtonPressed event,
     Emitter<InventoryState> emit,
   ) {
@@ -261,6 +255,13 @@ class InventoryBloc extends HydratedBloc<InventoryEvent, InventoryState> {
         filter: state.filter.copyWith(isSortedAscending: !isAscending),
       ),
     );
+  }
+
+  FutureOr<void> _onStreamError(
+    _OnStreamError event,
+    Emitter<InventoryState> emit,
+  ) {
+    emit(state.copyWith(error: event.error));
   }
 
   void _toggleFilterIdInSet(String filterId, Set<String> set) {
@@ -287,10 +288,8 @@ class InventoryBloc extends HydratedBloc<InventoryEvent, InventoryState> {
     };
   }
 
-  FutureOr<void> _onStreamError(
-    _OnStreamError event,
-    Emitter<InventoryState> emit,
-  ) {
-    emit(state.copyWith(error: event.error));
+  void _handleStreamError(dynamic e) {
+    final error = (e is RemoteException) ? e : const UnknownRemoteException();
+    add(_OnStreamError(error: error));
   }
 }

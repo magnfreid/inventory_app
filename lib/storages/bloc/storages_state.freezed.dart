@@ -14,7 +14,7 @@ T _$identity<T>(T value) => value;
 /// @nodoc
 mixin _$StoragesState {
 
- StoragesStateStatus get status; List<Storage> get storages;
+ StoragesStateStatus get status; List<Storage> get storages; Exception? get error;
 /// Create a copy of StoragesState
 /// with the given fields replaced by the non-null parameter values.
 @JsonKey(includeFromJson: false, includeToJson: false)
@@ -25,16 +25,16 @@ $StoragesStateCopyWith<StoragesState> get copyWith => _$StoragesStateCopyWithImp
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is StoragesState&&(identical(other.status, status) || other.status == status)&&const DeepCollectionEquality().equals(other.storages, storages));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is StoragesState&&(identical(other.status, status) || other.status == status)&&const DeepCollectionEquality().equals(other.storages, storages)&&(identical(other.error, error) || other.error == error));
 }
 
 
 @override
-int get hashCode => Object.hash(runtimeType,status,const DeepCollectionEquality().hash(storages));
+int get hashCode => Object.hash(runtimeType,status,const DeepCollectionEquality().hash(storages),error);
 
 @override
 String toString() {
-  return 'StoragesState(status: $status, storages: $storages)';
+  return 'StoragesState(status: $status, storages: $storages, error: $error)';
 }
 
 
@@ -45,7 +45,7 @@ abstract mixin class $StoragesStateCopyWith<$Res>  {
   factory $StoragesStateCopyWith(StoragesState value, $Res Function(StoragesState) _then) = _$StoragesStateCopyWithImpl;
 @useResult
 $Res call({
- StoragesStateStatus status, List<Storage> storages
+ StoragesStateStatus status, List<Storage> storages, Exception? error
 });
 
 
@@ -62,11 +62,12 @@ class _$StoragesStateCopyWithImpl<$Res>
 
 /// Create a copy of StoragesState
 /// with the given fields replaced by the non-null parameter values.
-@pragma('vm:prefer-inline') @override $Res call({Object? status = null,Object? storages = null,}) {
+@pragma('vm:prefer-inline') @override $Res call({Object? status = null,Object? storages = null,Object? error = freezed,}) {
   return _then(_self.copyWith(
 status: null == status ? _self.status : status // ignore: cast_nullable_to_non_nullable
 as StoragesStateStatus,storages: null == storages ? _self.storages : storages // ignore: cast_nullable_to_non_nullable
-as List<Storage>,
+as List<Storage>,error: freezed == error ? _self.error : error // ignore: cast_nullable_to_non_nullable
+as Exception?,
   ));
 }
 
@@ -151,10 +152,10 @@ return $default(_that);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function( StoragesStateStatus status,  List<Storage> storages)?  $default,{required TResult orElse(),}) {final _that = this;
+@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function( StoragesStateStatus status,  List<Storage> storages,  Exception? error)?  $default,{required TResult orElse(),}) {final _that = this;
 switch (_that) {
 case _StoragesState() when $default != null:
-return $default(_that.status,_that.storages);case _:
+return $default(_that.status,_that.storages,_that.error);case _:
   return orElse();
 
 }
@@ -172,10 +173,10 @@ return $default(_that.status,_that.storages);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function( StoragesStateStatus status,  List<Storage> storages)  $default,) {final _that = this;
+@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function( StoragesStateStatus status,  List<Storage> storages,  Exception? error)  $default,) {final _that = this;
 switch (_that) {
 case _StoragesState():
-return $default(_that.status,_that.storages);case _:
+return $default(_that.status,_that.storages,_that.error);case _:
   throw StateError('Unexpected subclass');
 
 }
@@ -192,10 +193,10 @@ return $default(_that.status,_that.storages);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function( StoragesStateStatus status,  List<Storage> storages)?  $default,) {final _that = this;
+@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function( StoragesStateStatus status,  List<Storage> storages,  Exception? error)?  $default,) {final _that = this;
 switch (_that) {
 case _StoragesState() when $default != null:
-return $default(_that.status,_that.storages);case _:
+return $default(_that.status,_that.storages,_that.error);case _:
   return null;
 
 }
@@ -207,7 +208,7 @@ return $default(_that.status,_that.storages);case _:
 
 
 class _StoragesState extends StoragesState {
-  const _StoragesState({this.status = StoragesStateStatus.loading, final  List<Storage> storages = const []}): _storages = storages,super._();
+  const _StoragesState({this.status = StoragesStateStatus.loading, final  List<Storage> storages = const [], this.error}): _storages = storages,super._();
   
 
 @override@JsonKey() final  StoragesStateStatus status;
@@ -218,6 +219,7 @@ class _StoragesState extends StoragesState {
   return EqualUnmodifiableListView(_storages);
 }
 
+@override final  Exception? error;
 
 /// Create a copy of StoragesState
 /// with the given fields replaced by the non-null parameter values.
@@ -229,16 +231,16 @@ _$StoragesStateCopyWith<_StoragesState> get copyWith => __$StoragesStateCopyWith
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is _StoragesState&&(identical(other.status, status) || other.status == status)&&const DeepCollectionEquality().equals(other._storages, _storages));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is _StoragesState&&(identical(other.status, status) || other.status == status)&&const DeepCollectionEquality().equals(other._storages, _storages)&&(identical(other.error, error) || other.error == error));
 }
 
 
 @override
-int get hashCode => Object.hash(runtimeType,status,const DeepCollectionEquality().hash(_storages));
+int get hashCode => Object.hash(runtimeType,status,const DeepCollectionEquality().hash(_storages),error);
 
 @override
 String toString() {
-  return 'StoragesState(status: $status, storages: $storages)';
+  return 'StoragesState(status: $status, storages: $storages, error: $error)';
 }
 
 
@@ -249,7 +251,7 @@ abstract mixin class _$StoragesStateCopyWith<$Res> implements $StoragesStateCopy
   factory _$StoragesStateCopyWith(_StoragesState value, $Res Function(_StoragesState) _then) = __$StoragesStateCopyWithImpl;
 @override @useResult
 $Res call({
- StoragesStateStatus status, List<Storage> storages
+ StoragesStateStatus status, List<Storage> storages, Exception? error
 });
 
 
@@ -266,11 +268,12 @@ class __$StoragesStateCopyWithImpl<$Res>
 
 /// Create a copy of StoragesState
 /// with the given fields replaced by the non-null parameter values.
-@override @pragma('vm:prefer-inline') $Res call({Object? status = null,Object? storages = null,}) {
+@override @pragma('vm:prefer-inline') $Res call({Object? status = null,Object? storages = null,Object? error = freezed,}) {
   return _then(_StoragesState(
 status: null == status ? _self.status : status // ignore: cast_nullable_to_non_nullable
 as StoragesStateStatus,storages: null == storages ? _self._storages : storages // ignore: cast_nullable_to_non_nullable
-as List<Storage>,
+as List<Storage>,error: freezed == error ? _self.error : error // ignore: cast_nullable_to_non_nullable
+as Exception?,
   ));
 }
 

@@ -1,6 +1,7 @@
 import 'dart:async';
 
 import 'package:bloc/bloc.dart';
+import 'package:core_remote/core_remote.dart';
 import 'package:inventory_app/part_editor/bloc/part_editor_state.dart';
 import 'package:inventory_app/shared/utilities/bloc_transformers.dart';
 import 'package:inventory_app/tags/models/tag_presentation.dart';
@@ -21,11 +22,13 @@ class PartEditorBloc extends Bloc<PartEditorEvent, PartEditorState> {
       _onTagsUpdated,
       transformer: debounceRestartable(const Duration(milliseconds: 500)),
     );
+    on<_OnStreamError>(_onStreamError);
 
     _subscription = _tagRepository.watchTags().listen(
       (tags) => add(
         _TagsUpdated(tags: tags.map(TagPresentation.fromDomainModel).toList()),
       ),
+      onError: _handleStreamError,
     );
   }
 
@@ -45,20 +48,20 @@ class PartEditorBloc extends Bloc<PartEditorEvent, PartEditorState> {
   ) async {
     final id = event.part.id;
     if (id != null) {
-      emit(state.copyWith(status: .loading));
+      emit(state.copyWith(status: .loading, error: null));
       try {
         await _partRepository.editPart(event.part);
-        emit(state.copyWith(status: .success));
-      } on Exception catch (_) {
-        emit(state.copyWith(status: .error));
+        emit(state.copyWith(status: .done));
+      } on Exception catch (e) {
+        emit(state.copyWith(status: .idle, error: e));
       }
     } else {
       emit(state.copyWith(status: .loading));
       try {
         await _partRepository.addPart(event.part);
-        emit(state.copyWith(status: .success));
-      } on Exception catch (_) {
-        emit(state.copyWith(status: .error));
+        emit(state.copyWith(status: .done));
+      } on Exception catch (e) {
+        emit(state.copyWith(status: .idle, error: e));
       }
     }
   }
@@ -81,5 +84,17 @@ class PartEditorBloc extends Bloc<PartEditorEvent, PartEditorState> {
         generalTags: generalTags,
       ),
     );
+  }
+
+  void _handleStreamError(dynamic e) {
+    final error = (e is RemoteException) ? e : const UnknownRemoteException();
+    add(_OnStreamError(error: error));
+  }
+
+  FutureOr<void> _onStreamError(
+    _OnStreamError event,
+    Emitter<PartEditorState> emit,
+  ) {
+    emit(state.copyWith(error: event.error));
   }
 }

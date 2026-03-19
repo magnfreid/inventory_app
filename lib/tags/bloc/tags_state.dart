@@ -5,7 +5,7 @@ part 'tags_state.freezed.dart';
 
 enum TagsStateStatus { loading, loaded }
 
-enum TagsStateBottomSheetStatus { idle, loading, success }
+enum TagsStateBottomSheetStatus { idle, loading, done }
 
 @freezed
 abstract class TagsState with _$TagsState {
@@ -16,6 +16,7 @@ abstract class TagsState with _$TagsState {
     @Default([]) List<TagPresentation> brandTags,
     @Default([]) List<TagPresentation> categoryTags,
     @Default([]) List<TagPresentation> generalTags,
+    Exception? error,
   }) = _TagsState;
   const TagsState._();
 }

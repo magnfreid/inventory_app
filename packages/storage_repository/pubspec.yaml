@@ -7,6 +7,8 @@ environment:
   sdk: ">=3.11.0 <4.0.0"
 
 dependencies:
+  core_remote:
+    path: ../core_remote
   flutter:
     sdk: flutter
   storage_remote:

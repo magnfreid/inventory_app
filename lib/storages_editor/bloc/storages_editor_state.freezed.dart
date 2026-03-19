@@ -14,7 +14,7 @@ T _$identity<T>(T value) => value;
 /// @nodoc
 mixin _$StoragesEditorState {
 
- StoragesEditorStatus get status;
+ StoragesEditorStatus get status; Exception? get error;
 /// Create a copy of StoragesEditorState
 /// with the given fields replaced by the non-null parameter values.
 @JsonKey(includeFromJson: false, includeToJson: false)
@@ -25,16 +25,16 @@ $StoragesEditorStateCopyWith<StoragesEditorState> get copyWith => _$StoragesEdit
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is StoragesEditorState&&(identical(other.status, status) || other.status == status));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is StoragesEditorState&&(identical(other.status, status) || other.status == status)&&(identical(other.error, error) || other.error == error));
 }
 
 
 @override
-int get hashCode => Object.hash(runtimeType,status);
+int get hashCode => Object.hash(runtimeType,status,error);
 
 @override
 String toString() {
-  return 'StoragesEditorState(status: $status)';
+  return 'StoragesEditorState(status: $status, error: $error)';
 }
 
 
@@ -45,7 +45,7 @@ abstract mixin class $StoragesEditorStateCopyWith<$Res>  {
   factory $StoragesEditorStateCopyWith(StoragesEditorState value, $Res Function(StoragesEditorState) _then) = _$StoragesEditorStateCopyWithImpl;
 @useResult
 $Res call({
- StoragesEditorStatus status
+ StoragesEditorStatus status, Exception? error
 });
 
 
@@ -62,10 +62,11 @@ class _$StoragesEditorStateCopyWithImpl<$Res>
 
 /// Create a copy of StoragesEditorState
 /// with the given fields replaced by the non-null parameter values.
-@pragma('vm:prefer-inline') @override $Res call({Object? status = null,}) {
+@pragma('vm:prefer-inline') @override $Res call({Object? status = null,Object? error = freezed,}) {
   return _then(_self.copyWith(
 status: null == status ? _self.status : status // ignore: cast_nullable_to_non_nullable
-as StoragesEditorStatus,
+as StoragesEditorStatus,error: freezed == error ? _self.error : error // ignore: cast_nullable_to_non_nullable
+as Exception?,
   ));
 }
 
@@ -150,10 +151,10 @@ return $default(_that);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function( StoragesEditorStatus status)?  $default,{required TResult orElse(),}) {final _that = this;
+@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function( StoragesEditorStatus status,  Exception? error)?  $default,{required TResult orElse(),}) {final _that = this;
 switch (_that) {
 case _StoragesEditorState() when $default != null:
-return $default(_that.status);case _:
+return $default(_that.status,_that.error);case _:
   return orElse();
 
 }
@@ -171,10 +172,10 @@ return $default(_that.status);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function( StoragesEditorStatus status)  $default,) {final _that = this;
+@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function( StoragesEditorStatus status,  Exception? error)  $default,) {final _that = this;
 switch (_that) {
 case _StoragesEditorState():
-return $default(_that.status);case _:
+return $default(_that.status,_that.error);case _:
   throw StateError('Unexpected subclass');
 
 }
@@ -191,10 +192,10 @@ return $default(_that.status);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function( StoragesEditorStatus status)?  $default,) {final _that = this;
+@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function( StoragesEditorStatus status,  Exception? error)?  $default,) {final _that = this;
 switch (_that) {
 case _StoragesEditorState() when $default != null:
-return $default(_that.status);case _:
+return $default(_that.status,_that.error);case _:
   return null;
 
 }
@@ -206,10 +207,11 @@ return $default(_that.status);case _:
 
 
 class _StoragesEditorState extends StoragesEditorState {
-  const _StoragesEditorState({this.status = StoragesEditorStatus.idle}): super._();
+  const _StoragesEditorState({this.status = StoragesEditorStatus.idle, this.error}): super._();
   
 
 @override@JsonKey() final  StoragesEditorStatus status;
+@override final  Exception? error;
 
 /// Create a copy of StoragesEditorState
 /// with the given fields replaced by the non-null parameter values.
@@ -221,16 +223,16 @@ _$StoragesEditorStateCopyWith<_StoragesEditorState> get copyWith => __$StoragesE
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is _StoragesEditorState&&(identical(other.status, status) || other.status == status));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is _StoragesEditorState&&(identical(other.status, status) || other.status == status)&&(identical(other.error, error) || other.error == error));
 }
 
 
 @override
-int get hashCode => Object.hash(runtimeType,status);
+int get hashCode => Object.hash(runtimeType,status,error);
 
 @override
 String toString() {
-  return 'StoragesEditorState(status: $status)';
+  return 'StoragesEditorState(status: $status, error: $error)';
 }
 
 
@@ -241,7 +243,7 @@ abstract mixin class _$StoragesEditorStateCopyWith<$Res> implements $StoragesEdi
   factory _$StoragesEditorStateCopyWith(_StoragesEditorState value, $Res Function(_StoragesEditorState) _then) = __$StoragesEditorStateCopyWithImpl;
 @override @useResult
 $Res call({
- StoragesEditorStatus status
+ StoragesEditorStatus status, Exception? error
 });
 
 
@@ -258,10 +260,11 @@ class __$StoragesEditorStateCopyWithImpl<$Res>
 
 /// Create a copy of StoragesEditorState
 /// with the given fields replaced by the non-null parameter values.
-@override @pragma('vm:prefer-inline') $Res call({Object? status = null,}) {
+@override @pragma('vm:prefer-inline') $Res call({Object? status = null,Object? error = freezed,}) {
   return _then(_StoragesEditorState(
 status: null == status ? _self.status : status // ignore: cast_nullable_to_non_nullable
-as StoragesEditorStatus,
+as StoragesEditorStatus,error: freezed == error ? _self.error : error // ignore: cast_nullable_to_non_nullable
+as Exception?,
   ));
 }
 

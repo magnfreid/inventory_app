@@ -1,6 +1,7 @@
 import 'dart:async';
 
 import 'package:bloc/bloc.dart';
+import 'package:core_remote/core_remote.dart';
 import 'package:inventory_app/shared/utilities/bloc_transformers.dart';
 import 'package:inventory_app/tags/bloc/tags_state.dart';
 import 'package:inventory_app/tags/models/tag_presentation.dart';
@@ -20,13 +21,12 @@ class TagsBloc extends Bloc<TagsEvent, TagsState> {
       _onSaveButtonPressed,
       transformer: throttle(const Duration(milliseconds: 500)),
     );
+    on<_OnStreamError>(_onStreamError);
 
-    _subscription = tagRepository.watchTags().listen(
-      (tags) {
-        final uiTags = tags.map(TagPresentation.fromDomainModel).toList();
-        add(_TagsUpdated(tags: uiTags));
-      },
-    );
+    _subscription = tagRepository.watchTags().listen((tags) {
+      final uiTags = tags.map(TagPresentation.fromDomainModel).toList();
+      add(_TagsUpdated(tags: uiTags));
+    }, onError: _handleStreamError);
   }
 
   final TagRepository _tagRepository;
@@ -54,16 +54,25 @@ class TagsBloc extends Bloc<TagsEvent, TagsState> {
     Emitter<TagsState> emit,
   ) async {
     final tag = event.tag;
-    emit(state.copyWith(bottomSheetStatus: .loading));
+    emit(state.copyWith(bottomSheetStatus: .loading, error: null));
     try {
       if (tag.id == null) {
         await _tagRepository.addTag(tag);
       } else {
         await _tagRepository.editTag(tag);
       }
-      emit(state.copyWith(bottomSheetStatus: .success));
-    } on Exception catch (_) {
-      emit(state.copyWith(bottomSheetStatus: .idle));
+      emit(state.copyWith(bottomSheetStatus: .done));
+    } on Exception catch (e) {
+      emit(state.copyWith(bottomSheetStatus: .done, error: e));
     }
+  }
+
+  void _handleStreamError(dynamic e) {
+    final error = (e is RemoteException) ? e : const UnknownRemoteException();
+    add(_OnStreamError(error: error));
+  }
+
+  FutureOr<void> _onStreamError(_OnStreamError event, Emitter<TagsState> emit) {
+    emit(state.copyWith(error: event.error));
   }
 }
