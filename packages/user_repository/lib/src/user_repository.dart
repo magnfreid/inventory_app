@@ -15,8 +15,6 @@ class UserRepository {
       .watchUser(userId)
       .map((dto) => dto == null ? null : User.fromDto(dto));
 
-  //TODO(magnfreid): Add sharedReplay!
-
   /// Watches all users belonging to a specific [organizationId].
   ///
   /// Returns a stream of [User] domain models.

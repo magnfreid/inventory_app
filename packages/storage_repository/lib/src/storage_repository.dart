@@ -1,4 +1,5 @@
 import 'package:core_remote/core_remote.dart';
+import 'package:rxdart/rxdart.dart';
 import 'package:storage_remote/storage_remote.dart';
 import 'package:storage_repository/storage_repository.dart';
 
@@ -11,27 +12,26 @@ class StorageRepository {
 
   final StorageRemote _remote;
 
-  //TODO(magnfreid): Add watchReplay!
+  late final Stream<List<Storage>> _storagesStream = _remote
+      .watchStorages()
+      .map(
+        (dtos) => dtos.map(Storage.fromDto).toList(),
+      )
+      .shareReplay(maxSize: 1)
+      //
+      // ignore: inference_failure_on_untyped_parameter
+      .handleError((e) {
+        if (e is RemoteException) {
+          throw e;
+        } else {
+          throw const UnknownRemoteException();
+        }
+      });
 
   /// Watches all storages from the remote source.
   ///
   /// Returns a stream of [Storage] domain models.
-  Stream<List<Storage>> watchStorages() {
-    return _remote
-        .watchStorages()
-        .map(
-          (dtos) => dtos.map(Storage.fromDto).toList(),
-        )
-        //
-        // ignore: inference_failure_on_untyped_parameter
-        .handleError((e) {
-          if (e is RemoteException) {
-            throw e;
-          } else {
-            throw const UnknownRemoteException();
-          }
-        });
-  }
+  Stream<List<Storage>> watchStorages() => _storagesStream;
 
   /// Adds a new storage using the [storage].
   ///

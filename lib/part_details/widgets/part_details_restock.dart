@@ -41,7 +41,7 @@ class PartDetailsRestock extends StatelessWidget {
                     ListTile(
                       title: Row(
                         children: [
-                          Text('//${l10n.inStockTotalText}:'),
+                          Text('${l10n.inStockTotalText}:'),
                           const Spacer(),
                           Text(part.totalQuantity.toString()),
                         ],
@@ -82,31 +82,10 @@ class PartDetailsRestock extends StatelessWidget {
                                   ),
                                 ),
                               ),
+                              //TODO(magnfreid): Add l10n
                               label: 'Välj',
                             ),
                           );
-                          // return Card(
-                          //   child: InkWell(
-                          //     onTap:
-
-                          //     child: Padding(
-                          //       padding: const .all(8),
-                          //       child: Row(
-                          //         mainAxisAlignment: .spaceBetween,
-                          //         children: [
-                          //           Text(
-                          //             storage.name,
-                          //             style: context.text.bodyLarge,
-                          //           ),
-                          //           Text(
-                          //             quantity.toString(),
-                          //             style: context.text.bodyLarge,
-                          //           ),
-                          //         ],
-                          //       ),
-                          //     ),
-                          //   ),
-                          // );
                         },
                       ),
                     ),

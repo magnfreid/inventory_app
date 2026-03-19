@@ -1,4 +1,5 @@
 import 'package:core_remote/core_remote.dart';
+import 'package:rxdart/rxdart.dart';
 import 'package:stock_remote/stock_remote.dart';
 import 'package:stock_repository/stock_repository.dart';
 
@@ -13,27 +14,29 @@ class StockRepository {
 
   final StockRemote _remote;
 
-  //TODO(magnfreid): Add sharedReplay!
+  /// Returns a [Stream] of all [Stock] entries.
+  ///
+  /// Maps the [StockDto]s from [_remote] to [Stock] domain models.
+  late final Stream<List<Stock>> _stockStream = _remote
+      .watchStock()
+      .map(
+        (dtos) => dtos.map(Stock.fromDto).toList(),
+      )
+      .shareReplay(maxSize: 1)
+      //
+      // ignore: inference_failure_on_untyped_parameter
+      .handleError((e) {
+        if (e is RemoteException) {
+          throw e;
+        } else {
+          throw const UnknownRemoteException();
+        }
+      });
 
   /// Returns a [Stream] of all [Stock] entries.
   ///
   /// Maps the [StockDto]s from [_remote] to [Stock] domain models.
-  Stream<List<Stock>> watchStock() {
-    return _remote
-        .watchStock()
-        .map(
-          (dtos) => dtos.map(Stock.fromDto).toList(),
-        )
-        //
-        // ignore: inference_failure_on_untyped_parameter
-        .handleError((e) {
-          if (e is RemoteException) {
-            throw e;
-          } else {
-            throw const UnknownRemoteException();
-          }
-        });
-  }
+  Stream<List<Stock>> watchStock() => _stockStream;
 
   /// Increases stock for a part at a specific storage location by [amount].
   Future<void> increaseStock({

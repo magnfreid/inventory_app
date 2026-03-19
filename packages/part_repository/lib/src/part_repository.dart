@@ -1,6 +1,7 @@
 import 'package:core_remote/core_remote.dart';
 import 'package:part_remote/part_remote.dart';
 import 'package:part_repository/part_repository.dart';
+import 'package:rxdart/rxdart.dart';
 
 /// Repository responsible for fetching, adding, and editing [Part] domain
 ///  models.
@@ -11,27 +12,26 @@ class PartRepository {
 
   final PartRemote _remote;
 
-  //TODO(magnfreid): Add sharedReplay!
+  late final Stream<List<Part>> _partStream = _remote
+      .watchParts()
+      .map(
+        (dtos) => dtos.map(Part.fromDto).toList(),
+      )
+      .shareReplay(maxSize: 1)
+      //
+      // ignore: inference_failure_on_untyped_parameter
+      .handleError((e) {
+        if (e is RemoteException) {
+          throw e;
+        } else {
+          throw const UnknownRemoteException();
+        }
+      });
 
   /// Returns a [Stream] of all [Part]s.
   ///
   /// Maps the [PartDto]s from [_remote] to [Part] domain models.
-  Stream<List<Part>> watchParts() {
-    return _remote
-        .watchParts()
-        .map(
-          (dtos) => dtos.map(Part.fromDto).toList(),
-        )
-        //
-        // ignore: inference_failure_on_untyped_parameter
-        .handleError((e) {
-          if (e is RemoteException) {
-            throw e;
-          } else {
-            throw const UnknownRemoteException();
-          }
-        });
-  }
+  Stream<List<Part>> watchParts() => _partStream;
 
   /// Adds a new [part] via [_remote] and returns the created [Part] with its
   /// assigned id.
