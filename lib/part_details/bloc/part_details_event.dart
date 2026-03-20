@@ -20,9 +20,16 @@ final class _StoragesUpdated extends PartDetailsEvent {
 }
 
 final class UseButtonPressed extends PartDetailsEvent {
-  const UseButtonPressed({required this.partId, required this.storageId});
+  const UseButtonPressed({
+    required this.partId,
+    required this.storageId,
+    required this.userId,
+    required this.note,
+  });
   final String partId;
   final String storageId;
+  final String userId;
+  final String note;
 }
 
 final class ButtonSegmentPressed extends PartDetailsEvent {
@@ -40,8 +47,12 @@ final class AddToStockButtonPressed extends PartDetailsEvent {
     required this.partId,
     required this.storageId,
     required this.amount,
+    required this.userId,
+    required this.note,
   });
   final String partId;
   final String storageId;
   final int amount;
+  final String userId;
+  final String? note;
 }

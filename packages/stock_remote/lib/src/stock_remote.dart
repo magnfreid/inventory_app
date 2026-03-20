@@ -5,9 +5,13 @@ abstract interface class StockRemote {
   ///Returns a [Stream] of a [List] of [StockDto].
   Stream<List<StockDto>> watchStock();
 
-  ///Increases a stock entry's quantity by [amount].
-  Future<void> increaseStock(String partId, String storageId, int amount);
+  Stream<List<TransactionDto>> watchTransactions();
 
-  ///Decreases a stock entry's quantity by [amount] (down to 0).
-  Future<void> decreaseStock(String partId, String storageId, int amount);
+  Future<void> applyStockChange(TransactionDto transaction);
+
+  // ///Increases a stock entry's quantity by [amount].
+  // Future<void> increaseStock(String partId, String storageId, int amount);
+
+  // ///Decreases a stock entry's quantity by [amount] (down to 0).
+  // Future<void> decreaseStock(String partId, String storageId, int amount);
 }

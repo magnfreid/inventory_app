@@ -1,11 +1,13 @@
 import 'package:core_remote/core_remote.dart';
 import 'package:rxdart/rxdart.dart';
 import 'package:stock_remote/stock_remote.dart';
+import 'package:stock_repository/src/models/transaction.dart';
 import 'package:stock_repository/stock_repository.dart';
 
-/// Repository responsible for managing [Stock] domain models.
+/// Repository responsible for managing [Stock] and [Transaction] domain models.
 ///
-/// Wraps a [StockRemote] data source and maps [StockDto]s to [Stock]s.
+/// Wraps a [StockRemote] data source and maps [StockDto]s to [Stock]s and
+/// [TransactionDto]s to [Transaction]s.
 class StockRepository {
   /// Creates a [StockRepository] using the provided [remote] data source.
   StockRepository({
@@ -38,33 +40,104 @@ class StockRepository {
   /// Maps the [StockDto]s from [_remote] to [Stock] domain models.
   Stream<List<Stock>> watchStock() => _stockStream;
 
-  /// Increases stock for a part at a specific storage location by [amount].
-  Future<void> increaseStock({
+  Future<void> useStock({
     required String partId,
     required String storageId,
-    required int amount,
+    required String userId,
+    required String note,
   }) async {
+    final transaction = Transaction.use(
+      partId: partId,
+      storageId: storageId,
+      userId: userId,
+      amount: 1,
+      note: note,
+    );
+
     try {
-      await _remote.increaseStock(partId, storageId, amount);
-    } on RemoteException catch (_) {
+      await _remote.applyStockChange(transaction.toDto());
+    } on RemoteException {
       rethrow;
     } on Exception catch (_) {
       throw const UnknownRemoteException();
     }
   }
 
-  /// Decreases stock for a part at a specific storage location by [amount].
-  Future<void> decreaseStock({
+  Future<void> restockStock({
     required String partId,
     required String storageId,
+    required String userId,
     required int amount,
+    String? note,
   }) async {
+    final transaction = Transaction.restock(
+      partId: partId,
+      storageId: storageId,
+      userId: userId,
+      amount: amount,
+      note: note,
+    );
+
     try {
-      await _remote.decreaseStock(partId, storageId, amount);
-    } on RemoteException catch (_) {
+      await _remote.applyStockChange(transaction.toDto());
+    } on RemoteException {
       rethrow;
     } on Exception catch (_) {
       throw const UnknownRemoteException();
     }
   }
+
+  Future<void> adjustStock({
+    required String partId,
+    required String storageId,
+    required String userId,
+    required int amount,
+    required String note,
+  }) async {
+    final transaction = Transaction.adjustment(
+      partId: partId,
+      storageId: storageId,
+      userId: userId,
+      amount: amount,
+      note: note,
+    );
+
+    try {
+      await _remote.applyStockChange(transaction.toDto());
+    } on RemoteException {
+      rethrow;
+    } on Exception catch (_) {
+      throw const UnknownRemoteException();
+    }
+  }
+
+  // /// Increases stock for a part at a specific storage location by [amount].
+  // Future<void> increaseStock({
+  //   required String partId,
+  //   required String storageId,
+  //   required int amount,
+  // }) async {
+  //   try {
+  //     await _remote.increaseStock(partId, storageId, amount);
+  //   } on RemoteException catch (_) {
+  //     rethrow;
+  //   } on Exception catch (_) {
+  //     throw const UnknownRemoteException();
+  //   }
+  // }
+
+  // /// Decreases stock for a part at a specific storage location by [amount].
+  // Future<void> decreaseStock({
+  //   required String partId,
+  //   required String storageId,
+  //   required int amount,
+  // }) async {
+  //   try {
+  //     await _remote.decreaseStock(partId, storageId, amount);
+  //   } on RemoteException catch (_) {
+  //     rethrow;
+  //   } on Exception catch (_) {
+  //     throw const UnknownRemoteException();
+  //   }
+  // }
 }

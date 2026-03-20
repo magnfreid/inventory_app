@@ -94,10 +94,11 @@ class PartDetailsBloc extends Bloc<PartDetailsEvent, PartDetailsState> {
   ) async {
     emit(state.copyWith(saveStatus: .loading, error: null));
     try {
-      await _stockRepository.decreaseStock(
+      await _stockRepository.useStock(
         partId: event.partId,
         storageId: event.storageId,
-        amount: 1,
+        userId: event.userId,
+        note: event.note,
       );
       emit(state.copyWith(saveStatus: .done));
     } on Exception catch (e) {
@@ -111,10 +112,12 @@ class PartDetailsBloc extends Bloc<PartDetailsEvent, PartDetailsState> {
   ) async {
     emit(state.copyWith(saveStatus: .loading, error: null));
     try {
-      await _stockRepository.increaseStock(
+      await _stockRepository.restockStock(
         partId: event.partId,
         storageId: event.storageId,
         amount: event.amount,
+        userId: event.userId,
+        note: event.note,
       );
       emit(state.copyWith(saveStatus: .done));
     } on Exception catch (e) {

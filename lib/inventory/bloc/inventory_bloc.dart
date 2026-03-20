@@ -116,10 +116,11 @@ class InventoryBloc extends HydratedBloc<InventoryEvent, InventoryState> {
   ) async {
     emit(state.copyWith(bottomSheetStatus: .loading, error: null));
     try {
-      await _stockRepository.decreaseStock(
+      await _stockRepository.useStock(
         partId: event.partId,
         storageId: event.storageId,
-        amount: 1,
+        note: event.note,
+        userId: event.userId,
       );
       emit(state.copyWith(bottomSheetStatus: .done));
     } on Exception catch (e) {

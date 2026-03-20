@@ -25,9 +25,16 @@ final class _OnStreamError extends InventoryEvent {
 }
 
 final class UseStockButtonPressed extends InventoryEvent {
-  const UseStockButtonPressed({required this.partId, required this.storageId});
+  const UseStockButtonPressed({
+    required this.partId,
+    required this.storageId,
+    required this.userId,
+    required this.note,
+  });
   final String partId;
   final String storageId;
+  final String userId;
+  final String note;
 }
 
 final class FilterChipPressed extends InventoryEvent {

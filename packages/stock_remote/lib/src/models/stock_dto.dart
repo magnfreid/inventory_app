@@ -28,4 +28,16 @@ class StockDto {
 
   /// Quantity of the part available at this storage location.
   final int quantity;
+
+  StockDto copyWith({
+    String? partId,
+    String? storageId,
+    int? quantity,
+  }) {
+    return StockDto(
+      partId: partId ?? this.partId,
+      storageId: storageId ?? this.storageId,
+      quantity: quantity ?? this.quantity,
+    );
+  }
 }
