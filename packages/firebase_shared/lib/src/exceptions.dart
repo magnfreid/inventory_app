@@ -1,6 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:core_remote/core_remote.dart';
 
+/// A function that maps [FirebaseException]'s to [RemoteException]'s.
 RemoteException mapFirebaseException(FirebaseException e) {
   switch (e.code) {
     case 'permission-denied':
@@ -34,5 +35,8 @@ RemoteException mapFirebaseException(FirebaseException e) {
   }
 }
 
-InvalidArgumentRemoteException invalidArgument() =>
+/// Getter for [InvalidArgumentRemoteException]. Used because this error needs
+/// to be thrown by custom validation logic and would otherwise be unreachable
+/// through firebase_shared package.
+InvalidArgumentRemoteException get invalidArgument =>
     const InvalidArgumentRemoteException();

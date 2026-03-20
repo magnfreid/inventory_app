@@ -1,4 +1,3 @@
-import 'package:core_remote/core_remote.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:inventory_app/inventory/models/inventory_filter.dart';
 import 'package:inventory_app/tags/models/tag_presentation.dart';
