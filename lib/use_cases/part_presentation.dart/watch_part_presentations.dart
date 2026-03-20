@@ -25,60 +25,61 @@ class WatchPartPresentations {
 
   Stream<List<PartPresentation>> call() {
     return Rx.combineLatest4<
-      List<Stock>,
-      List<Part>,
-      List<Storage>,
-      List<Tag>,
-      List<PartPresentation>
-    >(
-      _stockRepository.watchStock(),
-      _partRepository.watchParts(),
-      _storageRepository.watchStorages(),
-      _tagRepository.watchTags(),
-      (stocks, parts, storages, tags) {
-        final storagesMap = {for (final s in storages) s.id: s};
-        final tagsMap = {for (final t in tags) t.id: t};
+          List<Stock>,
+          List<Part>,
+          List<Storage>,
+          List<Tag>,
+          List<PartPresentation>
+        >(
+          _stockRepository.watchStock(),
+          _partRepository.watchParts(),
+          _storageRepository.watchStorages(),
+          _tagRepository.watchTags(),
+          (stocks, parts, storages, tags) {
+            final storagesMap = {for (final s in storages) s.id: s};
+            final tagsMap = {for (final t in tags) t.id: t};
 
-        final stockByPart = <String, List<Stock>>{};
-        for (final stock in stocks) {
-          stockByPart.putIfAbsent(stock.partId, () => []).add(stock);
-        }
+            final stockByPart = <String, List<Stock>>{};
+            for (final stock in stocks) {
+              stockByPart.putIfAbsent(stock.partId, () => []).add(stock);
+            }
 
-        return parts.map((part) {
-          final partStock = stockByPart[part.id] ?? const [];
-          final storageQuantities = partStock.map((stock) {
-            final storage = storagesMap[stock.storageId];
-            return StockPresentation(
-              storageId: stock.storageId,
-              storageName: storage?.name ?? 'Unknown',
-              quantity: stock.quantity,
-            );
-          }).toList();
+            return parts.map((part) {
+              final partStock = stockByPart[part.id] ?? const [];
+              final storageQuantities = partStock.map((stock) {
+                final storage = storagesMap[stock.storageId];
+                return StockPresentation(
+                  storageId: stock.storageId,
+                  storageName: storage?.name ?? 'Unknown',
+                  quantity: stock.quantity,
+                );
+              }).toList();
 
-          final categoryTag = part.categoryTagId != null
-              ? tagsMap[part.categoryTagId!]
-              : null;
-          final brandTag = part.brandTagId != null
-              ? tagsMap[part.brandTagId!]
-              : null;
+              final categoryTag = part.categoryTagId != null
+                  ? tagsMap[part.categoryTagId!]
+                  : null;
+              final brandTag = part.brandTagId != null
+                  ? tagsMap[part.brandTagId!]
+                  : null;
 
-          return PartPresentation(
-            partId: part.id ?? '',
-            name: part.name,
-            detailNumber: part.detailNumber,
-            price: part.price,
-            isRecycled: part.isRecycled,
-            brandTag: brandTag == null
-                ? null
-                : TagPresentation.fromDomainModel(brandTag),
-            categoryTag: categoryTag == null
-                ? null
-                : TagPresentation.fromDomainModel(categoryTag),
-            description: part.description,
-            stock: storageQuantities,
-          );
-        }).toList();
-      },
-    );
+              return PartPresentation(
+                partId: part.id ?? '',
+                name: part.name,
+                detailNumber: part.detailNumber,
+                price: part.price,
+                isRecycled: part.isRecycled,
+                brandTag: brandTag == null
+                    ? null
+                    : TagPresentation.fromDomainModel(brandTag),
+                categoryTag: categoryTag == null
+                    ? null
+                    : TagPresentation.fromDomainModel(categoryTag),
+                description: part.description,
+                stock: storageQuantities,
+              );
+            }).toList();
+          },
+        )
+        .shareReplay(maxSize: 1);
   }
 }

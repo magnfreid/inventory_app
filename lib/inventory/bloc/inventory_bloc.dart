@@ -122,7 +122,7 @@ class InventoryBloc extends HydratedBloc<InventoryEvent, InventoryState> {
         amount: 1,
       );
       emit(state.copyWith(bottomSheetStatus: .done));
-    } on RemoteException catch (e) {
+    } on Exception catch (e) {
       emit(state.copyWith(bottomSheetStatus: .done, error: e));
     }
   }

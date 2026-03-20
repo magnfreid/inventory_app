@@ -33,3 +33,6 @@ RemoteException mapFirebaseException(FirebaseException e) {
       return const UnknownRemoteException();
   }
 }
+
+InvalidArgumentRemoteException invalidArgument() =>
+    const InvalidArgumentRemoteException();

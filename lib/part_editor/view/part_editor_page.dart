@@ -135,7 +135,7 @@ class _PartEditorViewState extends State<PartEditorView> {
                               textCapitalization: .sentences,
                               controller: _nameController,
                               decoration: InputDecoration(
-                                labelText: '//${l10n.formFieldNameLabelText}*',
+                                labelText: '${l10n.formFieldNameLabelText}*',
                               ),
                               autovalidateMode: .onUserInteraction,
                               validator: (value) =>

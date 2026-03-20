@@ -25,3 +25,7 @@ class TimeoutException extends RemoteException {
 class UnknownRemoteException extends RemoteException {
   const UnknownRemoteException();
 }
+
+class InvalidArgumentRemoteException extends RemoteException {
+  const InvalidArgumentRemoteException();
+}

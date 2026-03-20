@@ -14,7 +14,7 @@ T _$identity<T>(T value) => value;
 /// @nodoc
 mixin _$InventoryState {
 
- InventoryStateStatus get status; List<PartPresentation> get parts; InventoryFilter get filter; List<TagPresentation> get brandTags; List<TagPresentation> get categoryTags; List<Storage> get storages; InventoryStateBottomSheetStatus get bottomSheetStatus; RemoteException? get error;
+ InventoryStateStatus get status; List<PartPresentation> get parts; InventoryFilter get filter; List<TagPresentation> get brandTags; List<TagPresentation> get categoryTags; List<Storage> get storages; InventoryStateBottomSheetStatus get bottomSheetStatus; Exception? get error;
 /// Create a copy of InventoryState
 /// with the given fields replaced by the non-null parameter values.
 @JsonKey(includeFromJson: false, includeToJson: false)
@@ -45,7 +45,7 @@ abstract mixin class $InventoryStateCopyWith<$Res>  {
   factory $InventoryStateCopyWith(InventoryState value, $Res Function(InventoryState) _then) = _$InventoryStateCopyWithImpl;
 @useResult
 $Res call({
- InventoryStateStatus status, List<PartPresentation> parts, InventoryFilter filter, List<TagPresentation> brandTags, List<TagPresentation> categoryTags, List<Storage> storages, InventoryStateBottomSheetStatus bottomSheetStatus, RemoteException? error
+ InventoryStateStatus status, List<PartPresentation> parts, InventoryFilter filter, List<TagPresentation> brandTags, List<TagPresentation> categoryTags, List<Storage> storages, InventoryStateBottomSheetStatus bottomSheetStatus, Exception? error
 });
 
 
@@ -72,7 +72,7 @@ as List<TagPresentation>,categoryTags: null == categoryTags ? _self.categoryTags
 as List<TagPresentation>,storages: null == storages ? _self.storages : storages // ignore: cast_nullable_to_non_nullable
 as List<Storage>,bottomSheetStatus: null == bottomSheetStatus ? _self.bottomSheetStatus : bottomSheetStatus // ignore: cast_nullable_to_non_nullable
 as InventoryStateBottomSheetStatus,error: freezed == error ? _self.error : error // ignore: cast_nullable_to_non_nullable
-as RemoteException?,
+as Exception?,
   ));
 }
 
@@ -157,7 +157,7 @@ return $default(_that);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function( InventoryStateStatus status,  List<PartPresentation> parts,  InventoryFilter filter,  List<TagPresentation> brandTags,  List<TagPresentation> categoryTags,  List<Storage> storages,  InventoryStateBottomSheetStatus bottomSheetStatus,  RemoteException? error)?  $default,{required TResult orElse(),}) {final _that = this;
+@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function( InventoryStateStatus status,  List<PartPresentation> parts,  InventoryFilter filter,  List<TagPresentation> brandTags,  List<TagPresentation> categoryTags,  List<Storage> storages,  InventoryStateBottomSheetStatus bottomSheetStatus,  Exception? error)?  $default,{required TResult orElse(),}) {final _that = this;
 switch (_that) {
 case _InventoryState() when $default != null:
 return $default(_that.status,_that.parts,_that.filter,_that.brandTags,_that.categoryTags,_that.storages,_that.bottomSheetStatus,_that.error);case _:
@@ -178,7 +178,7 @@ return $default(_that.status,_that.parts,_that.filter,_that.brandTags,_that.cate
 /// }
 /// ```
 
-@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function( InventoryStateStatus status,  List<PartPresentation> parts,  InventoryFilter filter,  List<TagPresentation> brandTags,  List<TagPresentation> categoryTags,  List<Storage> storages,  InventoryStateBottomSheetStatus bottomSheetStatus,  RemoteException? error)  $default,) {final _that = this;
+@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function( InventoryStateStatus status,  List<PartPresentation> parts,  InventoryFilter filter,  List<TagPresentation> brandTags,  List<TagPresentation> categoryTags,  List<Storage> storages,  InventoryStateBottomSheetStatus bottomSheetStatus,  Exception? error)  $default,) {final _that = this;
 switch (_that) {
 case _InventoryState():
 return $default(_that.status,_that.parts,_that.filter,_that.brandTags,_that.categoryTags,_that.storages,_that.bottomSheetStatus,_that.error);case _:
@@ -198,7 +198,7 @@ return $default(_that.status,_that.parts,_that.filter,_that.brandTags,_that.cate
 /// }
 /// ```
 
-@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function( InventoryStateStatus status,  List<PartPresentation> parts,  InventoryFilter filter,  List<TagPresentation> brandTags,  List<TagPresentation> categoryTags,  List<Storage> storages,  InventoryStateBottomSheetStatus bottomSheetStatus,  RemoteException? error)?  $default,) {final _that = this;
+@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function( InventoryStateStatus status,  List<PartPresentation> parts,  InventoryFilter filter,  List<TagPresentation> brandTags,  List<TagPresentation> categoryTags,  List<Storage> storages,  InventoryStateBottomSheetStatus bottomSheetStatus,  Exception? error)?  $default,) {final _that = this;
 switch (_that) {
 case _InventoryState() when $default != null:
 return $default(_that.status,_that.parts,_that.filter,_that.brandTags,_that.categoryTags,_that.storages,_that.bottomSheetStatus,_that.error);case _:
@@ -247,7 +247,7 @@ class _InventoryState extends InventoryState {
 }
 
 @override@JsonKey() final  InventoryStateBottomSheetStatus bottomSheetStatus;
-@override final  RemoteException? error;
+@override final  Exception? error;
 
 /// Create a copy of InventoryState
 /// with the given fields replaced by the non-null parameter values.
@@ -279,7 +279,7 @@ abstract mixin class _$InventoryStateCopyWith<$Res> implements $InventoryStateCo
   factory _$InventoryStateCopyWith(_InventoryState value, $Res Function(_InventoryState) _then) = __$InventoryStateCopyWithImpl;
 @override @useResult
 $Res call({
- InventoryStateStatus status, List<PartPresentation> parts, InventoryFilter filter, List<TagPresentation> brandTags, List<TagPresentation> categoryTags, List<Storage> storages, InventoryStateBottomSheetStatus bottomSheetStatus, RemoteException? error
+ InventoryStateStatus status, List<PartPresentation> parts, InventoryFilter filter, List<TagPresentation> brandTags, List<TagPresentation> categoryTags, List<Storage> storages, InventoryStateBottomSheetStatus bottomSheetStatus, Exception? error
 });
 
 
@@ -306,7 +306,7 @@ as List<TagPresentation>,categoryTags: null == categoryTags ? _self._categoryTag
 as List<TagPresentation>,storages: null == storages ? _self._storages : storages // ignore: cast_nullable_to_non_nullable
 as List<Storage>,bottomSheetStatus: null == bottomSheetStatus ? _self.bottomSheetStatus : bottomSheetStatus // ignore: cast_nullable_to_non_nullable
 as InventoryStateBottomSheetStatus,error: freezed == error ? _self.error : error // ignore: cast_nullable_to_non_nullable
-as RemoteException?,
+as Exception?,
   ));
 }
 

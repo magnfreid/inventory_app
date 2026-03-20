@@ -126,7 +126,7 @@ class PartDetailsBloc extends Bloc<PartDetailsEvent, PartDetailsState> {
     ConfirmDeleteButtonPressed event,
     Emitter<PartDetailsState> emit,
   ) async {
-    emit(state.copyWith(deleteStatus: .loading));
+    emit(state.copyWith(deleteStatus: .loading, error: null));
     try {
       await _partRepository.deletePart(event.partId);
       emit(state.copyWith(deleteStatus: .done));

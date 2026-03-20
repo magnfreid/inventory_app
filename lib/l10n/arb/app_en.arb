@@ -315,5 +315,9 @@
 	"remoteExceptionUnknown": "An unknown error occurred. Please try again.",
 	"@remoteExceptionUnknown": {
 		"description": "Fallback message for unexpected remote errors."
+	},
+	"remoteExceptionInvalidArgument": "The value you entered is not valid. Please try again.",
+	"@remoteExceptionInvalidArgument": {
+		"description": "Message to show the user if an invalid input was used when for example increasing or decreasing stock."
 	}
 }

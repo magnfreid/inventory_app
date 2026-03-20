@@ -21,6 +21,7 @@ void main() {
   late String partId;
   late Storage storage;
   late PartPresentation part;
+  late Exception error;
 
   late StreamController<List<Storage>> storagesStream;
   late StreamController<PartPresentation> partStream;
@@ -41,6 +42,7 @@ void main() {
       price: 10,
       isRecycled: true,
     );
+    error = Exception('Fail');
 
     when(
       () => stockRepository.watchStock(),
@@ -166,8 +168,8 @@ void main() {
     );
 
     blocTest(
-      'emits saveStatus [loading, error] when UseButtonPressed is added and '
-      'fails',
+      'emits saveStatus [loading, done] and error when UseButtonPressed is '
+      'added and fails',
       build: () {
         when(
           () => stockRepository.decreaseStock(
@@ -175,7 +177,7 @@ void main() {
             storageId: '123',
             amount: 1,
           ),
-        ).thenThrow(Exception('Fail'));
+        ).thenThrow(error);
         return PartDetailsBloc(
           stockRepository: stockRepository,
           storageRepository: storageRepository,
@@ -184,19 +186,24 @@ void main() {
           watchSinglePartPresentation: watchSinglePartPresentation,
         );
       },
+      seed: () => PartDetailsState(error: error),
       act: (bloc) =>
           bloc.add(UseButtonPressed(partId: partId, storageId: '123')),
       expect: () => [
-        isA<PartDetailsState>().having(
-          (s) => s.saveStatus,
-          'saveStatus',
-          PartDetailsSaveStatus.loading,
-        ),
-        isA<PartDetailsState>().having(
-          (s) => s.saveStatus,
-          'saveStatus',
-          PartDetailsSaveStatus.error,
-        ),
+        isA<PartDetailsState>()
+            .having(
+              (s) => s.saveStatus,
+              'saveStatus',
+              PartDetailsSaveStatus.loading,
+            )
+            .having((s) => s.error, 'error', isNull),
+        isA<PartDetailsState>()
+            .having(
+              (s) => s.saveStatus,
+              'saveStatus',
+              PartDetailsSaveStatus.done,
+            )
+            .having((s) => s.error, 'error', error),
       ],
     );
 
@@ -237,8 +244,8 @@ void main() {
     );
 
     blocTest(
-      'emits saveStatus [loading, error] when AddToStockButtonPressed is added '
-      'and fails',
+      'emits saveStatus [loading, done] and error when AddToStockButtonPressed '
+      'is added and fails',
       build: () {
         when(
           () => stockRepository.increaseStock(
@@ -246,7 +253,7 @@ void main() {
             storageId: '123',
             amount: 10,
           ),
-        ).thenThrow(Exception('Fail'));
+        ).thenThrow(error);
         return PartDetailsBloc(
           stockRepository: stockRepository,
           storageRepository: storageRepository,
@@ -255,20 +262,25 @@ void main() {
           watchSinglePartPresentation: watchSinglePartPresentation,
         );
       },
+      seed: () => PartDetailsState(error: error),
       act: (bloc) => bloc.add(
         AddToStockButtonPressed(partId: partId, storageId: '123', amount: 10),
       ),
       expect: () => [
-        isA<PartDetailsState>().having(
-          (s) => s.saveStatus,
-          'saveStatus',
-          PartDetailsSaveStatus.loading,
-        ),
-        isA<PartDetailsState>().having(
-          (s) => s.saveStatus,
-          'saveStatus',
-          PartDetailsSaveStatus.error,
-        ),
+        isA<PartDetailsState>()
+            .having(
+              (s) => s.saveStatus,
+              'saveStatus',
+              PartDetailsSaveStatus.loading,
+            )
+            .having((s) => s.error, 'error', isNull),
+        isA<PartDetailsState>()
+            .having(
+              (s) => s.saveStatus,
+              'saveStatus',
+              PartDetailsSaveStatus.done,
+            )
+            .having((s) => s.error, 'error', error),
       ],
     );
 
@@ -301,12 +313,12 @@ void main() {
     );
 
     blocTest(
-      'emits deleteStatus [loading, error] when ConfirmDeleteButtonPressed is '
-      ' added and fails',
+      'emits deleteStatus [loading, done] and error when '
+      'ConfirmDeleteButtonPressed is added and fails',
       build: () {
         when(
           () => partRepository.deletePart(partId),
-        ).thenThrow(Exception('Fail'));
+        ).thenThrow(error);
         return PartDetailsBloc(
           stockRepository: stockRepository,
           storageRepository: storageRepository,
@@ -315,18 +327,23 @@ void main() {
           watchSinglePartPresentation: watchSinglePartPresentation,
         );
       },
+      seed: () => PartDetailsState(error: error),
       act: (bloc) => bloc.add(ConfirmDeleteButtonPressed(partId: partId)),
       expect: () => [
-        isA<PartDetailsState>().having(
-          (s) => s.deleteStatus,
-          'deleteStatus',
-          PartDetailsDeleteStatus.loading,
-        ),
-        isA<PartDetailsState>().having(
-          (s) => s.deleteStatus,
-          'deleteStatus',
-          PartDetailsDeleteStatus.error,
-        ),
+        isA<PartDetailsState>()
+            .having(
+              (s) => s.deleteStatus,
+              'deleteStatus',
+              PartDetailsDeleteStatus.loading,
+            )
+            .having((s) => s.error, 'error', isNull),
+        isA<PartDetailsState>()
+            .having(
+              (s) => s.deleteStatus,
+              'deleteStatus',
+              PartDetailsDeleteStatus.done,
+            )
+            .having((s) => s.error, 'error', error),
       ],
     );
   });

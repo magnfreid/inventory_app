@@ -20,6 +20,7 @@ void main() {
   late Tag brandTag;
   late Tag categoryTag;
   late Tag generalTag;
+  late Exception error;
 
   setUp(() {
     partRepository = MockPartRepository();
@@ -61,6 +62,7 @@ void main() {
       color: .crimson,
       type: .general,
     );
+    error = Exception('Fail');
 
     when(
       () => tagRepository.watchTags(),
@@ -140,12 +142,12 @@ void main() {
     );
 
     blocTest(
-      'emits [loading, error] when SaveButtonPressed is added, part is '
-      'new and save fails',
+      'emits [loading, done] and error when SaveButtonPressed is added, part '
+      'is new and save fails',
       build: () {
         when(
           () => partRepository.addPart(newPart),
-        ).thenThrow(Exception('Fail'));
+        ).thenThrow(error);
         return PartEditorBloc(
           partRepository: partRepository,
           tagRepository: tagRepository,
@@ -153,26 +155,30 @@ void main() {
       },
       act: (bloc) => bloc.add(SaveButtonPressed(part: newPart)),
       expect: () => [
-        isA<PartEditorState>().having(
-          (s) => s.status,
-          'status',
-          PartEditorStatus.loading,
-        ),
-        isA<PartEditorState>().having(
-          (s) => s.status,
-          'status',
-          PartEditorStatus.error,
-        ),
+        isA<PartEditorState>()
+            .having(
+              (s) => s.status,
+              'status',
+              PartEditorStatus.loading,
+            )
+            .having((s) => s.error, 'error', isNull),
+        isA<PartEditorState>()
+            .having(
+              (s) => s.status,
+              'status',
+              PartEditorStatus.idle,
+            )
+            .having((s) => s.error, 'error', error),
       ],
     );
 
     blocTest(
-      'emits [loading, error] when SaveButtonPressed is added, part is '
-      'existing and save fails',
+      'emits [loading, done] and error when SaveButtonPressed is added, part '
+      'is existing and save fails',
       build: () {
         when(
           () => partRepository.editPart(existingPart),
-        ).thenThrow(Exception('Fail'));
+        ).thenThrow(error);
         return PartEditorBloc(
           partRepository: partRepository,
           tagRepository: tagRepository,
@@ -180,16 +186,20 @@ void main() {
       },
       act: (bloc) => bloc.add(SaveButtonPressed(part: existingPart)),
       expect: () => [
-        isA<PartEditorState>().having(
-          (s) => s.status,
-          'status',
-          PartEditorStatus.loading,
-        ),
-        isA<PartEditorState>().having(
-          (s) => s.status,
-          'status',
-          PartEditorStatus.error,
-        ),
+        isA<PartEditorState>()
+            .having(
+              (s) => s.status,
+              'status',
+              PartEditorStatus.loading,
+            )
+            .having((s) => s.error, 'error', isNull),
+        isA<PartEditorState>()
+            .having(
+              (s) => s.status,
+              'status',
+              PartEditorStatus.idle,
+            )
+            .having((s) => s.error, 'error', error),
       ],
     );
 

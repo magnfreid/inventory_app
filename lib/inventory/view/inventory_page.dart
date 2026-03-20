@@ -63,6 +63,7 @@ class InventoryView extends StatelessWidget {
           },
           child: BlocBuilder<InventoryBloc, InventoryState>(
             builder: (context, state) {
+              final error = state.error;
               final parts = state.isLoading
                   ? boneMockParts
                   : state.filteredParts;
@@ -70,7 +71,7 @@ class InventoryView extends StatelessWidget {
                 padding: const .symmetric(horizontal: 8),
                 child: Column(
                   children: [
-                    if (state.hasError && state.error is NetworkException)
+                    if (error != null && error is NetworkException)
                       Row(
                         children: [
                           const Padding(
@@ -80,7 +81,11 @@ class InventoryView extends StatelessWidget {
                               color: Colors.yellow,
                             ),
                           ),
-                          Text(state.error?.toL10n(context) ?? ''),
+                          Text(
+                            error.toL10n(
+                              context,
+                            ),
+                          ),
                         ],
                       ),
                     Expanded(

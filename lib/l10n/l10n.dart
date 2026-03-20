@@ -16,5 +16,7 @@ extension RemoteExceptionToL10n on RemoteException {
     NetworkException() => context.l10n.remoteExceptionNetwork,
     TimeoutException() => context.l10n.remoteExceptionTimeout,
     UnknownRemoteException() => context.l10n.remoteExceptionUnknown,
+    InvalidArgumentRemoteException() =>
+      context.l10n.remoteExceptionInvalidArgument,
   };
 }

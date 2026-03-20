@@ -22,7 +22,7 @@ abstract class InventoryState with _$InventoryState {
     @Default([]) List<Storage> storages,
     @Default(InventoryStateBottomSheetStatus.idle)
     InventoryStateBottomSheetStatus bottomSheetStatus,
-    RemoteException? error,
+    Exception? error,
   }) = _InventoryState;
   const InventoryState._();
 

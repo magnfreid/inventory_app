@@ -77,7 +77,7 @@ void main() {
     test('increaseStock throws if amount is zero or negative', () async {
       expect(
         () => remote.increaseStock('123', '456', 0),
-        throwsArgumentError,
+        throwsException,
       );
     });
 
@@ -132,7 +132,7 @@ void main() {
     test('decreaseStock throws if amount is zero or negative', () async {
       expect(
         () => remote.decreaseStock('123', '456', 0),
-        throwsArgumentError,
+        throwsException,
       );
     });
   });

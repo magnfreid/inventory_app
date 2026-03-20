@@ -49,6 +49,7 @@ class FirebaseStockRemote implements StockRemote {
     String storageId,
     int amount,
   ) async {
+    if (amount <= 0 || amount > 200) throw invalidArgument();
     final id = '${partId}_$storageId';
     final docRef = _collection.doc(id);
     try {
@@ -81,13 +82,14 @@ class FirebaseStockRemote implements StockRemote {
     String storageId,
     int amount,
   ) async {
+    if (amount <= 0) throw invalidArgument();
     final id = '${partId}_$storageId';
     try {
       final docRef = _collection.doc(id);
       await _firestore.runTransaction((transaction) async {
         final snapshot = await transaction.get(docRef);
         final currentQuantity = snapshot.data()?.quantity ?? 0;
-        if (currentQuantity < amount) return;
+        if (currentQuantity < amount) throw invalidArgument();
         transaction.update(docRef, {'quantity': FieldValue.increment(-amount)});
       });
     } on FirebaseException catch (e) {

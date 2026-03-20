@@ -315,5 +315,9 @@
 	"remoteExceptionUnknown": "Ett okänt fel uppstod. Försök igen.",
 	"@remoteExceptionUnknown": {
 		"description": "Fallback-meddelande för oväntade fel."
+	},
+	"remoteExceptionInvalidArgument": "Det angivna värdet är ogiltigt. Försök igen.",
+	"@remoteExceptionInvalidArgument": {
+		"description": "Message to show the user if an invalid input was used when for example increasing or decreasing stock."
 	}
 }
