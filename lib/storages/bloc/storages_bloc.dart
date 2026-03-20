@@ -1,6 +1,7 @@
 import 'dart:async';
 
 import 'package:bloc/bloc.dart';
+import 'package:core_remote/core_remote.dart';
 import 'package:inventory_app/shared/utilities/bloc_transformers.dart';
 import 'package:inventory_app/storages/bloc/storages_state.dart';
 import 'package:storage_repository/storage_repository.dart';
@@ -15,9 +16,11 @@ class StoragesBloc extends Bloc<StoragesEvent, StoragesState> {
       _onStoragesUpdated,
       transformer: throttle(const Duration(milliseconds: 500)),
     );
+    on<_OnStreamError>(_onStreamError);
 
     _streamSubscription = _storageRepository.watchStorages().listen(
       (data) => add(_StoragesUpdated(storages: data)),
+      onError: _handleStreamError,
     );
   }
 
@@ -35,5 +38,17 @@ class StoragesBloc extends Bloc<StoragesEvent, StoragesState> {
     Emitter<StoragesState> emit,
   ) {
     emit(state.copyWith(status: .loaded, storages: event.storages));
+  }
+
+  FutureOr<void> _onStreamError(
+    _OnStreamError event,
+    Emitter<StoragesState> emit,
+  ) {
+    emit(state.copyWith(error: event.error));
+  }
+
+  void _handleStreamError(dynamic e) {
+    final error = (e is RemoteException) ? e : const UnknownRemoteException();
+    add(_OnStreamError(error: error));
   }
 }

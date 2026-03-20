@@ -8,6 +8,8 @@ environment:
 
 dependencies:
   cloud_firestore: ^6.1.2
+  firebase_shared:
+    path: ../firebase_shared
   tag_remote:
     path: ../tag_remote
 

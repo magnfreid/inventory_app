@@ -32,6 +32,7 @@ void main() {
   late Tag brandTag;
   late Tag categoryTag;
   late Storage storage;
+  late Exception error;
 
   setUp(() {
     hydratedBlocStorage = MockHydratedBlocStorage();
@@ -62,6 +63,7 @@ void main() {
     );
 
     storage = Storage(id: '333', name: 'Storage');
+    error = Exception('Fail');
 
     when(
       () => hydratedBlocStorage.write(any(), any<dynamic>()),
@@ -200,7 +202,7 @@ void main() {
         isA<InventoryState>().having(
           (s) => s.bottomSheetStatus,
           'bottomSheetStatus',
-          InventoryStateBottomSheetStatus.success,
+          InventoryStateBottomSheetStatus.done,
         ),
       ],
       verify: (_) => verify(
@@ -213,8 +215,8 @@ void main() {
     );
 
     blocTest<InventoryBloc, InventoryState>(
-      'emits [loading, error] when UseStockButtonPressed is added and decrease '
-      'fails',
+      'emits [loading, done] and error when UseStockButtonPressed is added and '
+      'decrease fails',
       build: () {
         when(
           () => stockRepository.decreaseStock(
@@ -222,7 +224,7 @@ void main() {
             storageId: '123',
             amount: 1,
           ),
-        ).thenThrow(Exception('Error'));
+        ).thenThrow(error);
         return InventoryBloc(
           watchPartPresentations: watchPartPresentations,
           stockRepository: stockRepository,
@@ -233,17 +235,22 @@ void main() {
       act: (bloc) => bloc.add(
         const UseStockButtonPressed(partId: '123', storageId: '123'),
       ),
+      seed: () => InventoryState(error: error),
       expect: () => [
-        isA<InventoryState>().having(
-          (s) => s.bottomSheetStatus,
-          'bottomSheetStatus',
-          InventoryStateBottomSheetStatus.loading,
-        ),
-        isA<InventoryState>().having(
-          (s) => s.bottomSheetStatus,
-          'bottomSheetStatus',
-          InventoryStateBottomSheetStatus.error,
-        ),
+        isA<InventoryState>()
+            .having(
+              (s) => s.bottomSheetStatus,
+              'bottomSheetStatus',
+              InventoryStateBottomSheetStatus.loading,
+            )
+            .having((s) => s.error, 'error', isNull),
+        isA<InventoryState>()
+            .having(
+              (s) => s.bottomSheetStatus,
+              'bottomSheetStatus',
+              InventoryStateBottomSheetStatus.done,
+            )
+            .having((s) => s.error, 'error', error),
       ],
       verify: (_) => verify(
         () => stockRepository.decreaseStock(

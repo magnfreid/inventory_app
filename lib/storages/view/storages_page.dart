@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:inventory_app/l10n/l10n.dart';
 import 'package:inventory_app/shared/extensions/list_sorting_extension.dart';
+import 'package:inventory_app/shared/extensions/show_snack_bar_extensions.dart';
 import 'package:inventory_app/storages/bloc/storages_bloc.dart';
 import 'package:inventory_app/storages/bloc/storages_state.dart';
 import 'package:inventory_app/storages_editor/view/storages_editor_page.dart';
@@ -42,52 +43,59 @@ class StoragesView extends StatelessWidget {
         onPressed: () => Navigator.push(context, StoragesEditorPage.route()),
       ),
 
-      body: BlocBuilder<StoragesBloc, StoragesState>(
-        builder: (context, state) {
-          final storages = state.storages;
-          return switch (state.status) {
-            .loading => const Center(
-              child: CircularProgressIndicator.adaptive(),
-            ),
-            .loaded =>
-              storages.isEmpty
-                  ? Center(
-                      child: Text(l10n.storage),
-                    )
-                  : Column(
-                      children: [
-                        Padding(
-                          padding: const EdgeInsets.all(24),
-                          child: ExpansionPanelList.radio(
-                            expandedHeaderPadding: const .only(left: 8),
-                            elevation: 1,
-                            dividerColor: Colors.transparent,
-                            children: storages
-                                .sortedByName()
-                                .map(
-                                  (storage) => ExpansionPanelRadio(
-                                    canTapOnHeader: true,
-                                    value: storage.id ?? 0,
-                                    headerBuilder: (context, isExpanded) =>
-                                        Text(
-                                          storage.name,
-                                          style: isExpanded
-                                              ? context.text.bodyLarge
-                                                    ?.copyWith(
-                                                      color: Colors.blue,
-                                                    )
-                                              : null,
-                                        ),
-                                    body: _StoragePanelBody(storage: storage),
-                                  ),
-                                )
-                                .toList(),
-                          ),
-                        ),
-                      ],
-                    ),
-          };
+      body: BlocListener<StoragesBloc, StoragesState>(
+        listenWhen: (previous, current) => previous.error != current.error,
+        listener: (context, state) {
+          final error = state.error;
+          if (error != null) context.showErrorSnackBar(error);
         },
+        child: BlocBuilder<StoragesBloc, StoragesState>(
+          builder: (context, state) {
+            final storages = state.storages;
+            return switch (state.status) {
+              .loading => const Center(
+                child: CircularProgressIndicator.adaptive(),
+              ),
+              .loaded =>
+                storages.isEmpty
+                    ? Center(
+                        child: Text(l10n.storage),
+                      )
+                    : Column(
+                        children: [
+                          Padding(
+                            padding: const EdgeInsets.all(24),
+                            child: ExpansionPanelList.radio(
+                              expandedHeaderPadding: const .only(left: 8),
+                              elevation: 1,
+                              dividerColor: Colors.transparent,
+                              children: storages
+                                  .sortedByName()
+                                  .map(
+                                    (storage) => ExpansionPanelRadio(
+                                      canTapOnHeader: true,
+                                      value: storage.id ?? 0,
+                                      headerBuilder: (context, isExpanded) =>
+                                          Text(
+                                            storage.name,
+                                            style: isExpanded
+                                                ? context.text.bodyLarge
+                                                      ?.copyWith(
+                                                        color: Colors.blue,
+                                                      )
+                                                : null,
+                                          ),
+                                      body: _StoragePanelBody(storage: storage),
+                                    ),
+                                  )
+                                  .toList(),
+                            ),
+                          ),
+                        ],
+                      ),
+            };
+          },
+        ),
       ),
     );
   }

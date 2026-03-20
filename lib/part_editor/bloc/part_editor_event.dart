@@ -13,3 +13,8 @@ final class _TagsUpdated extends PartEditorEvent {
   const _TagsUpdated({required this.tags});
   final List<TagPresentation> tags;
 }
+
+final class _OnStreamError extends PartEditorEvent {
+  const _OnStreamError({required this.error});
+  final Exception error;
+}

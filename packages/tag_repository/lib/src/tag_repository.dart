@@ -1,3 +1,6 @@
+import 'dart:isolate';
+
+import 'package:core_remote/core_remote.dart';
 import 'package:rxdart/rxdart.dart';
 import 'package:tag_remote/tag_remote.dart';
 import 'package:tag_repository/tag_repository.dart';
@@ -9,26 +12,44 @@ class TagRepository {
 
   final TagRemote _remote;
 
-  late final Stream<List<Tag>> _allTagsStream = _remote
+  late final Stream<List<Tag>> _tagsStream = _remote
       .watchTags()
       .map((dtos) => dtos.map(Tag.fromDto).toList())
-      .shareReplay(maxSize: 1);
+      .shareReplay(maxSize: 1)
+      //
+      // ignore: inference_failure_on_untyped_parameter
+      .handleError((e) {
+        if (e is RemoteError) throw e;
+        throw const UnknownRemoteException();
+      });
 
   /// Watches all tags as a stream of domain [Tag]s.
   ///
   /// New subscribers will immediately receive the latest list due to caching.
-  Stream<List<Tag>> watchTags() => _allTagsStream;
+  Stream<List<Tag>> watchTags() => _tagsStream;
 
   /// Adds a [tag] via the remote and returns the created [Tag] with ID.
   Future<Tag> addTag(Tag tag) async {
     final dto = tag.toDto();
-    final createdDto = await _remote.addTag(dto);
-    return Tag.fromDto(createdDto);
+    try {
+      final createdDto = await _remote.addTag(dto);
+      return Tag.fromDto(createdDto);
+    } on RemoteException catch (_) {
+      rethrow;
+    } on Exception catch (_) {
+      throw const UnknownRemoteException();
+    }
   }
 
   /// Edits an existing [tag] on the remote.
   Future<void> editTag(Tag tag) async {
     final dto = tag.toDto();
-    return _remote.editTag(dto);
+    try {
+      return _remote.editTag(dto);
+    } on RemoteException catch (_) {
+      rethrow;
+    } on Exception catch (_) {
+      throw const UnknownRemoteException();
+    }
   }
 }

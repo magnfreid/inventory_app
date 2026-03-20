@@ -2,6 +2,7 @@ import 'package:app_ui/app_ui.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:inventory_app/l10n/l10n.dart';
+import 'package:inventory_app/shared/extensions/show_snack_bar_extensions.dart';
 import 'package:inventory_app/storages_editor/bloc/storages_editor_bloc.dart';
 import 'package:inventory_app/storages_editor/bloc/storages_editor_state.dart';
 import 'package:storage_repository/storage_repository.dart';
@@ -62,9 +63,20 @@ class _StoragesEditorViewState extends State<StoragesEditorView> {
   @override
   Widget build(BuildContext context) {
     final l10n = context.l10n;
-    return BlocListener<StoragesEditorBloc, StoragesEditorState>(
-      listenWhen: (previous, current) => current.isSuccess,
-      listener: (context, state) => Navigator.of(context).pop(),
+    return MultiBlocListener(
+      listeners: [
+        BlocListener<StoragesEditorBloc, StoragesEditorState>(
+          listenWhen: (previous, current) => current.isSuccess,
+          listener: (context, state) => Navigator.of(context).pop(),
+        ),
+        BlocListener<StoragesEditorBloc, StoragesEditorState>(
+          listenWhen: (previous, current) => previous.error != current.error,
+          listener: (context, state) {
+            final error = state.error;
+            if (error != null) context.showErrorSnackBar(error);
+          },
+        ),
+      ],
       child: Scaffold(
         appBar: AppBar(
           title: widget.storage == null

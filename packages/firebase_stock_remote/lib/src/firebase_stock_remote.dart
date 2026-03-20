@@ -1,4 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_shared/firebase_shared.dart';
 import 'package:firebase_stock_remote/src/constants/constants.dart';
 import 'package:stock_remote/stock_remote.dart';
 
@@ -28,9 +29,18 @@ class FirebaseStockRemote implements StockRemote {
 
   @override
   Stream<List<StockDto>> watchStock() {
-    return _collection.snapshots().map(
-      (snapshot) => snapshot.docs.map((doc) => doc.data()).toList(),
-    );
+    return _collection
+        .snapshots()
+        .map(
+          (snapshot) => snapshot.docs.map((doc) => doc.data()).toList(),
+        )
+        //
+        // ignore: inference_failure_on_untyped_parameter
+        .handleError((e) {
+          if (e is FirebaseException) {
+            throw mapFirebaseException(e);
+          }
+        });
   }
 
   @override
@@ -39,29 +49,31 @@ class FirebaseStockRemote implements StockRemote {
     String storageId,
     int amount,
   ) async {
-    if (amount <= 0) {
-      throw ArgumentError('Amount must be greater than 0');
-    }
+    if (amount <= 0 || amount > 200) throw invalidArgument;
     final id = '${partId}_$storageId';
     final docRef = _collection.doc(id);
-    await _firestore.runTransaction((transaction) async {
-      final snapshot = await transaction.get(docRef);
-      if (!snapshot.exists) {
-        transaction.set(
+    try {
+      await _firestore.runTransaction((transaction) async {
+        final snapshot = await transaction.get(docRef);
+        if (!snapshot.exists) {
+          transaction.set(
+            docRef,
+            StockDto(
+              partId: partId,
+              storageId: storageId,
+              quantity: amount,
+            ),
+          );
+          return;
+        }
+        transaction.update(
           docRef,
-          StockDto(
-            partId: partId,
-            storageId: storageId,
-            quantity: amount,
-          ),
+          {'quantity': FieldValue.increment(amount)},
         );
-        return;
-      }
-      transaction.update(
-        docRef,
-        {'quantity': FieldValue.increment(amount)},
-      );
-    });
+      });
+    } on FirebaseException catch (e) {
+      throw mapFirebaseException(e);
+    }
   }
 
   @override
@@ -70,26 +82,18 @@ class FirebaseStockRemote implements StockRemote {
     String storageId,
     int amount,
   ) async {
-    if (amount <= 0) {
-      throw ArgumentError('Amount must be greater than 0');
-    }
-
+    if (amount <= 0) throw invalidArgument;
     final id = '${partId}_$storageId';
-    final docRef = _collection.doc(id);
-
-    await _firestore.runTransaction((transaction) async {
-      final snapshot = await transaction.get(docRef);
-
-      if (!snapshot.exists) {
-        throw Exception(
-          'No stock exists for this part at this storage',
-        );
-      }
-      final currentQuantity = snapshot.data()?.quantity ?? 0;
-      if (currentQuantity < amount) {
-        throw Exception('Insufficient stock');
-      }
-      transaction.update(docRef, {'quantity': FieldValue.increment(-amount)});
-    });
+    try {
+      final docRef = _collection.doc(id);
+      await _firestore.runTransaction((transaction) async {
+        final snapshot = await transaction.get(docRef);
+        final currentQuantity = snapshot.data()?.quantity ?? 0;
+        if (currentQuantity < amount) throw invalidArgument;
+        transaction.update(docRef, {'quantity': FieldValue.increment(-amount)});
+      });
+    } on FirebaseException catch (e) {
+      throw mapFirebaseException(e);
+    }
   }
 }

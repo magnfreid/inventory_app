@@ -10,7 +10,6 @@ import 'package:inventory_app/inventory/bloc/inventory_bloc.dart';
 import 'package:inventory_app/inventory/bloc/inventory_state.dart';
 import 'package:inventory_app/inventory/view/inventory_page.dart';
 import 'package:inventory_app/inventory/widgets/inventory_part_card.dart';
-import 'package:inventory_app/shared/utilities/bone_mocks.dart';
 import 'package:inventory_app/use_cases/part_presentation.dart/models/part_presentation.dart';
 import 'package:inventory_app/use_cases/part_presentation.dart/models/stock_presentation.dart';
 import 'package:mocktail/mocktail.dart';

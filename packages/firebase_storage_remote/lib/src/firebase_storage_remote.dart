@@ -1,4 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_shared/firebase_shared.dart';
 import 'package:firebase_storage_remote/src/constants/constants.dart';
 import 'package:storage_remote/storage_remote.dart';
 
@@ -34,9 +35,18 @@ class FirebaseStorageRemote implements StorageRemote {
 
   @override
   Stream<List<StorageDto>> watchStorages() {
-    return _collection.snapshots().map(
-      (snapshot) => snapshot.docs.map((doc) => doc.data()).toList(),
-    );
+    return _collection
+        .snapshots()
+        .map(
+          (snapshot) => snapshot.docs.map((doc) => doc.data()).toList(),
+        )
+        //
+        // ignore: inference_failure_on_untyped_parameter
+        .handleError((e) {
+          if (e is FirebaseException) {
+            throw mapFirebaseException(e);
+          }
+        });
   }
 
   @override
@@ -47,14 +57,22 @@ class FirebaseStorageRemote implements StorageRemote {
       name: dto.name,
       description: dto.description,
     );
-    await docRef.set(dtoWithId);
-    return dtoWithId;
+    try {
+      await docRef.set(dtoWithId);
+      return dtoWithId;
+    } on FirebaseException catch (e) {
+      throw mapFirebaseException(e);
+    }
   }
 
   @override
   Future<StorageDto> editStorage(StorageDto updatedStorage) async {
     final docRef = _collection.doc(updatedStorage.id);
-    await docRef.set(updatedStorage, SetOptions(merge: true));
-    return updatedStorage;
+    try {
+      await docRef.set(updatedStorage, SetOptions(merge: true));
+      return updatedStorage;
+    } on FirebaseException catch (e) {
+      throw mapFirebaseException(e);
+    }
   }
 }

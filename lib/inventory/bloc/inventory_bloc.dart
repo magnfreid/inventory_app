@@ -1,5 +1,6 @@
 import 'dart:async';
 
+import 'package:core_remote/core_remote.dart';
 import 'package:hydrated_bloc/hydrated_bloc.dart' hide Storage;
 import 'package:inventory_app/inventory/bloc/inventory_state.dart';
 import 'package:inventory_app/inventory/models/inventory_filter.dart';
@@ -51,21 +52,24 @@ class InventoryBloc extends HydratedBloc<InventoryEvent, InventoryState> {
       transformer: throttle(_uiThrottleDuration),
     );
     on<SortOrderButtonPressed>(
-      _sortOrderButtonPressed,
+      _onSortOrderButtonPressed,
       transformer: throttle(_uiThrottleDuration),
     );
+    on<_OnStreamError>(_onStreamError);
 
     _partsStreamSubscription = watchPartPresentations().listen(
       (parts) => add(_PartsUpdated(parts: parts)),
+      onError: _handleStreamError,
     );
     _tagsStreamSubscription = _tagRepository.watchTags().listen((tags) {
       final tagPresentations = tags
           .map(TagPresentation.fromDomainModel)
           .toList();
       add(_TagsUpdated(tags: tagPresentations));
-    });
+    }, onError: _handleStreamError);
     _storagesStreamSubscription = _storageRepository.watchStorages().listen(
       (storages) => add(_StoragesUpdated(storages: storages)),
+      onError: _handleStreamError,
     );
   }
 
@@ -92,7 +96,7 @@ class InventoryBloc extends HydratedBloc<InventoryEvent, InventoryState> {
     _PartsUpdated event,
     Emitter<InventoryState> emit,
   ) {
-    emit(state.copyWith(status: .loaded, parts: event.parts));
+    emit(state.copyWith(status: .loaded, parts: event.parts, error: null));
   }
 
   FutureOr<void> _onTagsUpdated(
@@ -110,16 +114,16 @@ class InventoryBloc extends HydratedBloc<InventoryEvent, InventoryState> {
     UseStockButtonPressed event,
     Emitter<InventoryState> emit,
   ) async {
-    emit(state.copyWith(bottomSheetStatus: .loading));
+    emit(state.copyWith(bottomSheetStatus: .loading, error: null));
     try {
       await _stockRepository.decreaseStock(
         partId: event.partId,
         storageId: event.storageId,
         amount: 1,
       );
-      emit(state.copyWith(bottomSheetStatus: .success));
-    } on Exception catch (_) {
-      emit(state.copyWith(bottomSheetStatus: .error));
+      emit(state.copyWith(bottomSheetStatus: .done));
+    } on Exception catch (e) {
+      emit(state.copyWith(bottomSheetStatus: .done, error: e));
     }
   }
 
@@ -241,7 +245,7 @@ class InventoryBloc extends HydratedBloc<InventoryEvent, InventoryState> {
     );
   }
 
-  FutureOr<void> _sortOrderButtonPressed(
+  FutureOr<void> _onSortOrderButtonPressed(
     SortOrderButtonPressed event,
     Emitter<InventoryState> emit,
   ) {
@@ -251,6 +255,13 @@ class InventoryBloc extends HydratedBloc<InventoryEvent, InventoryState> {
         filter: state.filter.copyWith(isSortedAscending: !isAscending),
       ),
     );
+  }
+
+  FutureOr<void> _onStreamError(
+    _OnStreamError event,
+    Emitter<InventoryState> emit,
+  ) {
+    emit(state.copyWith(error: event.error));
   }
 
   void _toggleFilterIdInSet(String filterId, Set<String> set) {
@@ -275,5 +286,10 @@ class InventoryBloc extends HydratedBloc<InventoryEvent, InventoryState> {
     return {
       'filter': state.filter.toJson(),
     };
+  }
+
+  void _handleStreamError(dynamic e) {
+    final error = (e is RemoteException) ? e : const UnknownRemoteException();
+    add(_OnStreamError(error: error));
   }
 }

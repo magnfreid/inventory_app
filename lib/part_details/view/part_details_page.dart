@@ -8,6 +8,7 @@ import 'package:inventory_app/part_details/widgets/part_details_in_stock.dart';
 import 'package:inventory_app/part_details/widgets/part_details_info.dart';
 import 'package:inventory_app/part_details/widgets/part_details_restock.dart';
 import 'package:inventory_app/part_editor/view/part_editor_page.dart';
+import 'package:inventory_app/shared/extensions/show_snack_bar_extensions.dart';
 import 'package:inventory_app/shared/utilities/bone_mocks.dart';
 import 'package:inventory_app/use_cases/part_presentation.dart/watch_single_part_presentation.dart';
 import 'package:part_repository/part_repository.dart';
@@ -84,10 +85,21 @@ class PartDetailsView extends StatelessWidget {
           ),
         ],
       ),
-      body: BlocListener<PartDetailsBloc, PartDetailsState>(
-        listenWhen: (previous, current) => current.deleteStatus == .success,
-        listener: (context, state) =>
-            Navigator.of(context).popUntil((route) => route.isFirst),
+      body: MultiBlocListener(
+        listeners: [
+          BlocListener<PartDetailsBloc, PartDetailsState>(
+            listenWhen: (previous, current) => current.deleteStatus == .done,
+            listener: (context, state) =>
+                Navigator.of(context).popUntil((route) => route.isFirst),
+          ),
+          BlocListener<PartDetailsBloc, PartDetailsState>(
+            listenWhen: (previous, current) => previous.error != current.error,
+            listener: (context, state) {
+              final error = state.error;
+              if (error != null) context.showErrorSnackBar(error);
+            },
+          ),
+        ],
         child: BlocBuilder<PartDetailsBloc, PartDetailsState>(
           builder: (context, state) {
             final part = state.part ?? boneMockPartPresentation;

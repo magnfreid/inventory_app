@@ -8,6 +8,8 @@ environment:
 
 dependencies:
   cloud_firestore: ^6.1.2
+  firebase_shared:
+    path: ../firebase_shared
   stock_remote:
     path: ../stock_remote
 

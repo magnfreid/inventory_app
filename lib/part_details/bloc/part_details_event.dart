@@ -9,6 +9,11 @@ final class _PartUpdated extends PartDetailsEvent {
   final PartPresentation? part;
 }
 
+final class _OnStreamError extends PartDetailsEvent {
+  const _OnStreamError({required this.error});
+  final RemoteException error;
+}
+
 final class _StoragesUpdated extends PartDetailsEvent {
   _StoragesUpdated({required this.storages});
   final List<Storage> storages;

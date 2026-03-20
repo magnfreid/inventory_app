@@ -8,6 +8,7 @@ enum StoragesEditorStatus { idle, loading, success }
 abstract class StoragesEditorState with _$StoragesEditorState {
   const factory StoragesEditorState({
     @Default(StoragesEditorStatus.idle) StoragesEditorStatus status,
+    Exception? error,
   }) = _StoragesEditorState;
 
   const StoragesEditorState._();

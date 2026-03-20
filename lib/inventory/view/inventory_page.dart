@@ -1,3 +1,4 @@
+import 'package:core_remote/core_remote.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:inventory_app/authenticated_app/cubit/user_cubit.dart';
@@ -7,7 +8,9 @@ import 'package:inventory_app/inventory/bloc/inventory_state.dart';
 import 'package:inventory_app/inventory/widgets/inventory_drawer.dart';
 import 'package:inventory_app/inventory/widgets/inventory_part_card.dart';
 import 'package:inventory_app/inventory/widgets/inventory_tool_bar.dart';
+import 'package:inventory_app/l10n/l10n.dart';
 import 'package:inventory_app/shared/extensions/part_filtering_extension.dart';
+import 'package:inventory_app/shared/extensions/show_snack_bar_extensions.dart';
 import 'package:inventory_app/shared/utilities/bone_mocks.dart';
 
 import 'package:inventory_app/use_cases/part_presentation.dart/watch_part_presentations.dart';
@@ -52,27 +55,60 @@ class InventoryView extends StatelessWidget {
       floatingActionButtonLocation: .miniCenterFloat,
       body: SafeArea(
         top: false,
-        child: BlocBuilder<InventoryBloc, InventoryState>(
-          builder: (context, state) {
-            final parts = state.isLoading ? boneMockParts : state.filteredParts;
-            return Skeletonizer(
-              enabled: state.isLoading,
-              child: parts.isEmpty
-                  ? const Center(
-                      //TODO(magnfreid): Add l10n
-                      child: Text('Nothing added yet!'),
-                    )
-                  : Padding(
-                      padding: const .symmetric(horizontal: 8),
-                      child: ListView.builder(
-                        padding: const .only(bottom: 140),
-                        itemCount: parts.length,
-                        itemBuilder: (context, index) =>
-                            InventoryPartCard(part: parts[index]),
+        child: BlocListener<InventoryBloc, InventoryState>(
+          listenWhen: (previous, current) => previous.error != current.error,
+          listener: (context, state) {
+            final error = state.error;
+            if (error != null) context.showErrorSnackBar(error);
+          },
+          child: BlocBuilder<InventoryBloc, InventoryState>(
+            builder: (context, state) {
+              final error = state.error;
+              final parts = state.isLoading
+                  ? boneMockParts
+                  : state.filteredParts;
+              return Padding(
+                padding: const .symmetric(horizontal: 8),
+                child: Column(
+                  children: [
+                    if (error != null && error is NetworkException)
+                      Row(
+                        children: [
+                          const Padding(
+                            padding: .symmetric(horizontal: 8, vertical: 4),
+                            child: Icon(
+                              Icons.warning,
+                              color: Colors.yellow,
+                            ),
+                          ),
+                          Text(
+                            error.toL10n(
+                              context,
+                            ),
+                          ),
+                        ],
+                      ),
+                    Expanded(
+                      child: Skeletonizer(
+                        enabled: state.isLoading,
+                        child: parts.isEmpty
+                            ? const Center(
+                                //TODO(magnfreid): Add l10n
+                                child: Text('Nothing added yet!'),
+                              )
+                            : ListView.builder(
+                                padding: const .only(bottom: 140),
+                                itemCount: parts.length,
+                                itemBuilder: (context, index) =>
+                                    InventoryPartCard(part: parts[index]),
+                              ),
                       ),
                     ),
-            );
-          },
+                  ],
+                ),
+              );
+            },
+          ),
         ),
       ),
     );

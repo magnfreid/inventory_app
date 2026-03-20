@@ -8,7 +8,7 @@ part 'inventory_state.freezed.dart';
 
 enum InventoryStateStatus { loading, loaded }
 
-enum InventoryStateBottomSheetStatus { idle, loading, success, error }
+enum InventoryStateBottomSheetStatus { idle, loading, done }
 
 @freezed
 abstract class InventoryState with _$InventoryState {
@@ -21,9 +21,11 @@ abstract class InventoryState with _$InventoryState {
     @Default([]) List<Storage> storages,
     @Default(InventoryStateBottomSheetStatus.idle)
     InventoryStateBottomSheetStatus bottomSheetStatus,
+    Exception? error,
   }) = _InventoryState;
   const InventoryState._();
 
   bool get isLoading => status == .loading;
+  bool get hasError => error != null;
   bool get isLoadingBottomSheet => bottomSheetStatus == .loading;
 }

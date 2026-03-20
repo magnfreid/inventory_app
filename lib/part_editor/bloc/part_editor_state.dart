@@ -3,7 +3,7 @@ import 'package:inventory_app/tags/models/tag_presentation.dart';
 
 part 'part_editor_state.freezed.dart';
 
-enum PartEditorStatus { idle, loading, success, error }
+enum PartEditorStatus { idle, loading, done }
 
 @freezed
 abstract class PartEditorState with _$PartEditorState {
@@ -12,9 +12,10 @@ abstract class PartEditorState with _$PartEditorState {
     @Default([]) List<TagPresentation> brandTags,
     @Default([]) List<TagPresentation> categoryTags,
     @Default([]) List<TagPresentation> generalTags,
+    Exception? error,
   }) = _PartEditorState;
   const PartEditorState._();
 
   bool get isLoading => status == .loading;
-  bool get isSuccess => status == .success;
+  bool get isSuccess => status == .done;
 }

@@ -46,7 +46,7 @@ class _TagsBottomSheetState extends State<TagsBottomSheet> {
   Widget build(BuildContext context) {
     final l10n = context.l10n;
     return BlocListener<TagsBloc, TagsState>(
-      listenWhen: (previous, current) => current.bottomSheetStatus == .success,
+      listenWhen: (previous, current) => current.bottomSheetStatus == .done,
       listener: (context, state) => Navigator.pop(context),
       child: Padding(
         padding: const .fromLTRB(16, 8, 16, 24),

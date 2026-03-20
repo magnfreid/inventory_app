@@ -291,5 +291,33 @@
 	"workInProgress": "Work in progress!",
 	"@workInProgress": {
 		"description": "Text for features that are not done yet."
+	},
+	"remoteExceptionPermissionDenied": "Error: Permission denied.",
+	"@remoteExceptionPermissionDenied": {
+		"description": "Message shown when the user does not have permission to perform an action."
+	},
+	"remoteExceptionNotFound": "Error: Resource not found.",
+	"@remoteExceptionNotFound": {
+		"description": "Message shown when a requested resource could not be found."
+	},
+	"remoteExceptionAlreadyExists": "Error: Resource already exists.",
+	"@remoteExceptionAlreadyExists": {
+		"description": "Message shown when trying to create something that already exists."
+	},
+	"remoteExceptionNetwork": "Network error. Please check your connection.",
+	"@remoteExceptionNetwork": {
+		"description": "Message shown when there is a network connectivity issue."
+	},
+	"remoteExceptionTimeout": "Request timed out. Please try again.",
+	"@remoteExceptionTimeout": {
+		"description": "Message shown when a request takes too long to complete."
+	},
+	"remoteExceptionUnknown": "An unknown error occurred. Please try again.",
+	"@remoteExceptionUnknown": {
+		"description": "Fallback message for unexpected remote errors."
+	},
+	"remoteExceptionInvalidArgument": "The value you entered is not valid. Please try again.",
+	"@remoteExceptionInvalidArgument": {
+		"description": "Message to show the user if an invalid input was used when for example increasing or decreasing stock."
 	}
 }

@@ -8,6 +8,7 @@ import 'package:inventory_app/l10n/l10n.dart';
 import 'package:inventory_app/part_editor/bloc/part_editor_bloc.dart';
 import 'package:inventory_app/part_editor/bloc/part_editor_state.dart';
 import 'package:inventory_app/part_editor/widgets/part_editor_tag_bottom_sheet.dart';
+import 'package:inventory_app/shared/extensions/show_snack_bar_extensions.dart';
 import 'package:inventory_app/tags/models/tag_presentation.dart';
 import 'package:inventory_app/use_cases/part_presentation.dart/models/part_presentation.dart';
 import 'package:part_repository/part_repository.dart';
@@ -90,11 +91,22 @@ class _PartEditorViewState extends State<PartEditorView> {
   @override
   Widget build(BuildContext context) {
     final l10n = context.l10n;
-    return BlocListener<PartEditorBloc, PartEditorState>(
-      listenWhen: (previous, current) => current.isSuccess,
-      listener: (context, state) {
-        Navigator.of(context).pop();
-      },
+    return MultiBlocListener(
+      listeners: [
+        BlocListener<PartEditorBloc, PartEditorState>(
+          listenWhen: (previous, current) => current.isSuccess,
+          listener: (context, state) {
+            Navigator.of(context).pop();
+          },
+        ),
+        BlocListener<PartEditorBloc, PartEditorState>(
+          listenWhen: (previous, current) => previous.error != current.error,
+          listener: (context, state) {
+            final error = state.error;
+            if (error != null) context.showErrorSnackBar(error);
+          },
+        ),
+      ],
       child: Scaffold(
         resizeToAvoidBottomInset: false,
         appBar: AppBar(

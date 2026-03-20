@@ -14,7 +14,7 @@ T _$identity<T>(T value) => value;
 /// @nodoc
 mixin _$TagsState {
 
- TagsStateStatus get status; TagsStateBottomSheetStatus get bottomSheetStatus; List<TagPresentation> get brandTags; List<TagPresentation> get categoryTags; List<TagPresentation> get generalTags;
+ TagsStateStatus get status; TagsStateBottomSheetStatus get bottomSheetStatus; List<TagPresentation> get brandTags; List<TagPresentation> get categoryTags; List<TagPresentation> get generalTags; Exception? get error;
 /// Create a copy of TagsState
 /// with the given fields replaced by the non-null parameter values.
 @JsonKey(includeFromJson: false, includeToJson: false)
@@ -25,16 +25,16 @@ $TagsStateCopyWith<TagsState> get copyWith => _$TagsStateCopyWithImpl<TagsState>
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is TagsState&&(identical(other.status, status) || other.status == status)&&(identical(other.bottomSheetStatus, bottomSheetStatus) || other.bottomSheetStatus == bottomSheetStatus)&&const DeepCollectionEquality().equals(other.brandTags, brandTags)&&const DeepCollectionEquality().equals(other.categoryTags, categoryTags)&&const DeepCollectionEquality().equals(other.generalTags, generalTags));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is TagsState&&(identical(other.status, status) || other.status == status)&&(identical(other.bottomSheetStatus, bottomSheetStatus) || other.bottomSheetStatus == bottomSheetStatus)&&const DeepCollectionEquality().equals(other.brandTags, brandTags)&&const DeepCollectionEquality().equals(other.categoryTags, categoryTags)&&const DeepCollectionEquality().equals(other.generalTags, generalTags)&&(identical(other.error, error) || other.error == error));
 }
 
 
 @override
-int get hashCode => Object.hash(runtimeType,status,bottomSheetStatus,const DeepCollectionEquality().hash(brandTags),const DeepCollectionEquality().hash(categoryTags),const DeepCollectionEquality().hash(generalTags));
+int get hashCode => Object.hash(runtimeType,status,bottomSheetStatus,const DeepCollectionEquality().hash(brandTags),const DeepCollectionEquality().hash(categoryTags),const DeepCollectionEquality().hash(generalTags),error);
 
 @override
 String toString() {
-  return 'TagsState(status: $status, bottomSheetStatus: $bottomSheetStatus, brandTags: $brandTags, categoryTags: $categoryTags, generalTags: $generalTags)';
+  return 'TagsState(status: $status, bottomSheetStatus: $bottomSheetStatus, brandTags: $brandTags, categoryTags: $categoryTags, generalTags: $generalTags, error: $error)';
 }
 
 
@@ -45,7 +45,7 @@ abstract mixin class $TagsStateCopyWith<$Res>  {
   factory $TagsStateCopyWith(TagsState value, $Res Function(TagsState) _then) = _$TagsStateCopyWithImpl;
 @useResult
 $Res call({
- TagsStateStatus status, TagsStateBottomSheetStatus bottomSheetStatus, List<TagPresentation> brandTags, List<TagPresentation> categoryTags, List<TagPresentation> generalTags
+ TagsStateStatus status, TagsStateBottomSheetStatus bottomSheetStatus, List<TagPresentation> brandTags, List<TagPresentation> categoryTags, List<TagPresentation> generalTags, Exception? error
 });
 
 
@@ -62,14 +62,15 @@ class _$TagsStateCopyWithImpl<$Res>
 
 /// Create a copy of TagsState
 /// with the given fields replaced by the non-null parameter values.
-@pragma('vm:prefer-inline') @override $Res call({Object? status = null,Object? bottomSheetStatus = null,Object? brandTags = null,Object? categoryTags = null,Object? generalTags = null,}) {
+@pragma('vm:prefer-inline') @override $Res call({Object? status = null,Object? bottomSheetStatus = null,Object? brandTags = null,Object? categoryTags = null,Object? generalTags = null,Object? error = freezed,}) {
   return _then(_self.copyWith(
 status: null == status ? _self.status : status // ignore: cast_nullable_to_non_nullable
 as TagsStateStatus,bottomSheetStatus: null == bottomSheetStatus ? _self.bottomSheetStatus : bottomSheetStatus // ignore: cast_nullable_to_non_nullable
 as TagsStateBottomSheetStatus,brandTags: null == brandTags ? _self.brandTags : brandTags // ignore: cast_nullable_to_non_nullable
 as List<TagPresentation>,categoryTags: null == categoryTags ? _self.categoryTags : categoryTags // ignore: cast_nullable_to_non_nullable
 as List<TagPresentation>,generalTags: null == generalTags ? _self.generalTags : generalTags // ignore: cast_nullable_to_non_nullable
-as List<TagPresentation>,
+as List<TagPresentation>,error: freezed == error ? _self.error : error // ignore: cast_nullable_to_non_nullable
+as Exception?,
   ));
 }
 
@@ -154,10 +155,10 @@ return $default(_that);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function( TagsStateStatus status,  TagsStateBottomSheetStatus bottomSheetStatus,  List<TagPresentation> brandTags,  List<TagPresentation> categoryTags,  List<TagPresentation> generalTags)?  $default,{required TResult orElse(),}) {final _that = this;
+@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function( TagsStateStatus status,  TagsStateBottomSheetStatus bottomSheetStatus,  List<TagPresentation> brandTags,  List<TagPresentation> categoryTags,  List<TagPresentation> generalTags,  Exception? error)?  $default,{required TResult orElse(),}) {final _that = this;
 switch (_that) {
 case _TagsState() when $default != null:
-return $default(_that.status,_that.bottomSheetStatus,_that.brandTags,_that.categoryTags,_that.generalTags);case _:
+return $default(_that.status,_that.bottomSheetStatus,_that.brandTags,_that.categoryTags,_that.generalTags,_that.error);case _:
   return orElse();
 
 }
@@ -175,10 +176,10 @@ return $default(_that.status,_that.bottomSheetStatus,_that.brandTags,_that.categ
 /// }
 /// ```
 
-@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function( TagsStateStatus status,  TagsStateBottomSheetStatus bottomSheetStatus,  List<TagPresentation> brandTags,  List<TagPresentation> categoryTags,  List<TagPresentation> generalTags)  $default,) {final _that = this;
+@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function( TagsStateStatus status,  TagsStateBottomSheetStatus bottomSheetStatus,  List<TagPresentation> brandTags,  List<TagPresentation> categoryTags,  List<TagPresentation> generalTags,  Exception? error)  $default,) {final _that = this;
 switch (_that) {
 case _TagsState():
-return $default(_that.status,_that.bottomSheetStatus,_that.brandTags,_that.categoryTags,_that.generalTags);case _:
+return $default(_that.status,_that.bottomSheetStatus,_that.brandTags,_that.categoryTags,_that.generalTags,_that.error);case _:
   throw StateError('Unexpected subclass');
 
 }
@@ -195,10 +196,10 @@ return $default(_that.status,_that.bottomSheetStatus,_that.brandTags,_that.categ
 /// }
 /// ```
 
-@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function( TagsStateStatus status,  TagsStateBottomSheetStatus bottomSheetStatus,  List<TagPresentation> brandTags,  List<TagPresentation> categoryTags,  List<TagPresentation> generalTags)?  $default,) {final _that = this;
+@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function( TagsStateStatus status,  TagsStateBottomSheetStatus bottomSheetStatus,  List<TagPresentation> brandTags,  List<TagPresentation> categoryTags,  List<TagPresentation> generalTags,  Exception? error)?  $default,) {final _that = this;
 switch (_that) {
 case _TagsState() when $default != null:
-return $default(_that.status,_that.bottomSheetStatus,_that.brandTags,_that.categoryTags,_that.generalTags);case _:
+return $default(_that.status,_that.bottomSheetStatus,_that.brandTags,_that.categoryTags,_that.generalTags,_that.error);case _:
   return null;
 
 }
@@ -210,7 +211,7 @@ return $default(_that.status,_that.bottomSheetStatus,_that.brandTags,_that.categ
 
 
 class _TagsState extends TagsState {
-  const _TagsState({this.status = TagsStateStatus.loading, this.bottomSheetStatus = TagsStateBottomSheetStatus.idle, final  List<TagPresentation> brandTags = const [], final  List<TagPresentation> categoryTags = const [], final  List<TagPresentation> generalTags = const []}): _brandTags = brandTags,_categoryTags = categoryTags,_generalTags = generalTags,super._();
+  const _TagsState({this.status = TagsStateStatus.loading, this.bottomSheetStatus = TagsStateBottomSheetStatus.idle, final  List<TagPresentation> brandTags = const [], final  List<TagPresentation> categoryTags = const [], final  List<TagPresentation> generalTags = const [], this.error}): _brandTags = brandTags,_categoryTags = categoryTags,_generalTags = generalTags,super._();
   
 
 @override@JsonKey() final  TagsStateStatus status;
@@ -236,6 +237,7 @@ class _TagsState extends TagsState {
   return EqualUnmodifiableListView(_generalTags);
 }
 
+@override final  Exception? error;
 
 /// Create a copy of TagsState
 /// with the given fields replaced by the non-null parameter values.
@@ -247,16 +249,16 @@ _$TagsStateCopyWith<_TagsState> get copyWith => __$TagsStateCopyWithImpl<_TagsSt
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is _TagsState&&(identical(other.status, status) || other.status == status)&&(identical(other.bottomSheetStatus, bottomSheetStatus) || other.bottomSheetStatus == bottomSheetStatus)&&const DeepCollectionEquality().equals(other._brandTags, _brandTags)&&const DeepCollectionEquality().equals(other._categoryTags, _categoryTags)&&const DeepCollectionEquality().equals(other._generalTags, _generalTags));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is _TagsState&&(identical(other.status, status) || other.status == status)&&(identical(other.bottomSheetStatus, bottomSheetStatus) || other.bottomSheetStatus == bottomSheetStatus)&&const DeepCollectionEquality().equals(other._brandTags, _brandTags)&&const DeepCollectionEquality().equals(other._categoryTags, _categoryTags)&&const DeepCollectionEquality().equals(other._generalTags, _generalTags)&&(identical(other.error, error) || other.error == error));
 }
 
 
 @override
-int get hashCode => Object.hash(runtimeType,status,bottomSheetStatus,const DeepCollectionEquality().hash(_brandTags),const DeepCollectionEquality().hash(_categoryTags),const DeepCollectionEquality().hash(_generalTags));
+int get hashCode => Object.hash(runtimeType,status,bottomSheetStatus,const DeepCollectionEquality().hash(_brandTags),const DeepCollectionEquality().hash(_categoryTags),const DeepCollectionEquality().hash(_generalTags),error);
 
 @override
 String toString() {
-  return 'TagsState(status: $status, bottomSheetStatus: $bottomSheetStatus, brandTags: $brandTags, categoryTags: $categoryTags, generalTags: $generalTags)';
+  return 'TagsState(status: $status, bottomSheetStatus: $bottomSheetStatus, brandTags: $brandTags, categoryTags: $categoryTags, generalTags: $generalTags, error: $error)';
 }
 
 
@@ -267,7 +269,7 @@ abstract mixin class _$TagsStateCopyWith<$Res> implements $TagsStateCopyWith<$Re
   factory _$TagsStateCopyWith(_TagsState value, $Res Function(_TagsState) _then) = __$TagsStateCopyWithImpl;
 @override @useResult
 $Res call({
- TagsStateStatus status, TagsStateBottomSheetStatus bottomSheetStatus, List<TagPresentation> brandTags, List<TagPresentation> categoryTags, List<TagPresentation> generalTags
+ TagsStateStatus status, TagsStateBottomSheetStatus bottomSheetStatus, List<TagPresentation> brandTags, List<TagPresentation> categoryTags, List<TagPresentation> generalTags, Exception? error
 });
 
 
@@ -284,14 +286,15 @@ class __$TagsStateCopyWithImpl<$Res>
 
 /// Create a copy of TagsState
 /// with the given fields replaced by the non-null parameter values.
-@override @pragma('vm:prefer-inline') $Res call({Object? status = null,Object? bottomSheetStatus = null,Object? brandTags = null,Object? categoryTags = null,Object? generalTags = null,}) {
+@override @pragma('vm:prefer-inline') $Res call({Object? status = null,Object? bottomSheetStatus = null,Object? brandTags = null,Object? categoryTags = null,Object? generalTags = null,Object? error = freezed,}) {
   return _then(_TagsState(
 status: null == status ? _self.status : status // ignore: cast_nullable_to_non_nullable
 as TagsStateStatus,bottomSheetStatus: null == bottomSheetStatus ? _self.bottomSheetStatus : bottomSheetStatus // ignore: cast_nullable_to_non_nullable
 as TagsStateBottomSheetStatus,brandTags: null == brandTags ? _self._brandTags : brandTags // ignore: cast_nullable_to_non_nullable
 as List<TagPresentation>,categoryTags: null == categoryTags ? _self._categoryTags : categoryTags // ignore: cast_nullable_to_non_nullable
 as List<TagPresentation>,generalTags: null == generalTags ? _self._generalTags : generalTags // ignore: cast_nullable_to_non_nullable
-as List<TagPresentation>,
+as List<TagPresentation>,error: freezed == error ? _self.error : error // ignore: cast_nullable_to_non_nullable
+as Exception?,
   ));
 }
 

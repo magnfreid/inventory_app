@@ -13,3 +13,8 @@ final class SaveButtonPressed extends TagsEvent {
   const SaveButtonPressed({required this.tag});
   final Tag tag;
 }
+
+final class _OnStreamError extends TagsEvent {
+  const _OnStreamError({required this.error});
+  final Exception error;
+}
