@@ -3,7 +3,7 @@ import 'package:collection/collection.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:inventory_app/inventory/bloc/inventory_bloc.dart';
-import 'package:inventory_app/inventory/widgets/inventory_stock_bottom_sheet.dart';
+import 'package:inventory_app/inventory/widgets/inventory_use_stock.dart';
 import 'package:inventory_app/part_details/view/part_details_page.dart';
 import 'package:inventory_app/shared/widgets/recycled_icon.dart';
 import 'package:inventory_app/shared/widgets/tag_badge.dart';
@@ -100,7 +100,7 @@ class InventoryPartCard extends StatelessWidget {
         value: context.read<InventoryBloc>(),
         child: FractionallySizedBox(
           heightFactor: 0.75,
-          child: InventoryQuickStockBottomSheet(part: part),
+          child: InventoryUseStock(part: part),
         ),
       ),
     );

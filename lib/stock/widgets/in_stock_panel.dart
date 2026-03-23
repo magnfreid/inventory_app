@@ -3,25 +3,25 @@ import 'package:inventory_app/l10n/l10n.dart';
 import 'package:inventory_app/use_cases/part_presentation.dart/models/part_presentation.dart';
 import 'package:inventory_app/use_cases/part_presentation.dart/models/stock_presentation.dart';
 
-class InStockPanel extends StatelessWidget {
-  const InStockPanel({
+class InStockList extends StatelessWidget {
+  const InStockList({
     required this.part,
-    required this.onPressed,
+    required this.onStockSelected,
     this.textStyle,
     super.key,
   });
 
   final PartPresentation part;
   final TextStyle? textStyle;
-  final void Function(StockPresentation stock) onPressed;
+  final void Function(StockPresentation stock) onStockSelected;
 
   static MaterialPageRoute<void> route({
-    required void Function(StockPresentation stock) onPressed,
+    required void Function(StockPresentation stock) onStockSelected,
     required PartPresentation part,
   }) => MaterialPageRoute(
     builder: (_) => Scaffold(
       body: SafeArea(
-        child: InStockPanel(part: part, onPressed: onPressed),
+        child: InStockList(part: part, onStockSelected: onStockSelected),
       ),
     ),
   );
@@ -71,7 +71,7 @@ class InStockPanel extends StatelessWidget {
                     ),
                     const SizedBox(width: 8),
                     TextButton(
-                      onPressed: () => onPressed(stockItem),
+                      onPressed: () => onStockSelected(stockItem),
                       child: Text(l10n.useButtonText),
                     ),
                   ],

@@ -28,7 +28,7 @@ class PartDetailsBloc extends Bloc<PartDetailsEvent, PartDetailsState> {
       _onPartUpdated,
       transformer: debounceRestartable(const Duration(milliseconds: 500)),
     );
-    on<ButtonSegmentPressed>(_onButtonSegmentPressed);
+    // on<ButtonSegmentPressed>(_onButtonSegmentPressed);
     on<UseButtonPressed>(_onUseButtonPressed, transformer: droppable());
     on<AddToStockButtonPressed>(
       _onAddToStockButtonPressed,
@@ -83,12 +83,12 @@ class PartDetailsBloc extends Bloc<PartDetailsEvent, PartDetailsState> {
     emit(state.copyWith(part: event.part));
   }
 
-  FutureOr<void> _onButtonSegmentPressed(
-    ButtonSegmentPressed event,
-    Emitter<PartDetailsState> emit,
-  ) {
-    emit(state.copyWith(content: event.content));
-  }
+  // FutureOr<void> _onButtonSegmentPressed(
+  //   ButtonSegmentPressed event,
+  //   Emitter<PartDetailsState> emit,
+  // ) {
+  //   emit(state.copyWith(content: event.content));
+  // }
 
   FutureOr<void> _onUseButtonPressed(
     UseButtonPressed event,

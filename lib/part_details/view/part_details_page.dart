@@ -9,10 +9,10 @@ import 'package:inventory_app/part_details/widgets/delete_part_sheet.dart';
 import 'package:inventory_app/part_details/widgets/restock_sheet.dart';
 import 'package:inventory_app/part_editor/view/part_editor_page.dart';
 import 'package:inventory_app/shared/extensions/show_snack_bar_extensions.dart';
-import 'package:inventory_app/shared/widgets/in_stock_panel.dart';
 import 'package:inventory_app/shared/widgets/recycled_icon.dart';
 import 'package:inventory_app/shared/widgets/tag_badge.dart';
-import 'package:inventory_app/shared/widgets/use_stock_checkout.dart';
+import 'package:inventory_app/stock/widgets/in_stock_panel.dart';
+import 'package:inventory_app/stock/widgets/use_stock_checkout.dart';
 import 'package:inventory_app/use_cases/part_presentation.dart/models/part_presentation.dart';
 import 'package:inventory_app/use_cases/part_presentation.dart/watch_single_part_presentation.dart';
 import 'package:part_repository/part_repository.dart';
@@ -113,11 +113,11 @@ class PartDetailsView extends StatelessWidget {
                     const _Image(),
                     _Details(part: part),
                     const SizedBox(height: 32),
-                    InStockPanel(
+                    InStockList(
                       part: part,
-                      onPressed: (stock) => showModalBottomSheet<void>(
+                      onStockSelected: (stock) => showModalBottomSheet<void>(
                         context: context,
-                        builder: (_) => UseStockCheckout(stock: stock),
+                        builder: (_) => StockCheckoutPage(stock: stock),
                       ),
                       textStyle: _variantTextStyle(context),
                     ),
