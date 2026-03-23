@@ -18,11 +18,11 @@ class PartDetailsBloc extends Bloc<PartDetailsEvent, PartDetailsState> {
     required StockRepository stockRepository,
     required StorageRepository storageRepository,
     required PartRepository partRepository,
-    required String partId,
+    required PartPresentation initialPart,
     required WatchSinglePartPresentation watchSinglePartPresentation,
   }) : _stockRepository = stockRepository,
        _partRepository = partRepository,
-       super(const PartDetailsState()) {
+       super(PartDetailsState(part: initialPart)) {
     on<_StoragesUpdated>(_onStoragesUpdated);
     on<_PartUpdated>(
       _onPartUpdated,
@@ -47,9 +47,11 @@ class PartDetailsBloc extends Bloc<PartDetailsEvent, PartDetailsState> {
 
     _partStreamSubscription =
         watchSinglePartPresentation(
-          partId,
+          initialPart.partId,
         ).listen(
-          (part) => add(_PartUpdated(part: part)),
+          (part) {
+            if (part != null) add(_PartUpdated(part: part));
+          },
           onError: _handleStreamError,
         );
   }

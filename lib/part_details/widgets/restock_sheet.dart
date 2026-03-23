@@ -8,8 +8,8 @@ import 'package:inventory_app/part_details/bloc/part_details_bloc.dart';
 import 'package:inventory_app/part_details/bloc/part_details_state.dart';
 import 'package:storage_repository/storage_repository.dart';
 
-class PartDetailsRestock extends StatelessWidget {
-  const PartDetailsRestock({super.key});
+class RestockSheet extends StatelessWidget {
+  const RestockSheet({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -30,67 +30,76 @@ class PartDetailsRestock extends StatelessWidget {
           final part = state.part;
           final storages = state.storages.toList()
             ..sort((a, b) => a.name.compareTo(b.name));
-          return part == null
-              ? const Center(
-                  child: CircularProgressIndicator.adaptive(),
-                )
-              : Column(
-                  spacing: 12,
-                  crossAxisAlignment: .start,
+          return Padding(
+            padding: const .all(16),
+            child: Column(
+              mainAxisSize: .min,
+              spacing: 12,
+              crossAxisAlignment: .start,
+              children: [
+                Row(
+                  mainAxisAlignment: .spaceEvenly,
                   children: [
-                    ListTile(
+                    Text(l10n.partDetailsSelectorRestock),
+                    const Icon(Icons.arrow_right_alt),
+                    Text(part.name),
+                  ],
+                ),
+
+                // const Divider(),
+                ListView.builder(
+                  physics: const ClampingScrollPhysics(),
+                  shrinkWrap: true,
+                  itemCount: storages.length,
+                  itemBuilder: (context, index) {
+                    final storage = storages[index];
+                    final quantity =
+                        part.stock
+                            .where(
+                              (stock) => stock.storageId == storage.id,
+                            )
+                            .firstOrNull
+                            ?.quantity ??
+                        0;
+                    return ListTile(
                       title: Row(
                         children: [
-                          Text('${l10n.inStockTotalText}:'),
+                          Text(storage.name),
                           const Spacer(),
-                          Text(part.totalQuantity.toString()),
+                          Text(quantity.toString()),
                         ],
                       ),
-                    ),
-                    const Divider(),
-                    Expanded(
-                      child: ListView.builder(
-                        itemCount: storages.length,
-                        itemBuilder: (context, index) {
-                          final storage = storages[index];
-                          final quantity =
-                              part.stock
-                                  .where(
-                                    (stock) => stock.storageId == storage.id,
-                                  )
-                                  .firstOrNull
-                                  ?.quantity ??
-                              0;
-                          return ListTile(
-                            title: Row(
-                              children: [
-                                Text(storage.name),
-                                const Spacer(),
-                                Text(quantity.toString()),
-                              ],
+                      trailing: AppButton.text(
+                        width: .wrap,
+                        onPressed: () => showModalBottomSheet<void>(
+                          showDragHandle: true,
+                          context: context,
+                          builder: (_) => BlocProvider.value(
+                            value: context.read<PartDetailsBloc>(),
+                            child: _BottomSheet(
+                              partId: part.partId,
+                              storage: storage,
                             ),
-                            trailing: AppButton.text(
-                              width: .wrap,
-                              onPressed: () => showModalBottomSheet<void>(
-                                showDragHandle: true,
-                                context: context,
-                                builder: (_) => BlocProvider.value(
-                                  value: context.read<PartDetailsBloc>(),
-                                  child: _BottomSheet(
-                                    partId: part.partId,
-                                    storage: storage,
-                                  ),
-                                ),
-                              ),
-                              //TODO(magnfreid): Add l10n
-                              label: 'Välj',
-                            ),
-                          );
-                        },
+                          ),
+                        ),
+                        //TODO(magnfreid): Add l10n
+                        label: 'Välj',
                       ),
-                    ),
-                  ],
-                );
+                    );
+                  },
+                ),
+                ListTile(
+                  title: Row(
+                    children: [
+                      Text('${l10n.inStockTotalText}:'),
+                      const Spacer(),
+                      Text(part.totalQuantity.toString()),
+                    ],
+                  ),
+                ),
+              ],
+            ),
+          );
         },
       ),
     );
@@ -184,14 +193,16 @@ class _BottomSheetState extends State<_BottomSheet> {
                           child: Row(
                             children: [
                               IconButton.filled(
-                                onPressed: () =>
-                                    context.read<PartDetailsBloc>().add(
-                                      AddToStockButtonPressed(
-                                        partId: widget.partId,
-                                        storageId: widget.storage.id ?? '',
-                                        amount: value,
-                                      ),
-                                    ),
+                                //TODO(magnfreid): Fix this!
+                                onPressed: () {},
+                                // =>
+                                //     context.read<PartDetailsBloc>().add(
+                                //       AddToStockButtonPressed(
+                                //         partId: widget.partId,
+                                //         storageId: widget.storage.id ?? '',
+                                //         amount: value,
+                                //       ),
+                                //     ),
                                 icon: const Icon(Icons.done),
                               ),
                             ],
@@ -200,18 +211,6 @@ class _BottomSheetState extends State<_BottomSheet> {
                       ],
                     ),
                   ),
-
-                  // AppButton.text(
-                  //   width: .wrap,
-                  //   onPressed: () => context.read<PartDetailsBloc>().add(
-                  //     AddToStockButtonPressed(
-                  //       partId: widget.partId,
-                  //       storageId: widget.storage.id,
-                  //       amount: value,
-                  //     ),
-                  //   ),
-                  //   label: 'Lägg till',
-                  // ),
                 ],
               ),
             ),

@@ -13,11 +13,11 @@ enum PartDetailsDeleteStatus { idle, loading, done }
 @freezed
 abstract class PartDetailsState with _$PartDetailsState {
   const factory PartDetailsState({
+    required PartPresentation part,
     @Default(PartDetailsContent.details) PartDetailsContent content,
     @Default(PartDetailsSaveStatus.idle) PartDetailsSaveStatus saveStatus,
     @Default(PartDetailsDeleteStatus.idle) PartDetailsDeleteStatus deleteStatus,
     @Default([]) List<Storage> storages,
-    PartPresentation? part,
     Exception? error,
   }) = _PartDetailsState;
   const PartDetailsState._();

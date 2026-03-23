@@ -7,7 +7,7 @@ part of 'transaction_dto.dart';
 // **************************************************************************
 
 TransactionDto _$TransactionDtoFromJson(Map<String, dynamic> json) =>
-    TransactionDto._(
+    TransactionDto(
       id: json['id'] as String?,
       partId: json['partId'] as String,
       storageId: json['storageId'] as String,

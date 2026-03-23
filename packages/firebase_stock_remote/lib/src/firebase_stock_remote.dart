@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_shared/firebase_shared.dart';
 import 'package:firebase_stock_remote/src/constants/constants.dart';
@@ -75,6 +77,7 @@ class FirebaseStockRemote implements StockRemote {
 
   @override
   Future<void> applyStockChange(TransactionDto transaction) async {
+    log('Note: ${transaction.note}');
     final stockDoc = _stockCollection.doc(
       '${transaction.partId}_${transaction.storageId}',
     );

@@ -6,7 +6,7 @@ sealed class PartDetailsEvent {
 
 final class _PartUpdated extends PartDetailsEvent {
   const _PartUpdated({required this.part});
-  final PartPresentation? part;
+  final PartPresentation part;
 }
 
 final class _OnStreamError extends PartDetailsEvent {

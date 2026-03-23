@@ -6,7 +6,7 @@ import 'package:inventory_app/part_details/bloc/part_details_state.dart';
 import 'package:inventory_app/part_details/view/part_details_page.dart';
 import 'package:inventory_app/part_details/widgets/part_details_in_stock.dart';
 import 'package:inventory_app/part_details/widgets/part_details_info.dart';
-import 'package:inventory_app/part_details/widgets/part_details_restock.dart';
+import 'package:inventory_app/part_details/widgets/restock_sheet.dart';
 import 'package:inventory_app/use_cases/part_presentation.dart/models/part_presentation.dart';
 import 'package:mocktail/mocktail.dart';
 import 'package:skeletonizer/skeletonizer.dart';
@@ -98,7 +98,7 @@ void main() {
 
         await tester.pumpApp(pumpView());
 
-        expect(find.byType(PartDetailsRestock), findsOneWidget);
+        expect(find.byType(RestockSheet), findsOneWidget);
       });
 
       testWidgets('tapping delete button shows bottom sheet', (tester) async {
