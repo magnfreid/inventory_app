@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:authentication_service/authentication_service.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 

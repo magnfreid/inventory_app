@@ -1,8 +1,11 @@
+import 'dart:developer';
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:core_remote/core_remote.dart';
 
 /// A function that maps [FirebaseException]'s to [RemoteException]'s.
 RemoteException mapFirebaseException(FirebaseException e) {
+  log(e.toString());
   switch (e.code) {
     case 'permission-denied':
       return const PermissionDeniedException();

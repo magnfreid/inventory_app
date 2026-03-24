@@ -1,5 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:firebase_user_remote/src/constants/constants.dart';
+import 'package:firebase_shared/firebase_shared.dart';
 import 'package:user_remote/user_remote.dart';
 
 ///Implementation of a Firebase Firestore [UserRemote].

@@ -2,7 +2,6 @@ import 'dart:async';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_shared/firebase_shared.dart';
-import 'package:firebase_tag_remote/src/constants/constants.dart';
 import 'package:tag_remote/tag_remote.dart';
 
 ///Implementation of a Firebase Firestore [TagRemote].

@@ -1,0 +1,19 @@
+name: firebase_image_remote
+description: A Very Good Project created by Very Good CLI.
+version: 0.1.0+1
+publish_to: none
+
+environment:
+  sdk: ^3.11.0
+
+dependencies:
+  firebase_storage: ^13.2.0
+  image_remote:
+    path: ../image_remote
+
+dev_dependencies:
+  mocktail: ^1.0.4
+  test: ^1.29.0
+  very_good_analysis: ^10.2.0
+
+resolution: workspace

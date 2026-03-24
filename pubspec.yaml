@@ -11,12 +11,15 @@ workspace:
   - packages/authentication_service
   - packages/core_remote
   - packages/firebase_authentication_service
+  - packages/firebase_image_remote
   - packages/firebase_part_remote
   - packages/firebase_shared
   - packages/firebase_stock_remote
   - packages/firebase_storage_remote
   - packages/firebase_tag_remote
   - packages/firebase_user_remote
+  - packages/image_remote
+  - packages/image_repository
   - packages/part_remote
   - packages/part_repository
   - packages/stock_remote
@@ -62,6 +65,10 @@ dependencies:
   freezed: ^3.2.3
   freezed_annotation: ^3.1.0
   hydrated_bloc: ^10.1.1
+  image_remote:
+    path: packages/image_remote
+  image_repository:
+    path: packages/image_repository
   intl: ^0.20.2
   json_annotation: ^4.11.0
   part_remote:
