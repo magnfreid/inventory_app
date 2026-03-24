@@ -1,6 +1,16 @@
 import 'package:stock_remote/stock_remote.dart';
 
 class Transaction {
+  factory Transaction.fromDto(TransactionDto dto) => Transaction._(
+    id: dto.id ?? '',
+    partId: dto.partId,
+    storageId: dto.storageId,
+    userId: dto.userId,
+    amount: dto.amount,
+    type: dto.type,
+    timestamp: dto.timestamp,
+    note: dto.note,
+  );
   Transaction._({
     required this.id,
     required this.partId,
@@ -79,17 +89,6 @@ class Transaction {
   final TransactionType type;
   final String? note;
   final DateTime timestamp;
-
-  Transaction fromDto(TransactionDto dto) => Transaction._(
-    id: dto.id ?? '',
-    partId: dto.partId,
-    storageId: dto.storageId,
-    userId: dto.userId,
-    amount: dto.amount,
-    type: dto.type,
-    timestamp: dto.timestamp,
-    note: dto.note,
-  );
 
   TransactionDto toDto() => TransactionDto(
     id: null,

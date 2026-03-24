@@ -40,6 +40,30 @@ class StockRepository {
   /// Maps the [StockDto]s from [_remote] to [Stock] domain models.
   Stream<List<Stock>> watchStock() => _stockStream;
 
+  /// Returns a [Stream] of all [Transaction] entries.
+  ///
+  /// Maps the [TransactionDto]s from [_remote] to [Transaction] domain models.
+  late final Stream<List<Transaction>> _transactionsStream = _remote
+      .watchTransactions()
+      .map(
+        (dtos) => dtos.map(Transaction.fromDto).toList(),
+      )
+      .shareReplay(maxSize: 1)
+      //
+      // ignore: inference_failure_on_untyped_parameter
+      .handleError((e) {
+        if (e is RemoteException) {
+          throw e;
+        } else {
+          throw const UnknownRemoteException();
+        }
+      });
+
+  /// Returns a [Stream] of all [Transaction] entries.
+  ///
+  /// Maps the [TransactionDto]s from [_remote] to [Transaction] domain models.
+  Stream<List<Transaction>> watchTransactions() => _transactionsStream;
+
   Future<void> useStock({
     required String partId,
     required String storageId,
@@ -50,7 +74,7 @@ class StockRepository {
       partId: partId,
       storageId: storageId,
       userId: userId,
-      amount: -1,
+      amount: 1,
       note: note,
     );
 
@@ -110,34 +134,4 @@ class StockRepository {
       throw const UnknownRemoteException();
     }
   }
-
-  // /// Increases stock for a part at a specific storage location by [amount].
-  // Future<void> increaseStock({
-  //   required String partId,
-  //   required String storageId,
-  //   required int amount,
-  // }) async {
-  //   try {
-  //     await _remote.increaseStock(partId, storageId, amount);
-  //   } on RemoteException catch (_) {
-  //     rethrow;
-  //   } on Exception catch (_) {
-  //     throw const UnknownRemoteException();
-  //   }
-  // }
-
-  // /// Decreases stock for a part at a specific storage location by [amount].
-  // Future<void> decreaseStock({
-  //   required String partId,
-  //   required String storageId,
-  //   required int amount,
-  // }) async {
-  //   try {
-  //     await _remote.decreaseStock(partId, storageId, amount);
-  //   } on RemoteException catch (_) {
-  //     rethrow;
-  //   } on Exception catch (_) {
-  //     throw const UnknownRemoteException();
-  //   }
-  // }
 }
