@@ -50,7 +50,7 @@ class StockRepository {
       partId: partId,
       storageId: storageId,
       userId: userId,
-      amount: 1,
+      amount: -1,
       note: note,
     );
 
