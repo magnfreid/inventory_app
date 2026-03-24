@@ -10,6 +10,7 @@ import 'package:inventory_app/inventory/bloc/inventory_bloc.dart';
 import 'package:inventory_app/inventory/bloc/inventory_state.dart';
 import 'package:inventory_app/inventory/view/inventory_page.dart';
 import 'package:inventory_app/inventory/widgets/inventory_part_card.dart';
+import 'package:inventory_app/l10n/l10n.dart';
 import 'package:inventory_app/use_cases/part_presentation.dart/models/part_presentation.dart';
 import 'package:inventory_app/use_cases/part_presentation.dart/models/stock_presentation.dart';
 import 'package:mocktail/mocktail.dart';
@@ -22,9 +23,17 @@ void main() {
   late UserCubit userCubit;
   late PartPresentation mockPart;
   late hydrated.Storage storage;
+  late User user;
 
   setUp(() {
     storage = MockHydratedBlocStorage();
+    user = User(
+      id: '123',
+      organizationId: '456',
+      name: 'Test User',
+      email: 'email@test.com',
+      role: .admin,
+    );
     when(() => storage.write(any(), any<dynamic>())).thenAnswer((_) async {});
     hydrated.HydratedBloc.storage = storage;
 
@@ -37,15 +46,7 @@ void main() {
     );
 
     when(() => userCubit.state).thenReturn(
-      UserState.loaded(
-        currentUser: User(
-          id: '123',
-          organizationId: '456',
-          name: 'Test User',
-          email: 'email@test.com',
-          role: .admin,
-        ),
-      ),
+      UserState.loaded(currentUser: user),
     );
 
     when(() => mockPart.name).thenReturn('Test Part');
@@ -61,12 +62,12 @@ void main() {
       BlocProvider.value(value: inventoryBloc),
       BlocProvider.value(value: userCubit),
     ],
-    child: const MaterialApp(home: InventoryView()),
+    child: const InventoryView(),
   );
 
   testWidgets('AppBar shows user name', (tester) async {
-    await tester.pumpWidget(pumpInventoryView());
-    expect(find.text('Test User'), findsOneWidget);
+    await tester.pumpApp(pumpInventoryView());
+    expect(find.text(user.name), findsOneWidget);
   });
 
   testWidgets('shows skeletons when state is loading', (tester) async {
@@ -74,7 +75,7 @@ void main() {
       const InventoryState(),
     );
 
-    await tester.pumpWidget(pumpInventoryView());
+    await tester.pumpApp(pumpInventoryView());
     await tester.pump();
 
     final skeletonFinder = find.byWidgetPredicate(
@@ -89,9 +90,12 @@ void main() {
         status: .loaded,
       ),
     );
+    await tester.pumpApp(pumpInventoryView());
 
-    await tester.pumpWidget(pumpInventoryView());
-    expect(find.text('Nothing added yet!'), findsOneWidget);
+    final context = tester.element(find.byType(Scaffold));
+    final l10n = context.l10n;
+
+    expect(find.text(l10n.partsListEmpty), findsOneWidget);
   });
 
   testWidgets('renders ListView with InventoryPartCard when parts exist', (
@@ -104,7 +108,7 @@ void main() {
       ),
     );
 
-    await tester.pumpWidget(pumpInventoryView());
+    await tester.pumpApp(pumpInventoryView());
     expect(find.byType(ListView), findsOneWidget);
     expect(find.byType(InventoryPartCard), findsNWidgets(2));
   });

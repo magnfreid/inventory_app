@@ -19,6 +19,8 @@ void main() {
   late PartRepository partRepository;
   late WatchSinglePartPresentation watchSinglePartPresentation;
   late String partId;
+  late String note;
+  late String userId;
   late Storage storage;
   late PartPresentation part;
   late Exception error;
@@ -43,6 +45,8 @@ void main() {
       isRecycled: true,
     );
     error = Exception('Fail');
+    userId = '111';
+    note = 'note';
 
     when(
       () => stockRepository.watchStock(),
@@ -72,11 +76,11 @@ void main() {
         stockRepository: stockRepository,
         storageRepository: storageRepository,
         partRepository: partRepository,
-        partId: partId,
+        initialPart: part,
         watchSinglePartPresentation: watchSinglePartPresentation,
       );
 
-      expect(bloc.state, const PartDetailsState());
+      expect(bloc.state, PartDetailsState(part: part));
     });
 
     blocTest(
@@ -85,7 +89,7 @@ void main() {
         stockRepository: stockRepository,
         storageRepository: storageRepository,
         partRepository: partRepository,
-        partId: partId,
+        initialPart: part,
         watchSinglePartPresentation: watchSinglePartPresentation,
       ),
       act: (_) => storagesStream.add([storage]),
@@ -104,7 +108,7 @@ void main() {
         stockRepository: stockRepository,
         storageRepository: storageRepository,
         partRepository: partRepository,
-        partId: partId,
+        initialPart: part,
         watchSinglePartPresentation: watchSinglePartPresentation,
       ),
       act: (_) => partStream.add(part),
@@ -114,45 +118,30 @@ void main() {
     );
 
     blocTest(
-      'emits content when ButtonSegmentPressed is added',
-      build: () => PartDetailsBloc(
-        stockRepository: stockRepository,
-        storageRepository: storageRepository,
-        partRepository: partRepository,
-        partId: partId,
-        watchSinglePartPresentation: watchSinglePartPresentation,
-      ),
-      act: (bloc) => bloc.add(const ButtonSegmentPressed(content: .restock)),
-      expect: () => [
-        isA<PartDetailsState>().having(
-          (s) => s.content,
-          'content',
-          PartDetailsContent.restock,
-        ),
-      ],
-    );
-
-    blocTest(
       'emits saveStatus [loading, success] when UseButtonPressed is added and '
       'is successful',
       build: () {
         when(
-          () => stockRepository.decreaseStock(
+          () => stockRepository.useStock(
             partId: partId,
             storageId: '123',
-            amount: 1,
+            userId: userId,
+            note: note,
           ),
-        ).thenAnswer((_) async {});
+        ).thenAnswer((_) async {
+          return;
+        });
         return PartDetailsBloc(
           stockRepository: stockRepository,
           storageRepository: storageRepository,
           partRepository: partRepository,
-          partId: partId,
+          initialPart: part,
           watchSinglePartPresentation: watchSinglePartPresentation,
         );
       },
-      act: (bloc) =>
-          bloc.add(UseButtonPressed(partId: partId, storageId: '123')),
+      act: (bloc) => bloc.add(
+        UseButtonPressed(storageId: '123', userId: userId, message: note),
+      ),
       expect: () => [
         isA<PartDetailsState>().having(
           (s) => s.saveStatus,
@@ -172,23 +161,25 @@ void main() {
       'added and fails',
       build: () {
         when(
-          () => stockRepository.decreaseStock(
+          () => stockRepository.useStock(
             partId: partId,
             storageId: '123',
-            amount: 1,
+            userId: userId,
+            note: note,
           ),
         ).thenThrow(error);
         return PartDetailsBloc(
           stockRepository: stockRepository,
           storageRepository: storageRepository,
           partRepository: partRepository,
-          partId: partId,
+          initialPart: part,
           watchSinglePartPresentation: watchSinglePartPresentation,
         );
       },
-      seed: () => PartDetailsState(error: error),
-      act: (bloc) =>
-          bloc.add(UseButtonPressed(partId: partId, storageId: '123')),
+      seed: () => PartDetailsState(part: part, error: error),
+      act: (bloc) => bloc.add(
+        UseButtonPressed(storageId: '123', userId: userId, message: note),
+      ),
       expect: () => [
         isA<PartDetailsState>()
             .having(
@@ -212,22 +203,29 @@ void main() {
       'added and is successful',
       build: () {
         when(
-          () => stockRepository.increaseStock(
-            partId: partId,
-            storageId: '123',
-            amount: 10,
+          () => stockRepository.restockStock(
+            partId: any(named: 'partId'),
+            storageId: any(named: 'storageId'),
+            userId: any(named: 'userId'),
+            amount: any(named: 'amount'),
+            note: any(named: 'note'),
           ),
-        ).thenAnswer((_) async {});
+        ).thenAnswer((_) async => throw error);
         return PartDetailsBloc(
           stockRepository: stockRepository,
           storageRepository: storageRepository,
           partRepository: partRepository,
-          partId: partId,
+          initialPart: part,
           watchSinglePartPresentation: watchSinglePartPresentation,
         );
       },
       act: (bloc) => bloc.add(
-        AddToStockButtonPressed(partId: partId, storageId: '123', amount: 10),
+        AddToStockButtonPressed(
+          storageId: '123',
+          amount: 10,
+          userId: userId,
+          note: note,
+        ),
       ),
       expect: () => [
         isA<PartDetailsState>().having(
@@ -245,35 +243,40 @@ void main() {
 
     blocTest(
       'emits saveStatus [loading, done] and error when AddToStockButtonPressed '
-      'is added and fails',
+      'fails',
       build: () {
         when(
-          () => stockRepository.increaseStock(
-            partId: partId,
-            storageId: '123',
-            amount: 10,
+          () => stockRepository.restockStock(
+            partId: any(named: 'partId'),
+            storageId: any(named: 'storageId'),
+            userId: any(named: 'userId'),
+            amount: any(named: 'amount'),
+            note: any(named: 'note'),
           ),
-        ).thenThrow(error);
+        ).thenAnswer((_) async => throw error);
+
         return PartDetailsBloc(
           stockRepository: stockRepository,
           storageRepository: storageRepository,
           partRepository: partRepository,
-          partId: partId,
+          initialPart: part,
           watchSinglePartPresentation: watchSinglePartPresentation,
         );
       },
-      seed: () => PartDetailsState(error: error),
       act: (bloc) => bloc.add(
-        AddToStockButtonPressed(partId: partId, storageId: '123', amount: 10),
+        AddToStockButtonPressed(
+          storageId: '123',
+          amount: 10,
+          userId: userId,
+          note: note,
+        ),
       ),
       expect: () => [
-        isA<PartDetailsState>()
-            .having(
-              (s) => s.saveStatus,
-              'saveStatus',
-              PartDetailsSaveStatus.loading,
-            )
-            .having((s) => s.error, 'error', isNull),
+        isA<PartDetailsState>().having(
+          (s) => s.saveStatus,
+          'saveStatus',
+          PartDetailsSaveStatus.loading,
+        ),
         isA<PartDetailsState>()
             .having(
               (s) => s.saveStatus,
@@ -293,7 +296,7 @@ void main() {
           stockRepository: stockRepository,
           storageRepository: storageRepository,
           partRepository: partRepository,
-          partId: partId,
+          initialPart: part,
           watchSinglePartPresentation: watchSinglePartPresentation,
         );
       },
@@ -323,11 +326,11 @@ void main() {
           stockRepository: stockRepository,
           storageRepository: storageRepository,
           partRepository: partRepository,
-          partId: partId,
+          initialPart: part,
           watchSinglePartPresentation: watchSinglePartPresentation,
         );
       },
-      seed: () => PartDetailsState(error: error),
+      seed: () => PartDetailsState(part: part, error: error),
       act: (bloc) => bloc.add(ConfirmDeleteButtonPressed(partId: partId)),
       expect: () => [
         isA<PartDetailsState>()

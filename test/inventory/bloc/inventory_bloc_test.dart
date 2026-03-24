@@ -12,7 +12,6 @@ import 'package:inventory_app/use_cases/part_presentation.dart/models/part_prese
 import 'package:inventory_app/use_cases/part_presentation.dart/watch_part_presentations.dart';
 import 'package:mocktail/mocktail.dart';
 import 'package:part_repository/part_repository.dart';
-import 'package:stock_repository/stock_repository.dart';
 import 'package:storage_repository/storage_repository.dart';
 import 'package:tag_repository/tag_repository.dart';
 
@@ -21,7 +20,6 @@ import '../../helpers/helpers.dart';
 void main() {
   late WatchPartPresentations watchPartPresentations;
   late PartRepository partRepository;
-  late StockRepository stockRepository;
   late TagRepository tagRepository;
   late StorageRepository storageRepository;
   late hydrated.Storage hydratedBlocStorage;
@@ -32,12 +30,10 @@ void main() {
   late Tag brandTag;
   late Tag categoryTag;
   late Storage storage;
-  late Exception error;
 
   setUp(() {
     hydratedBlocStorage = MockHydratedBlocStorage();
     partRepository = MockPartRepository();
-    stockRepository = MockStockRepository();
     tagRepository = MockTagRepository();
     storageRepository = MockStorageRepository();
     watchPartPresentations = MockWatchPartPresentations();
@@ -63,7 +59,6 @@ void main() {
     );
 
     storage = Storage(id: '333', name: 'Storage');
-    error = Exception('Fail');
 
     when(
       () => hydratedBlocStorage.write(any(), any<dynamic>()),
@@ -77,10 +72,6 @@ void main() {
     when(
       () => storageRepository.watchStorages(),
     ).thenAnswer((_) => storageController.stream);
-
-    when(
-      () => stockRepository.watchStock(),
-    ).thenAnswer((_) => const Stream.empty());
 
     when(
       () => tagRepository.watchTags(),
@@ -101,7 +92,6 @@ void main() {
     test('initial state test', () {
       final bloc = InventoryBloc(
         watchPartPresentations: watchPartPresentations,
-        stockRepository: stockRepository,
         tagRepository: tagRepository,
         storageRepository: storageRepository,
       );
@@ -117,7 +107,6 @@ void main() {
       build: () {
         return InventoryBloc(
           watchPartPresentations: watchPartPresentations,
-          stockRepository: stockRepository,
           tagRepository: tagRepository,
           storageRepository: storageRepository,
         );
@@ -135,7 +124,6 @@ void main() {
       build: () {
         return InventoryBloc(
           watchPartPresentations: watchPartPresentations,
-          stockRepository: stockRepository,
           tagRepository: tagRepository,
           storageRepository: storageRepository,
         );
@@ -161,7 +149,6 @@ void main() {
       build: () {
         return InventoryBloc(
           watchPartPresentations: watchPartPresentations,
-          stockRepository: stockRepository,
           tagRepository: tagRepository,
           storageRepository: storageRepository,
         );
@@ -173,100 +160,10 @@ void main() {
     );
 
     blocTest<InventoryBloc, InventoryState>(
-      'emits [loading, success] when UseStockButtonPressed is added and stock '
-      'is used successfully',
-      build: () {
-        when(
-          () => stockRepository.decreaseStock(
-            partId: '123',
-            storageId: '123',
-            amount: 1,
-          ),
-        ).thenAnswer((_) => Future.value());
-        return InventoryBloc(
-          watchPartPresentations: watchPartPresentations,
-          stockRepository: stockRepository,
-          tagRepository: tagRepository,
-          storageRepository: storageRepository,
-        );
-      },
-      act: (bloc) => bloc.add(
-        const UseStockButtonPressed(partId: '123', storageId: '123'),
-      ),
-      expect: () => [
-        isA<InventoryState>().having(
-          (s) => s.bottomSheetStatus,
-          'bottomSheetStatus',
-          InventoryStateBottomSheetStatus.loading,
-        ),
-        isA<InventoryState>().having(
-          (s) => s.bottomSheetStatus,
-          'bottomSheetStatus',
-          InventoryStateBottomSheetStatus.done,
-        ),
-      ],
-      verify: (_) => verify(
-        () => stockRepository.decreaseStock(
-          partId: '123',
-          storageId: '123',
-          amount: 1,
-        ),
-      ).called(1),
-    );
-
-    blocTest<InventoryBloc, InventoryState>(
-      'emits [loading, done] and error when UseStockButtonPressed is added and '
-      'decrease fails',
-      build: () {
-        when(
-          () => stockRepository.decreaseStock(
-            partId: '123',
-            storageId: '123',
-            amount: 1,
-          ),
-        ).thenThrow(error);
-        return InventoryBloc(
-          watchPartPresentations: watchPartPresentations,
-          stockRepository: stockRepository,
-          tagRepository: tagRepository,
-          storageRepository: storageRepository,
-        );
-      },
-      act: (bloc) => bloc.add(
-        const UseStockButtonPressed(partId: '123', storageId: '123'),
-      ),
-      seed: () => InventoryState(error: error),
-      expect: () => [
-        isA<InventoryState>()
-            .having(
-              (s) => s.bottomSheetStatus,
-              'bottomSheetStatus',
-              InventoryStateBottomSheetStatus.loading,
-            )
-            .having((s) => s.error, 'error', isNull),
-        isA<InventoryState>()
-            .having(
-              (s) => s.bottomSheetStatus,
-              'bottomSheetStatus',
-              InventoryStateBottomSheetStatus.done,
-            )
-            .having((s) => s.error, 'error', error),
-      ],
-      verify: (_) => verify(
-        () => stockRepository.decreaseStock(
-          partId: '123',
-          storageId: '123',
-          amount: 1,
-        ),
-      ).called(1),
-    );
-
-    blocTest<InventoryBloc, InventoryState>(
       'emits inStock filter when HideEmptyStockSwitchPressed is added',
       build: () {
         return InventoryBloc(
           watchPartPresentations: watchPartPresentations,
-          stockRepository: stockRepository,
           tagRepository: tagRepository,
           storageRepository: storageRepository,
         );
@@ -290,7 +187,6 @@ void main() {
       build: () {
         final bloc = InventoryBloc(
           watchPartPresentations: watchPartPresentations,
-          stockRepository: stockRepository,
           tagRepository: tagRepository,
           storageRepository: storageRepository,
         );
@@ -338,7 +234,6 @@ void main() {
       build: () {
         final bloc = InventoryBloc(
           watchPartPresentations: watchPartPresentations,
-          stockRepository: stockRepository,
           tagRepository: tagRepository,
           storageRepository: storageRepository,
         );
@@ -426,7 +321,6 @@ void main() {
       build: () {
         final bloc = InventoryBloc(
           watchPartPresentations: watchPartPresentations,
-          stockRepository: stockRepository,
           tagRepository: tagRepository,
           storageRepository: storageRepository,
         );
@@ -510,7 +404,6 @@ void main() {
       build: () {
         final bloc = InventoryBloc(
           watchPartPresentations: watchPartPresentations,
-          stockRepository: stockRepository,
           tagRepository: tagRepository,
           storageRepository: storageRepository,
         );
@@ -610,7 +503,6 @@ void main() {
       build: () {
         return InventoryBloc(
           watchPartPresentations: watchPartPresentations,
-          stockRepository: stockRepository,
           tagRepository: tagRepository,
           storageRepository: storageRepository,
         );
@@ -636,7 +528,6 @@ void main() {
       build: () {
         return InventoryBloc(
           watchPartPresentations: watchPartPresentations,
-          stockRepository: stockRepository,
           tagRepository: tagRepository,
           storageRepository: storageRepository,
         );
@@ -662,7 +553,6 @@ void main() {
       build: () {
         return InventoryBloc(
           watchPartPresentations: watchPartPresentations,
-          stockRepository: stockRepository,
           tagRepository: tagRepository,
           storageRepository: storageRepository,
         );
