@@ -133,11 +133,7 @@ class PartDetailsView extends StatelessWidget {
       context: context,
       builder: (_) => BlocProvider.value(
         value: context.read<PartDetailsBloc>(),
-        child: UseStockSheet(
-          stock: stock,
-          //TODO(magnfried): Part already in bloc state?
-          partName: partName,
-        ),
+        child: UseStockSheet(stock: stock),
       ),
     );
   }

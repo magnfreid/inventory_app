@@ -10,10 +10,12 @@ import 'package:inventory_app/shared/extensions/show_snack_bar_extensions.dart';
 import 'package:inventory_app/use_cases/part_presentation.dart/models/stock_presentation.dart';
 
 class UseStockSheet extends StatefulWidget {
-  const UseStockSheet({required this.partName, required this.stock, super.key});
+  const UseStockSheet({
+    required this.stock,
+    super.key,
+  });
 
   final StockPresentation stock;
-  final String partName;
 
   @override
   State<UseStockSheet> createState() => _UseStockSheetState();
@@ -66,7 +68,7 @@ class _UseStockSheetState extends State<UseStockSheet> {
                           text: '${l10n.useButtonText} 1${l10n.pieces(1)} ',
                         ),
                         TextSpan(
-                          text: widget.partName,
+                          text: context.read<PartDetailsBloc>().state.part.name,
                           style: TextStyle(
                             color: context.colors.secondary,
                           ),

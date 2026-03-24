@@ -21,6 +21,4 @@ abstract class PartDetailsState with _$PartDetailsState {
     Exception? error,
   }) = _PartDetailsState;
   const PartDetailsState._();
-
-  bool get isLoading => part == null;
 }

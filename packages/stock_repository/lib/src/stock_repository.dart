@@ -18,52 +18,23 @@ class StockRepository {
 
   /// Returns a [Stream] of all [Stock] entries.
   ///
-  /// Maps the [StockDto]s from [_remote] to [Stock] domain models.
-  late final Stream<List<Stock>> _stockStream = _remote
-      .watchStock()
-      .map(
-        (dtos) => dtos.map(Stock.fromDto).toList(),
-      )
-      .shareReplay(maxSize: 1)
-      //
-      // ignore: inference_failure_on_untyped_parameter
-      .handleError((e) {
-        if (e is RemoteException) {
-          throw e;
-        } else {
-          throw const UnknownRemoteException();
-        }
-      });
-
-  /// Returns a [Stream] of all [Stock] entries.
-  ///
-  /// Maps the [StockDto]s from [_remote] to [Stock] domain models.
+  /// Maps the [StockDto]s from the remote data source to [Stock] domain models.
+  /// The latest emitted value is replayed to new subscribers.
   Stream<List<Stock>> watchStock() => _stockStream;
 
   /// Returns a [Stream] of all [Transaction] entries.
   ///
-  /// Maps the [TransactionDto]s from [_remote] to [Transaction] domain models.
-  late final Stream<List<Transaction>> _transactionsStream = _remote
-      .watchTransactions()
-      .map(
-        (dtos) => dtos.map(Transaction.fromDto).toList(),
-      )
-      .shareReplay(maxSize: 1)
-      //
-      // ignore: inference_failure_on_untyped_parameter
-      .handleError((e) {
-        if (e is RemoteException) {
-          throw e;
-        } else {
-          throw const UnknownRemoteException();
-        }
-      });
-
-  /// Returns a [Stream] of all [Transaction] entries.
-  ///
-  /// Maps the [TransactionDto]s from [_remote] to [Transaction] domain models.
+  /// Maps the [TransactionDto]s from the remote data source to [Transaction]
+  /// domain models. The latest emitted value is replayed to new subscribers.
   Stream<List<Transaction>> watchTransactions() => _transactionsStream;
 
+  /// Decreases the stock of a part by one unit.
+  ///
+  /// Creates a usage [Transaction] and applies it through the remote data
+  /// source.
+  ///
+  /// Rethrows [RemoteException] and wraps other exceptions in
+  /// [UnknownRemoteException].
   Future<void> useStock({
     required String partId,
     required String storageId,
@@ -87,6 +58,12 @@ class StockRepository {
     }
   }
 
+  /// Increases the stock of a part by the given [amount].
+  ///
+  /// Creates a restock [Transaction] and applies it through the remote data
+  /// source.
+  /// Rethrows [RemoteException] and wraps other exceptions in
+  /// [UnknownRemoteException].
   Future<void> restockStock({
     required String partId,
     required String storageId,
@@ -111,6 +88,14 @@ class StockRepository {
     }
   }
 
+  /// Adjusts the stock of a part by the given [amount].
+  ///
+  /// The [amount] may be positive or negative depending on the adjustment.
+  /// Creates an adjustment [Transaction] and applies it through the remote
+  /// data source.
+  ///
+  /// Rethrows [RemoteException] and wraps other exceptions in
+  /// [UnknownRemoteException].
   Future<void> adjustStock({
     required String partId,
     required String storageId,
@@ -134,4 +119,44 @@ class StockRepository {
       throw const UnknownRemoteException();
     }
   }
+
+  /// Internal shared stream of [Stock] entries.
+  ///
+  /// Uses `shareReplay` to cache the latest value and avoid multiple
+  /// subscriptions to the underlying remote stream.
+  late final Stream<List<Stock>> _stockStream = _remote
+      .watchStock()
+      .map(
+        (dtos) => dtos.map(Stock.fromDto).toList(),
+      )
+      .shareReplay(maxSize: 1)
+      //
+      // ignore: inference_failure_on_untyped_parameter
+      .handleError((e) {
+        if (e is RemoteException) {
+          throw e;
+        } else {
+          throw const UnknownRemoteException();
+        }
+      });
+
+  /// Internal shared stream of [Transaction] entries.
+  ///
+  /// Uses `shareReplay` to cache the latest value and avoid multiple
+  /// subscriptions to the underlying remote stream.
+  late final Stream<List<Transaction>> _transactionsStream = _remote
+      .watchTransactions()
+      .map(
+        (dtos) => dtos.map(Transaction.fromDto).toList(),
+      )
+      .shareReplay(maxSize: 1)
+      //
+      // ignore: inference_failure_on_untyped_parameter
+      .handleError((e) {
+        if (e is RemoteException) {
+          throw e;
+        } else {
+          throw const UnknownRemoteException();
+        }
+      });
 }
