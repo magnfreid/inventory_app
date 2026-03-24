@@ -97,10 +97,10 @@ class PartDetailsBloc extends Bloc<PartDetailsEvent, PartDetailsState> {
     emit(state.copyWith(saveStatus: .loading, error: null));
     try {
       await _stockRepository.useStock(
-        partId: event.partId,
+        partId: state.part.partId,
         storageId: event.storageId,
         userId: event.userId,
-        note: event.note,
+        note: event.message,
       );
       emit(state.copyWith(saveStatus: .done));
     } on Exception catch (e) {
@@ -115,7 +115,7 @@ class PartDetailsBloc extends Bloc<PartDetailsEvent, PartDetailsState> {
     emit(state.copyWith(saveStatus: .loading, error: null));
     try {
       await _stockRepository.restockStock(
-        partId: event.partId,
+        partId: state.part.partId,
         storageId: event.storageId,
         amount: event.amount,
         userId: event.userId,

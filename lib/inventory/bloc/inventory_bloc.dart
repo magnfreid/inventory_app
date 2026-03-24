@@ -10,7 +10,6 @@ import 'package:inventory_app/tags/models/tag_presentation.dart';
 import 'package:inventory_app/use_cases/part_presentation.dart/models/part_presentation.dart';
 import 'package:inventory_app/use_cases/part_presentation.dart/watch_part_presentations.dart';
 
-import 'package:stock_repository/stock_repository.dart';
 import 'package:storage_repository/storage_repository.dart';
 import 'package:tag_repository/tag_repository.dart';
 
@@ -19,11 +18,9 @@ part 'inventory_event.dart';
 class InventoryBloc extends HydratedBloc<InventoryEvent, InventoryState> {
   InventoryBloc({
     required WatchPartPresentations watchPartPresentations,
-    required StockRepository stockRepository,
     required TagRepository tagRepository,
     required StorageRepository storageRepository,
-  }) : _stockRepository = stockRepository,
-       _tagRepository = tagRepository,
+  }) : _tagRepository = tagRepository,
        _storageRepository = storageRepository,
        super(const InventoryState()) {
     on<_PartsUpdated>(
@@ -38,7 +35,6 @@ class InventoryBloc extends HydratedBloc<InventoryEvent, InventoryState> {
       _onStoragesUpdated,
       transformer: throttle(_streamThrottleDuration),
     );
-    on<UseStockButtonPressed>(_onUseStockButtonPressed);
     on<HideEmptyStockSwitchPressed>(_onHideEmptyStockSwitchPressed);
     on<ClearAllFiltersButtonPressed>(_onClearAllFiltersButtonPressed);
     on<FilterChipPressed>(
@@ -73,7 +69,6 @@ class InventoryBloc extends HydratedBloc<InventoryEvent, InventoryState> {
     );
   }
 
-  final StockRepository _stockRepository;
   final TagRepository _tagRepository;
   final StorageRepository _storageRepository;
   late final StreamSubscription<List<PartPresentation>>
@@ -108,24 +103,6 @@ class InventoryBloc extends HydratedBloc<InventoryEvent, InventoryState> {
         .where((tag) => tag.type == .category)
         .toList();
     emit(state.copyWith(brandTags: brandTags, categoryTags: catagoryTags));
-  }
-
-  FutureOr<void> _onUseStockButtonPressed(
-    UseStockButtonPressed event,
-    Emitter<InventoryState> emit,
-  ) async {
-    emit(state.copyWith(bottomSheetStatus: .loading, error: null));
-    try {
-      await _stockRepository.useStock(
-        partId: event.partId,
-        storageId: event.storageId,
-        note: event.note,
-        userId: event.userId,
-      );
-      emit(state.copyWith(bottomSheetStatus: .done));
-    } on Exception catch (e) {
-      emit(state.copyWith(bottomSheetStatus: .done, error: e));
-    }
   }
 
   FutureOr<void> _onHideEmptyStockSwitchPressed(

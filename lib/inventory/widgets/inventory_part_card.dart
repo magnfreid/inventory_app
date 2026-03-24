@@ -1,12 +1,9 @@
 import 'package:app_ui/app_ui.dart';
 import 'package:collection/collection.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:inventory_app/inventory/bloc/inventory_bloc.dart';
-import 'package:inventory_app/inventory/widgets/inventory_use_stock.dart';
 import 'package:inventory_app/part_details/view/part_details_page.dart';
 import 'package:inventory_app/shared/widgets/recycled_icon.dart';
-import 'package:inventory_app/shared/widgets/tag_badge.dart';
+import 'package:inventory_app/shared/widgets/tags_row.dart';
 import 'package:inventory_app/use_cases/part_presentation.dart/models/part_presentation.dart';
 import 'package:inventory_app/use_cases/part_presentation.dart/models/stock_presentation.dart';
 
@@ -25,7 +22,7 @@ class InventoryPartCard extends StatelessWidget {
     return Card(
       child: InkWell(
         onTap: () => Navigator.push(context, PartDetailsPage.route(part: part)),
-        onLongPress: () => _showStockBottomSheet(context),
+        // onLongPress: () => _showStockBottomSheet(context),
         child: Stack(
           children: [
             Padding(
@@ -90,21 +87,17 @@ class InventoryPartCard extends StatelessWidget {
     );
   }
 
-  Future<void> _showStockBottomSheet(BuildContext context) {
-    return showModalBottomSheet<void>(
-      useSafeArea: true,
-      isScrollControlled: true,
-      enableDrag: false,
-      context: context,
-      builder: (_) => BlocProvider.value(
-        value: context.read<InventoryBloc>(),
-        child: FractionallySizedBox(
-          heightFactor: 0.75,
-          child: InventoryUseStock(part: part),
-        ),
-      ),
-    );
-  }
+  // Future<void> _showStockBottomSheet(BuildContext context) {
+  //   return showModalBottomSheet<void>(
+  //     isScrollControlled: true,
+  //     enableDrag: false,
+  //     context: context,
+  //     builder: (_) => FractionallySizedBox(
+  //       heightFactor: 0.65,
+  //       child: InventoryUseStock(part: part),
+  //     ),
+  //   );
+  // }
 }
 
 class _InStockBadges extends StatelessWidget {

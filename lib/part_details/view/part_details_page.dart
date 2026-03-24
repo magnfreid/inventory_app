@@ -6,14 +6,15 @@ import 'package:inventory_app/l10n/l10n.dart';
 import 'package:inventory_app/part_details/bloc/part_details_bloc.dart';
 import 'package:inventory_app/part_details/bloc/part_details_state.dart';
 import 'package:inventory_app/part_details/widgets/delete_part_sheet.dart';
+import 'package:inventory_app/part_details/widgets/in_stock_list.dart';
 import 'package:inventory_app/part_details/widgets/restock_sheet.dart';
+import 'package:inventory_app/part_details/widgets/use_stock_sheet.dart';
 import 'package:inventory_app/part_editor/view/part_editor_page.dart';
 import 'package:inventory_app/shared/extensions/show_snack_bar_extensions.dart';
 import 'package:inventory_app/shared/widgets/recycled_icon.dart';
-import 'package:inventory_app/shared/widgets/tag_badge.dart';
-import 'package:inventory_app/stock/widgets/in_stock_panel.dart';
-import 'package:inventory_app/stock/widgets/use_stock_checkout.dart';
+import 'package:inventory_app/shared/widgets/tags_row.dart';
 import 'package:inventory_app/use_cases/part_presentation.dart/models/part_presentation.dart';
+import 'package:inventory_app/use_cases/part_presentation.dart/models/stock_presentation.dart';
 import 'package:inventory_app/use_cases/part_presentation.dart/watch_single_part_presentation.dart';
 import 'package:part_repository/part_repository.dart';
 import 'package:stock_repository/stock_repository.dart';
@@ -90,16 +91,7 @@ class PartDetailsView extends StatelessWidget {
                       children: [
                         TextButton.icon(
                           icon: const Icon(Icons.add),
-                          onPressed: () => showModalBottomSheet<void>(
-                            showDragHandle: true,
-                            useSafeArea: true,
-                            isScrollControlled: true,
-                            context: context,
-                            builder: (_) => BlocProvider.value(
-                              value: context.read<PartDetailsBloc>(),
-                              child: const RestockSheet(),
-                            ),
-                          ),
+                          onPressed: () => _showRestockSheet(context),
                           label: Text(l10n.partDetailsSelectorRestock),
                         ),
                         TagsRow(
@@ -115,10 +107,8 @@ class PartDetailsView extends StatelessWidget {
                     const SizedBox(height: 32),
                     InStockList(
                       part: part,
-                      onStockSelected: (stock) => showModalBottomSheet<void>(
-                        context: context,
-                        builder: (_) => StockCheckoutPage(stock: stock),
-                      ),
+                      onStockSelected: (stock) =>
+                          _showUseStockSheet(context, stock, part.name),
                       textStyle: _variantTextStyle(context),
                     ),
                   ],
@@ -127,6 +117,40 @@ class PartDetailsView extends StatelessWidget {
             },
           ),
         ),
+      ),
+    );
+  }
+
+  Future<void> _showUseStockSheet(
+    BuildContext context,
+    StockPresentation stock,
+    String partName,
+  ) {
+    return showModalBottomSheet<void>(
+      useSafeArea: true,
+      showDragHandle: true,
+      isScrollControlled: true,
+      context: context,
+      builder: (_) => BlocProvider.value(
+        value: context.read<PartDetailsBloc>(),
+        child: UseStockSheet(
+          stock: stock,
+          //TODO(magnfried): Part already in bloc state?
+          partName: partName,
+        ),
+      ),
+    );
+  }
+
+  Future<void> _showRestockSheet(BuildContext context) {
+    return showModalBottomSheet<void>(
+      useSafeArea: true,
+      showDragHandle: true,
+      isScrollControlled: true,
+      context: context,
+      builder: (_) => BlocProvider.value(
+        value: context.read<PartDetailsBloc>(),
+        child: const RestockSheet(),
       ),
     );
   }

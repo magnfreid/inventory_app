@@ -15,17 +15,6 @@ class InStockList extends StatelessWidget {
   final TextStyle? textStyle;
   final void Function(StockPresentation stock) onStockSelected;
 
-  static MaterialPageRoute<void> route({
-    required void Function(StockPresentation stock) onStockSelected,
-    required PartPresentation part,
-  }) => MaterialPageRoute(
-    builder: (_) => Scaffold(
-      body: SafeArea(
-        child: InStockList(part: part, onStockSelected: onStockSelected),
-      ),
-    ),
-  );
-
   @override
   Widget build(BuildContext context) {
     final l10n = context.l10n;

@@ -98,7 +98,7 @@ void main() {
 
         await tester.pumpApp(pumpView());
 
-        expect(find.byType(RestockSheet), findsOneWidget);
+        expect(find.byType(_StorageSelector), findsOneWidget);
       });
 
       testWidgets('tapping delete button shows bottom sheet', (tester) async {
