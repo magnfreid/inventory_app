@@ -1,13 +1,23 @@
 import 'package:stock_remote/stock_remote.dart';
 
-///Interface for [StockDto] remote data source.
+/// Interface for a remote data source handling stock and transactions.
+///
+/// Implementations are responsible for fetching and persisting data
+/// from an external source (e.g. a backend service).
 abstract interface class StockRemote {
-  ///Returns a [Stream] of a [List] of [StockDto].
+  /// Returns a stream of all stock entries.
+  ///
+  /// Each emission contains a list of [StockDto] objects representing
+  /// the current state of stock.
   Stream<List<StockDto>> watchStock();
 
-  ///Increases a stock entry's quantity by [amount].
-  Future<void> increaseStock(String partId, String storageId, int amount);
+  /// Returns a stream of all transactions.
+  ///
+  /// Each emission contains a list of [TransactionDto] objects.
+  Stream<List<TransactionDto>> watchTransactions();
 
-  ///Decreases a stock entry's quantity by [amount] (down to 0).
-  Future<void> decreaseStock(String partId, String storageId, int amount);
+  /// Applies a stock change based on the given [transaction].
+  ///
+  /// The [TransactionDto.amount] determines how the stock is affected.
+  Future<void> applyStockChange(TransactionDto transaction);
 }

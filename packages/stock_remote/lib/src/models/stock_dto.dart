@@ -28,4 +28,18 @@ class StockDto {
 
   /// Quantity of the part available at this storage location.
   final int quantity;
+
+  /// Creates a copy of a [StockDto], overriding any parameter passed in with
+  /// new values.
+  StockDto copyWith({
+    String? partId,
+    String? storageId,
+    int? quantity,
+  }) {
+    return StockDto(
+      partId: partId ?? this.partId,
+      storageId: storageId ?? this.storageId,
+      quantity: quantity ?? this.quantity,
+    );
+  }
 }

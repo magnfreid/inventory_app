@@ -1,89 +1,65 @@
 import 'package:app_ui/app_ui.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:intl/intl.dart';
 import 'package:inventory_app/l10n/l10n.dart';
 import 'package:inventory_app/part_details/bloc/part_details_bloc.dart';
 import 'package:inventory_app/part_details/bloc/part_details_state.dart';
-import 'package:inventory_app/part_details/widgets/part_details_in_stock.dart';
-import 'package:inventory_app/part_details/widgets/part_details_info.dart';
-import 'package:inventory_app/part_details/widgets/part_details_restock.dart';
+import 'package:inventory_app/part_details/widgets/delete_part_sheet.dart';
+import 'package:inventory_app/part_details/widgets/in_stock_list.dart';
+import 'package:inventory_app/part_details/widgets/restock_sheet.dart';
+import 'package:inventory_app/part_details/widgets/use_stock_sheet.dart';
 import 'package:inventory_app/part_editor/view/part_editor_page.dart';
 import 'package:inventory_app/shared/extensions/show_snack_bar_extensions.dart';
-import 'package:inventory_app/shared/utilities/bone_mocks.dart';
+import 'package:inventory_app/shared/widgets/recycled_icon.dart';
+import 'package:inventory_app/shared/widgets/tags_row.dart';
+import 'package:inventory_app/use_cases/part_presentation.dart/models/part_presentation.dart';
+import 'package:inventory_app/use_cases/part_presentation.dart/models/stock_presentation.dart';
 import 'package:inventory_app/use_cases/part_presentation.dart/watch_single_part_presentation.dart';
 import 'package:part_repository/part_repository.dart';
-import 'package:skeletonizer/skeletonizer.dart';
 import 'package:stock_repository/stock_repository.dart';
 import 'package:storage_repository/storage_repository.dart';
 
-class PartDetailsPage extends StatelessWidget {
-  const PartDetailsPage({required this.partId, super.key});
+enum _MenuAction { edit, delete }
 
-  final String partId;
+class PartDetailsPage extends StatelessWidget {
+  const PartDetailsPage({required this.initialPart, super.key});
+
+  final PartPresentation initialPart;
 
   static MaterialPageRoute<void> route({
-    required String partId,
+    required PartPresentation part,
   }) => MaterialPageRoute<void>(
-    builder: (context) => PartDetailsPage(
-      partId: partId,
-    ),
+    builder: (_) => PartDetailsPage(initialPart: part),
   );
 
   @override
   Widget build(BuildContext context) {
     return BlocProvider(
       create: (_) => PartDetailsBloc(
-        partId: partId,
+        initialPart: initialPart,
         watchSinglePartPresentation: context
             .read<WatchSinglePartPresentation>(),
         stockRepository: context.read<StockRepository>(),
         storageRepository: context.read<StorageRepository>(),
         partRepository: context.read<PartRepository>(),
       ),
-      child: PartDetailsView(
-        partId: partId,
-      ),
+      child: const PartDetailsView(),
     );
   }
 }
 
 class PartDetailsView extends StatelessWidget {
-  const PartDetailsView({required this.partId, super.key});
-
-  final String partId;
+  const PartDetailsView({super.key});
 
   @override
   Widget build(BuildContext context) {
+    final l10n = context.l10n;
     return Scaffold(
       appBar: AppBar(
         centerTitle: true,
-        title: BlocBuilder<PartDetailsBloc, PartDetailsState>(
-          buildWhen: (prev, curr) => prev.part != curr.part,
-          builder: (context, state) {
-            final title = state.part?.name ?? BoneMock.title;
-            return Skeletonizer(enabled: state.isLoading, child: Text(title));
-          },
-        ),
-        actions: [
-          BlocBuilder<PartDetailsBloc, PartDetailsState>(
-            buildWhen: (prev, curr) => prev.part != curr.part,
-            builder: (context, state) {
-              return Skeletonizer(
-                enabled: state.isLoading,
-                child: _DeleteButton(partId: partId),
-              );
-            },
-          ),
-          BlocBuilder<PartDetailsBloc, PartDetailsState>(
-            buildWhen: (prev, curr) => prev.part != curr.part,
-            builder: (context, state) {
-              return Skeletonizer(
-                enabled: state.isLoading,
-                child: const _EditButton(),
-              );
-            },
-          ),
-        ],
+        title: Text(context.watch<PartDetailsBloc>().state.part.name),
+        actions: const [_PopUpMenu()],
       ),
       body: MultiBlocListener(
         listeners: [
@@ -100,43 +76,193 @@ class PartDetailsView extends StatelessWidget {
             },
           ),
         ],
-        child: BlocBuilder<PartDetailsBloc, PartDetailsState>(
-          builder: (context, state) {
-            final part = state.part ?? boneMockPartPresentation;
-            return Skeletonizer(
-              enabled: state.isLoading,
-              child: Column(
-                children: [
-                  const SizedBox(height: 24),
-                  const Skeleton.ignore(child: _SegmentedButton()),
-                  const SizedBox(height: 24),
-                  Expanded(
-                    child: Padding(
-                      padding: const .symmetric(
-                        horizontal: 28,
-                      ),
-                      child: AnimatedSwitcher(
-                        duration: const Duration(milliseconds: 50),
+        child: SingleChildScrollView(
+          physics: const ClampingScrollPhysics(),
+          child: BlocBuilder<PartDetailsBloc, PartDetailsState>(
+            builder: (context, state) {
+              final part = state.part;
+              return Padding(
+                padding: const .fromLTRB(24, 8, 24, 100),
+                child: Column(
+                  crossAxisAlignment: .start,
+                  children: [
+                    Row(
+                      mainAxisAlignment: .spaceBetween,
+                      children: [
+                        TextButton.icon(
+                          icon: const Icon(Icons.add),
+                          onPressed: () => _showRestockSheet(context),
+                          label: Text(l10n.partDetailsSelectorRestock),
+                        ),
+                        TagsRow(
+                          part: part,
+                          textStyle: context.text.bodyMedium?.copyWith(
+                            color: context.colors.onSurfaceVariant,
+                          ),
+                        ),
+                      ],
+                    ),
+                    const _Image(),
+                    _Details(part: part),
+                    const SizedBox(height: 32),
+                    InStockList(
+                      part: part,
+                      onStockSelected: (stock) =>
+                          _showUseStockSheet(context, stock, part.name),
+                      textStyle: _variantTextStyle(context),
+                    ),
+                  ],
+                ),
+              );
+            },
+          ),
+        ),
+      ),
+    );
+  }
 
-                        child: switch (state.content) {
-                          .details => PartDetailsInfo(
-                            key: const ValueKey('details'),
-                            part,
-                          ),
-                          .inStock => PartDetailsInStock(
-                            key: const ValueKey('stock'),
-                            part: part,
-                          ),
-                          .restock => const PartDetailsRestock(
-                            key: ValueKey('restock'),
-                          ),
-                        },
-                      ),
+  Future<void> _showUseStockSheet(
+    BuildContext context,
+    StockPresentation stock,
+    String partName,
+  ) {
+    return showModalBottomSheet<void>(
+      useSafeArea: true,
+      showDragHandle: true,
+      isScrollControlled: true,
+      context: context,
+      builder: (_) => BlocProvider.value(
+        value: context.read<PartDetailsBloc>(),
+        child: UseStockSheet(stock: stock),
+      ),
+    );
+  }
+
+  Future<void> _showRestockSheet(BuildContext context) {
+    return showModalBottomSheet<void>(
+      useSafeArea: true,
+      showDragHandle: true,
+      isScrollControlled: true,
+      context: context,
+      builder: (_) => BlocProvider.value(
+        value: context.read<PartDetailsBloc>(),
+        child: const RestockSheet(),
+      ),
+    );
+  }
+}
+
+class _Details extends StatelessWidget {
+  const _Details({required this.part});
+
+  final PartPresentation part;
+
+  @override
+  Widget build(BuildContext context) {
+    final l10n = context.l10n;
+    final description = part.description;
+    return Padding(
+      padding: const .symmetric(vertical: 8),
+      child: Column(
+        children: [
+          _DetailField(
+            title: l10n.formFieldDetailNumberLabelText,
+            trailing: part.detailNumber.isEmpty ? '-' : part.detailNumber,
+          ),
+          _DetailField(
+            title: l10n.formFieldRecycledStatusLabelText,
+            trailing: part.isRecycled
+                ? l10n.formFieldRecycledLabelText
+                : l10n.formFieldNewLabelText,
+            icon: part.isRecycled ? const RecycledIcon() : null,
+          ),
+          _DetailField(
+            title: l10n.formFieldPriceLabelText,
+            trailing: NumberFormat.currency(
+              locale: 'sv_SE',
+              symbol: 'kr',
+              decimalDigits: 2,
+            ).format(part.price),
+          ),
+          if (description != null && description.isNotEmpty)
+            Padding(
+              padding: const .symmetric(vertical: 8),
+              child: Column(
+                crossAxisAlignment: .start,
+                children: [
+                  Text(
+                    context.l10n.formFieldDescriptionLabelText,
+                  ),
+                  const SizedBox(
+                    height: 4,
+                    width: double.infinity,
+                  ),
+                  Text(
+                    description,
+                    style: TextStyle(
+                      color: context.colors.onSurfaceVariant,
                     ),
                   ),
                 ],
               ),
+            ),
+        ],
+      ),
+    );
+  }
+}
+
+class _DetailField extends StatelessWidget {
+  const _DetailField({required this.title, required this.trailing, this.icon});
+
+  final String title;
+  final String trailing;
+  final Widget? icon;
+
+  @override
+  Widget build(BuildContext context) {
+    return Padding(
+      padding: const .symmetric(vertical: 8),
+      child: Row(
+        mainAxisAlignment: .spaceBetween,
+        children: [
+          Text(title),
+          Row(
+            spacing: 4,
+            children: [
+              ?icon,
+              Text(
+                trailing,
+                style: TextStyle(color: context.colors.onSurfaceVariant),
+              ),
+            ],
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+class _Image extends StatelessWidget {
+  const _Image();
+
+  @override
+  Widget build(BuildContext context) {
+    return AspectRatio(
+      aspectRatio: 16 / 9,
+      child: ClipRRect(
+        borderRadius: .circular(6),
+        child: Image.network(
+          'https://picsum.photos/200/300',
+          fit: BoxFit.fitWidth,
+          loadingBuilder: (context, child, loadingProgress) {
+            if (loadingProgress == null) return child;
+            return const Center(
+              child: CircularProgressIndicator(),
             );
+          },
+          errorBuilder: (context, error, stackTrace) {
+            return const Icon(Icons.image_not_supported);
           },
         ),
       ),
@@ -144,121 +270,60 @@ class PartDetailsView extends StatelessWidget {
   }
 }
 
-class _EditButton extends StatelessWidget {
-  const _EditButton();
-
-  @override
-  Widget build(BuildContext context) {
-    return IconButton(
-      onPressed: () => Navigator.push(
-        context,
-        PartEditorPage.route(
-          part: context.read<PartDetailsBloc>().state.part,
-        ),
-      ),
-      icon: const Icon(Icons.edit),
-    );
-  }
-}
-
-class _DeleteButton extends StatelessWidget {
-  const _DeleteButton({required this.partId});
-
-  final String partId;
+class _PopUpMenu extends StatelessWidget {
+  const _PopUpMenu();
 
   @override
   Widget build(BuildContext context) {
     final l10n = context.l10n;
-    return IconButton(
-      onPressed: () => showModalBottomSheet<void>(
-        context: context,
-        builder: (_) => SafeArea(
-          child: Padding(
-            padding: const .all(24),
-            child: Column(
-              spacing: 20,
-              mainAxisSize: .min,
+    return PopupMenuButton(
+      onSelected: (value) => switch (value) {
+        .edit => Navigator.push(
+          context,
+          PartEditorPage.route(
+            part: context.read<PartDetailsBloc>().state.part,
+          ),
+        ),
+        .delete => showModalBottomSheet<void>(
+          context: context,
+          builder: (_) => DeletePartSheet(
+            partId: context.read<PartDetailsBloc>().state.part.partId,
+          ),
+        ),
+      },
+      itemBuilder: (_) {
+        return [
+          PopupMenuItem(
+            value: _MenuAction.edit,
+            child: Row(
               children: [
+                const Icon(Icons.edit),
+                const SizedBox(width: 8),
+                Text(l10n.edit),
+              ],
+            ),
+          ),
+          PopupMenuItem(
+            value: _MenuAction.delete,
+            child: Row(
+              children: [
+                Icon(Icons.delete, color: context.colors.error),
+                const SizedBox(width: 8),
                 Text(
-                  l10n.deletePartSheetTitleText,
-                  style: context.text.bodyLarge,
-                ),
-                Row(
-                  mainAxisAlignment: .spaceBetween,
-                  children: [
-                    AppButton.elevated(
-                      width: .wrap,
-                      onPressed: () => Navigator.pop(context),
-                      label: l10n.cancel,
-                    ),
-                    AppButton(
-                      width: .wrap,
-                      onPressed: () => context.read<PartDetailsBloc>().add(
-                        ConfirmDeleteButtonPressed(partId: partId),
-                      ),
-                      label: l10n.delete,
-                      buttonStyle: ElevatedButton.styleFrom(
-                        backgroundColor: context.colors.error,
-                      ),
-                      textStyle: context.text.bodyMedium?.copyWith(
-                        color: context.colors.onError,
-                      ),
-                    ),
-                  ],
+                  l10n.delete,
+                  style: TextStyle(color: context.colors.error),
                 ),
               ],
             ),
           ),
-        ),
-      ),
-      icon: const Icon(
-        Icons.delete,
-      ),
+        ];
+      },
     );
   }
 }
 
-class _SegmentedButton extends StatelessWidget {
-  const _SegmentedButton();
-
-  @override
-  Widget build(BuildContext context) {
-    final l10n = context.l10n;
-    return SegmentedButton<PartDetailsContent>(
-      segments: [
-        ButtonSegment<PartDetailsContent>(
-          value: .details,
-          label: Text(
-            l10n.partDetailsSelectorDetails,
-            style: context.text.bodySmall,
-          ),
-          icon: const Icon(Icons.list_alt),
-        ),
-        ButtonSegment<PartDetailsContent>(
-          value: .inStock,
-          label: Text(
-            l10n.partDetailsSelectorInStock,
-            style: context.text.bodySmall,
-          ),
-          icon: const Icon(Icons.search),
-        ),
-        ButtonSegment<PartDetailsContent>(
-          value: .restock,
-          label: Center(
-            child: Text(
-              l10n.partDetailsSelectorRestock,
-              style: context.text.bodySmall,
-            ),
-          ),
-          icon: const Icon(Icons.shelves),
-        ),
-      ],
-      selected: {context.watch<PartDetailsBloc>().state.content},
-      onSelectionChanged: (selection) => context.read<PartDetailsBloc>().add(
-        ButtonSegmentPressed(
-          content: selection.first,
-        ),
-      ),
-    );
-  }
+TextStyle _variantTextStyle(BuildContext context) {
+  return TextStyle(
+    color: context.colors.onSurfaceVariant,
+  );
 }

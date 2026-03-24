@@ -49,6 +49,7 @@ class WatchPartPresentations {
               final storageQuantities = partStock.map((stock) {
                 final storage = storagesMap[stock.storageId];
                 return StockPresentation(
+                  partId: part.id!,
                   storageId: stock.storageId,
                   storageName: storage?.name ?? 'Unknown',
                   quantity: stock.quantity,

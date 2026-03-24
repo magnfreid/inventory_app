@@ -7,11 +7,47 @@ void main() {
   late FakeFirebaseFirestore firestore;
   late StockRemote remote;
   late StockDto stock;
+  late TransactionDto useTransaction;
+  late TransactionDto restockTransaction;
+  late TransactionDto emptyTransaction;
+  late DateTime now;
 
   setUp(() {
     firestore = FakeFirebaseFirestore();
     remote = FirebaseStockRemote(organizationId: 'org1', firestore: firestore);
+    now = DateTime.now();
     stock = StockDto(partId: '123', storageId: '456', quantity: 5);
+    useTransaction = TransactionDto(
+      id: '111',
+      partId: '123',
+      storageId: '456',
+      userId: '789',
+      amount: -1,
+      type: .use,
+      note: 'note',
+      timestamp: now,
+    );
+    restockTransaction = TransactionDto(
+      id: '222',
+      partId: '123',
+      storageId: '456',
+      userId: '789',
+      amount: 10,
+      type: .restock,
+      note: 'note',
+      timestamp: now,
+    );
+
+    emptyTransaction = TransactionDto(
+      id: '333',
+      partId: '123',
+      storageId: '456',
+      userId: '789',
+      amount: 0,
+      type: .use,
+      note: null,
+      timestamp: now,
+    );
   });
   group('FirebaseStockRemoteDataSource', () {
     test('watchStock emits list of StockDto with correct data', () async {
@@ -29,28 +65,99 @@ void main() {
               .having(
                 (list) => list.first.partId,
                 'part id',
-                '123',
+                stock.partId,
               )
-              .having((list) => list.first.storageId, 'storage id', '456')
-              .having((list) => list.first.quantity, 'quantity', 5),
+              .having(
+                (list) => list.first.storageId,
+                'storage id',
+                stock.storageId,
+              )
+              .having(
+                (list) => list.first.quantity,
+                'quantity',
+                stock.quantity,
+              ),
         ),
       );
     });
-    test('increaseStock creates new document if none exists', () async {
-      await remote.increaseStock('123', '456', 5);
 
-      final snapshot = await firestore
-          .collection('organizations')
-          .doc('org1')
-          .collection('stock')
-          .doc('123_456')
-          .get();
+    test(
+      'watchTransactions emits list of TransactionDto with correct data',
+      () async {
+        await firestore
+            .collection('organizations')
+            .doc('org1')
+            .collection('transactions')
+            .doc(restockTransaction.id)
+            .set(restockTransaction.toJson());
 
-      expect(snapshot.exists, true);
-      expect(snapshot.data()?['quantity'], 5);
-    });
+        await expectLater(
+          remote.watchTransactions(),
+          emits(
+            isA<List<TransactionDto>>()
+                .having(
+                  (list) => list.first.id,
+                  'id',
+                  restockTransaction.id,
+                )
+                .having(
+                  (list) => list.first.partId,
+                  'part id',
+                  restockTransaction.partId,
+                )
+                .having(
+                  (list) => list.first.storageId,
+                  'storage id',
+                  restockTransaction.storageId,
+                )
+                .having(
+                  (list) => list.first.userId,
+                  'user id',
+                  restockTransaction.userId,
+                )
+                .having(
+                  (list) => list.first.amount,
+                  'quantity',
+                  restockTransaction.amount,
+                )
+                .having(
+                  (list) => list.first.type,
+                  'type',
+                  restockTransaction.type,
+                )
+                .having(
+                  (list) => list.first.note,
+                  'note',
+                  restockTransaction.note,
+                )
+                .having(
+                  (list) => list.first.timestamp,
+                  'timestamp',
+                  restockTransaction.timestamp,
+                ),
+          ),
+        );
+      },
+    );
 
-    test('increaseStock increments existing quantity', () async {
+    test(
+      'applyStockChange creates a new stock document if none exists',
+      () async {
+        await remote.applyStockChange(restockTransaction);
+
+        final snapshot = await firestore
+            .collection('organizations')
+            .doc('org1')
+            .collection('stock')
+            .doc('123_456')
+            .get();
+
+        expect(snapshot.exists, true);
+        expect(snapshot.data()?['quantity'], restockTransaction.amount);
+      },
+    );
+
+    test('applyStockChange increments existing quantity', () async {
       await firestore
           .collection('organizations')
           .doc('org1')
@@ -62,7 +169,7 @@ void main() {
             'quantity': 5,
           });
 
-      await remote.increaseStock('123', '456', 3);
+      await remote.applyStockChange(restockTransaction);
 
       final snapshot = await firestore
           .collection('organizations')
@@ -71,24 +178,10 @@ void main() {
           .doc('123_456')
           .get();
 
-      expect(snapshot.data()?['quantity'], 8);
+      expect(snapshot.data()?['quantity'], 15);
     });
 
-    test('increaseStock throws if amount is zero or negative', () async {
-      expect(
-        () => remote.increaseStock('123', '456', 0),
-        throwsException,
-      );
-    });
-
-    test('decreaseStock throws if stock does not exist', () async {
-      expect(
-        () => remote.decreaseStock('123', '456', 1),
-        throwsException,
-      );
-    });
-
-    test('decreaseStock throws if insufficient stock', () async {
+    test('applyStockChange throws if insufficient stock', () async {
       await firestore
           .collection('organizations')
           .doc('org1')
@@ -97,16 +190,15 @@ void main() {
           .set({
             'partId': '123',
             'storageId': '456',
-            'quantity': 2,
+            'quantity': 0,
           });
-
-      expect(
-        () => remote.decreaseStock('123', '456', 5),
+      await expectLater(
+        remote.applyStockChange(useTransaction),
         throwsException,
       );
     });
 
-    test('decreaseStock decreases quantity correctly', () async {
+    test('applyStockChange decreases quantity correctly', () async {
       await firestore
           .collection('organizations')
           .doc('org1')
@@ -118,7 +210,7 @@ void main() {
             'quantity': 10,
           });
 
-      await remote.decreaseStock('123', '456', 4);
+      await remote.applyStockChange(useTransaction);
 
       final snapshot = await firestore
           .collection('organizations')
@@ -127,11 +219,11 @@ void main() {
           .doc('123_456')
           .get();
 
-      expect(snapshot.data()?['quantity'], 6);
+      expect(snapshot.data()?['quantity'], 9);
     });
-    test('decreaseStock throws if amount is zero or negative', () async {
+    test('applyStockChange throws if amount is zero', () async {
       expect(
-        () => remote.decreaseStock('123', '456', 0),
+        () => remote.applyStockChange(emptyTransaction),
         throwsException,
       );
     });

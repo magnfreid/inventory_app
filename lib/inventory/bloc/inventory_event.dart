@@ -24,12 +24,6 @@ final class _OnStreamError extends InventoryEvent {
   final RemoteException error;
 }
 
-final class UseStockButtonPressed extends InventoryEvent {
-  const UseStockButtonPressed({required this.partId, required this.storageId});
-  final String partId;
-  final String storageId;
-}
-
 final class FilterChipPressed extends InventoryEvent {
   const FilterChipPressed({required this.type, required this.itemId});
   final InventoryFilterType type;

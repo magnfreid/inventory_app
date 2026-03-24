@@ -11,7 +11,7 @@ class FirebaseStockRemote implements StockRemote {
     required String organizationId,
     FirebaseFirestore? firestore,
   }) : _firestore = firestore ?? FirebaseFirestore.instance {
-    _collection = _firestore
+    _stockCollection = _firestore
         .collection(organizationsCollection)
         .doc(organizationId)
         .collection(stockCollection)
@@ -22,14 +22,28 @@ class FirebaseStockRemote implements StockRemote {
           },
           toFirestore: (dto, _) => dto.toJson(),
         );
+
+    _transactionsCollection = _firestore
+        .collection(organizationsCollection)
+        .doc(organizationId)
+        .collection(transactionsCollection)
+        .withConverter<TransactionDto>(
+          fromFirestore: (snapshot, _) {
+            final data = snapshot.data()!;
+            final dto = TransactionDto.fromJson(data).copyWith(id: snapshot.id);
+            return dto;
+          },
+          toFirestore: (dto, _) => dto.toJson()..remove('id'),
+        );
   }
 
   final FirebaseFirestore _firestore;
-  late final CollectionReference<StockDto> _collection;
+  late final CollectionReference<StockDto> _stockCollection;
+  late final CollectionReference<TransactionDto> _transactionsCollection;
 
   @override
   Stream<List<StockDto>> watchStock() {
-    return _collection
+    return _stockCollection
         .snapshots()
         .map(
           (snapshot) => snapshot.docs.map((doc) => doc.data()).toList(),
@@ -44,56 +58,48 @@ class FirebaseStockRemote implements StockRemote {
   }
 
   @override
-  Future<void> increaseStock(
-    String partId,
-    String storageId,
-    int amount,
-  ) async {
-    if (amount <= 0 || amount > 200) throw invalidArgument;
-    final id = '${partId}_$storageId';
-    final docRef = _collection.doc(id);
-    try {
-      await _firestore.runTransaction((transaction) async {
-        final snapshot = await transaction.get(docRef);
-        if (!snapshot.exists) {
-          transaction.set(
-            docRef,
-            StockDto(
-              partId: partId,
-              storageId: storageId,
-              quantity: amount,
-            ),
-          );
-          return;
-        }
-        transaction.update(
-          docRef,
-          {'quantity': FieldValue.increment(amount)},
-        );
-      });
-    } on FirebaseException catch (e) {
-      throw mapFirebaseException(e);
-    }
+  Stream<List<TransactionDto>> watchTransactions() {
+    return _transactionsCollection
+        .snapshots()
+        .map(
+          (snapshot) => snapshot.docs.map((doc) => doc.data()).toList(),
+        )
+        //
+        // ignore: inference_failure_on_untyped_parameter
+        .handleError((e) {
+          if (e is FirebaseException) {
+            throw mapFirebaseException(e);
+          }
+        });
   }
 
   @override
-  Future<void> decreaseStock(
-    String partId,
-    String storageId,
-    int amount,
-  ) async {
-    if (amount <= 0) throw invalidArgument;
-    final id = '${partId}_$storageId';
-    try {
-      final docRef = _collection.doc(id);
-      await _firestore.runTransaction((transaction) async {
-        final snapshot = await transaction.get(docRef);
-        final currentQuantity = snapshot.data()?.quantity ?? 0;
-        if (currentQuantity < amount) throw invalidArgument;
-        transaction.update(docRef, {'quantity': FieldValue.increment(-amount)});
-      });
-    } on FirebaseException catch (e) {
-      throw mapFirebaseException(e);
-    }
+  Future<void> applyStockChange(TransactionDto transaction) async {
+    if (transaction.amount == 0) throw invalidArgument;
+    final stockDoc = _stockCollection.doc(
+      '${transaction.partId}_${transaction.storageId}',
+    );
+
+    final transactionDoc = _transactionsCollection.doc();
+
+    await _firestore.runTransaction((txn) async {
+      final snapshot = await txn.get(stockDoc);
+      final currentDto = snapshot.exists
+          ? snapshot.data()!
+          : StockDto(
+              partId: transaction.partId,
+              storageId: transaction.storageId,
+              quantity: 0,
+            );
+
+      final newStock = currentDto.quantity + transaction.amount;
+      if (newStock < 0) throw invalidArgument;
+
+      final updatedDto = currentDto.copyWith(quantity: newStock);
+
+      txn
+        ..set(stockDoc, updatedDto)
+        ..set(transactionDoc, transaction);
+    });
   }
 }

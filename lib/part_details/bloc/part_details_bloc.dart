@@ -18,17 +18,17 @@ class PartDetailsBloc extends Bloc<PartDetailsEvent, PartDetailsState> {
     required StockRepository stockRepository,
     required StorageRepository storageRepository,
     required PartRepository partRepository,
-    required String partId,
+    required PartPresentation initialPart,
     required WatchSinglePartPresentation watchSinglePartPresentation,
   }) : _stockRepository = stockRepository,
        _partRepository = partRepository,
-       super(const PartDetailsState()) {
+       super(PartDetailsState(part: initialPart)) {
     on<_StoragesUpdated>(_onStoragesUpdated);
     on<_PartUpdated>(
       _onPartUpdated,
       transformer: debounceRestartable(const Duration(milliseconds: 500)),
     );
-    on<ButtonSegmentPressed>(_onButtonSegmentPressed);
+    // on<ButtonSegmentPressed>(_onButtonSegmentPressed);
     on<UseButtonPressed>(_onUseButtonPressed, transformer: droppable());
     on<AddToStockButtonPressed>(
       _onAddToStockButtonPressed,
@@ -47,9 +47,11 @@ class PartDetailsBloc extends Bloc<PartDetailsEvent, PartDetailsState> {
 
     _partStreamSubscription =
         watchSinglePartPresentation(
-          partId,
+          initialPart.partId,
         ).listen(
-          (part) => add(_PartUpdated(part: part)),
+          (part) {
+            if (part != null) add(_PartUpdated(part: part));
+          },
           onError: _handleStreamError,
         );
   }
@@ -81,12 +83,12 @@ class PartDetailsBloc extends Bloc<PartDetailsEvent, PartDetailsState> {
     emit(state.copyWith(part: event.part));
   }
 
-  FutureOr<void> _onButtonSegmentPressed(
-    ButtonSegmentPressed event,
-    Emitter<PartDetailsState> emit,
-  ) {
-    emit(state.copyWith(content: event.content));
-  }
+  // FutureOr<void> _onButtonSegmentPressed(
+  //   ButtonSegmentPressed event,
+  //   Emitter<PartDetailsState> emit,
+  // ) {
+  //   emit(state.copyWith(content: event.content));
+  // }
 
   FutureOr<void> _onUseButtonPressed(
     UseButtonPressed event,
@@ -94,10 +96,11 @@ class PartDetailsBloc extends Bloc<PartDetailsEvent, PartDetailsState> {
   ) async {
     emit(state.copyWith(saveStatus: .loading, error: null));
     try {
-      await _stockRepository.decreaseStock(
-        partId: event.partId,
+      await _stockRepository.useStock(
+        partId: state.part.partId,
         storageId: event.storageId,
-        amount: 1,
+        userId: event.userId,
+        note: event.message,
       );
       emit(state.copyWith(saveStatus: .done));
     } on Exception catch (e) {
@@ -111,10 +114,12 @@ class PartDetailsBloc extends Bloc<PartDetailsEvent, PartDetailsState> {
   ) async {
     emit(state.copyWith(saveStatus: .loading, error: null));
     try {
-      await _stockRepository.increaseStock(
-        partId: event.partId,
+      await _stockRepository.restockStock(
+        partId: state.part.partId,
         storageId: event.storageId,
         amount: event.amount,
+        userId: event.userId,
+        note: event.note,
       );
       emit(state.copyWith(saveStatus: .done));
     } on Exception catch (e) {

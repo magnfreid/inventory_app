@@ -1,11 +1,10 @@
 import 'package:app_ui/app_ui.dart';
 import 'package:collection/collection.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:inventory_app/inventory/bloc/inventory_bloc.dart';
-import 'package:inventory_app/inventory/widgets/inventory_stock_bottom_sheet.dart';
+import 'package:inventory_app/l10n/l10n.dart';
 import 'package:inventory_app/part_details/view/part_details_page.dart';
-import 'package:inventory_app/shared/widgets/tag_badge.dart';
+import 'package:inventory_app/shared/widgets/recycled_icon.dart';
+import 'package:inventory_app/shared/widgets/tags_row.dart';
 import 'package:inventory_app/use_cases/part_presentation.dart/models/part_presentation.dart';
 import 'package:inventory_app/use_cases/part_presentation.dart/models/stock_presentation.dart';
 
@@ -23,9 +22,7 @@ class InventoryPartCard extends StatelessWidget {
       ..sorted((a, b) => b.storageName.compareTo(a.storageName));
     return Card(
       child: InkWell(
-        onTap: () =>
-            Navigator.push(context, PartDetailsPage.route(partId: part.partId)),
-        onLongPress: () => _showStockBottomSheet(context),
+        onTap: () => Navigator.push(context, PartDetailsPage.route(part: part)),
         child: Stack(
           children: [
             Padding(
@@ -43,12 +40,7 @@ class InventoryPartCard extends StatelessWidget {
                             spacing: 2,
                             children: [
                               Text(part.name),
-                              if (part.isRecycled)
-                                const Icon(
-                                  Icons.eco,
-                                  color: Colors.green,
-                                  size: 16,
-                                ),
+                              if (part.isRecycled) const RecycledIcon(),
                             ],
                           ),
                           Text(
@@ -60,7 +52,7 @@ class InventoryPartCard extends StatelessWidget {
                         ],
                       ),
                       const Spacer(),
-                      _Tags(part: part),
+                      TagsRow(part: part),
                     ],
                   ),
                   const Padding(
@@ -89,20 +81,8 @@ class InventoryPartCard extends StatelessWidget {
                 ],
               ),
             ),
-            // if (part.isRecycled) const _EcoIndicator(),
           ],
         ),
-      ),
-    );
-  }
-
-  Future<void> _showStockBottomSheet(BuildContext context) {
-    return showModalBottomSheet<void>(
-      showDragHandle: true,
-      context: context,
-      builder: (_) => BlocProvider.value(
-        value: context.read<InventoryBloc>(),
-        child: InventoryStockBottomSheet(part: part),
       ),
     );
   }
@@ -117,9 +97,10 @@ class _InStockBadges extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = context.l10n;
     return stocks.isEmpty
         ? Text(
-            'Ej i lager',
+            l10n.notInStock,
             style: context.text.labelSmall?.copyWith(
               fontStyle: .italic,
               fontWeight: .w300,
@@ -151,39 +132,5 @@ class _InStockBadges extends StatelessWidget {
                 )
                 .toList(),
           );
-  }
-}
-
-// class _EcoIndicator extends StatelessWidget {
-//   const _EcoIndicator();
-
-//   @override
-//   Widget build(BuildContext context) {
-//     return const Positioned(
-//       top: 3,
-//       right: 3,
-//       child: Icon(
-//         size: 16,
-//         Icons.eco,
-//         color: Colors.green,
-//       ),
-//     );
-//   }
-// }
-
-class _Tags extends StatelessWidget {
-  const _Tags({required this.part});
-
-  final PartPresentation part;
-
-  @override
-  Widget build(BuildContext context) {
-    return Row(
-      spacing: 6,
-      children: [
-        if (part.brandTag != null) TagBadge(tag: part.brandTag!),
-        if (part.categoryTag != null) TagBadge(tag: part.categoryTag!),
-      ],
-    );
   }
 }
