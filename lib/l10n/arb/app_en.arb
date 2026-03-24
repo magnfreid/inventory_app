@@ -204,6 +204,10 @@
 	"@delete": {
 		"description": "General delete confirmation."
 	},
+	"edit": "Edit",
+	"@edit": {
+		"description": "General edit text."
+	},
 	"cancel": "Cancel",
 	"@cancel": {
 		"description": "General cancel confirmation."
@@ -239,6 +243,14 @@
 	"name": "Name",
 	"@name": {
 		"description": "General singular name text."
+	},
+	"message": "Message",
+	"@message": {
+		"description": "General singular message text."
+	},
+	"from": "from",
+	"@from": {
+		"description": "General singular from text."
 	},
 	"storages": "Storages",
 	"@storages": {
@@ -319,5 +331,26 @@
 	"remoteExceptionInvalidArgument": "The value you entered is not valid. Please try again.",
 	"@remoteExceptionInvalidArgument": {
 		"description": "Message to show the user if an invalid input was used when for example increasing or decreasing stock."
+	},
+	"partsListEmpty": "No parts added yet.",
+	"@partsListEmpty": {
+		"description": "Message shown in the middle of the parts list when the list is empty."
+	},
+	"notInStock": "Not in stock",
+	"@notInStock": {
+		"description": "Text shown when a part is not in stock in a storage."
+	},
+	"pieces": "{count, plural, =1 {pc} other {pcs}}",
+	"@pieces": {
+		"description": "Text shown when a part is not in stock in a storage.",
+		"placeholders": {
+			"count": {
+				"type": "int"
+			}
+		}
+	},
+	"restockSheetSelectStorageTitle": "Select storage to restock:",
+	"@restockSheetSelectStorageTitle": {
+		"description": "Restock view title when selecting storage to restock."
 	}
 }

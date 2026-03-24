@@ -29,7 +29,7 @@ class InStockList extends StatelessWidget {
               style: const TextStyle(fontWeight: .bold),
             ),
             Text(
-              '${part.totalQuantity} st',
+              '${part.totalQuantity} ${l10n.pieces(part.totalQuantity)}',
               style: const TextStyle(fontWeight: .bold),
             ),
           ],

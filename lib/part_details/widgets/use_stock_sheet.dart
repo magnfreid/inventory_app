@@ -56,21 +56,22 @@ class _UseStockSheetState extends State<UseStockSheet> {
           child: Column(
             mainAxisSize: .min,
             children: [
-              //TODO(magnfreid): Add l10n!
               Row(
                 children: [
                   Text.rich(
                     TextSpan(
-                      style: context.text.bodyLarge, // default style
+                      style: context.text.bodyLarge,
                       children: [
-                        const TextSpan(text: 'Use one '),
+                        TextSpan(
+                          text: '${l10n.useButtonText} 1${l10n.pieces(1)} ',
+                        ),
                         TextSpan(
                           text: widget.partName,
                           style: TextStyle(
                             color: context.colors.secondary,
                           ),
                         ),
-                        const TextSpan(text: ' from '),
+                        TextSpan(text: ' ${l10n.from} '),
                         TextSpan(
                           text: widget.stock.storageName,
                           style: TextStyle(
@@ -83,14 +84,13 @@ class _UseStockSheetState extends State<UseStockSheet> {
                   const Spacer(),
                 ],
               ),
-              const SizedBox(height: 16),
+              const SizedBox(height: 24),
               TextFormField(
                 maxLines: 3,
                 minLines: 1,
                 maxLength: 100,
-                decoration: const InputDecoration(
-                  hint: Text('Enter message...'),
-                  label: Text('Message'),
+                decoration: InputDecoration(
+                  label: Text('${l10n.message}*'),
                 ),
                 controller: _controller,
                 onChanged: (value) =>

@@ -39,6 +39,7 @@ class InventoryView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = context.l10n;
     final userName = context.watch<UserCubit>().state.maybeWhen(
       loaded: (currentUser) => currentUser.name,
       orElse: () => '',
@@ -90,9 +91,8 @@ class InventoryView extends StatelessWidget {
                       child: Skeletonizer(
                         enabled: state.isLoading,
                         child: parts.isEmpty
-                            ? const Center(
-                                //TODO(magnfreid): Add l10n
-                                child: Text('Nothing added yet!'),
+                            ? Center(
+                                child: Text(l10n.partsListEmpty),
                               )
                             : ListView.builder(
                                 padding: const .only(bottom: 140),

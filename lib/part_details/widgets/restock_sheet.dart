@@ -76,7 +76,7 @@ class _StorageSelector extends StatelessWidget {
                 crossAxisAlignment: .start,
                 children: [
                   Text(
-                    'Välj lager att fylla på:',
+                    l10n.restockSheetSelectStorageTitle,
                     style: context.text.bodyLarge,
                   ),
                   ListView.separated(
@@ -198,7 +198,9 @@ class _RestockCheckoutState extends State<_RestockCheckout> {
                   const Icon(Icons.arrow_right_alt),
                   Text(
                     widget.storage.name,
-                    style: context.text.bodyLarge,
+                    style: context.text.bodyLarge?.copyWith(
+                      color: context.colors.tertiary,
+                    ),
                   ),
                 ],
               ),
@@ -223,9 +225,9 @@ class _RestockCheckoutState extends State<_RestockCheckout> {
                           SizedBox(
                             width: 75,
                             child: TextField(
-                              decoration: const InputDecoration(
+                              decoration: InputDecoration(
                                 floatingLabelAlignment: .center,
-                                label: Text('Antal'),
+                                label: Text(l10n.quantity),
                               ),
                               style: context.text.bodyLarge,
                               textInputAction: .done,

@@ -1,6 +1,7 @@
 import 'package:app_ui/app_ui.dart';
 import 'package:collection/collection.dart';
 import 'package:flutter/material.dart';
+import 'package:inventory_app/l10n/l10n.dart';
 import 'package:inventory_app/part_details/view/part_details_page.dart';
 import 'package:inventory_app/shared/widgets/recycled_icon.dart';
 import 'package:inventory_app/shared/widgets/tags_row.dart';
@@ -22,7 +23,6 @@ class InventoryPartCard extends StatelessWidget {
     return Card(
       child: InkWell(
         onTap: () => Navigator.push(context, PartDetailsPage.route(part: part)),
-        // onLongPress: () => _showStockBottomSheet(context),
         child: Stack(
           children: [
             Padding(
@@ -86,18 +86,6 @@ class InventoryPartCard extends StatelessWidget {
       ),
     );
   }
-
-  // Future<void> _showStockBottomSheet(BuildContext context) {
-  //   return showModalBottomSheet<void>(
-  //     isScrollControlled: true,
-  //     enableDrag: false,
-  //     context: context,
-  //     builder: (_) => FractionallySizedBox(
-  //       heightFactor: 0.65,
-  //       child: InventoryUseStock(part: part),
-  //     ),
-  //   );
-  // }
 }
 
 class _InStockBadges extends StatelessWidget {
@@ -109,10 +97,10 @@ class _InStockBadges extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = context.l10n;
     return stocks.isEmpty
         ? Text(
-            //TODO(magnfreid): Add l10n
-            'Ej i lager',
+            l10n.notInStock,
             style: context.text.labelSmall?.copyWith(
               fontStyle: .italic,
               fontWeight: .w300,

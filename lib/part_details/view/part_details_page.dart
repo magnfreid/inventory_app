@@ -279,6 +279,7 @@ class _PopUpMenu extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = context.l10n;
     return PopupMenuButton(
       onSelected: (value) => switch (value) {
         .edit => Navigator.push(
@@ -296,13 +297,13 @@ class _PopUpMenu extends StatelessWidget {
       },
       itemBuilder: (_) {
         return [
-          const PopupMenuItem(
+          PopupMenuItem(
             value: _MenuAction.edit,
             child: Row(
               children: [
-                Icon(Icons.edit),
-                SizedBox(width: 8),
-                Text('Edit'),
+                const Icon(Icons.edit),
+                const SizedBox(width: 8),
+                Text(l10n.edit),
               ],
             ),
           ),
@@ -313,7 +314,7 @@ class _PopUpMenu extends StatelessWidget {
                 Icon(Icons.delete, color: context.colors.error),
                 const SizedBox(width: 8),
                 Text(
-                  'Delete',
+                  l10n.delete,
                   style: TextStyle(color: context.colors.error),
                 ),
               ],
