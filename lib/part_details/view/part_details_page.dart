@@ -1,4 +1,5 @@
 import 'package:app_ui/app_ui.dart';
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:intl/intl.dart';
@@ -17,6 +18,7 @@ import 'package:inventory_app/use_cases/part_presentation.dart/models/part_prese
 import 'package:inventory_app/use_cases/part_presentation.dart/models/stock_presentation.dart';
 import 'package:inventory_app/use_cases/part_presentation.dart/watch_single_part_presentation.dart';
 import 'package:part_repository/part_repository.dart';
+import 'package:shimmer_animation/shimmer_animation.dart';
 import 'package:stock_repository/stock_repository.dart';
 import 'package:storage_repository/storage_repository.dart';
 
@@ -248,23 +250,62 @@ class _Image extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    return BlocBuilder<PartDetailsBloc, PartDetailsState>(
+      builder: (context, state) {
+        final imagePath = state.part.imgPath;
+        return switch (imagePath) {
+          String() => _ImageFrame(
+            hideBorder: true,
+            child: CachedNetworkImage(
+              imageUrl: imagePath,
+              fit: BoxFit.fitWidth,
+              placeholder: (context, url) => Shimmer(
+                duration: const Duration(seconds: 4),
+                color: context.colors.onSurface,
+                child: Container(
+                  decoration: BoxDecoration(
+                    borderRadius: .circular(6),
+                    color: context.colors.surface,
+                  ),
+                ),
+              ),
+              errorWidget: (context, url, error) =>
+                  const Center(child: Icon(Icons.image_not_supported)),
+            ),
+          ),
+          null => _ImageFrame(
+            child: Center(
+              child: TextButton.icon(
+                icon: const Icon(Icons.add),
+                onPressed: () {},
+                label: const Text('Add image'),
+              ),
+            ),
+          ),
+        };
+      },
+    );
+  }
+}
+
+class _ImageFrame extends StatelessWidget {
+  const _ImageFrame({required this.child, this.hideBorder = false});
+
+  final Widget child;
+  final bool hideBorder;
+
+  @override
+  Widget build(BuildContext context) {
     return AspectRatio(
       aspectRatio: 16 / 9,
-      child: ClipRRect(
-        borderRadius: .circular(6),
-        child: Image.network(
-          'https://picsum.photos/200/300',
-          fit: BoxFit.fitWidth,
-          loadingBuilder: (context, child, loadingProgress) {
-            if (loadingProgress == null) return child;
-            return const Center(
-              child: CircularProgressIndicator(),
-            );
-          },
-          errorBuilder: (context, error, stackTrace) {
-            return const Icon(Icons.image_not_supported);
-          },
-        ),
+      child: Container(
+        decoration: hideBorder
+            ? null
+            : BoxDecoration(
+                border: .all(color: context.colors.onSurface, width: 0.5),
+                borderRadius: .circular(6),
+              ),
+        child: child,
       ),
     );
   }

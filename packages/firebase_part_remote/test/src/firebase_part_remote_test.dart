@@ -24,6 +24,7 @@ void main() {
       description: '',
       brandTagId: '',
       generalTagIds: [],
+      imgPath: 'imgPath',
     );
   });
 

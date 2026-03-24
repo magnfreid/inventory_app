@@ -18,6 +18,7 @@ PartDto _$PartDtoFromJson(Map<String, dynamic> json) => PartDto(
   generalTagIds: (json['generalTagIds'] as List<dynamic>)
       .map((e) => e as String)
       .toList(),
+  imgPath: json['imgPath'] as String?,
 );
 
 Map<String, dynamic> _$PartDtoToJson(PartDto instance) => <String, dynamic>{
@@ -30,4 +31,5 @@ Map<String, dynamic> _$PartDtoToJson(PartDto instance) => <String, dynamic>{
   'brandTagId': instance.brandTagId,
   'description': instance.description,
   'generalTagIds': instance.generalTagIds,
+  'imgPath': instance.imgPath,
 };

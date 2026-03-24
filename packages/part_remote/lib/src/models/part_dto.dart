@@ -16,6 +16,7 @@ class PartDto {
     required this.description,
     required this.brandTagId,
     required this.generalTagIds,
+    required this.imgPath,
   });
 
   /// Creates a [PartDto] from a JSON map.
@@ -36,6 +37,7 @@ class PartDto {
     String? brandTagId,
     List<String>? generalTagIds,
     String? description,
+    String? imgPath,
   }) {
     return PartDto(
       id: id ?? this.id,
@@ -47,6 +49,7 @@ class PartDto {
       brandTagId: brandTagId ?? this.brandTagId,
       generalTagIds: generalTagIds ?? this.generalTagIds,
       description: description ?? this.description,
+      imgPath: imgPath ?? this.imgPath,
     );
   }
 
@@ -76,4 +79,6 @@ class PartDto {
 
   /// List of IDs for general tags associated with the part.
   final List<String> generalTagIds;
+
+  final String? imgPath;
 }

@@ -13,6 +13,7 @@ class Part {
     required this.categoryTagId,
     required this.generalTagIds,
     required this.description,
+    required this.imgPath,
   });
 
   /// Creates a [Part] from a [PartDto].
@@ -26,6 +27,7 @@ class Part {
     brandTagId: dto.brandTagId,
     generalTagIds: dto.generalTagIds,
     description: dto.description,
+    imgPath: dto.imgPath,
   );
 
   /// Converts this [Part] to a [PartDto] for persistence.
@@ -39,6 +41,7 @@ class Part {
     description: description,
     brandTagId: brandTagId,
     generalTagIds: generalTagIds,
+    imgPath: imgPath,
   );
 
   /// Unique identifier of the part.
@@ -67,4 +70,6 @@ class Part {
 
   /// Optional description of the part.
   final String? description;
+
+  final String? imgPath;
 }

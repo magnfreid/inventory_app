@@ -13,6 +13,7 @@ class PartPresentation {
     this.brandTag,
     this.generalTags = const [],
     this.description,
+    this.imgPath,
   });
 
   final String partId;
@@ -25,6 +26,7 @@ class PartPresentation {
   final List<TagPresentation> generalTags;
   final String? description;
   final List<StockPresentation> stock;
+  final String? imgPath;
 
   int get totalQuantity =>
       stock.fold(0, (sum, element) => sum + element.quantity);
