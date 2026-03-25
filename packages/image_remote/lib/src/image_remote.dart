@@ -1,21 +1,17 @@
-import 'dart:typed_data';
+import 'dart:io';
 
 /// Abstract interface for image storage.
 abstract interface class ImageRemote {
   Future<String> uploadImage({
-    required String orgId,
-    required String fileName,
-    required Uint8List data,
-    String? contentType,
+    required String partId,
+    required File file,
   });
 
   Future<void> deleteImage({
-    required String orgId,
     required String fileName,
   });
 
   Future<String> getImageUrl({
-    required String orgId,
     required String fileName,
   });
 }

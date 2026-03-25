@@ -46,7 +46,7 @@ class _UseStockSheetState extends State<UseStockSheet> {
     );
     final l10n = context.l10n;
     return BlocListener<PartDetailsBloc, PartDetailsState>(
-      listenWhen: (previous, current) => current.saveStatus == .done,
+      listenWhen: (previous, current) => current.stockStatus == .done,
       listener: (context, state) {
         final error = state.error;
         if (error != null) context.showErrorSnackBar(error);
@@ -102,7 +102,7 @@ class _UseStockSheetState extends State<UseStockSheet> {
               BlocBuilder<PartDetailsBloc, PartDetailsState>(
                 builder: (context, state) {
                   return AppButton(
-                    isLoading: state.saveStatus == .loading,
+                    isLoading: state.stockStatus == .loading,
                     onPressed: canSave && userId != null
                         ? () => context.read<PartDetailsBloc>().add(
                             UseButtonPressed(

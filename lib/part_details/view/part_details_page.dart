@@ -2,11 +2,13 @@ import 'package:app_ui/app_ui.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:image_repository/image_repository.dart';
 import 'package:intl/intl.dart';
 import 'package:inventory_app/l10n/l10n.dart';
 import 'package:inventory_app/part_details/bloc/part_details_bloc.dart';
 import 'package:inventory_app/part_details/bloc/part_details_state.dart';
 import 'package:inventory_app/part_details/widgets/delete_part_sheet.dart';
+import 'package:inventory_app/part_details/widgets/image_picker_sheet.dart';
 import 'package:inventory_app/part_details/widgets/in_stock_list.dart';
 import 'package:inventory_app/part_details/widgets/restock_sheet.dart';
 import 'package:inventory_app/part_details/widgets/use_stock_sheet.dart';
@@ -45,6 +47,7 @@ class PartDetailsPage extends StatelessWidget {
         stockRepository: context.read<StockRepository>(),
         storageRepository: context.read<StorageRepository>(),
         partRepository: context.read<PartRepository>(),
+        imageRepository: context.read<ImageRepository>(),
       ),
       child: const PartDetailsView(),
     );
@@ -104,7 +107,9 @@ class PartDetailsView extends StatelessWidget {
                         ),
                       ],
                     ),
-                    const _Image(),
+                    _Image(
+                      onAddImagePressed: () => _showAddImageSheet(context),
+                    ),
                     _Details(part: part),
                     const SizedBox(height: 32),
                     InStockList(
@@ -152,6 +157,19 @@ class PartDetailsView extends StatelessWidget {
       ),
     );
   }
+}
+
+Future<void> _showAddImageSheet(BuildContext context) {
+  return showModalBottomSheet<void>(
+    useSafeArea: true,
+    showDragHandle: true,
+    // isScrollControlled: true,
+    context: context,
+    builder: (_) => BlocProvider.value(
+      value: context.read<PartDetailsBloc>(),
+      child: const ImagePickerSheet(),
+    ),
+  );
 }
 
 class _Details extends StatelessWidget {
@@ -246,43 +264,49 @@ class _DetailField extends StatelessWidget {
 }
 
 class _Image extends StatelessWidget {
-  const _Image();
+  const _Image({required this.onAddImagePressed});
+
+  final VoidCallback onAddImagePressed;
 
   @override
   Widget build(BuildContext context) {
     return BlocBuilder<PartDetailsBloc, PartDetailsState>(
       builder: (context, state) {
         final imagePath = state.part.imgPath;
-        return switch (imagePath) {
-          String() => _ImageFrame(
-            hideBorder: true,
-            child: CachedNetworkImage(
-              imageUrl: imagePath,
-              fit: BoxFit.fitWidth,
-              placeholder: (context, url) => Shimmer(
-                duration: const Duration(seconds: 4),
-                color: context.colors.onSurface,
-                child: Container(
-                  decoration: BoxDecoration(
-                    borderRadius: .circular(6),
-                    color: context.colors.surface,
+        return state.imageStatus == .loading
+            ? const _ImageFrame(
+                child: Center(child: CircularProgressIndicator.adaptive()),
+              )
+            : switch (imagePath) {
+                String() => _ImageFrame(
+                  hideBorder: true,
+                  child: CachedNetworkImage(
+                    imageUrl: imagePath,
+                    fit: BoxFit.fitWidth,
+                    placeholder: (context, url) => Shimmer(
+                      duration: const Duration(seconds: 4),
+                      color: context.colors.onSurface,
+                      child: Container(
+                        decoration: BoxDecoration(
+                          borderRadius: .circular(6),
+                          color: context.colors.surface,
+                        ),
+                      ),
+                    ),
+                    errorWidget: (context, url, error) =>
+                        const Center(child: Icon(Icons.image_not_supported)),
                   ),
                 ),
-              ),
-              errorWidget: (context, url, error) =>
-                  const Center(child: Icon(Icons.image_not_supported)),
-            ),
-          ),
-          null => _ImageFrame(
-            child: Center(
-              child: TextButton.icon(
-                icon: const Icon(Icons.add),
-                onPressed: () {},
-                label: const Text('Add image'),
-              ),
-            ),
-          ),
-        };
+                null => _ImageFrame(
+                  child: Center(
+                    child: TextButton.icon(
+                      icon: const Icon(Icons.add),
+                      onPressed: onAddImagePressed,
+                      label: const Text('Add image'),
+                    ),
+                  ),
+                ),
+              };
       },
     );
   }

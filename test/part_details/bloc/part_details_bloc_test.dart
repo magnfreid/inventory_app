@@ -146,12 +146,12 @@ void main() {
         isA<PartDetailsState>().having(
           (s) => s.saveStatus,
           'saveStatus',
-          PartDetailsSaveStatus.loading,
+          PartDetailsStatus.loading,
         ),
         isA<PartDetailsState>().having(
           (s) => s.saveStatus,
           'saveStatus',
-          PartDetailsSaveStatus.done,
+          PartDetailsStatus.success,
         ),
       ],
     );
@@ -185,14 +185,14 @@ void main() {
             .having(
               (s) => s.saveStatus,
               'saveStatus',
-              PartDetailsSaveStatus.loading,
+              PartDetailsStatus.loading,
             )
             .having((s) => s.error, 'error', isNull),
         isA<PartDetailsState>()
             .having(
               (s) => s.saveStatus,
               'saveStatus',
-              PartDetailsSaveStatus.done,
+              PartDetailsStatus.success,
             )
             .having((s) => s.error, 'error', error),
       ],
@@ -231,12 +231,12 @@ void main() {
         isA<PartDetailsState>().having(
           (s) => s.saveStatus,
           'saveStatus',
-          PartDetailsSaveStatus.loading,
+          PartDetailsStatus.loading,
         ),
         isA<PartDetailsState>().having(
           (s) => s.saveStatus,
           'saveStatus',
-          PartDetailsSaveStatus.done,
+          PartDetailsStatus.success,
         ),
       ],
     );
@@ -275,13 +275,13 @@ void main() {
         isA<PartDetailsState>().having(
           (s) => s.saveStatus,
           'saveStatus',
-          PartDetailsSaveStatus.loading,
+          PartDetailsStatus.loading,
         ),
         isA<PartDetailsState>()
             .having(
               (s) => s.saveStatus,
               'saveStatus',
-              PartDetailsSaveStatus.done,
+              PartDetailsStatus.success,
             )
             .having((s) => s.error, 'error', error),
       ],

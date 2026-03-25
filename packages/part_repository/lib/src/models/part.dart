@@ -72,4 +72,30 @@ class Part {
   final String? description;
 
   final String? imgPath;
+
+  Part copyWith({
+    String? id,
+    String? name,
+    String? detailNumber,
+    double? price,
+    bool? isRecycled,
+    String? brandTagId,
+    String? categoryTagId,
+    List<String>? generalTagIds,
+    String? description,
+    String? imgPath,
+  }) {
+    return Part(
+      id: id ?? this.id,
+      name: name ?? this.name,
+      detailNumber: detailNumber ?? this.detailNumber,
+      price: price ?? this.price,
+      isRecycled: isRecycled ?? this.isRecycled,
+      brandTagId: brandTagId ?? this.brandTagId,
+      categoryTagId: categoryTagId ?? this.categoryTagId,
+      generalTagIds: generalTagIds ?? this.generalTagIds,
+      description: description ?? this.description,
+      imgPath: imgPath ?? this.imgPath,
+    );
+  }
 }

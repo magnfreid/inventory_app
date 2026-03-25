@@ -1,5 +1,6 @@
 import 'package:inventory_app/tags/models/tag_presentation.dart';
 import 'package:inventory_app/use_cases/part_presentation.dart/models/stock_presentation.dart';
+import 'package:part_repository/part_repository.dart';
 
 class PartPresentation {
   PartPresentation({
@@ -27,6 +28,19 @@ class PartPresentation {
   final String? description;
   final List<StockPresentation> stock;
   final String? imgPath;
+
+  Part toDomainModel() => Part(
+    id: partId,
+    name: name,
+    detailNumber: detailNumber,
+    price: price,
+    isRecycled: isRecycled,
+    brandTagId: brandTag?.id,
+    categoryTagId: categoryTag?.id,
+    generalTagIds: generalTags.map((tag) => tag.id).toList(),
+    description: description,
+    imgPath: imgPath,
+  );
 
   int get totalQuantity =>
       stock.fold(0, (sum, element) => sum + element.quantity);

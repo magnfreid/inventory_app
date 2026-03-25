@@ -55,8 +55,8 @@ class _StorageSelector extends StatelessWidget {
       listeners: [
         BlocListener<PartDetailsBloc, PartDetailsState>(
           listenWhen: (previous, current) =>
-              previous.saveStatus != current.saveStatus &&
-              current.saveStatus == .done,
+              previous.stockStatus != current.stockStatus &&
+              current.stockStatus == .done,
           listener: (context, state) {
             Navigator.pop(context);
           },

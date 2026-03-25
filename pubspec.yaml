@@ -46,6 +46,8 @@ dependencies:
   firebase_authentication_service:
     path: packages/firebase_authentication_service
   firebase_core: ^4.4.0
+  firebase_image_remote:
+    path: packages/firebase_image_remote
   firebase_part_remote:
     path: packages/firebase_part_remote
   firebase_shared:
@@ -66,6 +68,7 @@ dependencies:
   freezed: ^3.2.3
   freezed_annotation: ^3.1.0
   hydrated_bloc: ^10.1.1
+  image_picker: ^1.2.1
   image_remote:
     path: packages/image_remote
   image_repository:

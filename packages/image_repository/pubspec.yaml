@@ -9,8 +9,10 @@ environment:
 dependencies:
   core_remote:
     path: ../core_remote
+  image: ^4.8.0
   image_remote:
     path: ../image_remote
+  path_provider: ^2.1.5
 
 dev_dependencies:
   mocktail: ^1.0.4

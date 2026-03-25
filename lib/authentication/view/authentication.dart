@@ -1,9 +1,11 @@
+import 'package:firebase_image_remote/firebase_image_remote.dart';
 import 'package:firebase_part_remote/firebase_part_remote.dart';
 import 'package:firebase_stock_remote/firebase_stock_remote.dart';
 import 'package:firebase_storage_remote/firebase_storage_remote.dart';
 import 'package:firebase_tag_remote/firebase_tag_remote.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:image_repository/image_repository.dart';
 import 'package:inventory_app/authenticated_app/view/authenticated_app.dart';
 import 'package:inventory_app/authentication/cubit/authentication_cubit.dart';
 import 'package:inventory_app/authentication/cubit/authentication_state.dart';
@@ -50,6 +52,12 @@ class Authentication extends StatelessWidget {
                 organizationId: orgId,
               );
               return TagRepository(remote: firebaseTagRemote);
+            },
+            imageRepositoryFactory: (orgId) {
+              final firebaseImageRemote = FirebaseImageRemote(
+                organizationId: orgId,
+              );
+              return ImageRepository(remote: firebaseImageRemote);
             },
           ),
         );

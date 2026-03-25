@@ -31,11 +31,6 @@ final class UseButtonPressed extends PartDetailsEvent {
   final String message;
 }
 
-final class ButtonSegmentPressed extends PartDetailsEvent {
-  const ButtonSegmentPressed({required this.content});
-  final PartDetailsContent content;
-}
-
 final class ConfirmDeleteButtonPressed extends PartDetailsEvent {
   const ConfirmDeleteButtonPressed({required this.partId});
   final String partId;
@@ -52,4 +47,9 @@ final class AddToStockButtonPressed extends PartDetailsEvent {
   final int amount;
   final String userId;
   final String? note;
+}
+
+final class ImageSelected extends PartDetailsEvent {
+  const ImageSelected({required this.deviceImgPath});
+  final String deviceImgPath;
 }
