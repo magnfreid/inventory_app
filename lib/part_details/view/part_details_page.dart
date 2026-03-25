@@ -293,8 +293,15 @@ class _Image extends StatelessWidget {
                         ),
                       ),
                     ),
-                    errorWidget: (context, url, error) =>
-                        const Center(child: Icon(Icons.image_not_supported)),
+                    errorWidget: (context, url, error) => const Center(
+                      child: Column(
+                        mainAxisSize: .min,
+                        children: [
+                          Icon(Icons.image_not_supported),
+                          Text('Image could not be loaded.'),
+                        ],
+                      ),
+                    ),
                   ),
                 ),
                 null => _ImageFrame(
