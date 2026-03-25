@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:inventory_app/l10n/l10n.dart';
 import 'package:inventory_app/part_details/bloc/part_details_bloc.dart';
+import 'package:inventory_app/part_details/bloc/part_details_state.dart';
 
 class DeletePartSheet extends StatelessWidget {
   const DeletePartSheet({
@@ -33,18 +34,22 @@ class DeletePartSheet extends StatelessWidget {
                 onPressed: () => Navigator.pop(context),
                 label: l10n.cancel,
               ),
-              AppButton(
-                width: .wrap,
-                onPressed: () => context.read<PartDetailsBloc>().add(
-                  ConfirmDeleteButtonPressed(partId: partId),
-                ),
-                label: l10n.delete,
-                buttonStyle: ElevatedButton.styleFrom(
-                  backgroundColor: context.colors.error,
-                ),
-                textStyle: context.text.bodyMedium?.copyWith(
-                  color: context.colors.onError,
-                ),
+              BlocBuilder<PartDetailsBloc, PartDetailsState>(
+                builder: (context, state) {
+                  return AppButton(
+                    isLoading: state.deleteStatus == .loading,
+                    onPressed: () => context.read<PartDetailsBloc>().add(
+                      ConfirmDeleteButtonPressed(partId: partId),
+                    ),
+                    label: l10n.delete,
+                    buttonStyle: ElevatedButton.styleFrom(
+                      backgroundColor: context.colors.error,
+                    ),
+                    textStyle: context.text.bodyMedium?.copyWith(
+                      color: context.colors.onError,
+                    ),
+                  );
+                },
               ),
             ],
           ),

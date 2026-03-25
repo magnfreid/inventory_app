@@ -358,8 +358,11 @@ class _PopUpMenu extends StatelessWidget {
         ),
         .delete => showModalBottomSheet<void>(
           context: context,
-          builder: (_) => DeletePartSheet(
-            partId: context.read<PartDetailsBloc>().state.part.partId,
+          builder: (_) => BlocProvider.value(
+            value: context.read<PartDetailsBloc>(),
+            child: DeletePartSheet(
+              partId: context.read<PartDetailsBloc>().state.part.partId,
+            ),
           ),
         ),
       },
