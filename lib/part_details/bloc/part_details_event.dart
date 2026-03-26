@@ -50,8 +50,8 @@ final class AddToStockButtonPressed extends PartDetailsEvent {
 }
 
 final class ImageSelected extends PartDetailsEvent {
-  const ImageSelected({required this.deviceImgPath});
-  final String deviceImgPath;
+  const ImageSelected({required this.file});
+  final XFile file;
 }
 
 final class ConfirmDeleteImageButtonPressed extends PartDetailsEvent {

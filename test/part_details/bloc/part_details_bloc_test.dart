@@ -406,7 +406,7 @@ void main() {
           watchSinglePartPresentation: watchSinglePartPresentation,
         );
       },
-      act: (bloc) => bloc.add(ImageSelected(deviceImgPath: deviceImagePath)),
+      act: (bloc) => bloc.add(ImageSelected(file: deviceImagePath)),
       expect: () => [
         isA<PartDetailsState>().having(
           (s) => s.imageStatus,
@@ -444,7 +444,7 @@ void main() {
         );
       },
       seed: () => PartDetailsState(part: part, error: error),
-      act: (bloc) => bloc.add(ImageSelected(deviceImgPath: deviceImagePath)),
+      act: (bloc) => bloc.add(ImageSelected(file: deviceImagePath)),
       expect: () => [
         isA<PartDetailsState>()
             .having(

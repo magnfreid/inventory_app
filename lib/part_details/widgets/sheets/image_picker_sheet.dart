@@ -1,3 +1,6 @@
+import 'dart:developer';
+import 'dart:typed_data';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:image_picker/image_picker.dart';
@@ -21,9 +24,9 @@ class ImagePickerSheet extends StatelessWidget {
             onTap: () => _pickImage(
               context: context,
               source: .gallery,
-              onImageSelected: (imgPath) {
+              onImageSelected: (file) {
                 context.read<PartDetailsBloc>().add(
-                  ImageSelected(deviceImgPath: imgPath),
+                  ImageSelected(file: file),
                 );
                 Navigator.pop(context);
               },
@@ -38,7 +41,7 @@ class ImagePickerSheet extends StatelessWidget {
               source: .camera,
               onImageSelected: (imgPath) {
                 context.read<PartDetailsBloc>().add(
-                  ImageSelected(deviceImgPath: imgPath),
+                  ImageSelected(file: imgPath),
                 );
                 Navigator.pop(context);
               },
@@ -52,14 +55,18 @@ class ImagePickerSheet extends StatelessWidget {
   Future<void> _pickImage({
     required BuildContext context,
     required ImageSource source,
-    required void Function(String imgPath) onImageSelected,
+    required void Function(XFile file) onImageSelected,
   }) async {
     final picker = ImagePicker();
+    log('BEFORE PICKING');
     final file = await picker.pickImage(
       source: source,
-      imageQuality: 80,
+      maxWidth: 1080,
+      maxHeight: 608,
     );
+    log('AFTER PICKING');
     if (file == null) return;
-    onImageSelected(file.path);
+
+    onImageSelected(file);
   }
 }

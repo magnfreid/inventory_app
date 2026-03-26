@@ -1,5 +1,3 @@
-import 'dart:developer';
-
 import 'package:app_ui/app_ui.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
@@ -22,8 +20,6 @@ class PartDetailsImage extends StatelessWidget {
           previous.imageStatusLoading != current.imageStatusLoading ||
           previous.part.imgPath != current.part.imgPath,
       builder: (context, state) {
-        log(state.part.imgPath.toString());
-        log(state.imageStatus.toString());
         final imagePath = state.part.imgPath;
         return state.imageStatus == .loading
             ? const _ImageFrame(

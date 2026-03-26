@@ -5,10 +5,13 @@ publish_to: none
 
 environment:
   sdk: ^3.11.0
+  flutter: ^3.41.1
 
 dependencies:
   core_remote:
     path: ../core_remote
+  flutter:
+    sdk: flutter
   image: ^4.8.0
   image_remote:
     path: ../image_remote

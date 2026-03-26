@@ -1,10 +1,14 @@
 import 'dart:async';
+import 'dart:developer';
 
 import 'package:bloc/bloc.dart';
 import 'package:bloc_concurrency/bloc_concurrency.dart';
 import 'package:core_remote/core_remote.dart';
+import 'package:flutter/foundation.dart';
+import 'package:image_picker/image_picker.dart';
 import 'package:image_repository/image_repository.dart';
 import 'package:inventory_app/part_details/bloc/part_details_state.dart';
+import 'package:inventory_app/part_details/process_image.dart';
 import 'package:inventory_app/shared/utilities/bloc_transformers.dart';
 import 'package:inventory_app/use_cases/part_presentation.dart/models/part_presentation.dart';
 import 'package:inventory_app/use_cases/part_presentation.dart/watch_single_part_presentation.dart';
@@ -158,10 +162,20 @@ class PartDetailsBloc extends Bloc<PartDetailsEvent, PartDetailsState> {
     Emitter<PartDetailsState> emit,
   ) async {
     emit(state.copyWith(imageStatus: .loading, error: null));
+    await Future<void>.delayed(Duration.zero);
+
     try {
+      log('READING BYTES...');
+      final bytes = await event.file.readAsBytes();
+      log('READING BYTES FINISHED!');
+
+      log('PROCESSING IMAGE...');
+      final processedImage = await compute(processImage, bytes);
+      log('IMAGE PROCESSED!');
+
       final downloadPath = await _imageRepository.uploadImage(
         partId: state.part.partId,
-        deviceImgPath: event.deviceImgPath,
+        bytes: processedImage,
       );
       final editedPart = await _partRepository.editPart(
         state.part.toDomainModel().copyWith(imgPath: downloadPath),
