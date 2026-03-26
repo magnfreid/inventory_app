@@ -300,7 +300,7 @@ void main() {
           watchSinglePartPresentation: watchSinglePartPresentation,
         );
       },
-      act: (bloc) => bloc.add(ConfirmDeleteButtonPressed(partId: partId)),
+      act: (bloc) => bloc.add(ConfirmDeletePartButtonPressed(partId: partId)),
       expect: () => [
         isA<PartDetailsState>().having(
           (s) => s.deleteStatus,
@@ -331,7 +331,7 @@ void main() {
         );
       },
       seed: () => PartDetailsState(part: part, error: error),
-      act: (bloc) => bloc.add(ConfirmDeleteButtonPressed(partId: partId)),
+      act: (bloc) => bloc.add(ConfirmDeletePartButtonPressed(partId: partId)),
       expect: () => [
         isA<PartDetailsState>()
             .having(

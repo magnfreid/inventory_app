@@ -39,7 +39,7 @@ class DeletePartSheet extends StatelessWidget {
                   return AppButton(
                     isLoading: state.deleteStatus == .loading,
                     onPressed: () => context.read<PartDetailsBloc>().add(
-                      ConfirmDeleteButtonPressed(partId: partId),
+                      ConfirmDeletePartButtonPressed(partId: partId),
                     ),
                     label: l10n.delete,
                     buttonStyle: ElevatedButton.styleFrom(

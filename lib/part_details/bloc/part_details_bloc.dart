@@ -1,5 +1,5 @@
 import 'dart:async';
-import 'dart:io';
+import 'dart:developer';
 
 import 'package:bloc/bloc.dart';
 import 'package:bloc_concurrency/bloc_concurrency.dart';
@@ -37,12 +37,16 @@ class PartDetailsBloc extends Bloc<PartDetailsEvent, PartDetailsState> {
       _onAddToStockButtonPressed,
       transformer: droppable(),
     );
-    on<ConfirmDeleteButtonPressed>(
-      _onConfirmDeleteButtonPressed,
+    on<ConfirmDeletePartButtonPressed>(
+      _onConfirmDeletePartButtonPressed,
       transformer: droppable(),
     );
     on<_OnStreamError>(_onStreamError);
     on<ImageSelected>(_onImageSelected);
+    on<ConfirmDeleteImageButtonPressed>(
+      _onConfirmDeleteImageButtonPressed,
+      transformer: droppable(),
+    );
 
     _storagesStreamSubscription = storageRepository.watchStorages().listen(
       (data) => add(_StoragesUpdated(storages: data)),
@@ -125,8 +129,8 @@ class PartDetailsBloc extends Bloc<PartDetailsEvent, PartDetailsState> {
     }
   }
 
-  FutureOr<void> _onConfirmDeleteButtonPressed(
-    ConfirmDeleteButtonPressed event,
+  FutureOr<void> _onConfirmDeletePartButtonPressed(
+    ConfirmDeletePartButtonPressed event,
     Emitter<PartDetailsState> emit,
   ) async {
     emit(state.copyWith(deleteStatus: .loading, error: null));
@@ -163,6 +167,23 @@ class PartDetailsBloc extends Bloc<PartDetailsEvent, PartDetailsState> {
       await _partRepository.editPart(
         state.part.toDomainModel().copyWith(imgPath: downloadPath),
       );
+      emit(state.copyWith(imageStatus: .done));
+    } on Exception catch (e) {
+      emit(state.copyWith(imageStatus: .done, error: e));
+    }
+  }
+
+  FutureOr<void> _onConfirmDeleteImageButtonPressed(
+    ConfirmDeleteImageButtonPressed event,
+    Emitter<PartDetailsState> emit,
+  ) async {
+    emit(state.copyWith(imageStatus: .loading, error: null));
+    try {
+      final partDomainModel = event.part.toDomainModel();
+      final updatedPart = partDomainModel.copyWith(imgPath: null);
+      log('Updated part imgPath: ${updatedPart.imgPath}');
+      //TODO(magnfreid): Add deleteImage call here!!!
+      await _partRepository.editPart(updatedPart);
       emit(state.copyWith(imageStatus: .done));
     } on Exception catch (e) {
       emit(state.copyWith(imageStatus: .done, error: e));

@@ -1,20 +1,25 @@
+import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:part_remote/part_remote.dart';
+part 'part.freezed.dart';
 
 /// Domain model representing a [Part] in the system.
-class Part {
+@freezed
+abstract class Part with _$Part {
   /// Creates a [Part] instance.
-  Part({
-    required this.id,
-    required this.name,
-    required this.detailNumber,
-    required this.price,
-    required this.isRecycled,
-    required this.brandTagId,
-    required this.categoryTagId,
-    required this.generalTagIds,
-    required this.description,
-    required this.imgPath,
-  });
+  const factory Part({
+    required String? id,
+    required String name,
+    required String detailNumber,
+    required double price,
+    required bool isRecycled,
+    required List<String> generalTagIds,
+    required String? brandTagId,
+    required String? categoryTagId,
+    required String? description,
+    required String? imgPath,
+  }) = _Part;
+
+  const Part._();
 
   /// Creates a [Part] from a [PartDto].
   factory Part.fromDto(PartDto dto) => Part(
@@ -43,59 +48,4 @@ class Part {
     generalTagIds: generalTagIds,
     imgPath: imgPath,
   );
-
-  /// Unique identifier of the part.
-  final String? id;
-
-  /// Name of the part.
-  final String name;
-
-  /// Detail or catalog number of the part.
-  final String detailNumber;
-
-  /// Price of the part.
-  final double price;
-
-  /// Indicates if the part is recycled.
-  final bool isRecycled;
-
-  /// Optional brand tag ID associated with the part.
-  final String? brandTagId;
-
-  /// Optional category tag ID associated with the part.
-  final String? categoryTagId;
-
-  /// List of IDs for general tags associated with the part.
-  final List<String> generalTagIds;
-
-  /// Optional description of the part.
-  final String? description;
-
-  final String? imgPath;
-
-  Part copyWith({
-    String? id,
-    String? name,
-    String? detailNumber,
-    double? price,
-    bool? isRecycled,
-    String? brandTagId,
-    String? categoryTagId,
-    List<String>? generalTagIds,
-    String? description,
-    String? imgPath,
-  }) {
-    return Part(
-      id: id ?? this.id,
-      name: name ?? this.name,
-      detailNumber: detailNumber ?? this.detailNumber,
-      price: price ?? this.price,
-      isRecycled: isRecycled ?? this.isRecycled,
-      brandTagId: brandTagId ?? this.brandTagId,
-      categoryTagId: categoryTagId ?? this.categoryTagId,
-      generalTagIds: generalTagIds ?? this.generalTagIds,
-      description: description ?? this.description,
-      imgPath: imgPath ?? this.imgPath,
-    );
-  }
 }

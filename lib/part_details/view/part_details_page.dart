@@ -7,6 +7,7 @@ import 'package:intl/intl.dart';
 import 'package:inventory_app/l10n/l10n.dart';
 import 'package:inventory_app/part_details/bloc/part_details_bloc.dart';
 import 'package:inventory_app/part_details/bloc/part_details_state.dart';
+import 'package:inventory_app/part_details/widgets/delete_image_sheet.dart';
 import 'package:inventory_app/part_details/widgets/delete_part_sheet.dart';
 import 'package:inventory_app/part_details/widgets/image_picker_sheet.dart';
 import 'package:inventory_app/part_details/widgets/in_stock_list.dart';
@@ -24,7 +25,7 @@ import 'package:shimmer_animation/shimmer_animation.dart';
 import 'package:stock_repository/stock_repository.dart';
 import 'package:storage_repository/storage_repository.dart';
 
-enum _MenuAction { edit, delete }
+enum _MenuAction { edit, deletePart, deleteImage }
 
 class PartDetailsPage extends StatelessWidget {
   const PartDetailsPage({required this.initialPart, super.key});
@@ -348,7 +349,7 @@ class _PopUpMenu extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final l10n = context.l10n;
-    return PopupMenuButton(
+    return PopupMenuButton<_MenuAction>(
       onSelected: (value) => switch (value) {
         .edit => Navigator.push(
           context,
@@ -356,12 +357,21 @@ class _PopUpMenu extends StatelessWidget {
             part: context.read<PartDetailsBloc>().state.part,
           ),
         ),
-        .delete => showModalBottomSheet<void>(
+        .deletePart => showModalBottomSheet<void>(
           context: context,
           builder: (_) => BlocProvider.value(
             value: context.read<PartDetailsBloc>(),
             child: DeletePartSheet(
               partId: context.read<PartDetailsBloc>().state.part.partId,
+            ),
+          ),
+        ),
+        _MenuAction.deleteImage => showModalBottomSheet<void>(
+          context: context,
+          builder: (_) => BlocProvider.value(
+            value: context.read<PartDetailsBloc>(),
+            child: DeleteImageSheet(
+              part: context.read<PartDetailsBloc>().state.part,
             ),
           ),
         ),
@@ -373,17 +383,29 @@ class _PopUpMenu extends StatelessWidget {
             child: Row(
               children: [
                 const Icon(Icons.edit),
-                const SizedBox(width: 8),
+                const SizedBox(width: 16),
                 Text(l10n.edit),
               ],
             ),
           ),
-          PopupMenuItem(
-            value: _MenuAction.delete,
+          const PopupMenuItem(
+            value: _MenuAction.deleteImage,
             child: Row(
               children: [
-                Icon(Icons.delete, color: context.colors.error),
-                const SizedBox(width: 8),
+                Icon(Icons.delete),
+                SizedBox(width: 16),
+                Text('Delete picture'),
+              ],
+            ),
+          ),
+          const PopupMenuDivider(),
+
+          PopupMenuItem(
+            value: _MenuAction.deletePart,
+            child: Row(
+              children: [
+                Icon(Icons.block, color: context.colors.error),
+                const SizedBox(width: 16),
                 Text(
                   l10n.delete,
                   style: TextStyle(color: context.colors.error),

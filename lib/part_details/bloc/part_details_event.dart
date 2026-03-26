@@ -31,8 +31,8 @@ final class UseButtonPressed extends PartDetailsEvent {
   final String message;
 }
 
-final class ConfirmDeleteButtonPressed extends PartDetailsEvent {
-  const ConfirmDeleteButtonPressed({required this.partId});
+final class ConfirmDeletePartButtonPressed extends PartDetailsEvent {
+  const ConfirmDeletePartButtonPressed({required this.partId});
   final String partId;
 }
 
@@ -52,4 +52,9 @@ final class AddToStockButtonPressed extends PartDetailsEvent {
 final class ImageSelected extends PartDetailsEvent {
   const ImageSelected({required this.deviceImgPath});
   final String deviceImgPath;
+}
+
+final class ConfirmDeleteImageButtonPressed extends PartDetailsEvent {
+  const ConfirmDeleteImageButtonPressed({required this.part});
+  final PartPresentation part;
 }
