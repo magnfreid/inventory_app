@@ -1,9 +1,7 @@
-import 'dart:developer';
 import 'dart:io';
+import 'package:firebase_shared/firebase_shared.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:image_remote/image_remote.dart';
-
-//TODO(magnfreid): Error handling for file!
 
 /// Firebase implementation of [ImageRemote].
 class FirebaseImageRemote implements ImageRemote {
@@ -24,37 +22,32 @@ class FirebaseImageRemote implements ImageRemote {
     required File file,
   }) async {
     {
-      log('orgId -> $_organizationId');
-      final ref = _storage.ref(
-        'organizations/$_organizationId/parts/$partId.jpg',
-      );
-      log('ref -> $ref');
-      await ref.putFile(
-        file,
-        SettableMetadata(contentType: 'image/jpeg'),
-      );
-      final downloadUrl = await ref.getDownloadURL();
-      return downloadUrl;
+      try {
+        final ref = _storage.ref(
+          'organizations/$_organizationId/parts/$partId.jpg',
+        );
+        await ref.putFile(
+          file,
+          SettableMetadata(contentType: 'image/jpeg'),
+        );
+        final downloadUrl = await ref.getDownloadURL();
+        return downloadUrl;
+      } on FirebaseException catch (e) {
+        throw mapFirebaseException(e);
+      }
     }
   }
 
   @override
-  Future<void> deleteImage({
-    required String fileName,
-  }) async {
-    final ref = _storage.ref().child(
-      'organizations/$_organizationId/$fileName',
-    );
-    await ref.delete();
-  }
-
-  @override
-  Future<String> getImageUrl({
-    required String fileName,
-  }) async {
-    final ref = _storage.ref().child(
-      'organizations/$_organizationId/$fileName',
-    );
-    return ref.getDownloadURL();
+  Future<void> deleteImage({required String partId}) async {
+    if (partId.isEmpty) return;
+    try {
+      final ref = _storage.ref(
+        'organizations/$_organizationId/parts/$partId.jpg',
+      );
+      await ref.delete();
+    } on FirebaseException catch (e) {
+      throw mapFirebaseException(e);
+    }
   }
 }

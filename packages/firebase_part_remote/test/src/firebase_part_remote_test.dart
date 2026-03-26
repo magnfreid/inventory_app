@@ -14,8 +14,8 @@ void main() {
       organizationId: 'org1',
       firestore: fakeFirestore,
     );
-    fakePart = PartDto(
-      id: null,
+    fakePart = const PartDto(
+      id: '123',
       name: '',
       detailNumber: '',
       isRecycled: true,

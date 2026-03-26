@@ -20,6 +20,7 @@ void main() {
   late MockStockRepository stockRepository;
   late MockPartRepository partRepository;
   late MockTagRepository tagRepository;
+  late MockImageRepository imageRepository;
   late AuthenticatedUser authUser;
   late User user;
 
@@ -29,6 +30,7 @@ void main() {
     stockRepository = MockStockRepository();
     partRepository = MockPartRepository();
     tagRepository = MockTagRepository();
+    imageRepository = MockImageRepository();
     authUser = AuthenticatedUser(id: '123');
     user = User(
       id: '123',
@@ -57,6 +59,7 @@ void main() {
                 storageRepositoryFactory: (orgId) => storageRepository,
                 partRepositoryFactory: (orgId) => partRepository,
                 tagRepositoryFactory: (orgId) => tagRepository,
+                imageRepositoryFactory: (orgId) => imageRepository,
               ),
             ),
           ),
@@ -105,6 +108,7 @@ void main() {
                 storageRepositoryFactory: (orgId) => storageRepository,
                 partRepositoryFactory: (orgId) => partRepository,
                 tagRepositoryFactory: (orgId) => tagRepository,
+                imageRepositoryFactory: (orgId) => imageRepository,
               ),
             ),
           );

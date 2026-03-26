@@ -1,5 +1,4 @@
 import 'dart:async';
-import 'dart:developer';
 
 import 'package:bloc/bloc.dart';
 import 'package:bloc_concurrency/bloc_concurrency.dart';
@@ -114,7 +113,7 @@ class PartDetailsBloc extends Bloc<PartDetailsEvent, PartDetailsState> {
     AddToStockButtonPressed event,
     Emitter<PartDetailsState> emit,
   ) async {
-    emit(state.copyWith(stockStatus: .done, error: null));
+    emit(state.copyWith(stockStatus: .loading, error: null));
     try {
       await _stockRepository.restockStock(
         partId: state.part.partId,
@@ -181,9 +180,8 @@ class PartDetailsBloc extends Bloc<PartDetailsEvent, PartDetailsState> {
     try {
       final partDomainModel = event.part.toDomainModel();
       final updatedPart = partDomainModel.copyWith(imgPath: null);
-      log('Updated part imgPath: ${updatedPart.imgPath}');
-      //TODO(magnfreid): Add deleteImage call here!!!
       await _partRepository.editPart(updatedPart);
+      await _imageRepository.deleteImage(partId: event.part.partId);
       emit(state.copyWith(imageStatus: .done));
     } on Exception catch (e) {
       emit(state.copyWith(imageStatus: .done, error: e));
