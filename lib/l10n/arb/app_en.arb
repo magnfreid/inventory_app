@@ -220,9 +220,17 @@
 	"@category": {
 		"description": "General singular category text."
 	},
+	"ofText": "of",
+	"@ofText": {
+		"description": "General singular of text."
+	},
 	"select": "Select",
 	"@select": {
 		"description": "General singular select text."
+	},
+	"showing": "Showing",
+	"@showing": {
+		"description": "General singular showing text."
 	},
 	"storage": "Storage",
 	"@storage": {
@@ -332,7 +340,7 @@
 	"@remoteExceptionInvalidArgument": {
 		"description": "Message to show the user if an invalid input was used when for example increasing or decreasing stock."
 	},
-	"partsListEmpty": "No parts added yet.",
+	"partsListEmpty": "No parts to show.",
 	"@partsListEmpty": {
 		"description": "Message shown in the middle of the parts list when the list is empty."
 	},

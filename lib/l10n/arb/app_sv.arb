@@ -220,9 +220,17 @@
 	"@category": {
 		"description": "General singular category text."
 	},
+	"ofText": "av",
+	"@ofText": {
+		"description": "General singular of text."
+	},
 	"select": "Välj",
 	"@select": {
 		"description": "General singular select text."
+	},
+	"showing": "Visar",
+	"@showing": {
+		"description": "General singular showing text."
 	},
 	"storage": "Lager",
 	"@storage": {
@@ -332,7 +340,7 @@
 	"@remoteExceptionInvalidArgument": {
 		"description": "Message to show the user if an invalid input was used when for example increasing or decreasing stock."
 	},
-	"partsListEmpty": "Inga delar tillagda ännu.",
+	"partsListEmpty": "Inga delar att visa.",
 	"@partsListEmpty": {
 		"description": "Message shown in the middle of the parts list when the list is empty."
 	},
