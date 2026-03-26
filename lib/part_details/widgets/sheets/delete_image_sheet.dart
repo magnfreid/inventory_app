@@ -31,7 +31,7 @@ class DeleteImageSheet extends StatelessWidget {
           mainAxisSize: .min,
           children: [
             Text(
-              'Delete image?',
+              l10n.partDetailsDeleteImageSheetTitle,
               style: context.text.bodyLarge,
             ),
             Row(

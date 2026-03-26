@@ -1,33 +1,27 @@
+import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:inventory_app/tags/models/tag_presentation.dart';
 import 'package:inventory_app/use_cases/part_presentation.dart/models/stock_presentation.dart';
 import 'package:part_repository/part_repository.dart';
 
-class PartPresentation {
-  PartPresentation({
-    required this.partId,
-    required this.name,
-    required this.detailNumber,
-    required this.price,
-    required this.isRecycled,
-    this.stock = const [],
-    this.categoryTag,
-    this.brandTag,
-    this.generalTags = const [],
-    this.description,
-    this.imgPath,
-  });
+part 'part_presentation.freezed.dart';
 
-  final String partId;
-  final String name;
-  final String detailNumber;
-  final double price;
-  final bool isRecycled;
-  final TagPresentation? categoryTag;
-  final TagPresentation? brandTag;
-  final List<TagPresentation> generalTags;
-  final String? description;
-  final List<StockPresentation> stock;
-  final String? imgPath;
+@freezed
+abstract class PartPresentation with _$PartPresentation {
+  const factory PartPresentation({
+    required String partId,
+    required String name,
+    required String detailNumber,
+    required double price,
+    required bool isRecycled,
+    @Default([]) List<StockPresentation> stock,
+    TagPresentation? categoryTag,
+    TagPresentation? brandTag,
+    @Default([]) List<TagPresentation> generalTags,
+    String? description,
+    String? imgPath,
+  }) = _Part;
+
+  const PartPresentation._();
 
   Part toDomainModel() => Part(
     id: partId,

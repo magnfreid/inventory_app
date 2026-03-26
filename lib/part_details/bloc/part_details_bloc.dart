@@ -163,10 +163,15 @@ class PartDetailsBloc extends Bloc<PartDetailsEvent, PartDetailsState> {
         partId: state.part.partId,
         deviceImgPath: event.deviceImgPath,
       );
-      await _partRepository.editPart(
+      final editedPart = await _partRepository.editPart(
         state.part.toDomainModel().copyWith(imgPath: downloadPath),
       );
-      emit(state.copyWith(imageStatus: .done));
+      emit(
+        state.copyWith(
+          imageStatus: .done,
+          part: state.part.copyWith(imgPath: editedPart.imgPath),
+        ),
+      );
     } on Exception catch (e) {
       emit(state.copyWith(imageStatus: .done, error: e));
     }

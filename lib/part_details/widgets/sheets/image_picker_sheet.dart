@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:inventory_app/l10n/l10n.dart';
 import 'package:inventory_app/part_details/bloc/part_details_bloc.dart';
 
 class ImagePickerSheet extends StatelessWidget {
@@ -8,13 +9,14 @@ class ImagePickerSheet extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = context.l10n;
     return Padding(
       padding: const .fromLTRB(8, 0, 8, 50),
       child: Column(
         mainAxisSize: .min,
         children: [
           ListTile(
-            title: const Text('Choose from gallery'),
+            title: Text(l10n.imagePickerSheetChooseFromGallery),
             trailing: const Icon(Icons.photo),
             onTap: () => _pickImage(
               context: context,
@@ -27,8 +29,9 @@ class ImagePickerSheet extends StatelessWidget {
               },
             ),
           ),
+          const Divider(),
           ListTile(
-            title: const Text('Take photo'),
+            title: Text(l10n.imagePickerSheetTakePicture),
             trailing: const Icon(Icons.camera_alt),
             onTap: () => _pickImage(
               context: context,

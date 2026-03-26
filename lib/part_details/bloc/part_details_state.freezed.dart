@@ -49,7 +49,7 @@ $Res call({
 });
 
 
-
+$PartPresentationCopyWith<$Res> get part;
 
 }
 /// @nodoc
@@ -73,7 +73,16 @@ as List<Storage>,error: freezed == error ? _self.error : error // ignore: cast_n
 as Exception?,
   ));
 }
-
+/// Create a copy of PartDetailsState
+/// with the given fields replaced by the non-null parameter values.
+@override
+@pragma('vm:prefer-inline')
+$PartPresentationCopyWith<$Res> get part {
+  
+  return $PartPresentationCopyWith<$Res>(_self.part, (value) {
+    return _then(_self.copyWith(part: value));
+  });
+}
 }
 
 
@@ -261,7 +270,7 @@ $Res call({
 });
 
 
-
+@override $PartPresentationCopyWith<$Res> get part;
 
 }
 /// @nodoc
@@ -286,7 +295,16 @@ as Exception?,
   ));
 }
 
-
+/// Create a copy of PartDetailsState
+/// with the given fields replaced by the non-null parameter values.
+@override
+@pragma('vm:prefer-inline')
+$PartPresentationCopyWith<$Res> get part {
+  
+  return $PartPresentationCopyWith<$Res>(_self.part, (value) {
+    return _then(_self.copyWith(part: value));
+  });
+}
 }
 
 // dart format on

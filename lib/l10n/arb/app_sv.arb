@@ -352,5 +352,29 @@
 	"restockSheetSelectStorageTitle": "Välj lager att fylla på:",
 	"@restockSheetSelectStorageTitle": {
 		"description": "Restock view title when selecting storage to restock."
+	},
+	"popUpMenuDeleteImage": "Ta bort bild",
+	"@popUpMenuDeleteImage": {
+		"description": "Label for menu selection to delete a part's image."
+	},
+	"partDetailsImageNotLoaded": "Bilden kunde inte laddas.",
+	"@partDetailsImageNotLoaded": {
+		"description": "Message shown to user when a part's image could not be loaded."
+	},
+	"partDetailsAddImage": "Lägg till bild",
+	"@partDetailsAddImage": {
+		"description": "Label text for icon button to add an image to a part."
+	},
+	"partDetailsDeleteImageSheetTitle": "Är du säker på att du vill ta bort bilden?",
+	"@partDetailsDeleteImageSheetTitle": {
+		"description": "Title text for bottom sheet for delete image confirmation."
+	},
+	"imagePickerSheetChooseFromGallery": "Välj från galleri",
+	"@imagePickerSheetChooseFromGallery": {
+		"description": "Label text for option to select an image from device's gallery."
+	},
+	"imagePickerSheetTakePicture": "Ta bild",
+	"@imagePickerSheetTakePicture": {
+		"description": "Label text for option to select take a new picture."
 	}
 }

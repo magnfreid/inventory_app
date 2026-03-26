@@ -3,8 +3,8 @@ import 'package:inventory_app/l10n/l10n.dart';
 import 'package:inventory_app/use_cases/part_presentation.dart/models/part_presentation.dart';
 import 'package:inventory_app/use_cases/part_presentation.dart/models/stock_presentation.dart';
 
-class InStockList extends StatelessWidget {
-  const InStockList({
+class PartDetailsInStock extends StatelessWidget {
+  const PartDetailsInStock({
     required this.part,
     required this.onStockSelected,
     this.textStyle,

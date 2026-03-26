@@ -74,7 +74,6 @@ class InventoryFilterBottomSheet extends StatelessWidget {
                         ),
                         ...state.categoryTags.sortedByLabel().map(
                           (tag) => FilterChip(
-                            showCheckmark: false,
                             selected: state.filter.categoryFilters.contains(
                               tag.id,
                             ),
@@ -106,7 +105,6 @@ class InventoryFilterBottomSheet extends StatelessWidget {
                         ),
                         ...state.brandTags.sortedByLabel().map(
                           (tag) => FilterChip(
-                            showCheckmark: false,
                             label: Text(tag.label),
                             selected: filter.brandFilters.contains(tag.id),
                             onSelected: (selected) {
@@ -133,7 +131,6 @@ class InventoryFilterBottomSheet extends StatelessWidget {
                         ),
                         ...state.storages.sortedByName().map(
                           (storage) => FilterChip(
-                            showCheckmark: false,
                             label: Text(storage.name),
                             selected: filter.storageFilters.contains(
                               storage.id,
