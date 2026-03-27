@@ -26,7 +26,7 @@ void main() {
     partRepository = MockPartRepository();
     tagRepository = MockTagRepository();
     streamController = StreamController();
-    newPart = Part(
+    newPart = const Part(
       id: null,
       name: 'New',
       detailNumber: 'detailNumber',
@@ -36,8 +36,9 @@ void main() {
       categoryTagId: null,
       generalTagIds: [],
       description: null,
+      imgPath: 'imgPath',
     );
-    existingPart = Part(
+    existingPart = const Part(
       id: '123',
       name: 'Existing',
       detailNumber: 'detailNumber',
@@ -47,6 +48,7 @@ void main() {
       categoryTagId: null,
       generalTagIds: [],
       description: null,
+      imgPath: 'imgPath',
     );
 
     brandTag = Tag(id: '123', label: 'Brand', color: .amber, type: .brand);

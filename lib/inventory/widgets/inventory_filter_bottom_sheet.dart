@@ -45,20 +45,7 @@ class InventoryFilterBottomSheet extends StatelessWidget {
                         ),
                       ],
                     ),
-                    Row(
-                      mainAxisAlignment: .spaceBetween,
-                      children: [
-                        Text(l10n.inventoryShowEmptyStockText),
-                        ScaleTransition(
-                          scale: const AlwaysStoppedAnimation(0.8),
-                          child: Switch(
-                            value: state.filter.quantityFilter == .inStock,
-                            onChanged: (_) =>
-                                bloc.add(const HideEmptyStockSwitchPressed()),
-                          ),
-                        ),
-                      ],
-                    ),
+
                     Text(l10n.formFieldCategoryLabelText),
                     Wrap(
                       spacing: 8,
@@ -74,7 +61,6 @@ class InventoryFilterBottomSheet extends StatelessWidget {
                         ),
                         ...state.categoryTags.sortedByLabel().map(
                           (tag) => FilterChip(
-                            showCheckmark: false,
                             selected: state.filter.categoryFilters.contains(
                               tag.id,
                             ),
@@ -106,7 +92,6 @@ class InventoryFilterBottomSheet extends StatelessWidget {
                         ),
                         ...state.brandTags.sortedByLabel().map(
                           (tag) => FilterChip(
-                            showCheckmark: false,
                             label: Text(tag.label),
                             selected: filter.brandFilters.contains(tag.id),
                             onSelected: (selected) {
@@ -133,7 +118,6 @@ class InventoryFilterBottomSheet extends StatelessWidget {
                         ),
                         ...state.storages.sortedByName().map(
                           (storage) => FilterChip(
-                            showCheckmark: false,
                             label: Text(storage.name),
                             selected: filter.storageFilters.contains(
                               storage.id,

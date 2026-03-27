@@ -1,5 +1,4 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:firebase_part_remote/src/constants/constants.dart';
 import 'package:firebase_shared/firebase_shared.dart';
 import 'package:part_remote/part_remote.dart';
 

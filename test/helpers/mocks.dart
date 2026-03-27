@@ -2,6 +2,7 @@ import 'package:authentication_service/authentication_service.dart';
 import 'package:bloc_test/bloc_test.dart';
 import 'package:flutter/material.dart';
 import 'package:hydrated_bloc/hydrated_bloc.dart';
+import 'package:image_repository/image_repository.dart';
 import 'package:inventory_app/authenticated_app/cubit/user_cubit.dart';
 import 'package:inventory_app/authenticated_app/cubit/user_state.dart';
 import 'package:inventory_app/authentication/cubit/authentication_cubit.dart';
@@ -55,6 +56,8 @@ class MockWatchPartPresentations extends Mock
 
 class MockWatchSinglePartsPresentation extends Mock
     implements WatchSinglePartPresentation {}
+
+class MockImageRepository extends Mock implements ImageRepository {}
 
 //Bloc
 class MockAuthenticationCubit extends MockCubit<AuthenticationState>

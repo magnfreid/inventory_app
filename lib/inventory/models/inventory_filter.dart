@@ -6,6 +6,8 @@ enum QuantityFilter { all, inStock, outOfStock }
 
 enum SortByType { name, brand, category, quantity }
 
+//TODO(magnfreid): Make freezed
+
 @JsonSerializable()
 final class InventoryFilter {
   const InventoryFilter({

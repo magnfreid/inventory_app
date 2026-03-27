@@ -1,7 +1,9 @@
 import 'dart:async';
 
 import 'package:bloc_test/bloc_test.dart';
+import 'package:firebase_shared/firebase_shared.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:image_repository/image_repository.dart';
 import 'package:inventory_app/part_details/bloc/part_details_bloc.dart';
 import 'package:inventory_app/part_details/bloc/part_details_state.dart';
 import 'package:inventory_app/use_cases/part_presentation.dart/models/part_presentation.dart';
@@ -18,9 +20,12 @@ void main() {
   late StorageRepository storageRepository;
   late PartRepository partRepository;
   late WatchSinglePartPresentation watchSinglePartPresentation;
+  late ImageRepository imageRepository;
   late String partId;
   late String note;
   late String userId;
+  late String deviceImagePath;
+  late String downloadPath;
   late Storage storage;
   late PartPresentation part;
   late Exception error;
@@ -33,7 +38,10 @@ void main() {
     storageRepository = MockStorageRepository();
     partRepository = MockPartRepository();
     watchSinglePartPresentation = MockWatchSinglePartsPresentation();
+    imageRepository = MockImageRepository();
     partId = '123';
+    deviceImagePath = 'device/image/path';
+    downloadPath = 'download/path';
     storagesStream = StreamController();
     partStream = StreamController();
     storage = Storage(id: '123', name: 'Storage');
@@ -65,6 +73,23 @@ void main() {
     ).thenAnswer((_) => partStream.stream);
   });
 
+  setUpAll(() {
+    registerFallbackValue(
+      const Part(
+        id: 'id',
+        name: 'name',
+        detailNumber: 'detailNumber',
+        price: 10,
+        isRecycled: true,
+        generalTagIds: [],
+        brandTagId: null,
+        categoryTagId: null,
+        description: 'description',
+        imgPath: 'imgPath',
+      ),
+    );
+  });
+
   tearDown(() async {
     await partStream.close();
     await storagesStream.close();
@@ -76,6 +101,7 @@ void main() {
         stockRepository: stockRepository,
         storageRepository: storageRepository,
         partRepository: partRepository,
+        imageRepository: imageRepository,
         initialPart: part,
         watchSinglePartPresentation: watchSinglePartPresentation,
       );
@@ -89,6 +115,7 @@ void main() {
         stockRepository: stockRepository,
         storageRepository: storageRepository,
         partRepository: partRepository,
+        imageRepository: imageRepository,
         initialPart: part,
         watchSinglePartPresentation: watchSinglePartPresentation,
       ),
@@ -108,6 +135,7 @@ void main() {
         stockRepository: stockRepository,
         storageRepository: storageRepository,
         partRepository: partRepository,
+        imageRepository: imageRepository,
         initialPart: part,
         watchSinglePartPresentation: watchSinglePartPresentation,
       ),
@@ -135,6 +163,7 @@ void main() {
           stockRepository: stockRepository,
           storageRepository: storageRepository,
           partRepository: partRepository,
+          imageRepository: imageRepository,
           initialPart: part,
           watchSinglePartPresentation: watchSinglePartPresentation,
         );
@@ -144,14 +173,14 @@ void main() {
       ),
       expect: () => [
         isA<PartDetailsState>().having(
-          (s) => s.saveStatus,
-          'saveStatus',
-          PartDetailsSaveStatus.loading,
+          (s) => s.stockStatus,
+          'stockStatus',
+          PartDetailsStatus.loading,
         ),
         isA<PartDetailsState>().having(
-          (s) => s.saveStatus,
-          'saveStatus',
-          PartDetailsSaveStatus.done,
+          (s) => s.stockStatus,
+          'stockStatus',
+          PartDetailsStatus.done,
         ),
       ],
     );
@@ -172,6 +201,7 @@ void main() {
           stockRepository: stockRepository,
           storageRepository: storageRepository,
           partRepository: partRepository,
+          imageRepository: imageRepository,
           initialPart: part,
           watchSinglePartPresentation: watchSinglePartPresentation,
         );
@@ -183,16 +213,16 @@ void main() {
       expect: () => [
         isA<PartDetailsState>()
             .having(
-              (s) => s.saveStatus,
+              (s) => s.stockStatus,
               'saveStatus',
-              PartDetailsSaveStatus.loading,
+              PartDetailsStatus.loading,
             )
             .having((s) => s.error, 'error', isNull),
         isA<PartDetailsState>()
             .having(
-              (s) => s.saveStatus,
+              (s) => s.stockStatus,
               'saveStatus',
-              PartDetailsSaveStatus.done,
+              PartDetailsStatus.done,
             )
             .having((s) => s.error, 'error', error),
       ],
@@ -215,6 +245,7 @@ void main() {
           stockRepository: stockRepository,
           storageRepository: storageRepository,
           partRepository: partRepository,
+          imageRepository: imageRepository,
           initialPart: part,
           watchSinglePartPresentation: watchSinglePartPresentation,
         );
@@ -229,14 +260,14 @@ void main() {
       ),
       expect: () => [
         isA<PartDetailsState>().having(
-          (s) => s.saveStatus,
-          'saveStatus',
-          PartDetailsSaveStatus.loading,
+          (s) => s.stockStatus,
+          'stockStatus',
+          PartDetailsStatus.loading,
         ),
         isA<PartDetailsState>().having(
-          (s) => s.saveStatus,
-          'saveStatus',
-          PartDetailsSaveStatus.done,
+          (s) => s.stockStatus,
+          'stockStatus',
+          PartDetailsStatus.done,
         ),
       ],
     );
@@ -259,6 +290,7 @@ void main() {
           stockRepository: stockRepository,
           storageRepository: storageRepository,
           partRepository: partRepository,
+          imageRepository: imageRepository,
           initialPart: part,
           watchSinglePartPresentation: watchSinglePartPresentation,
         );
@@ -273,15 +305,15 @@ void main() {
       ),
       expect: () => [
         isA<PartDetailsState>().having(
-          (s) => s.saveStatus,
-          'saveStatus',
-          PartDetailsSaveStatus.loading,
+          (s) => s.stockStatus,
+          'stockStatus',
+          PartDetailsStatus.loading,
         ),
         isA<PartDetailsState>()
             .having(
-              (s) => s.saveStatus,
-              'saveStatus',
-              PartDetailsSaveStatus.done,
+              (s) => s.stockStatus,
+              'stockStatus',
+              PartDetailsStatus.done,
             )
             .having((s) => s.error, 'error', error),
       ],
@@ -296,21 +328,22 @@ void main() {
           stockRepository: stockRepository,
           storageRepository: storageRepository,
           partRepository: partRepository,
+          imageRepository: imageRepository,
           initialPart: part,
           watchSinglePartPresentation: watchSinglePartPresentation,
         );
       },
-      act: (bloc) => bloc.add(ConfirmDeleteButtonPressed(partId: partId)),
+      act: (bloc) => bloc.add(ConfirmDeletePartButtonPressed(partId: partId)),
       expect: () => [
         isA<PartDetailsState>().having(
           (s) => s.deleteStatus,
           'deleteStatus',
-          PartDetailsDeleteStatus.loading,
+          PartDetailsStatus.loading,
         ),
         isA<PartDetailsState>().having(
           (s) => s.deleteStatus,
           'deleteStatus',
-          PartDetailsDeleteStatus.done,
+          PartDetailsStatus.done,
         ),
       ],
     );
@@ -326,27 +359,183 @@ void main() {
           stockRepository: stockRepository,
           storageRepository: storageRepository,
           partRepository: partRepository,
+          imageRepository: imageRepository,
           initialPart: part,
           watchSinglePartPresentation: watchSinglePartPresentation,
         );
       },
       seed: () => PartDetailsState(part: part, error: error),
-      act: (bloc) => bloc.add(ConfirmDeleteButtonPressed(partId: partId)),
+      act: (bloc) => bloc.add(ConfirmDeletePartButtonPressed(partId: partId)),
       expect: () => [
         isA<PartDetailsState>()
             .having(
               (s) => s.deleteStatus,
               'deleteStatus',
-              PartDetailsDeleteStatus.loading,
+              PartDetailsStatus.loading,
             )
             .having((s) => s.error, 'error', isNull),
         isA<PartDetailsState>()
             .having(
               (s) => s.deleteStatus,
               'deleteStatus',
-              PartDetailsDeleteStatus.done,
+              PartDetailsStatus.done,
             )
             .having((s) => s.error, 'error', error),
+      ],
+    );
+
+    blocTest(
+      'emits imageStatus [loading, success] when ImageSelected is'
+      ' added and is successful',
+      build: () {
+        when(
+          () => imageRepository.uploadImage(
+            partId: partId,
+            deviceImgPath: deviceImagePath,
+          ),
+        ).thenAnswer((_) async => downloadPath);
+        when(
+          () => partRepository.editPart(any()),
+        ).thenAnswer((_) async => part.toDomainModel());
+        return PartDetailsBloc(
+          stockRepository: stockRepository,
+          storageRepository: storageRepository,
+          partRepository: partRepository,
+          imageRepository: imageRepository,
+          initialPart: part,
+          watchSinglePartPresentation: watchSinglePartPresentation,
+        );
+      },
+      act: (bloc) => bloc.add(ImageSelected(file: deviceImagePath)),
+      expect: () => [
+        isA<PartDetailsState>().having(
+          (s) => s.imageStatus,
+          'deleteStatus',
+          PartDetailsStatus.loading,
+        ),
+        isA<PartDetailsState>().having(
+          (s) => s.imageStatus,
+          'deleteStatus',
+          PartDetailsStatus.done,
+        ),
+      ],
+    );
+
+    blocTest(
+      'emits imageStatus [loading, done] and error when ImageSelected is'
+      ' added and fails',
+      build: () {
+        when(
+          () => imageRepository.uploadImage(
+            partId: partId,
+            deviceImgPath: deviceImagePath,
+          ),
+        ).thenThrow(const InvalidArgumentRemoteException());
+        when(
+          () => partRepository.editPart(any()),
+        ).thenAnswer((_) async => part.toDomainModel());
+        return PartDetailsBloc(
+          stockRepository: stockRepository,
+          storageRepository: storageRepository,
+          partRepository: partRepository,
+          imageRepository: imageRepository,
+          initialPart: part,
+          watchSinglePartPresentation: watchSinglePartPresentation,
+        );
+      },
+      seed: () => PartDetailsState(part: part, error: error),
+      act: (bloc) => bloc.add(ImageSelected(file: deviceImagePath)),
+      expect: () => [
+        isA<PartDetailsState>()
+            .having(
+              (s) => s.imageStatus,
+              'deleteStatus',
+              PartDetailsStatus.loading,
+            )
+            .having((s) => s.error, 'error', isNull),
+        isA<PartDetailsState>()
+            .having(
+              (s) => s.imageStatus,
+              'deleteStatus',
+              PartDetailsStatus.done,
+            )
+            .having((s) => s.error, 'error', isA<RemoteException>()),
+      ],
+    );
+
+    blocTest(
+      'emits imageStatus [loading, success] when '
+      'ConfirmDeleteImageButtonPressed is added and is successful',
+      build: () {
+        when(
+          () => imageRepository.deleteImage(partId: partId),
+        ).thenAnswer((_) async {});
+        when(
+          () => partRepository.editPart(any()),
+        ).thenAnswer((_) async => part.toDomainModel());
+        return PartDetailsBloc(
+          stockRepository: stockRepository,
+          storageRepository: storageRepository,
+          partRepository: partRepository,
+          imageRepository: imageRepository,
+          initialPart: part,
+          watchSinglePartPresentation: watchSinglePartPresentation,
+        );
+      },
+      seed: () => PartDetailsState(part: part, error: error),
+      act: (bloc) => bloc.add(ConfirmDeleteImageButtonPressed(part: part)),
+      expect: () => [
+        isA<PartDetailsState>()
+            .having(
+              (s) => s.imageStatus,
+              'deleteStatus',
+              PartDetailsStatus.loading,
+            )
+            .having((s) => s.error, 'error', isNull),
+        isA<PartDetailsState>().having(
+          (s) => s.imageStatus,
+          'deleteStatus',
+          PartDetailsStatus.done,
+        ),
+      ],
+    );
+
+    blocTest(
+      'emits imageStatus [loading, done] and error when '
+      'ConfirmDeleteImageButtonPressed is added and fails',
+      build: () {
+        when(
+          () => imageRepository.deleteImage(partId: partId),
+        ).thenThrow(const InvalidArgumentRemoteException());
+        when(
+          () => partRepository.editPart(any()),
+        ).thenAnswer((_) async => part.toDomainModel());
+        return PartDetailsBloc(
+          stockRepository: stockRepository,
+          storageRepository: storageRepository,
+          partRepository: partRepository,
+          imageRepository: imageRepository,
+          initialPart: part,
+          watchSinglePartPresentation: watchSinglePartPresentation,
+        );
+      },
+      seed: () => PartDetailsState(part: part, error: error),
+      act: (bloc) => bloc.add(ConfirmDeleteImageButtonPressed(part: part)),
+      expect: () => [
+        isA<PartDetailsState>()
+            .having(
+              (s) => s.imageStatus,
+              'deleteStatus',
+              PartDetailsStatus.loading,
+            )
+            .having((s) => s.error, 'error', isNull),
+        isA<PartDetailsState>()
+            .having(
+              (s) => s.imageStatus,
+              'deleteStatus',
+              PartDetailsStatus.done,
+            )
+            .having((s) => s.error, 'error', isA<RemoteException>()),
       ],
     );
   });

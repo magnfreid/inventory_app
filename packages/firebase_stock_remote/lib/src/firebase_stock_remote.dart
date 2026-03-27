@@ -1,6 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_shared/firebase_shared.dart';
-import 'package:firebase_stock_remote/src/constants/constants.dart';
 import 'package:stock_remote/stock_remote.dart';
 
 ///Implementation of a Firebase Firestore [StockRemote].

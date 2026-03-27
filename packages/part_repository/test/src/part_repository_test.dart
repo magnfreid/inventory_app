@@ -15,7 +15,7 @@ void main() {
     mockRemote = MockPartRemote();
     repository = PartRepository(remote: mockRemote);
 
-    dto = PartDto(
+    dto = const PartDto(
       id: 'abc',
       name: 'Test Part',
       detailNumber: '123',
@@ -25,6 +25,7 @@ void main() {
       description: '',
       brandTagId: '',
       generalTagIds: [],
+      imgPath: 'path',
     );
 
     domainPart = Part.fromDto(dto);
@@ -32,7 +33,7 @@ void main() {
 
   setUpAll(() {
     registerFallbackValue(
-      PartDto(
+      const PartDto(
         id: 'fallback',
         name: '',
         detailNumber: '',
@@ -42,6 +43,7 @@ void main() {
         description: '',
         brandTagId: '',
         generalTagIds: [],
+        imgPath: '',
       ),
     );
   });

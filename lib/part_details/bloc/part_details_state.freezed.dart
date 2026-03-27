@@ -14,7 +14,7 @@ T _$identity<T>(T value) => value;
 /// @nodoc
 mixin _$PartDetailsState {
 
- PartPresentation get part; PartDetailsContent get content; PartDetailsSaveStatus get saveStatus; PartDetailsDeleteStatus get deleteStatus; List<Storage> get storages; Exception? get error;
+ PartPresentation get part; PartDetailsStatus get stockStatus; PartDetailsStatus get deleteStatus; PartDetailsStatus get imageStatus; List<Storage> get storages; Exception? get error;
 /// Create a copy of PartDetailsState
 /// with the given fields replaced by the non-null parameter values.
 @JsonKey(includeFromJson: false, includeToJson: false)
@@ -25,16 +25,16 @@ $PartDetailsStateCopyWith<PartDetailsState> get copyWith => _$PartDetailsStateCo
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is PartDetailsState&&(identical(other.part, part) || other.part == part)&&(identical(other.content, content) || other.content == content)&&(identical(other.saveStatus, saveStatus) || other.saveStatus == saveStatus)&&(identical(other.deleteStatus, deleteStatus) || other.deleteStatus == deleteStatus)&&const DeepCollectionEquality().equals(other.storages, storages)&&(identical(other.error, error) || other.error == error));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is PartDetailsState&&(identical(other.part, part) || other.part == part)&&(identical(other.stockStatus, stockStatus) || other.stockStatus == stockStatus)&&(identical(other.deleteStatus, deleteStatus) || other.deleteStatus == deleteStatus)&&(identical(other.imageStatus, imageStatus) || other.imageStatus == imageStatus)&&const DeepCollectionEquality().equals(other.storages, storages)&&(identical(other.error, error) || other.error == error));
 }
 
 
 @override
-int get hashCode => Object.hash(runtimeType,part,content,saveStatus,deleteStatus,const DeepCollectionEquality().hash(storages),error);
+int get hashCode => Object.hash(runtimeType,part,stockStatus,deleteStatus,imageStatus,const DeepCollectionEquality().hash(storages),error);
 
 @override
 String toString() {
-  return 'PartDetailsState(part: $part, content: $content, saveStatus: $saveStatus, deleteStatus: $deleteStatus, storages: $storages, error: $error)';
+  return 'PartDetailsState(part: $part, stockStatus: $stockStatus, deleteStatus: $deleteStatus, imageStatus: $imageStatus, storages: $storages, error: $error)';
 }
 
 
@@ -45,11 +45,11 @@ abstract mixin class $PartDetailsStateCopyWith<$Res>  {
   factory $PartDetailsStateCopyWith(PartDetailsState value, $Res Function(PartDetailsState) _then) = _$PartDetailsStateCopyWithImpl;
 @useResult
 $Res call({
- PartPresentation part, PartDetailsContent content, PartDetailsSaveStatus saveStatus, PartDetailsDeleteStatus deleteStatus, List<Storage> storages, Exception? error
+ PartPresentation part, PartDetailsStatus stockStatus, PartDetailsStatus deleteStatus, PartDetailsStatus imageStatus, List<Storage> storages, Exception? error
 });
 
 
-
+$PartPresentationCopyWith<$Res> get part;
 
 }
 /// @nodoc
@@ -62,18 +62,27 @@ class _$PartDetailsStateCopyWithImpl<$Res>
 
 /// Create a copy of PartDetailsState
 /// with the given fields replaced by the non-null parameter values.
-@pragma('vm:prefer-inline') @override $Res call({Object? part = null,Object? content = null,Object? saveStatus = null,Object? deleteStatus = null,Object? storages = null,Object? error = freezed,}) {
+@pragma('vm:prefer-inline') @override $Res call({Object? part = null,Object? stockStatus = null,Object? deleteStatus = null,Object? imageStatus = null,Object? storages = null,Object? error = freezed,}) {
   return _then(_self.copyWith(
 part: null == part ? _self.part : part // ignore: cast_nullable_to_non_nullable
-as PartPresentation,content: null == content ? _self.content : content // ignore: cast_nullable_to_non_nullable
-as PartDetailsContent,saveStatus: null == saveStatus ? _self.saveStatus : saveStatus // ignore: cast_nullable_to_non_nullable
-as PartDetailsSaveStatus,deleteStatus: null == deleteStatus ? _self.deleteStatus : deleteStatus // ignore: cast_nullable_to_non_nullable
-as PartDetailsDeleteStatus,storages: null == storages ? _self.storages : storages // ignore: cast_nullable_to_non_nullable
+as PartPresentation,stockStatus: null == stockStatus ? _self.stockStatus : stockStatus // ignore: cast_nullable_to_non_nullable
+as PartDetailsStatus,deleteStatus: null == deleteStatus ? _self.deleteStatus : deleteStatus // ignore: cast_nullable_to_non_nullable
+as PartDetailsStatus,imageStatus: null == imageStatus ? _self.imageStatus : imageStatus // ignore: cast_nullable_to_non_nullable
+as PartDetailsStatus,storages: null == storages ? _self.storages : storages // ignore: cast_nullable_to_non_nullable
 as List<Storage>,error: freezed == error ? _self.error : error // ignore: cast_nullable_to_non_nullable
 as Exception?,
   ));
 }
-
+/// Create a copy of PartDetailsState
+/// with the given fields replaced by the non-null parameter values.
+@override
+@pragma('vm:prefer-inline')
+$PartPresentationCopyWith<$Res> get part {
+  
+  return $PartPresentationCopyWith<$Res>(_self.part, (value) {
+    return _then(_self.copyWith(part: value));
+  });
+}
 }
 
 
@@ -155,10 +164,10 @@ return $default(_that);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function( PartPresentation part,  PartDetailsContent content,  PartDetailsSaveStatus saveStatus,  PartDetailsDeleteStatus deleteStatus,  List<Storage> storages,  Exception? error)?  $default,{required TResult orElse(),}) {final _that = this;
+@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function( PartPresentation part,  PartDetailsStatus stockStatus,  PartDetailsStatus deleteStatus,  PartDetailsStatus imageStatus,  List<Storage> storages,  Exception? error)?  $default,{required TResult orElse(),}) {final _that = this;
 switch (_that) {
 case _PartDetailsState() when $default != null:
-return $default(_that.part,_that.content,_that.saveStatus,_that.deleteStatus,_that.storages,_that.error);case _:
+return $default(_that.part,_that.stockStatus,_that.deleteStatus,_that.imageStatus,_that.storages,_that.error);case _:
   return orElse();
 
 }
@@ -176,10 +185,10 @@ return $default(_that.part,_that.content,_that.saveStatus,_that.deleteStatus,_th
 /// }
 /// ```
 
-@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function( PartPresentation part,  PartDetailsContent content,  PartDetailsSaveStatus saveStatus,  PartDetailsDeleteStatus deleteStatus,  List<Storage> storages,  Exception? error)  $default,) {final _that = this;
+@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function( PartPresentation part,  PartDetailsStatus stockStatus,  PartDetailsStatus deleteStatus,  PartDetailsStatus imageStatus,  List<Storage> storages,  Exception? error)  $default,) {final _that = this;
 switch (_that) {
 case _PartDetailsState():
-return $default(_that.part,_that.content,_that.saveStatus,_that.deleteStatus,_that.storages,_that.error);case _:
+return $default(_that.part,_that.stockStatus,_that.deleteStatus,_that.imageStatus,_that.storages,_that.error);case _:
   throw StateError('Unexpected subclass');
 
 }
@@ -196,10 +205,10 @@ return $default(_that.part,_that.content,_that.saveStatus,_that.deleteStatus,_th
 /// }
 /// ```
 
-@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function( PartPresentation part,  PartDetailsContent content,  PartDetailsSaveStatus saveStatus,  PartDetailsDeleteStatus deleteStatus,  List<Storage> storages,  Exception? error)?  $default,) {final _that = this;
+@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function( PartPresentation part,  PartDetailsStatus stockStatus,  PartDetailsStatus deleteStatus,  PartDetailsStatus imageStatus,  List<Storage> storages,  Exception? error)?  $default,) {final _that = this;
 switch (_that) {
 case _PartDetailsState() when $default != null:
-return $default(_that.part,_that.content,_that.saveStatus,_that.deleteStatus,_that.storages,_that.error);case _:
+return $default(_that.part,_that.stockStatus,_that.deleteStatus,_that.imageStatus,_that.storages,_that.error);case _:
   return null;
 
 }
@@ -211,13 +220,13 @@ return $default(_that.part,_that.content,_that.saveStatus,_that.deleteStatus,_th
 
 
 class _PartDetailsState extends PartDetailsState {
-  const _PartDetailsState({required this.part, this.content = PartDetailsContent.details, this.saveStatus = PartDetailsSaveStatus.idle, this.deleteStatus = PartDetailsDeleteStatus.idle, final  List<Storage> storages = const [], this.error}): _storages = storages,super._();
+  const _PartDetailsState({required this.part, this.stockStatus = PartDetailsStatus.idle, this.deleteStatus = PartDetailsStatus.idle, this.imageStatus = PartDetailsStatus.idle, final  List<Storage> storages = const [], this.error}): _storages = storages,super._();
   
 
 @override final  PartPresentation part;
-@override@JsonKey() final  PartDetailsContent content;
-@override@JsonKey() final  PartDetailsSaveStatus saveStatus;
-@override@JsonKey() final  PartDetailsDeleteStatus deleteStatus;
+@override@JsonKey() final  PartDetailsStatus stockStatus;
+@override@JsonKey() final  PartDetailsStatus deleteStatus;
+@override@JsonKey() final  PartDetailsStatus imageStatus;
  final  List<Storage> _storages;
 @override@JsonKey() List<Storage> get storages {
   if (_storages is EqualUnmodifiableListView) return _storages;
@@ -237,16 +246,16 @@ _$PartDetailsStateCopyWith<_PartDetailsState> get copyWith => __$PartDetailsStat
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is _PartDetailsState&&(identical(other.part, part) || other.part == part)&&(identical(other.content, content) || other.content == content)&&(identical(other.saveStatus, saveStatus) || other.saveStatus == saveStatus)&&(identical(other.deleteStatus, deleteStatus) || other.deleteStatus == deleteStatus)&&const DeepCollectionEquality().equals(other._storages, _storages)&&(identical(other.error, error) || other.error == error));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is _PartDetailsState&&(identical(other.part, part) || other.part == part)&&(identical(other.stockStatus, stockStatus) || other.stockStatus == stockStatus)&&(identical(other.deleteStatus, deleteStatus) || other.deleteStatus == deleteStatus)&&(identical(other.imageStatus, imageStatus) || other.imageStatus == imageStatus)&&const DeepCollectionEquality().equals(other._storages, _storages)&&(identical(other.error, error) || other.error == error));
 }
 
 
 @override
-int get hashCode => Object.hash(runtimeType,part,content,saveStatus,deleteStatus,const DeepCollectionEquality().hash(_storages),error);
+int get hashCode => Object.hash(runtimeType,part,stockStatus,deleteStatus,imageStatus,const DeepCollectionEquality().hash(_storages),error);
 
 @override
 String toString() {
-  return 'PartDetailsState(part: $part, content: $content, saveStatus: $saveStatus, deleteStatus: $deleteStatus, storages: $storages, error: $error)';
+  return 'PartDetailsState(part: $part, stockStatus: $stockStatus, deleteStatus: $deleteStatus, imageStatus: $imageStatus, storages: $storages, error: $error)';
 }
 
 
@@ -257,11 +266,11 @@ abstract mixin class _$PartDetailsStateCopyWith<$Res> implements $PartDetailsSta
   factory _$PartDetailsStateCopyWith(_PartDetailsState value, $Res Function(_PartDetailsState) _then) = __$PartDetailsStateCopyWithImpl;
 @override @useResult
 $Res call({
- PartPresentation part, PartDetailsContent content, PartDetailsSaveStatus saveStatus, PartDetailsDeleteStatus deleteStatus, List<Storage> storages, Exception? error
+ PartPresentation part, PartDetailsStatus stockStatus, PartDetailsStatus deleteStatus, PartDetailsStatus imageStatus, List<Storage> storages, Exception? error
 });
 
 
-
+@override $PartPresentationCopyWith<$Res> get part;
 
 }
 /// @nodoc
@@ -274,19 +283,28 @@ class __$PartDetailsStateCopyWithImpl<$Res>
 
 /// Create a copy of PartDetailsState
 /// with the given fields replaced by the non-null parameter values.
-@override @pragma('vm:prefer-inline') $Res call({Object? part = null,Object? content = null,Object? saveStatus = null,Object? deleteStatus = null,Object? storages = null,Object? error = freezed,}) {
+@override @pragma('vm:prefer-inline') $Res call({Object? part = null,Object? stockStatus = null,Object? deleteStatus = null,Object? imageStatus = null,Object? storages = null,Object? error = freezed,}) {
   return _then(_PartDetailsState(
 part: null == part ? _self.part : part // ignore: cast_nullable_to_non_nullable
-as PartPresentation,content: null == content ? _self.content : content // ignore: cast_nullable_to_non_nullable
-as PartDetailsContent,saveStatus: null == saveStatus ? _self.saveStatus : saveStatus // ignore: cast_nullable_to_non_nullable
-as PartDetailsSaveStatus,deleteStatus: null == deleteStatus ? _self.deleteStatus : deleteStatus // ignore: cast_nullable_to_non_nullable
-as PartDetailsDeleteStatus,storages: null == storages ? _self._storages : storages // ignore: cast_nullable_to_non_nullable
+as PartPresentation,stockStatus: null == stockStatus ? _self.stockStatus : stockStatus // ignore: cast_nullable_to_non_nullable
+as PartDetailsStatus,deleteStatus: null == deleteStatus ? _self.deleteStatus : deleteStatus // ignore: cast_nullable_to_non_nullable
+as PartDetailsStatus,imageStatus: null == imageStatus ? _self.imageStatus : imageStatus // ignore: cast_nullable_to_non_nullable
+as PartDetailsStatus,storages: null == storages ? _self._storages : storages // ignore: cast_nullable_to_non_nullable
 as List<Storage>,error: freezed == error ? _self.error : error // ignore: cast_nullable_to_non_nullable
 as Exception?,
   ));
 }
 
-
+/// Create a copy of PartDetailsState
+/// with the given fields replaced by the non-null parameter values.
+@override
+@pragma('vm:prefer-inline')
+$PartPresentationCopyWith<$Res> get part {
+  
+  return $PartPresentationCopyWith<$Res>(_self.part, (value) {
+    return _then(_self.copyWith(part: value));
+  });
+}
 }
 
 // dart format on

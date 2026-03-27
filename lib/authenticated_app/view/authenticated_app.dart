@@ -1,6 +1,7 @@
 import 'package:authentication_service/authentication_service.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:image_repository/image_repository.dart';
 import 'package:inventory_app/authenticated_app/cubit/user_cubit.dart';
 import 'package:inventory_app/authenticated_app/cubit/user_state.dart';
 import 'package:inventory_app/inventory/view/inventory_page.dart';
@@ -20,6 +21,7 @@ class AuthenticatedApp extends StatelessWidget {
     required this.storageRepositoryFactory,
     required this.partRepositoryFactory,
     required this.tagRepositoryFactory,
+    required this.imageRepositoryFactory,
     super.key,
   });
 
@@ -29,6 +31,7 @@ class AuthenticatedApp extends StatelessWidget {
   final StorageRepository Function(String orgId) storageRepositoryFactory;
   final PartRepository Function(String orgId) partRepositoryFactory;
   final TagRepository Function(String orgId) tagRepositoryFactory;
+  final ImageRepository Function(String orgId) imageRepositoryFactory;
 
   @override
   Widget build(BuildContext context) {
@@ -72,6 +75,10 @@ class AuthenticatedApp extends StatelessWidget {
                   watchPartPresentations: context
                       .read<WatchPartPresentations>(),
                 ),
+              ),
+              RepositoryProvider(
+                create: (context) =>
+                    imageRepositoryFactory(currentUser.organizationId),
               ),
             ],
             child: Navigator(

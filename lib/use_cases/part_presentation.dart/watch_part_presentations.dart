@@ -77,6 +77,7 @@ class WatchPartPresentations {
                     : TagPresentation.fromDomainModel(categoryTag),
                 description: part.description,
                 stock: storageQuantities,
+                imgPath: part.imgPath,
               );
             }).toList();
           },

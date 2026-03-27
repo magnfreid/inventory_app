@@ -1,79 +1,49 @@
-import 'package:json_annotation/json_annotation.dart';
+import 'package:freezed_annotation/freezed_annotation.dart';
 
+part 'part_dto.freezed.dart';
 part 'part_dto.g.dart';
 
-@JsonSerializable()
-/// Data Transfer Object representing a `Part` in the system.
-class PartDto {
-  /// Creates a [PartDto] instance.
-  PartDto({
-    required this.id,
-    required this.name,
-    required this.detailNumber,
-    required this.isRecycled,
-    required this.price,
-    required this.categoryTagId,
-    required this.description,
-    required this.brandTagId,
-    required this.generalTagIds,
-  });
+/// Data Transfer Object (DTO) for Part entity.
+///
+/// Used for JSON serialization between the app and backend.
+@freezed
+abstract class PartDto with _$PartDto {
+  /// Creates a [PartDto].
+  const factory PartDto({
+    /// Part name
+    required String name,
 
-  /// Creates a [PartDto] from a JSON map.
+    /// Unique detail / part number
+    required String detailNumber,
+
+    /// Whether the part is made from recycled materials
+    required bool isRecycled,
+
+    /// Price of the part
+    required double price,
+
+    /// Optional category tag ID
+    required String? categoryTagId,
+
+    /// Optional brand tag ID
+    required String? brandTagId,
+
+    /// Optional part description
+    required String? description,
+
+    /// List of general tag IDs
+    required List<String> generalTagIds,
+
+    /// Optional image path / URL
+    required String? imgPath,
+
+    /// Optional unique ID (used when received from backend)
+    required String? id,
+  }) = _PartDto;
+
+  const PartDto._();
+
+  /// Creates [PartDto] from JSON map.
   factory PartDto.fromJson(Map<String, dynamic> json) =>
       _$PartDtoFromJson(json);
-
-  /// Converts this [PartDto] to a JSON map.
-  Map<String, dynamic> toJson() => _$PartDtoToJson(this);
-
-  /// Creates a copy of this [PartDto] with optional new values.
-  PartDto copyWith({
-    String? id,
-    String? name,
-    String? detailNumber,
-    bool? isRecycled,
-    double? price,
-    String? categoryTagId,
-    String? brandTagId,
-    List<String>? generalTagIds,
-    String? description,
-  }) {
-    return PartDto(
-      id: id ?? this.id,
-      name: name ?? this.name,
-      detailNumber: detailNumber ?? this.detailNumber,
-      isRecycled: isRecycled ?? this.isRecycled,
-      price: price ?? this.price,
-      categoryTagId: categoryTagId ?? this.categoryTagId,
-      brandTagId: brandTagId ?? this.brandTagId,
-      generalTagIds: generalTagIds ?? this.generalTagIds,
-      description: description ?? this.description,
-    );
-  }
-
-  /// Unique identifier of the part.
-  final String? id;
-
-  /// Name of the part.
-  final String name;
-
-  /// Detail or catalog number of the part.
-  final String detailNumber;
-
-  /// Indicates if the part is recycled.
-  final bool isRecycled;
-
-  /// Price of the part.
-  final double price;
-
-  /// Optional category tag ID associated with the part.
-  final String? categoryTagId;
-
-  /// Optional brand tag ID associated with the part.
-  final String? brandTagId;
-
-  /// Optional description of the part.
-  final String? description;
-
-  /// List of IDs for general tags associated with the part.
-  final List<String> generalTagIds;
 }

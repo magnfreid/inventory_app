@@ -1,3 +1,4 @@
+import 'package:app_ui/app_ui.dart';
 import 'package:core_remote/core_remote.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -87,6 +88,43 @@ class InventoryView extends StatelessWidget {
                           ),
                         ],
                       ),
+                    Padding(
+                      padding: const .symmetric(horizontal: 8),
+                      child: Row(
+                        mainAxisAlignment: .spaceBetween,
+                        children: [
+                          Row(
+                            spacing: 4,
+                            children: [
+                              Text('${l10n.showing}:'),
+                              Text(state.filteredParts.length.toString()),
+                              Text(
+                                '(${l10n.ofText} ${state.parts.length})',
+                                style: TextStyle(
+                                  color: context.colors.onSurfaceVariant,
+                                ),
+                              ),
+                            ],
+                          ),
+                          Row(
+                            children: [
+                              Text(l10n.inventoryShowEmptyStockText),
+                              ScaleTransition(
+                                scale: const AlwaysStoppedAnimation(0.6),
+                                child: Switch(
+                                  value:
+                                      state.filter.quantityFilter == .inStock,
+                                  onChanged: (_) =>
+                                      context.read<InventoryBloc>().add(
+                                        const HideEmptyStockSwitchPressed(),
+                                      ),
+                                ),
+                              ),
+                            ],
+                          ),
+                        ],
+                      ),
+                    ),
                     Expanded(
                       child: Skeletonizer(
                         enabled: state.isLoading,

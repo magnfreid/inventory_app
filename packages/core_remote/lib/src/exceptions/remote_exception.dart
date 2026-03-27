@@ -64,9 +64,6 @@ class UnknownRemoteException extends RemoteException {
 /// - invalid number formats
 /// - out-of-range values
 /// - missing required fields
-///
-/// Note: This differs from [AlreadyExistsException] and [NotFoundException],
-/// which relate to resource state rather than input validity.
 class InvalidArgumentRemoteException extends RemoteException {
   ///Creates an [InvalidArgumentRemoteException]
   const InvalidArgumentRemoteException();

@@ -252,6 +252,7 @@ class _PartEditorViewState extends State<PartEditorView> {
                                   categoryTagId: _selectedCategoryTag?.id,
                                   generalTagIds: [],
                                   description: _descriptionController.text,
+                                  imgPath: widget.part?.imgPath,
                                 ),
                               ),
                             )

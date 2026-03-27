@@ -1,9 +1,14 @@
 import 'dart:async';
+import 'dart:developer';
 
 import 'package:bloc/bloc.dart';
 import 'package:bloc_concurrency/bloc_concurrency.dart';
 import 'package:core_remote/core_remote.dart';
+import 'package:flutter/foundation.dart';
+import 'package:image_picker/image_picker.dart';
+import 'package:image_repository/image_repository.dart';
 import 'package:inventory_app/part_details/bloc/part_details_state.dart';
+import 'package:inventory_app/part_details/process_image.dart';
 import 'package:inventory_app/shared/utilities/bloc_transformers.dart';
 import 'package:inventory_app/use_cases/part_presentation.dart/models/part_presentation.dart';
 import 'package:inventory_app/use_cases/part_presentation.dart/watch_single_part_presentation.dart';
@@ -18,27 +23,33 @@ class PartDetailsBloc extends Bloc<PartDetailsEvent, PartDetailsState> {
     required StockRepository stockRepository,
     required StorageRepository storageRepository,
     required PartRepository partRepository,
+    required ImageRepository imageRepository,
     required PartPresentation initialPart,
     required WatchSinglePartPresentation watchSinglePartPresentation,
   }) : _stockRepository = stockRepository,
        _partRepository = partRepository,
+       _imageRepository = imageRepository,
        super(PartDetailsState(part: initialPart)) {
     on<_StoragesUpdated>(_onStoragesUpdated);
     on<_PartUpdated>(
       _onPartUpdated,
       transformer: debounceRestartable(const Duration(milliseconds: 500)),
     );
-    // on<ButtonSegmentPressed>(_onButtonSegmentPressed);
     on<UseButtonPressed>(_onUseButtonPressed, transformer: droppable());
     on<AddToStockButtonPressed>(
       _onAddToStockButtonPressed,
       transformer: droppable(),
     );
-    on<ConfirmDeleteButtonPressed>(
-      _onConfirmDeleteButtonPressed,
+    on<ConfirmDeletePartButtonPressed>(
+      _onConfirmDeletePartButtonPressed,
       transformer: droppable(),
     );
     on<_OnStreamError>(_onStreamError);
+    on<ImageSelected>(_onImageSelected);
+    on<ConfirmDeleteImageButtonPressed>(
+      _onConfirmDeleteImageButtonPressed,
+      transformer: droppable(),
+    );
 
     _storagesStreamSubscription = storageRepository.watchStorages().listen(
       (data) => add(_StoragesUpdated(storages: data)),
@@ -58,6 +69,7 @@ class PartDetailsBloc extends Bloc<PartDetailsEvent, PartDetailsState> {
 
   final StockRepository _stockRepository;
   final PartRepository _partRepository;
+  final ImageRepository _imageRepository;
 
   late final StreamSubscription<List<Storage>> _storagesStreamSubscription;
   late final StreamSubscription<PartPresentation?> _partStreamSubscription;
@@ -83,18 +95,11 @@ class PartDetailsBloc extends Bloc<PartDetailsEvent, PartDetailsState> {
     emit(state.copyWith(part: event.part));
   }
 
-  // FutureOr<void> _onButtonSegmentPressed(
-  //   ButtonSegmentPressed event,
-  //   Emitter<PartDetailsState> emit,
-  // ) {
-  //   emit(state.copyWith(content: event.content));
-  // }
-
   FutureOr<void> _onUseButtonPressed(
     UseButtonPressed event,
     Emitter<PartDetailsState> emit,
   ) async {
-    emit(state.copyWith(saveStatus: .loading, error: null));
+    emit(state.copyWith(stockStatus: .loading, error: null));
     try {
       await _stockRepository.useStock(
         partId: state.part.partId,
@@ -102,9 +107,9 @@ class PartDetailsBloc extends Bloc<PartDetailsEvent, PartDetailsState> {
         userId: event.userId,
         note: event.message,
       );
-      emit(state.copyWith(saveStatus: .done));
+      emit(state.copyWith(stockStatus: .done));
     } on Exception catch (e) {
-      emit(state.copyWith(saveStatus: .done, error: e));
+      emit(state.copyWith(stockStatus: .done, error: e));
     }
   }
 
@@ -112,7 +117,7 @@ class PartDetailsBloc extends Bloc<PartDetailsEvent, PartDetailsState> {
     AddToStockButtonPressed event,
     Emitter<PartDetailsState> emit,
   ) async {
-    emit(state.copyWith(saveStatus: .loading, error: null));
+    emit(state.copyWith(stockStatus: .loading, error: null));
     try {
       await _stockRepository.restockStock(
         partId: state.part.partId,
@@ -121,14 +126,14 @@ class PartDetailsBloc extends Bloc<PartDetailsEvent, PartDetailsState> {
         userId: event.userId,
         note: event.note,
       );
-      emit(state.copyWith(saveStatus: .done));
+      emit(state.copyWith(stockStatus: .done));
     } on Exception catch (e) {
-      emit(state.copyWith(saveStatus: .done, error: e));
+      emit(state.copyWith(stockStatus: .done, error: e));
     }
   }
 
-  FutureOr<void> _onConfirmDeleteButtonPressed(
-    ConfirmDeleteButtonPressed event,
+  FutureOr<void> _onConfirmDeletePartButtonPressed(
+    ConfirmDeletePartButtonPressed event,
     Emitter<PartDetailsState> emit,
   ) async {
     emit(state.copyWith(deleteStatus: .loading, error: null));
@@ -150,5 +155,55 @@ class PartDetailsBloc extends Bloc<PartDetailsEvent, PartDetailsState> {
   void _handleStreamError(dynamic e) {
     final error = (e is RemoteException) ? e : const UnknownRemoteException();
     add(_OnStreamError(error: error));
+  }
+
+  FutureOr<void> _onImageSelected(
+    ImageSelected event,
+    Emitter<PartDetailsState> emit,
+  ) async {
+    emit(state.copyWith(imageStatus: .loading, error: null));
+    await Future<void>.delayed(Duration.zero);
+
+    try {
+      log('READING BYTES...');
+      final bytes = await event.file.readAsBytes();
+      log('READING BYTES FINISHED!');
+
+      log('PROCESSING IMAGE...');
+      final processedImage = await compute(processImage, bytes);
+      log('IMAGE PROCESSED!');
+
+      final downloadPath = await _imageRepository.uploadImage(
+        partId: state.part.partId,
+        bytes: processedImage,
+      );
+      final editedPart = await _partRepository.editPart(
+        state.part.toDomainModel().copyWith(imgPath: downloadPath),
+      );
+      emit(
+        state.copyWith(
+          imageStatus: .done,
+          part: state.part.copyWith(imgPath: editedPart.imgPath),
+        ),
+      );
+    } on Exception catch (e) {
+      emit(state.copyWith(imageStatus: .done, error: e));
+    }
+  }
+
+  FutureOr<void> _onConfirmDeleteImageButtonPressed(
+    ConfirmDeleteImageButtonPressed event,
+    Emitter<PartDetailsState> emit,
+  ) async {
+    emit(state.copyWith(imageStatus: .loading, error: null));
+    try {
+      final partDomainModel = event.part.toDomainModel();
+      final updatedPart = partDomainModel.copyWith(imgPath: null);
+      await _partRepository.editPart(updatedPart);
+      await _imageRepository.deleteImage(partId: event.part.partId);
+      emit(state.copyWith(imageStatus: .done));
+    } on Exception catch (e) {
+      emit(state.copyWith(imageStatus: .done, error: e));
+    }
   }
 }
