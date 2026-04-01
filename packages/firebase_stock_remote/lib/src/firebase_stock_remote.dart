@@ -73,6 +73,27 @@ class FirebaseStockRemote implements StockRemote {
   }
 
   @override
+  Future<List<TransactionDto>> fetchTransactionsForMonth(DateTime month) async {
+    final start = DateTime(month.year, month.month);
+    final end = DateTime(month.year, month.month + 1);
+    try {
+      final snapshot = await _transactionsCollection
+          .where(
+            'timestamp',
+            isGreaterThanOrEqualTo: start.toIso8601String(),
+          )
+          .where('timestamp', isLessThan: end.toIso8601String())
+          .orderBy('timestamp', descending: true)
+          .get();
+      return snapshot.docs
+          .map((doc) => doc.data().copyWith(id: doc.id))
+          .toList();
+    } on FirebaseException catch (e) {
+      throw mapFirebaseException(e);
+    }
+  }
+
+  @override
   Future<void> applyStockChange(TransactionDto transaction) async {
     if (transaction.amount == 0) throw invalidArgument;
     final stockDoc = _stockCollection.doc(

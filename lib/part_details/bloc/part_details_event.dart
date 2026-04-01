@@ -22,11 +22,16 @@ final class _StoragesUpdated extends PartDetailsEvent {
 final class UseButtonPressed extends PartDetailsEvent {
   const UseButtonPressed({
     required this.userId,
+    required this.userDisplayName,
     required this.storageId,
     required this.message,
   });
 
   final String userId;
+
+  /// Display name snapshotted onto the transaction (denormalized).
+  final String userDisplayName;
+
   final String storageId;
   final String message;
 }
@@ -41,11 +46,16 @@ final class AddToStockButtonPressed extends PartDetailsEvent {
     required this.storageId,
     required this.amount,
     required this.userId,
+    required this.userDisplayName,
     required this.note,
   });
   final String storageId;
   final int amount;
   final String userId;
+
+  /// Display name snapshotted onto the transaction (denormalized).
+  final String userDisplayName;
+
   final String? note;
 }
 

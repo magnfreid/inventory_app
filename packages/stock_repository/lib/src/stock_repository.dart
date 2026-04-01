@@ -1,7 +1,6 @@
 import 'package:core_remote/core_remote.dart';
 import 'package:rxdart/rxdart.dart';
 import 'package:stock_remote/stock_remote.dart';
-import 'package:stock_repository/src/models/transaction.dart';
 import 'package:stock_repository/stock_repository.dart';
 
 /// Repository responsible for managing [Stock] and [Transaction] domain models.
@@ -28,6 +27,18 @@ class StockRepository {
   /// domain models. The latest emitted value is replayed to new subscribers.
   Stream<List<Transaction>> watchTransactions() => _transactionsStream;
 
+  /// Fetches [Transaction]s for a single calendar month (not a live stream).
+  Future<List<Transaction>> fetchTransactionsForMonth(DateTime month) async {
+    try {
+      final dtos = await _remote.fetchTransactionsForMonth(month);
+      return dtos.map(Transaction.fromDto).toList();
+    } on RemoteException {
+      rethrow;
+    } on Exception catch (_) {
+      throw const UnknownRemoteException();
+    }
+  }
+
   /// Decreases the stock of a part by one unit.
   ///
   /// Creates a usage [Transaction] and applies it through the remote data
@@ -39,12 +50,24 @@ class StockRepository {
     required String partId,
     required String storageId,
     required String userId,
+    required String userDisplayName,
+    required String partName,
+    required String detailNumber,
+    required String storageName,
+    required double unitPriceSnapshot,
+    required bool isRecycledPart,
     required String note,
   }) async {
     final transaction = Transaction.use(
       partId: partId,
       storageId: storageId,
       userId: userId,
+      userDisplayName: userDisplayName,
+      partName: partName,
+      detailNumber: detailNumber,
+      storageName: storageName,
+      unitPriceSnapshot: unitPriceSnapshot,
+      isRecycledPart: isRecycledPart,
       amount: 1,
       note: note,
     );
@@ -68,6 +91,12 @@ class StockRepository {
     required String partId,
     required String storageId,
     required String userId,
+    required String userDisplayName,
+    required String partName,
+    required String detailNumber,
+    required String storageName,
+    required double unitPriceSnapshot,
+    required bool isRecycledPart,
     required int amount,
     String? note,
   }) async {
@@ -75,6 +104,12 @@ class StockRepository {
       partId: partId,
       storageId: storageId,
       userId: userId,
+      userDisplayName: userDisplayName,
+      partName: partName,
+      detailNumber: detailNumber,
+      storageName: storageName,
+      unitPriceSnapshot: unitPriceSnapshot,
+      isRecycledPart: isRecycledPart,
       amount: amount,
       note: note,
     );
@@ -100,6 +135,12 @@ class StockRepository {
     required String partId,
     required String storageId,
     required String userId,
+    required String userDisplayName,
+    required String partName,
+    required String detailNumber,
+    required String storageName,
+    required double unitPriceSnapshot,
+    required bool isRecycledPart,
     required int amount,
     required String note,
   }) async {
@@ -107,6 +148,12 @@ class StockRepository {
       partId: partId,
       storageId: storageId,
       userId: userId,
+      userDisplayName: userDisplayName,
+      partName: partName,
+      detailNumber: detailNumber,
+      storageName: storageName,
+      unitPriceSnapshot: unitPriceSnapshot,
+      isRecycledPart: isRecycledPart,
       amount: amount,
       note: note,
     );

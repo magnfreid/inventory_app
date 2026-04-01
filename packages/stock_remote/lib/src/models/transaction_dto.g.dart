@@ -16,6 +16,12 @@ TransactionDto _$TransactionDtoFromJson(Map<String, dynamic> json) =>
       type: $enumDecode(_$TransactionTypeEnumMap, json['type']),
       note: json['note'] as String?,
       timestamp: DateTime.parse(json['timestamp'] as String),
+      userDisplayName: json['userDisplayName'] as String? ?? '',
+      partName: json['partName'] as String? ?? '',
+      detailNumber: json['detailNumber'] as String? ?? '',
+      storageName: json['storageName'] as String? ?? '',
+      unitPriceSnapshot: (json['unitPriceSnapshot'] as num?)?.toDouble() ?? 0,
+      isRecycledPart: json['isRecycledPart'] as bool? ?? false,
     );
 
 Map<String, dynamic> _$TransactionDtoToJson(TransactionDto instance) =>
@@ -24,6 +30,12 @@ Map<String, dynamic> _$TransactionDtoToJson(TransactionDto instance) =>
       'partId': instance.partId,
       'storageId': instance.storageId,
       'userId': instance.userId,
+      'userDisplayName': instance.userDisplayName,
+      'partName': instance.partName,
+      'detailNumber': instance.detailNumber,
+      'storageName': instance.storageName,
+      'unitPriceSnapshot': instance.unitPriceSnapshot,
+      'isRecycledPart': instance.isRecycledPart,
       'amount': instance.amount,
       'type': _$TransactionTypeEnumMap[instance.type]!,
       'note': instance.note,

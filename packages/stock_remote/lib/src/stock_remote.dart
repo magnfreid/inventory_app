@@ -16,6 +16,10 @@ abstract interface class StockRemote {
   /// Each emission contains a list of [TransactionDto] objects.
   Stream<List<TransactionDto>> watchTransactions();
 
+  /// Loads transactions whose [TransactionDto.timestamp] falls in the given
+  /// calendar [month] (local date semantics; day-of-month is ignored).
+  Future<List<TransactionDto>> fetchTransactionsForMonth(DateTime month);
+
   /// Applies a stock change based on the given [transaction].
   ///
   /// The [TransactionDto.amount] determines how the stock is affected.

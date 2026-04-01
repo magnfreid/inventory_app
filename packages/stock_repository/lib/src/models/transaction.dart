@@ -4,21 +4,33 @@ import 'package:stock_remote/stock_remote.dart';
 class Transaction {
   /// Creates a [Transaction] from a [TransactionDto].
   factory Transaction.fromDto(TransactionDto dto) => Transaction._(
-    id: dto.id ?? '',
-    partId: dto.partId,
-    storageId: dto.storageId,
-    userId: dto.userId,
-    amount: dto.amount,
-    type: dto.type,
-    timestamp: dto.timestamp,
-    note: dto.note,
-  );
+        id: dto.id ?? '',
+        partId: dto.partId,
+        storageId: dto.storageId,
+        userId: dto.userId,
+        userDisplayName: dto.userDisplayName,
+        partName: dto.partName,
+        detailNumber: dto.detailNumber,
+        storageName: dto.storageName,
+        unitPriceSnapshot: dto.unitPriceSnapshot,
+        isRecycledPart: dto.isRecycledPart,
+        amount: dto.amount,
+        type: dto.type,
+        timestamp: dto.timestamp,
+        note: dto.note,
+      );
 
   Transaction._({
     required this.id,
     required this.partId,
     required this.storageId,
     required this.userId,
+    required this.userDisplayName,
+    required this.partName,
+    required this.detailNumber,
+    required this.storageName,
+    required this.unitPriceSnapshot,
+    required this.isRecycledPart,
     required this.amount,
     required this.type,
     required this.timestamp,
@@ -33,6 +45,12 @@ class Transaction {
     required String partId,
     required String storageId,
     required String userId,
+    required String userDisplayName,
+    required String partName,
+    required String detailNumber,
+    required String storageName,
+    required double unitPriceSnapshot,
+    required bool isRecycledPart,
     required int amount,
     required String note,
   }) {
@@ -42,6 +60,12 @@ class Transaction {
       partId: partId,
       storageId: storageId,
       userId: userId,
+      userDisplayName: userDisplayName,
+      partName: partName,
+      detailNumber: detailNumber,
+      storageName: storageName,
+      unitPriceSnapshot: unitPriceSnapshot,
+      isRecycledPart: isRecycledPart,
       amount: -amount,
       type: .use,
       note: note,
@@ -56,6 +80,12 @@ class Transaction {
     required String partId,
     required String storageId,
     required String userId,
+    required String userDisplayName,
+    required String partName,
+    required String detailNumber,
+    required String storageName,
+    required double unitPriceSnapshot,
+    required bool isRecycledPart,
     required int amount,
     String? note,
   }) {
@@ -65,6 +95,12 @@ class Transaction {
       partId: partId,
       storageId: storageId,
       userId: userId,
+      userDisplayName: userDisplayName,
+      partName: partName,
+      detailNumber: detailNumber,
+      storageName: storageName,
+      unitPriceSnapshot: unitPriceSnapshot,
+      isRecycledPart: isRecycledPart,
       amount: amount,
       type: .restock,
       timestamp: DateTime.now(),
@@ -79,6 +115,12 @@ class Transaction {
     required String partId,
     required String storageId,
     required String userId,
+    required String userDisplayName,
+    required String partName,
+    required String detailNumber,
+    required String storageName,
+    required double unitPriceSnapshot,
+    required bool isRecycledPart,
     required int amount,
     required String note,
   }) {
@@ -87,6 +129,12 @@ class Transaction {
       partId: partId,
       storageId: storageId,
       userId: userId,
+      userDisplayName: userDisplayName,
+      partName: partName,
+      detailNumber: detailNumber,
+      storageName: storageName,
+      unitPriceSnapshot: unitPriceSnapshot,
+      isRecycledPart: isRecycledPart,
       amount: amount,
       type: .adjustment,
       note: note,
@@ -106,6 +154,24 @@ class Transaction {
   /// Identifier of the user who performed the transaction.
   final String userId;
 
+  /// User display name snapshotted at write time.
+  final String userDisplayName;
+
+  /// Part name snapshotted at write time.
+  final String partName;
+
+  /// Part detail number snapshotted at write time.
+  final String detailNumber;
+
+  /// Storage name snapshotted at write time.
+  final String storageName;
+
+  /// Part unit price snapshotted at write time.
+  final double unitPriceSnapshot;
+
+  /// Whether the part was recycled at write time.
+  final bool isRecycledPart;
+
   /// The amount applied to the stock.
   ///
   /// Positive values increase stock, negative values decrease it.
@@ -122,13 +188,19 @@ class Transaction {
 
   /// Converts this [Transaction] into a [TransactionDto].
   TransactionDto toDto() => TransactionDto(
-    id: null,
-    partId: partId,
-    storageId: storageId,
-    userId: userId,
-    amount: amount,
-    type: type,
-    note: note,
-    timestamp: timestamp,
-  );
+        id: null,
+        partId: partId,
+        storageId: storageId,
+        userId: userId,
+        userDisplayName: userDisplayName,
+        partName: partName,
+        detailNumber: detailNumber,
+        storageName: storageName,
+        unitPriceSnapshot: unitPriceSnapshot,
+        isRecycledPart: isRecycledPart,
+        amount: amount,
+        type: type,
+        note: note,
+        timestamp: timestamp,
+      );
 }

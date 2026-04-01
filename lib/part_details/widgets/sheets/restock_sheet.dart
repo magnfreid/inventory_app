@@ -173,6 +173,10 @@ class _RestockCheckoutState extends State<_RestockCheckout> {
       loaded: (currentUser) => currentUser.id,
       orElse: () => null,
     );
+    final userDisplayName = context.read<UserCubit>().state.maybeWhen(
+      loaded: (currentUser) => currentUser.name,
+      orElse: () => '',
+    );
     final l10n = context.l10n;
     return Scaffold(
       backgroundColor: context.colors.surfaceContainerLow,
@@ -255,6 +259,8 @@ class _RestockCheckoutState extends State<_RestockCheckout> {
                                                     widget.storage.id ?? '',
                                                 amount: value,
                                                 userId: userId,
+                                                userDisplayName:
+                                                    userDisplayName,
                                                 note: null,
                                               ),
                                             )

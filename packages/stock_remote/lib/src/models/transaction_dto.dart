@@ -20,7 +20,8 @@ enum TransactionType {
 /// with external data sources such as Firebase.
 ///
 /// A transaction represents a single change to stock for a given [partId]
-/// and [storageId].
+/// and [storageId]. Denormalized display and pricing fields are snapshotted at
+/// write time so reads do not require joins or extra collection access.
 @JsonSerializable()
 class TransactionDto {
   /// Creates a new [TransactionDto].
@@ -36,6 +37,12 @@ class TransactionDto {
     required this.type,
     required this.note,
     required this.timestamp,
+    this.userDisplayName = '',
+    this.partName = '',
+    this.detailNumber = '',
+    this.storageName = '',
+    this.unitPriceSnapshot = 0,
+    this.isRecycledPart = false,
   });
 
   /// Creates a [TransactionDto] from a JSON map.
@@ -64,6 +71,30 @@ class TransactionDto {
   /// Identifier of the user who performed the transaction.
   final String userId;
 
+  /// Display name of the user at write time (denormalized).
+  @JsonKey(defaultValue: '')
+  final String userDisplayName;
+
+  /// Part name at write time (denormalized).
+  @JsonKey(defaultValue: '')
+  final String partName;
+
+  /// Part detail/article number at write time (denormalized).
+  @JsonKey(defaultValue: '')
+  final String detailNumber;
+
+  /// Storage location name at write time (denormalized).
+  @JsonKey(defaultValue: '')
+  final String storageName;
+
+  /// Part unit price at write time; does not change if catalog price changes.
+  @JsonKey(defaultValue: 0)
+  final double unitPriceSnapshot;
+
+  /// Whether the part was marked recycled at write time.
+  @JsonKey(defaultValue: false)
+  final bool isRecycledPart;
+
   /// The amount of stock change.
   ///
   /// Positive values increase stock, negative values decrease stock.
@@ -90,6 +121,12 @@ class TransactionDto {
     String? partId,
     String? storageId,
     String? userId,
+    String? userDisplayName,
+    String? partName,
+    String? detailNumber,
+    String? storageName,
+    double? unitPriceSnapshot,
+    bool? isRecycledPart,
     int? amount,
     TransactionType? type,
     String? note,
@@ -100,6 +137,12 @@ class TransactionDto {
       partId: partId ?? this.partId,
       storageId: storageId ?? this.storageId,
       userId: userId ?? this.userId,
+      userDisplayName: userDisplayName ?? this.userDisplayName,
+      partName: partName ?? this.partName,
+      detailNumber: detailNumber ?? this.detailNumber,
+      storageName: storageName ?? this.storageName,
+      unitPriceSnapshot: unitPriceSnapshot ?? this.unitPriceSnapshot,
+      isRecycledPart: isRecycledPart ?? this.isRecycledPart,
       amount: amount ?? this.amount,
       type: type ?? this.type,
       note: note ?? this.note,

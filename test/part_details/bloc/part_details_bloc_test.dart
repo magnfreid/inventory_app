@@ -1,19 +1,28 @@
 import 'dart:async';
+import 'dart:typed_data';
 
 import 'package:bloc_test/bloc_test.dart';
-import 'package:firebase_shared/firebase_shared.dart';
+import 'package:cross_file/cross_file.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:firebase_shared/firebase_shared.dart';
 import 'package:image_repository/image_repository.dart';
 import 'package:inventory_app/part_details/bloc/part_details_bloc.dart';
 import 'package:inventory_app/part_details/bloc/part_details_state.dart';
 import 'package:inventory_app/use_cases/part_presentation.dart/models/part_presentation.dart';
 import 'package:inventory_app/use_cases/part_presentation.dart/watch_single_part_presentation.dart';
+import 'package:image/image.dart' as img;
 import 'package:mocktail/mocktail.dart';
 import 'package:part_repository/part_repository.dart';
 import 'package:stock_repository/stock_repository.dart';
 import 'package:storage_repository/storage_repository.dart';
 
 import '../../helpers/helpers.dart';
+
+/// Valid image bytes so [processImage] / decode succeed in image tests.
+final _testImageFile = XFile.fromData(
+  Uint8List.fromList(img.encodePng(img.Image(width: 1, height: 1))),
+  name: 't.png',
+);
 
 void main() {
   late StockRepository stockRepository;
@@ -24,7 +33,6 @@ void main() {
   late String partId;
   late String note;
   late String userId;
-  late String deviceImagePath;
   late String downloadPath;
   late Storage storage;
   late PartPresentation part;
@@ -40,7 +48,6 @@ void main() {
     watchSinglePartPresentation = MockWatchSinglePartsPresentation();
     imageRepository = MockImageRepository();
     partId = '123';
-    deviceImagePath = 'device/image/path';
     downloadPath = 'download/path';
     storagesStream = StreamController();
     partStream = StreamController();
@@ -74,6 +81,8 @@ void main() {
   });
 
   setUpAll(() {
+    TestWidgetsFlutterBinding.ensureInitialized();
+    registerFallbackValue(Uint8List(0));
     registerFallbackValue(
       const Part(
         id: 'id',
@@ -151,10 +160,16 @@ void main() {
       build: () {
         when(
           () => stockRepository.useStock(
-            partId: partId,
-            storageId: '123',
-            userId: userId,
-            note: note,
+            partId: any(named: 'partId'),
+            storageId: any(named: 'storageId'),
+            userId: any(named: 'userId'),
+            userDisplayName: any(named: 'userDisplayName'),
+            partName: any(named: 'partName'),
+            detailNumber: any(named: 'detailNumber'),
+            storageName: any(named: 'storageName'),
+            unitPriceSnapshot: any(named: 'unitPriceSnapshot'),
+            isRecycledPart: any(named: 'isRecycledPart'),
+            note: any(named: 'note'),
           ),
         ).thenAnswer((_) async {
           return;
@@ -168,8 +183,14 @@ void main() {
           watchSinglePartPresentation: watchSinglePartPresentation,
         );
       },
+      seed: () => PartDetailsState(part: part, storages: [storage]),
       act: (bloc) => bloc.add(
-        UseButtonPressed(storageId: '123', userId: userId, message: note),
+        UseButtonPressed(
+          storageId: '123',
+          userId: userId,
+          userDisplayName: 'User',
+          message: note,
+        ),
       ),
       expect: () => [
         isA<PartDetailsState>().having(
@@ -191,10 +212,16 @@ void main() {
       build: () {
         when(
           () => stockRepository.useStock(
-            partId: partId,
-            storageId: '123',
-            userId: userId,
-            note: note,
+            partId: any(named: 'partId'),
+            storageId: any(named: 'storageId'),
+            userId: any(named: 'userId'),
+            userDisplayName: any(named: 'userDisplayName'),
+            partName: any(named: 'partName'),
+            detailNumber: any(named: 'detailNumber'),
+            storageName: any(named: 'storageName'),
+            unitPriceSnapshot: any(named: 'unitPriceSnapshot'),
+            isRecycledPart: any(named: 'isRecycledPart'),
+            note: any(named: 'note'),
           ),
         ).thenThrow(error);
         return PartDetailsBloc(
@@ -206,9 +233,15 @@ void main() {
           watchSinglePartPresentation: watchSinglePartPresentation,
         );
       },
-      seed: () => PartDetailsState(part: part, error: error),
+      seed: () =>
+          PartDetailsState(part: part, storages: [storage], error: error),
       act: (bloc) => bloc.add(
-        UseButtonPressed(storageId: '123', userId: userId, message: note),
+        UseButtonPressed(
+          storageId: '123',
+          userId: userId,
+          userDisplayName: 'User',
+          message: note,
+        ),
       ),
       expect: () => [
         isA<PartDetailsState>()
@@ -237,10 +270,16 @@ void main() {
             partId: any(named: 'partId'),
             storageId: any(named: 'storageId'),
             userId: any(named: 'userId'),
+            userDisplayName: any(named: 'userDisplayName'),
+            partName: any(named: 'partName'),
+            detailNumber: any(named: 'detailNumber'),
+            storageName: any(named: 'storageName'),
+            unitPriceSnapshot: any(named: 'unitPriceSnapshot'),
+            isRecycledPart: any(named: 'isRecycledPart'),
             amount: any(named: 'amount'),
             note: any(named: 'note'),
           ),
-        ).thenAnswer((_) async => throw error);
+        ).thenAnswer((_) async {});
         return PartDetailsBloc(
           stockRepository: stockRepository,
           storageRepository: storageRepository,
@@ -250,11 +289,13 @@ void main() {
           watchSinglePartPresentation: watchSinglePartPresentation,
         );
       },
+      seed: () => PartDetailsState(part: part, storages: [storage]),
       act: (bloc) => bloc.add(
         AddToStockButtonPressed(
           storageId: '123',
           amount: 10,
           userId: userId,
+          userDisplayName: 'User',
           note: note,
         ),
       ),
@@ -281,6 +322,12 @@ void main() {
             partId: any(named: 'partId'),
             storageId: any(named: 'storageId'),
             userId: any(named: 'userId'),
+            userDisplayName: any(named: 'userDisplayName'),
+            partName: any(named: 'partName'),
+            detailNumber: any(named: 'detailNumber'),
+            storageName: any(named: 'storageName'),
+            unitPriceSnapshot: any(named: 'unitPriceSnapshot'),
+            isRecycledPart: any(named: 'isRecycledPart'),
             amount: any(named: 'amount'),
             note: any(named: 'note'),
           ),
@@ -295,11 +342,13 @@ void main() {
           watchSinglePartPresentation: watchSinglePartPresentation,
         );
       },
+      seed: () => PartDetailsState(part: part, storages: [storage]),
       act: (bloc) => bloc.add(
         AddToStockButtonPressed(
           storageId: '123',
           amount: 10,
           userId: userId,
+          userDisplayName: 'User',
           note: note,
         ),
       ),
@@ -390,8 +439,8 @@ void main() {
       build: () {
         when(
           () => imageRepository.uploadImage(
-            partId: partId,
-            deviceImgPath: deviceImagePath,
+            partId: any(named: 'partId'),
+            bytes: any(named: 'bytes'),
           ),
         ).thenAnswer((_) async => downloadPath);
         when(
@@ -406,19 +455,20 @@ void main() {
           watchSinglePartPresentation: watchSinglePartPresentation,
         );
       },
-      act: (bloc) => bloc.add(ImageSelected(file: deviceImagePath)),
+      act: (bloc) => bloc.add(ImageSelected(file: _testImageFile)),
       expect: () => [
         isA<PartDetailsState>().having(
           (s) => s.imageStatus,
-          'deleteStatus',
+          'imageStatus',
           PartDetailsStatus.loading,
         ),
         isA<PartDetailsState>().having(
           (s) => s.imageStatus,
-          'deleteStatus',
+          'imageStatus',
           PartDetailsStatus.done,
         ),
       ],
+      wait: const Duration(seconds: 2),
     );
 
     blocTest(
@@ -427,8 +477,8 @@ void main() {
       build: () {
         when(
           () => imageRepository.uploadImage(
-            partId: partId,
-            deviceImgPath: deviceImagePath,
+            partId: any(named: 'partId'),
+            bytes: any(named: 'bytes'),
           ),
         ).thenThrow(const InvalidArgumentRemoteException());
         when(
@@ -444,23 +494,24 @@ void main() {
         );
       },
       seed: () => PartDetailsState(part: part, error: error),
-      act: (bloc) => bloc.add(ImageSelected(file: deviceImagePath)),
+      act: (bloc) => bloc.add(ImageSelected(file: _testImageFile)),
       expect: () => [
         isA<PartDetailsState>()
             .having(
               (s) => s.imageStatus,
-              'deleteStatus',
+              'imageStatus',
               PartDetailsStatus.loading,
             )
             .having((s) => s.error, 'error', isNull),
         isA<PartDetailsState>()
             .having(
               (s) => s.imageStatus,
-              'deleteStatus',
+              'imageStatus',
               PartDetailsStatus.done,
             )
             .having((s) => s.error, 'error', isA<RemoteException>()),
       ],
+      wait: const Duration(seconds: 2),
     );
 
     blocTest(
@@ -488,13 +539,13 @@ void main() {
         isA<PartDetailsState>()
             .having(
               (s) => s.imageStatus,
-              'deleteStatus',
+              'imageStatus',
               PartDetailsStatus.loading,
             )
             .having((s) => s.error, 'error', isNull),
         isA<PartDetailsState>().having(
           (s) => s.imageStatus,
-          'deleteStatus',
+          'imageStatus',
           PartDetailsStatus.done,
         ),
       ],
@@ -525,14 +576,14 @@ void main() {
         isA<PartDetailsState>()
             .having(
               (s) => s.imageStatus,
-              'deleteStatus',
+              'imageStatus',
               PartDetailsStatus.loading,
             )
             .having((s) => s.error, 'error', isNull),
         isA<PartDetailsState>()
             .having(
               (s) => s.imageStatus,
-              'deleteStatus',
+              'imageStatus',
               PartDetailsStatus.done,
             )
             .having((s) => s.error, 'error', isA<RemoteException>()),

@@ -24,7 +24,7 @@ void main() {
         amount: 0,
         id: '',
         userId: '',
-        type: .adjustment,
+        type: TransactionType.adjustment,
         note: '',
         timestamp: DateTime.now(),
       ),
@@ -42,7 +42,7 @@ void main() {
       storageId: 's1',
       userId: '456',
       amount: 1,
-      type: .restock,
+      type: TransactionType.restock,
       note: 'note',
       timestamp: now,
     );
@@ -73,12 +73,31 @@ void main() {
       expect(transactions.first.amount, transactionDto.amount);
     });
 
+    test('fetchTransactionsForMonth maps DTOs to domain models', () async {
+      when(
+        () => mockRemote.fetchTransactionsForMonth(any()),
+      ).thenAnswer((_) async => [transactionDto]);
+
+      final transactions = await repository.fetchTransactionsForMonth(
+        DateTime(now.year, now.month),
+      );
+
+      expect(transactions.first.partId, transactionDto.partId);
+      verify(() => mockRemote.fetchTransactionsForMonth(any())).called(1);
+    });
+
     test('useStock calls remote with correct parameters', () async {
       when(() => mockRemote.applyStockChange(any())).thenAnswer((_) async {});
       await repository.useStock(
         partId: transactionDto.partId,
         storageId: transactionDto.storageId,
         userId: transactionDto.userId,
+        userDisplayName: 'Alice',
+        partName: 'Part',
+        detailNumber: 'D1',
+        storageName: 'Shelf',
+        unitPriceSnapshot: 9.99,
+        isRecycledPart: false,
         note: transactionDto.note ?? '',
       );
 
@@ -92,6 +111,12 @@ void main() {
         partId: transactionDto.partId,
         storageId: transactionDto.storageId,
         userId: transactionDto.userId,
+        userDisplayName: 'Alice',
+        partName: 'Part',
+        detailNumber: 'D1',
+        storageName: 'Shelf',
+        unitPriceSnapshot: 9.99,
+        isRecycledPart: false,
         amount: transactionDto.amount,
       );
 
@@ -108,6 +133,12 @@ void main() {
           partId: 'p1',
           storageId: 's1',
           userId: 'u1',
+          userDisplayName: 'A',
+          partName: 'P',
+          detailNumber: 'D',
+          storageName: 'S',
+          unitPriceSnapshot: 1,
+          isRecycledPart: false,
           note: 'note',
         ),
         throwsA(isA<InvalidArgumentRemoteException>()),
@@ -126,6 +157,12 @@ void main() {
             partId: 'p1',
             storageId: 's1',
             userId: 'u1',
+            userDisplayName: 'A',
+            partName: 'P',
+            detailNumber: 'D',
+            storageName: 'S',
+            unitPriceSnapshot: 1,
+            isRecycledPart: false,
             note: 'note',
           ),
           throwsA(isA<UnknownRemoteException>()),

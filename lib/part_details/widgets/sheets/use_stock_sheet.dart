@@ -44,6 +44,10 @@ class _UseStockSheetState extends State<UseStockSheet> {
       loaded: (user) => user.id,
       orElse: () => null,
     );
+    final userDisplayName = context.read<UserCubit>().state.maybeWhen(
+      loaded: (user) => user.name,
+      orElse: () => '',
+    );
     final l10n = context.l10n;
     return BlocListener<PartDetailsBloc, PartDetailsState>(
       listenWhen: (previous, current) => current.stockStatus == .done,
@@ -107,6 +111,7 @@ class _UseStockSheetState extends State<UseStockSheet> {
                         ? () => context.read<PartDetailsBloc>().add(
                             UseButtonPressed(
                               userId: userId,
+                              userDisplayName: userDisplayName,
                               message: _controller.text,
                               storageId: widget.stock.storageId,
                             ),

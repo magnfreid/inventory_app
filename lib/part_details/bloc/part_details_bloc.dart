@@ -101,10 +101,17 @@ class PartDetailsBloc extends Bloc<PartDetailsEvent, PartDetailsState> {
   ) async {
     emit(state.copyWith(stockStatus: .loading, error: null));
     try {
+      final storageName = _storageNameForId(state.storages, event.storageId);
       await _stockRepository.useStock(
         partId: state.part.partId,
         storageId: event.storageId,
         userId: event.userId,
+        userDisplayName: event.userDisplayName,
+        partName: state.part.name,
+        detailNumber: state.part.detailNumber,
+        storageName: storageName,
+        unitPriceSnapshot: state.part.price,
+        isRecycledPart: state.part.isRecycled,
         note: event.message,
       );
       emit(state.copyWith(stockStatus: .done));
@@ -119,11 +126,18 @@ class PartDetailsBloc extends Bloc<PartDetailsEvent, PartDetailsState> {
   ) async {
     emit(state.copyWith(stockStatus: .loading, error: null));
     try {
+      final storageName = _storageNameForId(state.storages, event.storageId);
       await _stockRepository.restockStock(
         partId: state.part.partId,
         storageId: event.storageId,
         amount: event.amount,
         userId: event.userId,
+        userDisplayName: event.userDisplayName,
+        partName: state.part.name,
+        detailNumber: state.part.detailNumber,
+        storageName: storageName,
+        unitPriceSnapshot: state.part.price,
+        isRecycledPart: state.part.isRecycled,
         note: event.note,
       );
       emit(state.copyWith(stockStatus: .done));
@@ -155,6 +169,13 @@ class PartDetailsBloc extends Bloc<PartDetailsEvent, PartDetailsState> {
   void _handleStreamError(dynamic e) {
     final error = (e is RemoteException) ? e : const UnknownRemoteException();
     add(_OnStreamError(error: error));
+  }
+
+  String _storageNameForId(List<Storage> storages, String storageId) {
+    for (final s in storages) {
+      if (s.id == storageId) return s.name;
+    }
+    return storageId;
   }
 
   FutureOr<void> _onImageSelected(

@@ -1,0 +1,44 @@
+---
+description: Flutter app structure, Bloc UI state, packages layout, and documentation standards
+alwaysApply: true
+---
+
+# Inventory app — architecture and AI behavior
+
+## UI state: Bloc
+
+- Use **Bloc** (or Cubit where appropriate) for screen and feature UI state, not ad-hoc `setState` for business/async state.
+- Prefer `BlocProvider`, `BlocBuilder` / `BlocListener`, and repository injection patterns already used in the app.
+
+## Page + View in one file
+
+- For a feature screen, **normally** split in the **same file**:
+  - **`*Page`**: provides the Bloc (`BlocProvider`), may own `Scaffold` / `AppBar`, reads repositories from `context` and passes them into the Bloc constructor.
+  - **`*View`**: child widget that contains **UI only** (`BlocBuilder`, layout, navigation callbacks).
+- Example: `StatisticsPage` → provides `StatisticsBloc` → child `StatisticsView` with the rest of the UI.
+
+## Packages layout
+
+- **Repositories, remotes, services**, and similar integration code live under **`packages/`** (not under `lib/`). The app layer in `lib/` composes them.
+
+## Code organization
+
+- Prefer **clear folder boundaries** (e.g. `feature/bloc/`, `feature/view/`) and names that match navigation and responsibility so the codebase is **easy to scan**.
+
+## Dart dot shorthands
+
+- Prefer **leading-dot enum / static member shorthand** where Dart can infer the
+  type (same style as elsewhere in this repo), e.g. `.center` instead of
+  `MainAxisAlignment.center`, `.loaded` instead of `StatisticsStatus.loaded`
+  when the target type is clear from context.
+- Skip shorthand when inference fails, the code becomes unclear, or you need to
+  disambiguate two types with the same member name.
+
+## Documentation
+
+- Add **`///` documentation comments** to **all public** APIs: classes, constructors, methods, getters, top-level declarations, and public enum values where they are part of the contract.
+- Wrap **`///` doc comments and `//` comments** so each line is **at most 80 characters** (break long sentences across lines; indent continuation lines to match the project style).
+
+## Clarification
+
+- **Ask the user** when requirements are ambiguous (e.g. product behavior, Firestore shape, or UX) instead of guessing.
