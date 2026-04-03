@@ -61,6 +61,7 @@ class StatisticsView extends StatelessWidget {
           return const Center(child: CircularProgressIndicator.adaptive());
         }
 
+        final l10n = context.l10n;
         final stats = state.stats;
         final monthLabel = DateFormat.yMMMM().format(state.selectedMonth);
         final decimalFormat = NumberFormat('#,##0.00');
@@ -74,7 +75,7 @@ class StatisticsView extends StatelessWidget {
                 Row(
                   children: [
                     IconButton(
-                      tooltip: 'Previous month',
+                      tooltip: l10n.statisticsPreviousMonth,
                       onPressed: () => context.read<StatisticsBloc>().add(
                             const StatisticsMonthStepRequested(-1),
                           ),
@@ -88,7 +89,7 @@ class StatisticsView extends StatelessWidget {
                       ),
                     ),
                     IconButton(
-                      tooltip: 'Next month',
+                      tooltip: l10n.statisticsNextMonth,
                       onPressed: _canStepForward(state.selectedMonth)
                           ? () => context.read<StatisticsBloc>().add(
                                 const StatisticsMonthStepRequested(1),
@@ -104,17 +105,17 @@ class StatisticsView extends StatelessWidget {
                   runSpacing: 8,
                   children: [
                     _MetricCard(
-                      label: 'Incoming',
+                      label: l10n.statisticsIncoming,
                       value: stats.totalIncoming.toString(),
                       color: Colors.green,
                     ),
                     _MetricCard(
-                      label: 'Outgoing',
+                      label: l10n.statisticsOutgoing,
                       value: stats.totalOutgoing.toString(),
                       color: Colors.orange,
                     ),
                     _MetricCard(
-                      label: 'Recycled savings',
+                      label: l10n.statisticsRecycledSavings,
                       value: decimalFormat.format(stats.recycledSavings),
                       color: Colors.blue,
                     ),
@@ -123,8 +124,8 @@ class StatisticsView extends StatelessWidget {
                 const SizedBox(height: 12),
                 Expanded(
                   child: stats.items.isEmpty
-                      ? const Center(
-                          child: Text('No transactions for this month'),
+                      ? Center(
+                          child: Text(l10n.statisticsNoTransactions),
                         )
                       : ListView.builder(
                           itemCount: stats.items.length,
@@ -155,7 +156,7 @@ class StatisticsView extends StatelessWidget {
                                   '${tx.detailNumber}\n'
                                   '$whenStr · ${tx.storageName}\n'
                                   '${tx.userDisplayName}\n'
-                                  'Message: ${tx.note ?? '-'}',
+                                  '${l10n.statisticsMessageLabel}: ${tx.note ?? '-'}',
                                 ),
                                 isThreeLine: true,
                                 trailing: Text(

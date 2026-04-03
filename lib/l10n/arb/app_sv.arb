@@ -384,5 +384,33 @@
 	"imagePickerSheetTakePicture": "Ta bild",
 	"@imagePickerSheetTakePicture": {
 		"description": "Label text for option to select take a new picture."
+	},
+	"statisticsPreviousMonth": "Föregående månad",
+	"@statisticsPreviousMonth": {
+		"description": "Tooltip for the previous month navigation button on the statistics page."
+	},
+	"statisticsNextMonth": "Nästa månad",
+	"@statisticsNextMonth": {
+		"description": "Tooltip for the next month navigation button on the statistics page."
+	},
+	"statisticsIncoming": "Inkommande",
+	"@statisticsIncoming": {
+		"description": "Label for the incoming transactions metric card on the statistics page."
+	},
+	"statisticsOutgoing": "Utgående",
+	"@statisticsOutgoing": {
+		"description": "Label for the outgoing transactions metric card on the statistics page."
+	},
+	"statisticsRecycledSavings": "Återvinningsbesparing",
+	"@statisticsRecycledSavings": {
+		"description": "Label for the recycled savings metric card on the statistics page."
+	},
+	"statisticsNoTransactions": "Inga transaktioner för denna månad",
+	"@statisticsNoTransactions": {
+		"description": "Message shown when there are no transactions for the selected month on the statistics page."
+	},
+	"statisticsMessageLabel": "Meddelande",
+	"@statisticsMessageLabel": {
+		"description": "Label prefix for the transaction note/message in the statistics transaction list."
 	}
 }

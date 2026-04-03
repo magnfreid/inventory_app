@@ -384,5 +384,33 @@
 	"imagePickerSheetTakePicture": "Take a picture",
 	"@imagePickerSheetTakePicture": {
 		"description": "Label text for option to select take a new picture."
+	},
+	"statisticsPreviousMonth": "Previous month",
+	"@statisticsPreviousMonth": {
+		"description": "Tooltip for the previous month navigation button on the statistics page."
+	},
+	"statisticsNextMonth": "Next month",
+	"@statisticsNextMonth": {
+		"description": "Tooltip for the next month navigation button on the statistics page."
+	},
+	"statisticsIncoming": "Incoming",
+	"@statisticsIncoming": {
+		"description": "Label for the incoming transactions metric card on the statistics page."
+	},
+	"statisticsOutgoing": "Outgoing",
+	"@statisticsOutgoing": {
+		"description": "Label for the outgoing transactions metric card on the statistics page."
+	},
+	"statisticsRecycledSavings": "Recycled savings",
+	"@statisticsRecycledSavings": {
+		"description": "Label for the recycled savings metric card on the statistics page."
+	},
+	"statisticsNoTransactions": "No transactions for this month",
+	"@statisticsNoTransactions": {
+		"description": "Message shown when there are no transactions for the selected month on the statistics page."
+	},
+	"statisticsMessageLabel": "Message",
+	"@statisticsMessageLabel": {
+		"description": "Label prefix for the transaction note/message in the statistics transaction list."
 	}
 }
