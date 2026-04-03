@@ -1,4 +1,5 @@
 import 'package:app_ui/app_ui.dart';
+import 'package:flutter/foundation.dart' show kIsWeb;
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:inventory_app/inventory/bloc/inventory_bloc.dart';
@@ -47,8 +48,10 @@ class _InventoryToolBarState extends State<InventoryToolBar> {
       builder: (context, state) {
         final activeFilters = state.filter.totalActiveFilters;
         final searchQuery = state.filter.searchQuery;
+        final bottomInset =
+            kIsWeb ? MediaQuery.of(context).viewInsets.bottom : 0.0;
         return Padding(
-          padding: const .symmetric(horizontal: 16),
+          padding: EdgeInsets.only(left: 16, right: 16, bottom: bottomInset),
           child: AnimatedSwitcher(
             transitionBuilder: (child, animation) {
               return ScaleTransition(
@@ -116,7 +119,9 @@ class _InventoryToolBarState extends State<InventoryToolBar> {
                         IconButton(
                           onPressed: () {
                             setState(() => _searchBarVisible = true);
-                            _focusNode.requestFocus();
+                            WidgetsBinding.instance.addPostFrameCallback((_) {
+                              _focusNode.requestFocus();
+                            });
                           },
                           icon: Icon(Icons.search, color: onContainerColor),
                         ),

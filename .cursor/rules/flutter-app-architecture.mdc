@@ -34,6 +34,19 @@ alwaysApply: true
 - Skip shorthand when inference fails, the code becomes unclear, or you need to
   disambiguate two types with the same member name.
 
+## Localization (l10n)
+
+- **Do not hardcode** user-visible strings in widgets (labels, buttons, tooltips,
+  empty states, errors shown in the UI). Use the app’s generated
+  **localizations** (`context.l10n` / `AppLocalizations`).
+- When adding or changing UI copy, update **both** ARB files:
+  - `lib/l10n/arb/app_en.arb` (English)
+  - `lib/l10n/arb/app_sv.arb` (Swedish)
+- Use the same **message key** in both files; keep Swedish and English
+  **meaning aligned** (same placeholders / plural rules where applicable).
+- After ARB edits, run **`flutter gen-l10n`** (or the project’s `melos` l10n
+  script) so generated Dart code stays in sync.
+
 ## Documentation
 
 - Add **`///` documentation comments** to **all public** APIs: classes, constructors, methods, getters, top-level declarations, and public enum values where they are part of the contract.

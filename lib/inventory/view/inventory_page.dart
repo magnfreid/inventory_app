@@ -1,5 +1,6 @@
 import 'package:app_ui/app_ui.dart';
 import 'package:core_remote/core_remote.dart';
+import 'package:flutter/foundation.dart' show kIsWeb;
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:inventory_app/authenticated_app/cubit/user_cubit.dart';
@@ -46,6 +47,7 @@ class InventoryView extends StatelessWidget {
       orElse: () => '',
     );
     return Scaffold(
+      resizeToAvoidBottomInset: !kIsWeb,
       appBar: AppBar(
         centerTitle: true,
         title: Text(userName),
