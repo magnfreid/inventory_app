@@ -1,7 +1,12 @@
 {
   "permissions": {
     "allow": [
-      "Bash(flutter gen-l10n:*)"
+      "Bash(flutter gen-l10n:*)",
+      "Bash(flutter test:*)",
+      "Bash(lcov --summary coverage/lcov.info)",
+      "Bash(lcov --list coverage/lcov.info)",
+      "Bash(sort -t'|' -k3 -n)",
+      "Bash(python3 -c ':*)"
     ]
   }
 }

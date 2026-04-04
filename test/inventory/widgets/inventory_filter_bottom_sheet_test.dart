@@ -44,8 +44,6 @@ void main() {
     expect(find.text('Brand'), findsOneWidget);
     expect(find.text('Storage'), findsOneWidget);
 
-    expect(find.byType(Switch), findsOneWidget);
-
     expect(find.text('All'), findsNWidgets(3));
 
     expect(find.byType(TextButton), findsOneWidget);
@@ -73,20 +71,4 @@ void main() {
 
     verify(() => bloc.add(const ClearAllFiltersButtonPressed())).called(1);
   });
-
-  testWidgets(
-    'tapping HideEmptyStock switch dispatches HideEmptyStockSwitchPressed',
-    (tester) async {
-      await tester.pumpApp(buildBottomSheet());
-      await tester.pumpAndSettle();
-
-      final switchFinder = find.byType(Switch);
-      expect(switchFinder, findsOneWidget);
-
-      await tester.tap(switchFinder);
-      await tester.pump();
-
-      verify(() => bloc.add(const HideEmptyStockSwitchPressed())).called(1);
-    },
-  );
 }

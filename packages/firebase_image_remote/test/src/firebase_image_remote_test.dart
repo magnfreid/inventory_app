@@ -1,4 +1,6 @@
+import 'dart:async';
 import 'dart:io';
+import 'dart:typed_data';
 
 import 'package:firebase_image_remote/firebase_image_remote.dart';
 import 'package:firebase_shared/firebase_shared.dart';
@@ -10,14 +12,64 @@ class MockFirebaseStorage extends Mock implements FirebaseStorage {}
 
 class MockReference extends Mock implements Reference {}
 
-class MockUploadTask extends Mock implements UploadTask {}
-
 class MockTaskSnapshot extends Mock implements TaskSnapshot {}
+
+/// A fake [UploadTask] that completes immediately with a given [TaskSnapshot].
+class FakeUploadTask implements UploadTask {
+  FakeUploadTask(this._snapshot);
+
+  final TaskSnapshot _snapshot;
+
+  @override
+  Future<R> then<R>(
+    FutureOr<R> Function(TaskSnapshot value) onValue, {
+    Function? onError,
+  }) =>
+      Future.value(_snapshot).then(onValue, onError: onError);
+
+  @override
+  Future<TaskSnapshot> catchError(
+    Function onError, {
+    bool Function(Object error)? test,
+  }) =>
+      Future.value(_snapshot).catchError(onError, test: test);
+
+  @override
+  Stream<TaskSnapshot> asStream() => Stream.value(_snapshot);
+
+  @override
+  Future<TaskSnapshot> whenComplete(FutureOr<void> Function() action) =>
+      Future.value(_snapshot).whenComplete(action);
+
+  @override
+  Future<TaskSnapshot> timeout(
+    Duration timeLimit, {
+    FutureOr<TaskSnapshot> Function()? onTimeout,
+  }) =>
+      Future.value(_snapshot).timeout(timeLimit, onTimeout: onTimeout);
+
+  @override
+  Future<bool> cancel() => Future.value(false);
+
+  @override
+  Future<bool> pause() => Future.value(false);
+
+  @override
+  Future<bool> resume() => Future.value(false);
+
+  @override
+  Stream<TaskSnapshot> get snapshotEvents => Stream.value(_snapshot);
+
+  @override
+  TaskSnapshot get snapshot => _snapshot;
+
+  @override
+  FirebaseStorage get storage => throw UnimplementedError();
+}
 
 void main() {
   late MockFirebaseStorage mockStorage;
   late MockReference mockRef;
-  late MockUploadTask mockUploadTask;
   late FirebaseImageRemote imageRemote;
 
   final file = File('does-not-matter.jpg');
@@ -28,84 +80,115 @@ void main() {
   setUpAll(() {
     registerFallbackValue(File('fake.jpg'));
     registerFallbackValue(SettableMetadata());
+    registerFallbackValue(Uint8List(0));
   });
 
   setUp(() {
     mockStorage = MockFirebaseStorage();
     mockRef = MockReference();
-    mockUploadTask = MockUploadTask();
     imageRemote = FirebaseImageRemote(
       organizationId: organizationId,
       storage: mockStorage,
     );
 
-    // Always stub ref lookup
     when(() => mockStorage.ref(any())).thenReturn(mockRef);
 
-    // putFile returns UploadTask synchronously
-    when(() => mockRef.putFile(any(), any())).thenAnswer((_) => mockUploadTask);
-
-    // whenComplete returns Future<TaskSnapshot>
     final snapshot = MockTaskSnapshot();
     when(
-      () => mockUploadTask.whenComplete(any()),
-    ).thenAnswer((invocation) => Future.value(snapshot));
+      () => mockRef.putFile(any(), any()),
+    ).thenAnswer((_) => FakeUploadTask(snapshot));
 
-    // getDownloadURL returns Future<String>
+    when(
+      () => mockRef.putData(any(), any()),
+    ).thenAnswer((_) => FakeUploadTask(snapshot));
+
     when(
       () => mockRef.getDownloadURL(),
     ).thenAnswer((_) => Future.value(downloadUrl));
 
-    // delete returns Future<void>
     when(() => mockRef.delete()).thenAnswer((_) async {});
   });
 
   group(
     'FirebaseImageRemote',
     () {
-      // test('uploadImage uploads file and returns download URL', () async {
-      //   final result = await imageRemote.uploadImage(
-      //     partId: partId,
-      //     file: file,
-      //   );
+      group('uploadImageFromFile', () {
+        test('uploads file and returns download URL', () async {
+          final result = await imageRemote.uploadImageFromFile(
+            partId: partId,
+            file: file,
+          );
 
-      //   await expectLater(result, downloadUrl);
+          expect(result, downloadUrl);
+          verify(() => mockRef.putFile(file, any())).called(1);
+          verify(() => mockRef.getDownloadURL()).called(1);
+        });
 
-      //   verify(() => mockRef.putFile(file, any())).called(1);
-      //   verify(() => mockRef.getDownloadURL()).called(1);
-      // });
+        test('uses correct storage path', () async {
+          await imageRemote.uploadImageFromFile(partId: partId, file: file);
+          verify(
+            () => mockStorage.ref(
+              'organizations/$organizationId/parts/$partId.jpg',
+            ),
+          ).called(1);
+        });
 
-      // test('deleteImage deletes the correct reference', () async {
-      //   await imageRemote.deleteImage(partId: partId);
-      //   verify(() => mockRef.delete()).called(1);
-      // });
-
-      // test('deleteImage does nothing for empty partId', () async {
-      //   await imageRemote.deleteImage(partId: '');
-      //   verifyNever(() => mockRef.delete());
-      // });
-
-      test(
-        'uploadImage throws exception',
-        () async {
+        test('throws RemoteException on FirebaseException', () async {
           when(
             () => mockRef.putFile(any(), any()),
           ).thenThrow(FirebaseException(plugin: 'storage', code: ''));
           expect(
-            () async => imageRemote.uploadImage(partId: partId, file: file),
+            () async =>
+                imageRemote.uploadImageFromFile(partId: partId, file: file),
             throwsA(isA<RemoteException>()),
           );
-        },
-      );
+        });
+      });
 
-      test('deleteImage throws exception', () async {
-        when(
-          () => mockRef.delete(),
-        ).thenThrow(FirebaseException(plugin: 'storage', code: ''));
-        expect(
-          () async => imageRemote.deleteImage(partId: partId),
-          throwsA(isA<RemoteException>()),
-        );
+      group('uploadImageFromBytes', () {
+        final bytes = Uint8List.fromList([1, 2, 3]);
+
+        test('uploads bytes and returns download URL', () async {
+          final result = await imageRemote.uploadImageFromBytes(
+            partId: partId,
+            bytes: bytes,
+          );
+
+          expect(result, downloadUrl);
+          verify(() => mockRef.putData(bytes, any())).called(1);
+          verify(() => mockRef.getDownloadURL()).called(1);
+        });
+
+        test('uses correct storage path', () async {
+          await imageRemote.uploadImageFromBytes(partId: partId, bytes: bytes);
+          verify(
+            () => mockStorage.ref(
+              'organizations/$organizationId/parts/$partId.jpg',
+            ),
+          ).called(1);
+        });
+      });
+
+      group('deleteImage', () {
+        test('deletes the correct reference', () async {
+          await imageRemote.deleteImage(partId: partId);
+          verify(() => mockRef.delete()).called(1);
+        });
+
+        test('does nothing for empty partId', () async {
+          await imageRemote.deleteImage(partId: '');
+          verifyNever(() => mockRef.delete());
+        });
+
+        test('throws RemoteException on FirebaseException', () async {
+          when(
+            () => mockRef.delete(),
+          ).thenThrow(FirebaseException(plugin: 'storage', code: ''));
+          expect(
+            () async => imageRemote.deleteImage(partId: partId),
+            throwsA(isA<RemoteException>()),
+          );
+        });
       });
     },
   );
