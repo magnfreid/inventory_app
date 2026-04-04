@@ -40,18 +40,13 @@ void main() {
     );
     when(() => authCubit.signOut()).thenAnswer((_) async {});
 
-    when(() => themeCubit.state).thenReturn(AppThemeMode.system);
+    when(() => themeCubit.state).thenReturn(const ThemeState());
     when(() => themeCubit.stream).thenAnswer(
-      (_) => Stream.value(AppThemeMode.system),
+      (_) => Stream.value(const ThemeState()),
     );
-    when(() => themeCubit.themeButtonPressed(any())).thenReturn(null);
 
     when(() => storagesBloc.state).thenReturn(const StoragesState());
     when(() => storagesBloc.stream).thenAnswer((_) => const Stream.empty());
-  });
-
-  setUpAll(() {
-    registerFallbackValue(AppThemeMode.system);
   });
 
   Widget inventoryDrawer() {
@@ -70,15 +65,13 @@ void main() {
 
   group('InventoryDrawer', () {
     testWidgets('renders all menu items', (tester) async {
-      when(() => themeCubit.state).thenReturn(AppThemeMode.system);
-
       await tester.pumpApp(inventoryDrawer());
 
       expect(find.byType(Drawer), findsOneWidget);
 
       expect(find.byIcon(Icons.shelves), findsOneWidget);
       expect(find.byIcon(Icons.sell), findsOneWidget);
-      expect(find.byIcon(Icons.query_stats), findsOneWidget);
+      expect(find.byIcon(Icons.settings), findsOneWidget);
       expect(find.byIcon(Icons.logout), findsOneWidget);
     });
 

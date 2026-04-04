@@ -412,5 +412,53 @@
 	"statisticsMessageLabel": "Message",
 	"@statisticsMessageLabel": {
 		"description": "Label prefix for the transaction note/message in the statistics transaction list."
+	},
+	"settingsPageTitle": "Settings",
+	"@settingsPageTitle": {
+		"description": "Title for the settings page."
+	},
+	"settingsThemeModeTitle": "Theme",
+	"@settingsThemeModeTitle": {
+		"description": "Section heading for theme mode selection on the settings page."
+	},
+	"settingsThemeModeSystem": "System",
+	"@settingsThemeModeSystem": {
+		"description": "Label for system theme mode option."
+	},
+	"settingsThemeModeLight": "Light",
+	"@settingsThemeModeLight": {
+		"description": "Label for light theme mode option."
+	},
+	"settingsThemeModeDark": "Dark",
+	"@settingsThemeModeDark": {
+		"description": "Label for dark theme mode option."
+	},
+	"settingsSeedColorTitle": "Accent color",
+	"@settingsSeedColorTitle": {
+		"description": "Section heading for seed color selection on the settings page."
+	},
+	"settingsSeedColorBlueGrey": "Blue grey",
+	"@settingsSeedColorBlueGrey": {
+		"description": "Tooltip for the blue grey seed color option."
+	},
+	"settingsSeedColorTeal": "Teal",
+	"@settingsSeedColorTeal": {
+		"description": "Tooltip for the teal seed color option."
+	},
+	"settingsSeedColorDeepPurple": "Deep purple",
+	"@settingsSeedColorDeepPurple": {
+		"description": "Tooltip for the deep purple seed color option."
+	},
+	"settingsSeedColorOrange": "Orange",
+	"@settingsSeedColorOrange": {
+		"description": "Tooltip for the orange seed color option."
+	},
+	"settingsSeedColorGreen": "Green",
+	"@settingsSeedColorGreen": {
+		"description": "Tooltip for the green seed color option."
+	},
+	"settingsStatisticsLinkText": "My statistics",
+	"@settingsStatisticsLinkText": {
+		"description": "Link to the statistics page from the settings page."
 	}
 }

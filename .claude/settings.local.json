@@ -6,7 +6,8 @@
       "Bash(lcov --summary coverage/lcov.info)",
       "Bash(lcov --list coverage/lcov.info)",
       "Bash(sort -t'|' -k3 -n)",
-      "Bash(python3 -c ':*)"
+      "Bash(python3 -c ':*)",
+      "Bash(fvm flutter:*)"
     ]
   }
 }

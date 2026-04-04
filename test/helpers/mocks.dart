@@ -84,6 +84,6 @@ class MockStorageEditorBloc
 class MockPartEditorBloc extends MockBloc<PartEditorEvent, PartEditorState>
     implements PartEditorBloc {}
 
-class MockThemeCubit extends MockCubit<AppThemeMode> implements ThemeCubit {}
+class MockThemeCubit extends MockCubit<ThemeState> implements ThemeCubit {}
 
 class MockHydratedBlocStorage extends Mock implements Storage {}

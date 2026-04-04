@@ -4,10 +4,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:inventory_app/authentication/cubit/authentication_cubit.dart';
 import 'package:inventory_app/l10n/l10n.dart';
-import 'package:inventory_app/statistics/view/statistics_page.dart';
+import 'package:inventory_app/settings/settings.dart';
 import 'package:inventory_app/storages/view/storages_page.dart';
 import 'package:inventory_app/tags/view/tags_page.dart';
-import 'package:inventory_app/theme/cubit/theme_cubit.dart';
 
 class InventoryDrawer extends StatelessWidget {
   const InventoryDrawer({super.key});
@@ -19,18 +18,12 @@ class InventoryDrawer extends StatelessWidget {
       child: SafeArea(
         child: Column(
           children: [
-            const Padding(
-              padding: .only(top: 36),
-              child: _ThemeModeSelector(),
-            ),
-
             DrawerHeader(
               child: Align(
                 alignment: .bottomLeft,
                 child: Text(l10n.drawerHeaderText),
               ),
             ),
-
             ListTile(
               leading: const Icon(Icons.shelves),
               title: Text(l10n.drawerLocationsLinkText),
@@ -48,11 +41,11 @@ class InventoryDrawer extends StatelessWidget {
               },
             ),
             ListTile(
-              leading: const Icon(Icons.query_stats),
-              title: Text(l10n.drawerStatisticsLinkText),
+              leading: const Icon(Icons.settings),
+              title: Text(l10n.drawerSettingsLinkText),
               onTap: () {
                 Navigator.pop(context);
-                unawaited(Navigator.push(context, StatisticsPage.route()));
+                unawaited(Navigator.push(context, SettingsPage.route()));
               },
             ),
             const Spacer(),
@@ -64,35 +57,6 @@ class InventoryDrawer extends StatelessWidget {
           ],
         ),
       ),
-    );
-  }
-}
-
-class _ThemeModeSelector extends StatelessWidget {
-  const _ThemeModeSelector();
-
-  @override
-  Widget build(BuildContext context) {
-    final mode = context.watch<ThemeCubit>().state;
-    return SegmentedButton<AppThemeMode>(
-      style: SegmentedButton.styleFrom(),
-      segments: const [
-        ButtonSegment<AppThemeMode>(
-          value: .system,
-          icon: Icon(Icons.mobile_friendly),
-        ),
-        ButtonSegment<AppThemeMode>(
-          value: .light,
-          icon: Icon(Icons.light_mode),
-        ),
-        ButtonSegment<AppThemeMode>(
-          value: .dark,
-          icon: Icon(Icons.dark_mode),
-        ),
-      ],
-      selected: {mode},
-      onSelectionChanged: (selection) =>
-          context.read<ThemeCubit>().themeButtonPressed(selection.first),
     );
   }
 }

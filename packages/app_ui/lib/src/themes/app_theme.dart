@@ -4,10 +4,14 @@ import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 
 abstract class AppTheme {
-  const AppTheme();
+  const AppTheme({this.seedColor});
 
-  factory AppTheme.light() => const _LightTheme();
-  factory AppTheme.dark() => const _DarkTheme();
+  factory AppTheme.light({Color? seedColor}) =>
+      _LightTheme(seedColor: seedColor);
+  factory AppTheme.dark({Color? seedColor}) =>
+      _DarkTheme(seedColor: seedColor);
+
+  final Color? seedColor;
 
   double get _defaultBorderRadius => 2;
 
@@ -56,12 +60,16 @@ abstract class AppTheme {
     ),
   );
 
-  Color get _color;
+  Color get _defaultSeedColor;
 
   Brightness get _brightness;
 
-  ColorScheme get _colorScheme =>
-      ColorScheme.fromSeed(seedColor: _color, brightness: _brightness);
+  Color get _effectiveSeedColor => seedColor ?? _defaultSeedColor;
+
+  ColorScheme get _colorScheme => ColorScheme.fromSeed(
+        seedColor: _effectiveSeedColor,
+        brightness: _brightness,
+      );
 
   TextTheme get _textTheme => GoogleFonts.oswaldTextTheme(
     ThemeData.from(colorScheme: _colorScheme).textTheme,
@@ -69,20 +77,20 @@ abstract class AppTheme {
 }
 
 final class _LightTheme extends AppTheme {
-  const _LightTheme();
+  const _LightTheme({super.seedColor});
 
   @override
-  Color get _color => Colors.blueGrey;
+  Color get _defaultSeedColor => Colors.blueGrey;
 
   @override
   Brightness get _brightness => .light;
 }
 
 final class _DarkTheme extends AppTheme {
-  const _DarkTheme();
+  const _DarkTheme({super.seedColor});
 
   @override
-  Color get _color => Colors.blueAccent;
+  Color get _defaultSeedColor => Colors.blueAccent;
 
   @override
   Brightness get _brightness => .dark;
