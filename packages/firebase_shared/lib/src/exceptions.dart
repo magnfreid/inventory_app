@@ -22,14 +22,6 @@ RemoteException mapFirebaseException(FirebaseException e) {
     case 'deadline-exceeded':
       return const NetworkException();
 
-    case 'user-not-found':
-      return const NotFoundException();
-    case 'email-already-in-use':
-      return const AlreadyExistsException();
-    case 'wrong-password':
-    case 'invalid-credential':
-      return const PermissionDeniedException();
-
     case 'file-not-found':
       return const NotFoundException();
     case 'unauthorized':
@@ -39,9 +31,3 @@ RemoteException mapFirebaseException(FirebaseException e) {
       return const UnknownRemoteException();
   }
 }
-
-/// Getter for [InvalidArgumentRemoteException]. Used because this error needs
-/// to be thrown by custom validation logic and would otherwise be unreachable
-/// through firebase_shared package.
-InvalidArgumentRemoteException get invalidArgument =>
-    const InvalidArgumentRemoteException();

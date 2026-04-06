@@ -44,9 +44,9 @@ class NetworkException extends RemoteException {
 /// Thrown when a remote request exceeds the allowed time limit.
 ///
 /// Example: the server takes too long to respond.
-class TimeoutException extends RemoteException {
-  /// Creates a [TimeoutException]
-  const TimeoutException();
+class RemoteTimeoutException extends RemoteException {
+  /// Creates a [RemoteTimeoutException].
+  const RemoteTimeoutException();
 }
 
 /// Thrown when an unknown or unexpected error occurs in the remote layer.
@@ -67,4 +67,15 @@ class UnknownRemoteException extends RemoteException {
 class InvalidArgumentRemoteException extends RemoteException {
   ///Creates an [InvalidArgumentRemoteException]
   const InvalidArgumentRemoteException();
+}
+
+/// Thrown when authentication fails due to invalid credentials.
+///
+/// This covers cases such as:
+/// - wrong password
+/// - unrecognised email address
+/// - malformed or expired credential token
+class InvalidCredentialsException extends RemoteException {
+  /// Creates an [InvalidCredentialsException].
+  const InvalidCredentialsException();
 }

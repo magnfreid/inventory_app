@@ -95,7 +95,7 @@ class FirebaseStockRemote implements StockRemote {
 
   @override
   Future<void> applyStockChange(TransactionDto transaction) async {
-    if (transaction.amount == 0) throw invalidArgument;
+    if (transaction.amount == 0) throw const InvalidArgumentRemoteException();
     final stockDoc = _stockCollection.doc(
       '${transaction.partId}_${transaction.storageId}',
     );
@@ -113,7 +113,7 @@ class FirebaseStockRemote implements StockRemote {
             );
 
       final newStock = currentDto.quantity + transaction.amount;
-      if (newStock < 0) throw invalidArgument;
+      if (newStock < 0) throw const InvalidArgumentRemoteException();
 
       final updatedDto = currentDto.copyWith(quantity: newStock);
 

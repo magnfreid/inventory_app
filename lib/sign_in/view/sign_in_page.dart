@@ -3,6 +3,7 @@ import 'package:authentication_service/authentication_service.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:inventory_app/l10n/l10n.dart';
+import 'package:inventory_app/shared/extensions/show_snack_bar_extensions.dart';
 import 'package:inventory_app/sign_in/bloc/sign_in_bloc.dart';
 import 'package:inventory_app/sign_in/bloc/sign_in_state.dart';
 
@@ -52,14 +53,7 @@ class _SignInViewState extends State<SignInView> {
     return BlocListener<SignInBloc, SignInState>(
       listenWhen: (previous, current) => current.error != null,
       listener: (context, state) {
-        ScaffoldMessenger.of(
-          context,
-        ).showSnackBar(
-          SnackBar(
-            duration: const Duration(seconds: 3),
-            content: Text(state.error.toString()),
-          ),
-        );
+        context.showErrorSnackBar(state.error!);
       },
       child: BlocBuilder<SignInBloc, SignInState>(
         builder: (context, state) {

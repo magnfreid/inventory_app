@@ -14,9 +14,11 @@ extension RemoteExceptionToL10n on RemoteException {
     NotFoundException() => context.l10n.remoteExceptionNotFound,
     AlreadyExistsException() => context.l10n.remoteExceptionAlreadyExists,
     NetworkException() => context.l10n.remoteExceptionNetwork,
-    TimeoutException() => context.l10n.remoteExceptionTimeout,
+    RemoteTimeoutException() => context.l10n.remoteExceptionTimeout,
     UnknownRemoteException() => context.l10n.remoteExceptionUnknown,
     InvalidArgumentRemoteException() =>
       context.l10n.remoteExceptionInvalidArgument,
+    InvalidCredentialsException() =>
+      context.l10n.remoteExceptionInvalidCredentials,
   };
 }

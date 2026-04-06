@@ -340,6 +340,10 @@
 	"@remoteExceptionInvalidArgument": {
 		"description": "Message to show the user if an invalid input was used when for example increasing or decreasing stock."
 	},
+	"remoteExceptionInvalidCredentials": "Felaktig e-postadress eller lösenord. Försök igen.",
+	"@remoteExceptionInvalidCredentials": {
+		"description": "Visas när inloggningen misslyckas på grund av fel e-post eller lösenord."
+	},
 	"partsListEmpty": "Inga delar att visa.",
 	"@partsListEmpty": {
 		"description": "Message shown in the middle of the parts list when the list is empty."

@@ -9,6 +9,8 @@ environment:
 dependencies:
   authentication_service:
     path: ../authentication_service
+  core_remote:
+    path: ../core_remote
   firebase_auth: ^6.1.4
   flutter:
     sdk: flutter

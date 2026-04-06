@@ -340,6 +340,10 @@
 	"@remoteExceptionInvalidArgument": {
 		"description": "Message to show the user if an invalid input was used when for example increasing or decreasing stock."
 	},
+	"remoteExceptionInvalidCredentials": "Invalid email or password. Please try again.",
+	"@remoteExceptionInvalidCredentials": {
+		"description": "Message shown when sign-in fails due to incorrect email or password."
+	},
 	"partsListEmpty": "No parts to show.",
 	"@partsListEmpty": {
 		"description": "Message shown in the middle of the parts list when the list is empty."
