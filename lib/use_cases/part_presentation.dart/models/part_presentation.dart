@@ -19,6 +19,7 @@ abstract class PartPresentation with _$PartPresentation {
     @Default([]) List<TagPresentation> generalTags,
     String? description,
     String? imgPath,
+    String? thumbnailPath,
   }) = _Part;
 
   const PartPresentation._();
@@ -34,6 +35,7 @@ abstract class PartPresentation with _$PartPresentation {
     generalTagIds: generalTags.map((tag) => tag.id).toList(),
     description: description,
     imgPath: imgPath,
+    thumbnailPath: thumbnailPath,
   );
 
   int get totalQuantity =>

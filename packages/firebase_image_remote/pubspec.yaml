@@ -10,6 +10,8 @@ dependencies:
   firebase_shared:
     path: ../firebase_shared
   firebase_storage: ^13.2.0
+  flutter:
+    sdk: flutter
   image_remote:
     path: ../image_remote
 

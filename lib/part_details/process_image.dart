@@ -2,21 +2,35 @@ import 'dart:typed_data';
 import 'package:flutter/foundation.dart';
 import 'package:image/image.dart' as img;
 
-Uint8List processImage(Uint8List bytes) {
+typedef ProcessedImages = ({Uint8List full, Uint8List thumbnail});
+
+ProcessedImages processImage(Uint8List bytes) {
   final image = img.decodeImage(bytes);
   if (image == null) throw Exception('Failed to decode image');
 
   final oriented = img.bakeOrientation(image);
 
-  const targetWidth = 1080;
-  const targetHeight = 608;
+  const fullWidth = 1080;
+  const fullHeight = 608;
+  const thumbWidth = 300;
+  const thumbHeight = 169;
 
-  final resized = img.copyResize(
+  final full = img.copyResize(
     oriented,
-    width: targetWidth,
-    height: targetHeight,
+    width: fullWidth,
+    height: fullHeight,
     interpolation: img.Interpolation.cubic,
   );
 
-  return Uint8List.fromList(img.encodeJpg(resized, quality: 85));
+  final thumbnail = img.copyResize(
+    oriented,
+    width: thumbWidth,
+    height: thumbHeight,
+    interpolation: img.Interpolation.cubic,
+  );
+
+  return (
+    full: Uint8List.fromList(img.encodeJpg(full, quality: 85)),
+    thumbnail: Uint8List.fromList(img.encodeJpg(thumbnail, quality: 80)),
+  );
 }

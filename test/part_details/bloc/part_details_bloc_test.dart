@@ -95,6 +95,7 @@ void main() {
         categoryTagId: null,
         description: 'description',
         imgPath: 'imgPath',
+        thumbnailPath: null,
       ),
     );
   });
@@ -441,8 +442,11 @@ void main() {
           () => imageRepository.uploadImage(
             partId: any(named: 'partId'),
             bytes: any(named: 'bytes'),
+            thumbnailBytes: any(named: 'thumbnailBytes'),
           ),
-        ).thenAnswer((_) async => downloadPath);
+        ).thenAnswer(
+          (_) async => (imgPath: downloadPath, thumbnailPath: 'thumb/path'),
+        );
         when(
           () => partRepository.editPart(any()),
         ).thenAnswer((_) async => part.toDomainModel());
@@ -479,6 +483,7 @@ void main() {
           () => imageRepository.uploadImage(
             partId: any(named: 'partId'),
             bytes: any(named: 'bytes'),
+            thumbnailBytes: any(named: 'thumbnailBytes'),
           ),
         ).thenThrow(const InvalidArgumentRemoteException());
         when(

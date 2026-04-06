@@ -37,6 +37,9 @@ abstract class PartDto with _$PartDto {
     /// Optional image path / URL
     required String? imgPath,
 
+    /// Optional thumbnail image path / URL
+    required String? thumbnailPath,
+
     /// Optional unique ID (used when received from backend)
     required String? id,
   }) = _PartDto;

@@ -14,7 +14,7 @@ T _$identity<T>(T value) => value;
 /// @nodoc
 mixin _$Part {
 
- String? get id; String get name; String get detailNumber; double get price; bool get isRecycled; List<String> get generalTagIds; String? get brandTagId; String? get categoryTagId; String? get description; String? get imgPath;
+ String? get id; String get name; String get detailNumber; double get price; bool get isRecycled; List<String> get generalTagIds; String? get brandTagId; String? get categoryTagId; String? get description; String? get imgPath; String? get thumbnailPath;
 /// Create a copy of Part
 /// with the given fields replaced by the non-null parameter values.
 @JsonKey(includeFromJson: false, includeToJson: false)
@@ -25,16 +25,16 @@ $PartCopyWith<Part> get copyWith => _$PartCopyWithImpl<Part>(this as Part, _$ide
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is Part&&(identical(other.id, id) || other.id == id)&&(identical(other.name, name) || other.name == name)&&(identical(other.detailNumber, detailNumber) || other.detailNumber == detailNumber)&&(identical(other.price, price) || other.price == price)&&(identical(other.isRecycled, isRecycled) || other.isRecycled == isRecycled)&&const DeepCollectionEquality().equals(other.generalTagIds, generalTagIds)&&(identical(other.brandTagId, brandTagId) || other.brandTagId == brandTagId)&&(identical(other.categoryTagId, categoryTagId) || other.categoryTagId == categoryTagId)&&(identical(other.description, description) || other.description == description)&&(identical(other.imgPath, imgPath) || other.imgPath == imgPath));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is Part&&(identical(other.id, id) || other.id == id)&&(identical(other.name, name) || other.name == name)&&(identical(other.detailNumber, detailNumber) || other.detailNumber == detailNumber)&&(identical(other.price, price) || other.price == price)&&(identical(other.isRecycled, isRecycled) || other.isRecycled == isRecycled)&&const DeepCollectionEquality().equals(other.generalTagIds, generalTagIds)&&(identical(other.brandTagId, brandTagId) || other.brandTagId == brandTagId)&&(identical(other.categoryTagId, categoryTagId) || other.categoryTagId == categoryTagId)&&(identical(other.description, description) || other.description == description)&&(identical(other.imgPath, imgPath) || other.imgPath == imgPath)&&(identical(other.thumbnailPath, thumbnailPath) || other.thumbnailPath == thumbnailPath));
 }
 
 
 @override
-int get hashCode => Object.hash(runtimeType,id,name,detailNumber,price,isRecycled,const DeepCollectionEquality().hash(generalTagIds),brandTagId,categoryTagId,description,imgPath);
+int get hashCode => Object.hash(runtimeType,id,name,detailNumber,price,isRecycled,const DeepCollectionEquality().hash(generalTagIds),brandTagId,categoryTagId,description,imgPath,thumbnailPath);
 
 @override
 String toString() {
-  return 'Part(id: $id, name: $name, detailNumber: $detailNumber, price: $price, isRecycled: $isRecycled, generalTagIds: $generalTagIds, brandTagId: $brandTagId, categoryTagId: $categoryTagId, description: $description, imgPath: $imgPath)';
+  return 'Part(id: $id, name: $name, detailNumber: $detailNumber, price: $price, isRecycled: $isRecycled, generalTagIds: $generalTagIds, brandTagId: $brandTagId, categoryTagId: $categoryTagId, description: $description, imgPath: $imgPath, thumbnailPath: $thumbnailPath)';
 }
 
 
@@ -45,7 +45,7 @@ abstract mixin class $PartCopyWith<$Res>  {
   factory $PartCopyWith(Part value, $Res Function(Part) _then) = _$PartCopyWithImpl;
 @useResult
 $Res call({
- String? id, String name, String detailNumber, double price, bool isRecycled, List<String> generalTagIds, String? brandTagId, String? categoryTagId, String? description, String? imgPath
+ String? id, String name, String detailNumber, double price, bool isRecycled, List<String> generalTagIds, String? brandTagId, String? categoryTagId, String? description, String? imgPath, String? thumbnailPath
 });
 
 
@@ -62,7 +62,7 @@ class _$PartCopyWithImpl<$Res>
 
 /// Create a copy of Part
 /// with the given fields replaced by the non-null parameter values.
-@pragma('vm:prefer-inline') @override $Res call({Object? id = freezed,Object? name = null,Object? detailNumber = null,Object? price = null,Object? isRecycled = null,Object? generalTagIds = null,Object? brandTagId = freezed,Object? categoryTagId = freezed,Object? description = freezed,Object? imgPath = freezed,}) {
+@pragma('vm:prefer-inline') @override $Res call({Object? id = freezed,Object? name = null,Object? detailNumber = null,Object? price = null,Object? isRecycled = null,Object? generalTagIds = null,Object? brandTagId = freezed,Object? categoryTagId = freezed,Object? description = freezed,Object? imgPath = freezed,Object? thumbnailPath = freezed,}) {
   return _then(_self.copyWith(
 id: freezed == id ? _self.id : id // ignore: cast_nullable_to_non_nullable
 as String?,name: null == name ? _self.name : name // ignore: cast_nullable_to_non_nullable
@@ -74,6 +74,7 @@ as List<String>,brandTagId: freezed == brandTagId ? _self.brandTagId : brandTagI
 as String?,categoryTagId: freezed == categoryTagId ? _self.categoryTagId : categoryTagId // ignore: cast_nullable_to_non_nullable
 as String?,description: freezed == description ? _self.description : description // ignore: cast_nullable_to_non_nullable
 as String?,imgPath: freezed == imgPath ? _self.imgPath : imgPath // ignore: cast_nullable_to_non_nullable
+as String?,thumbnailPath: freezed == thumbnailPath ? _self.thumbnailPath : thumbnailPath // ignore: cast_nullable_to_non_nullable
 as String?,
   ));
 }
@@ -159,10 +160,10 @@ return $default(_that);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function( String? id,  String name,  String detailNumber,  double price,  bool isRecycled,  List<String> generalTagIds,  String? brandTagId,  String? categoryTagId,  String? description,  String? imgPath)?  $default,{required TResult orElse(),}) {final _that = this;
+@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function( String? id,  String name,  String detailNumber,  double price,  bool isRecycled,  List<String> generalTagIds,  String? brandTagId,  String? categoryTagId,  String? description,  String? imgPath,  String? thumbnailPath)?  $default,{required TResult orElse(),}) {final _that = this;
 switch (_that) {
 case _Part() when $default != null:
-return $default(_that.id,_that.name,_that.detailNumber,_that.price,_that.isRecycled,_that.generalTagIds,_that.brandTagId,_that.categoryTagId,_that.description,_that.imgPath);case _:
+return $default(_that.id,_that.name,_that.detailNumber,_that.price,_that.isRecycled,_that.generalTagIds,_that.brandTagId,_that.categoryTagId,_that.description,_that.imgPath,_that.thumbnailPath);case _:
   return orElse();
 
 }
@@ -180,10 +181,10 @@ return $default(_that.id,_that.name,_that.detailNumber,_that.price,_that.isRecyc
 /// }
 /// ```
 
-@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function( String? id,  String name,  String detailNumber,  double price,  bool isRecycled,  List<String> generalTagIds,  String? brandTagId,  String? categoryTagId,  String? description,  String? imgPath)  $default,) {final _that = this;
+@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function( String? id,  String name,  String detailNumber,  double price,  bool isRecycled,  List<String> generalTagIds,  String? brandTagId,  String? categoryTagId,  String? description,  String? imgPath,  String? thumbnailPath)  $default,) {final _that = this;
 switch (_that) {
 case _Part():
-return $default(_that.id,_that.name,_that.detailNumber,_that.price,_that.isRecycled,_that.generalTagIds,_that.brandTagId,_that.categoryTagId,_that.description,_that.imgPath);case _:
+return $default(_that.id,_that.name,_that.detailNumber,_that.price,_that.isRecycled,_that.generalTagIds,_that.brandTagId,_that.categoryTagId,_that.description,_that.imgPath,_that.thumbnailPath);case _:
   throw StateError('Unexpected subclass');
 
 }
@@ -200,10 +201,10 @@ return $default(_that.id,_that.name,_that.detailNumber,_that.price,_that.isRecyc
 /// }
 /// ```
 
-@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function( String? id,  String name,  String detailNumber,  double price,  bool isRecycled,  List<String> generalTagIds,  String? brandTagId,  String? categoryTagId,  String? description,  String? imgPath)?  $default,) {final _that = this;
+@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function( String? id,  String name,  String detailNumber,  double price,  bool isRecycled,  List<String> generalTagIds,  String? brandTagId,  String? categoryTagId,  String? description,  String? imgPath,  String? thumbnailPath)?  $default,) {final _that = this;
 switch (_that) {
 case _Part() when $default != null:
-return $default(_that.id,_that.name,_that.detailNumber,_that.price,_that.isRecycled,_that.generalTagIds,_that.brandTagId,_that.categoryTagId,_that.description,_that.imgPath);case _:
+return $default(_that.id,_that.name,_that.detailNumber,_that.price,_that.isRecycled,_that.generalTagIds,_that.brandTagId,_that.categoryTagId,_that.description,_that.imgPath,_that.thumbnailPath);case _:
   return null;
 
 }
@@ -215,7 +216,7 @@ return $default(_that.id,_that.name,_that.detailNumber,_that.price,_that.isRecyc
 
 
 class _Part extends Part {
-  const _Part({required this.id, required this.name, required this.detailNumber, required this.price, required this.isRecycled, required final  List<String> generalTagIds, required this.brandTagId, required this.categoryTagId, required this.description, required this.imgPath}): _generalTagIds = generalTagIds,super._();
+  const _Part({required this.id, required this.name, required this.detailNumber, required this.price, required this.isRecycled, required final  List<String> generalTagIds, required this.brandTagId, required this.categoryTagId, required this.description, required this.imgPath, required this.thumbnailPath}): _generalTagIds = generalTagIds,super._();
   
 
 @override final  String? id;
@@ -234,6 +235,7 @@ class _Part extends Part {
 @override final  String? categoryTagId;
 @override final  String? description;
 @override final  String? imgPath;
+@override final  String? thumbnailPath;
 
 /// Create a copy of Part
 /// with the given fields replaced by the non-null parameter values.
@@ -245,16 +247,16 @@ _$PartCopyWith<_Part> get copyWith => __$PartCopyWithImpl<_Part>(this, _$identit
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is _Part&&(identical(other.id, id) || other.id == id)&&(identical(other.name, name) || other.name == name)&&(identical(other.detailNumber, detailNumber) || other.detailNumber == detailNumber)&&(identical(other.price, price) || other.price == price)&&(identical(other.isRecycled, isRecycled) || other.isRecycled == isRecycled)&&const DeepCollectionEquality().equals(other._generalTagIds, _generalTagIds)&&(identical(other.brandTagId, brandTagId) || other.brandTagId == brandTagId)&&(identical(other.categoryTagId, categoryTagId) || other.categoryTagId == categoryTagId)&&(identical(other.description, description) || other.description == description)&&(identical(other.imgPath, imgPath) || other.imgPath == imgPath));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is _Part&&(identical(other.id, id) || other.id == id)&&(identical(other.name, name) || other.name == name)&&(identical(other.detailNumber, detailNumber) || other.detailNumber == detailNumber)&&(identical(other.price, price) || other.price == price)&&(identical(other.isRecycled, isRecycled) || other.isRecycled == isRecycled)&&const DeepCollectionEquality().equals(other._generalTagIds, _generalTagIds)&&(identical(other.brandTagId, brandTagId) || other.brandTagId == brandTagId)&&(identical(other.categoryTagId, categoryTagId) || other.categoryTagId == categoryTagId)&&(identical(other.description, description) || other.description == description)&&(identical(other.imgPath, imgPath) || other.imgPath == imgPath)&&(identical(other.thumbnailPath, thumbnailPath) || other.thumbnailPath == thumbnailPath));
 }
 
 
 @override
-int get hashCode => Object.hash(runtimeType,id,name,detailNumber,price,isRecycled,const DeepCollectionEquality().hash(_generalTagIds),brandTagId,categoryTagId,description,imgPath);
+int get hashCode => Object.hash(runtimeType,id,name,detailNumber,price,isRecycled,const DeepCollectionEquality().hash(_generalTagIds),brandTagId,categoryTagId,description,imgPath,thumbnailPath);
 
 @override
 String toString() {
-  return 'Part(id: $id, name: $name, detailNumber: $detailNumber, price: $price, isRecycled: $isRecycled, generalTagIds: $generalTagIds, brandTagId: $brandTagId, categoryTagId: $categoryTagId, description: $description, imgPath: $imgPath)';
+  return 'Part(id: $id, name: $name, detailNumber: $detailNumber, price: $price, isRecycled: $isRecycled, generalTagIds: $generalTagIds, brandTagId: $brandTagId, categoryTagId: $categoryTagId, description: $description, imgPath: $imgPath, thumbnailPath: $thumbnailPath)';
 }
 
 
@@ -265,7 +267,7 @@ abstract mixin class _$PartCopyWith<$Res> implements $PartCopyWith<$Res> {
   factory _$PartCopyWith(_Part value, $Res Function(_Part) _then) = __$PartCopyWithImpl;
 @override @useResult
 $Res call({
- String? id, String name, String detailNumber, double price, bool isRecycled, List<String> generalTagIds, String? brandTagId, String? categoryTagId, String? description, String? imgPath
+ String? id, String name, String detailNumber, double price, bool isRecycled, List<String> generalTagIds, String? brandTagId, String? categoryTagId, String? description, String? imgPath, String? thumbnailPath
 });
 
 
@@ -282,7 +284,7 @@ class __$PartCopyWithImpl<$Res>
 
 /// Create a copy of Part
 /// with the given fields replaced by the non-null parameter values.
-@override @pragma('vm:prefer-inline') $Res call({Object? id = freezed,Object? name = null,Object? detailNumber = null,Object? price = null,Object? isRecycled = null,Object? generalTagIds = null,Object? brandTagId = freezed,Object? categoryTagId = freezed,Object? description = freezed,Object? imgPath = freezed,}) {
+@override @pragma('vm:prefer-inline') $Res call({Object? id = freezed,Object? name = null,Object? detailNumber = null,Object? price = null,Object? isRecycled = null,Object? generalTagIds = null,Object? brandTagId = freezed,Object? categoryTagId = freezed,Object? description = freezed,Object? imgPath = freezed,Object? thumbnailPath = freezed,}) {
   return _then(_Part(
 id: freezed == id ? _self.id : id // ignore: cast_nullable_to_non_nullable
 as String?,name: null == name ? _self.name : name // ignore: cast_nullable_to_non_nullable
@@ -294,6 +296,7 @@ as List<String>,brandTagId: freezed == brandTagId ? _self.brandTagId : brandTagI
 as String?,categoryTagId: freezed == categoryTagId ? _self.categoryTagId : categoryTagId // ignore: cast_nullable_to_non_nullable
 as String?,description: freezed == description ? _self.description : description // ignore: cast_nullable_to_non_nullable
 as String?,imgPath: freezed == imgPath ? _self.imgPath : imgPath // ignore: cast_nullable_to_non_nullable
+as String?,thumbnailPath: freezed == thumbnailPath ? _self.thumbnailPath : thumbnailPath // ignore: cast_nullable_to_non_nullable
 as String?,
   ));
 }

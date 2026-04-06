@@ -1,4 +1,5 @@
 import 'package:app_ui/app_ui.dart';
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:collection/collection.dart';
 import 'package:flutter/material.dart';
 import 'package:inventory_app/l10n/l10n.dart';
@@ -21,67 +22,104 @@ class InventoryPartCard extends StatelessWidget {
     final stocks = part.stock.where((stock) => stock.quantity > 0).toList()
       ..sorted((a, b) => b.storageName.compareTo(a.storageName));
     return Card(
+      clipBehavior: Clip.hardEdge,
       child: InkWell(
         onTap: () => Navigator.push(context, PartDetailsPage.route(part: part)),
         child: Stack(
           children: [
-            Padding(
-              padding: const .all(8),
-              child: Column(
-                crossAxisAlignment: .start,
-                children: [
-                  Row(
-                    crossAxisAlignment: .start,
-                    children: [
-                      Column(
-                        crossAxisAlignment: .start,
-                        children: [
-                          Row(
-                            spacing: 2,
-                            children: [
-                              Text(part.name),
-                              if (part.isRecycled) const RecycledIcon(),
-                            ],
-                          ),
-                          Text(
-                            part.detailNumber,
-                            style: context.text.bodySmall?.copyWith(
-                              color: context.colors.onSurfaceVariant,
+            Row(
+              children: [
+                if (part.thumbnailPath != null)
+                  _PartThumbnail(url: part.thumbnailPath!),
+                Expanded(
+                  child: Padding(
+                    padding: const .all(8),
+                    child: Column(
+                      crossAxisAlignment: .start,
+                      children: [
+                        Row(
+                          crossAxisAlignment: .start,
+                          children: [
+                            Column(
+                              crossAxisAlignment: .start,
+                              children: [
+                                Row(
+                                  spacing: 2,
+                                  children: [
+                                    Text(part.name),
+                                    if (part.isRecycled) const RecycledIcon(),
+                                  ],
+                                ),
+                                Text(
+                                  part.detailNumber,
+                                  style: context.text.bodySmall?.copyWith(
+                                    color: context.colors.onSurfaceVariant,
+                                  ),
+                                ),
+                              ],
                             ),
-                          ),
-                        ],
-                      ),
-                      const Spacer(),
-                      TagsRow(part: part),
-                    ],
-                  ),
-                  const Padding(
-                    padding: .symmetric(vertical: 2),
-                    child: Divider(
-                      thickness: 0.3,
-                      height: 2,
-                    ),
-                  ),
-                  Row(
-                    mainAxisAlignment: .spaceBetween,
-                    children: [
-                      Expanded(child: _InStockBadges(stocks: stocks)),
-                      Padding(
-                        padding: const .symmetric(vertical: 2, horizontal: 4),
-                        child: Text(
-                          part.totalQuantity.toString(),
-                          style: context.text.bodyMedium?.copyWith(
-                            color: Colors.blueAccent,
-                            fontWeight: .bold,
+                            const Spacer(),
+                            TagsRow(part: part),
+                          ],
+                        ),
+                        const Padding(
+                          padding: .symmetric(vertical: 2),
+                          child: Divider(
+                            thickness: 0.3,
+                            height: 2,
                           ),
                         ),
-                      ),
-                    ],
+                        Row(
+                          mainAxisAlignment: .spaceBetween,
+                          children: [
+                            Expanded(child: _InStockBadges(stocks: stocks)),
+                            Padding(
+                              padding: const .symmetric(
+                                vertical: 2,
+                                horizontal: 4,
+                              ),
+                              child: Text(
+                                part.totalQuantity.toString(),
+                                style: context.text.bodyMedium?.copyWith(
+                                  color: Colors.blueAccent,
+                                  fontWeight: .bold,
+                                ),
+                              ),
+                            ),
+                          ],
+                        ),
+                      ],
+                    ),
                   ),
-                ],
-              ),
+                ),
+              ],
             ),
           ],
+        ),
+      ),
+    );
+  }
+}
+
+class _PartThumbnail extends StatelessWidget {
+  const _PartThumbnail({required this.url});
+
+  final String url;
+
+  @override
+  Widget build(BuildContext context) {
+    return SizedBox(
+      width: 72,
+      child: CachedNetworkImage(
+        imageUrl: url,
+        fit: BoxFit.cover,
+        fadeInDuration: const Duration(milliseconds: 200),
+        placeholder: (context, url) => ColoredBox(
+          color: context.colors.surfaceContainerHighest,
+        ),
+        errorWidget: (context, url, error) => ColoredBox(
+          color: context.colors.surfaceContainerHighest,
+          child: const Center(child: Icon(Icons.image_not_supported, size: 20)),
         ),
       ),
     );

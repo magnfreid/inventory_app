@@ -17,6 +17,7 @@ abstract class Part with _$Part {
     required String? categoryTagId,
     required String? description,
     required String? imgPath,
+    required String? thumbnailPath,
   }) = _Part;
 
   const Part._();
@@ -33,6 +34,7 @@ abstract class Part with _$Part {
     generalTagIds: dto.generalTagIds,
     description: dto.description,
     imgPath: dto.imgPath,
+    thumbnailPath: dto.thumbnailPath,
   );
 
   /// Converts this [Part] to a [PartDto] for persistence.
@@ -47,5 +49,6 @@ abstract class Part with _$Part {
     brandTagId: brandTagId,
     generalTagIds: generalTagIds,
     imgPath: imgPath,
+    thumbnailPath: thumbnailPath,
   );
 }

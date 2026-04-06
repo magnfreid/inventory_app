@@ -1,69 +1,64 @@
 import 'dart:io';
 import 'package:flutter/foundation.dart';
-import 'package:image/image.dart' as img;
 import 'package:image_remote/image_remote.dart';
 import 'package:path_provider/path_provider.dart';
 
+typedef UploadedImagePaths = ({String imgPath, String thumbnailPath});
+
 /// Repository responsible for image upload and deletion.
 ///
-/// Handles resizing to 1080x608 (9:16), JPEG compression (85% quality),
-/// and delegates storage operations to [ImageRemote].
+/// Handles uploading both a full-size image and a thumbnail, then delegates
+/// storage operations to [ImageRemote].
 class ImageRepository {
   /// Creates an [ImageRepository] with the given remote data source.
   ImageRepository({required ImageRemote remote}) : _remote = remote;
 
   final ImageRemote _remote;
 
-  /// Uploads an image after resizing and compressing it.
-  ///
-  /// - Resizes image to 1080x608 using cubic interpolation.
-  /// - Encodes as JPEG with 85% quality.
-  /// - Saves to temporary directory before upload.
+  /// Uploads a full-size image and a thumbnail.
   ///
   /// [partId] Unique identifier for the part.
-  /// [deviceImgPath] Local file path of the image on device.
+  /// [bytes] Full-size image bytes.
+  /// [thumbnailBytes] Thumbnail image bytes.
   ///
-  /// Returns the download URL of the uploaded image.
-  ///
-  /// Throws [Exception] if file is not found or cannot be decoded.
-  Future<String> uploadImage({
+  /// Returns a record with the download URLs for both.
+  Future<UploadedImagePaths> uploadImage({
     required String partId,
     required Uint8List bytes,
+    required Uint8List thumbnailBytes,
   }) async {
-    // final image = img.decodeImage(bytes);
-    // if (image == null) throw Exception('Failed to decode image');
-
-    // const targetWidth = 1080;
-    // final targetHeight = (1080 * 9 / 16).round();
-
-    // final resized = img.copyResize(
-    //   image,
-    //   width: targetWidth,
-    //   height: targetHeight,
-    //   interpolation: img.Interpolation.cubic,
-    // );
-
-    // final encoded = img.encodeJpg(resized, quality: 85);
-
     if (kIsWeb) {
-      return _remote.uploadImageFromBytes(
+      final imgPath = await _remote.uploadImageFromBytes(
         partId: partId,
         bytes: bytes,
       );
+      final thumbnailPath = await _remote.uploadThumbnailFromBytes(
+        partId: partId,
+        bytes: thumbnailBytes,
+      );
+      return (imgPath: imgPath, thumbnailPath: thumbnailPath);
     } else {
       final tempDir = await getTemporaryDirectory();
       final tempFile = File('${tempDir.path}/$partId.jpg');
-
       await tempFile.writeAsBytes(bytes);
 
-      return _remote.uploadImageFromFile(
+      final imgPath = await _remote.uploadImageFromFile(
         partId: partId,
         file: tempFile,
       );
+      final thumbnailPath = await _remote.uploadThumbnailFromBytes(
+        partId: partId,
+        bytes: thumbnailBytes,
+      );
+      return (imgPath: imgPath, thumbnailPath: thumbnailPath);
     }
   }
 
-  /// Deletes an image by its part ID.
-  Future<void> deleteImage({required String partId}) =>
-      _remote.deleteImage(partId: partId);
+  /// Deletes both the image and thumbnail for a given part.
+  Future<void> deleteImage({required String partId}) async {
+    await Future.wait([
+      _remote.deleteImage(partId: partId),
+      _remote.deleteThumbnail(partId: partId),
+    ]);
+  }
 }

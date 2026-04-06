@@ -14,7 +14,7 @@ T _$identity<T>(T value) => value;
 /// @nodoc
 mixin _$PartPresentation {
 
- String get partId; String get name; String get detailNumber; double get price; bool get isRecycled; List<StockPresentation> get stock; TagPresentation? get categoryTag; TagPresentation? get brandTag; List<TagPresentation> get generalTags; String? get description; String? get imgPath;
+ String get partId; String get name; String get detailNumber; double get price; bool get isRecycled; List<StockPresentation> get stock; TagPresentation? get categoryTag; TagPresentation? get brandTag; List<TagPresentation> get generalTags; String? get description; String? get imgPath; String? get thumbnailPath;
 /// Create a copy of PartPresentation
 /// with the given fields replaced by the non-null parameter values.
 @JsonKey(includeFromJson: false, includeToJson: false)
@@ -25,16 +25,16 @@ $PartPresentationCopyWith<PartPresentation> get copyWith => _$PartPresentationCo
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is PartPresentation&&(identical(other.partId, partId) || other.partId == partId)&&(identical(other.name, name) || other.name == name)&&(identical(other.detailNumber, detailNumber) || other.detailNumber == detailNumber)&&(identical(other.price, price) || other.price == price)&&(identical(other.isRecycled, isRecycled) || other.isRecycled == isRecycled)&&const DeepCollectionEquality().equals(other.stock, stock)&&(identical(other.categoryTag, categoryTag) || other.categoryTag == categoryTag)&&(identical(other.brandTag, brandTag) || other.brandTag == brandTag)&&const DeepCollectionEquality().equals(other.generalTags, generalTags)&&(identical(other.description, description) || other.description == description)&&(identical(other.imgPath, imgPath) || other.imgPath == imgPath));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is PartPresentation&&(identical(other.partId, partId) || other.partId == partId)&&(identical(other.name, name) || other.name == name)&&(identical(other.detailNumber, detailNumber) || other.detailNumber == detailNumber)&&(identical(other.price, price) || other.price == price)&&(identical(other.isRecycled, isRecycled) || other.isRecycled == isRecycled)&&const DeepCollectionEquality().equals(other.stock, stock)&&(identical(other.categoryTag, categoryTag) || other.categoryTag == categoryTag)&&(identical(other.brandTag, brandTag) || other.brandTag == brandTag)&&const DeepCollectionEquality().equals(other.generalTags, generalTags)&&(identical(other.description, description) || other.description == description)&&(identical(other.imgPath, imgPath) || other.imgPath == imgPath)&&(identical(other.thumbnailPath, thumbnailPath) || other.thumbnailPath == thumbnailPath));
 }
 
 
 @override
-int get hashCode => Object.hash(runtimeType,partId,name,detailNumber,price,isRecycled,const DeepCollectionEquality().hash(stock),categoryTag,brandTag,const DeepCollectionEquality().hash(generalTags),description,imgPath);
+int get hashCode => Object.hash(runtimeType,partId,name,detailNumber,price,isRecycled,const DeepCollectionEquality().hash(stock),categoryTag,brandTag,const DeepCollectionEquality().hash(generalTags),description,imgPath,thumbnailPath);
 
 @override
 String toString() {
-  return 'PartPresentation(partId: $partId, name: $name, detailNumber: $detailNumber, price: $price, isRecycled: $isRecycled, stock: $stock, categoryTag: $categoryTag, brandTag: $brandTag, generalTags: $generalTags, description: $description, imgPath: $imgPath)';
+  return 'PartPresentation(partId: $partId, name: $name, detailNumber: $detailNumber, price: $price, isRecycled: $isRecycled, stock: $stock, categoryTag: $categoryTag, brandTag: $brandTag, generalTags: $generalTags, description: $description, imgPath: $imgPath, thumbnailPath: $thumbnailPath)';
 }
 
 
@@ -45,7 +45,7 @@ abstract mixin class $PartPresentationCopyWith<$Res>  {
   factory $PartPresentationCopyWith(PartPresentation value, $Res Function(PartPresentation) _then) = _$PartPresentationCopyWithImpl;
 @useResult
 $Res call({
- String partId, String name, String detailNumber, double price, bool isRecycled, List<StockPresentation> stock, TagPresentation? categoryTag, TagPresentation? brandTag, List<TagPresentation> generalTags, String? description, String? imgPath
+ String partId, String name, String detailNumber, double price, bool isRecycled, List<StockPresentation> stock, TagPresentation? categoryTag, TagPresentation? brandTag, List<TagPresentation> generalTags, String? description, String? imgPath, String? thumbnailPath
 });
 
 
@@ -62,7 +62,7 @@ class _$PartPresentationCopyWithImpl<$Res>
 
 /// Create a copy of PartPresentation
 /// with the given fields replaced by the non-null parameter values.
-@pragma('vm:prefer-inline') @override $Res call({Object? partId = null,Object? name = null,Object? detailNumber = null,Object? price = null,Object? isRecycled = null,Object? stock = null,Object? categoryTag = freezed,Object? brandTag = freezed,Object? generalTags = null,Object? description = freezed,Object? imgPath = freezed,}) {
+@pragma('vm:prefer-inline') @override $Res call({Object? partId = null,Object? name = null,Object? detailNumber = null,Object? price = null,Object? isRecycled = null,Object? stock = null,Object? categoryTag = freezed,Object? brandTag = freezed,Object? generalTags = null,Object? description = freezed,Object? imgPath = freezed,Object? thumbnailPath = freezed,}) {
   return _then(_self.copyWith(
 partId: null == partId ? _self.partId : partId // ignore: cast_nullable_to_non_nullable
 as String,name: null == name ? _self.name : name // ignore: cast_nullable_to_non_nullable
@@ -75,6 +75,7 @@ as TagPresentation?,brandTag: freezed == brandTag ? _self.brandTag : brandTag //
 as TagPresentation?,generalTags: null == generalTags ? _self.generalTags : generalTags // ignore: cast_nullable_to_non_nullable
 as List<TagPresentation>,description: freezed == description ? _self.description : description // ignore: cast_nullable_to_non_nullable
 as String?,imgPath: freezed == imgPath ? _self.imgPath : imgPath // ignore: cast_nullable_to_non_nullable
+as String?,thumbnailPath: freezed == thumbnailPath ? _self.thumbnailPath : thumbnailPath // ignore: cast_nullable_to_non_nullable
 as String?,
   ));
 }
@@ -160,10 +161,10 @@ return $default(_that);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function( String partId,  String name,  String detailNumber,  double price,  bool isRecycled,  List<StockPresentation> stock,  TagPresentation? categoryTag,  TagPresentation? brandTag,  List<TagPresentation> generalTags,  String? description,  String? imgPath)?  $default,{required TResult orElse(),}) {final _that = this;
+@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function( String partId,  String name,  String detailNumber,  double price,  bool isRecycled,  List<StockPresentation> stock,  TagPresentation? categoryTag,  TagPresentation? brandTag,  List<TagPresentation> generalTags,  String? description,  String? imgPath,  String? thumbnailPath)?  $default,{required TResult orElse(),}) {final _that = this;
 switch (_that) {
 case _Part() when $default != null:
-return $default(_that.partId,_that.name,_that.detailNumber,_that.price,_that.isRecycled,_that.stock,_that.categoryTag,_that.brandTag,_that.generalTags,_that.description,_that.imgPath);case _:
+return $default(_that.partId,_that.name,_that.detailNumber,_that.price,_that.isRecycled,_that.stock,_that.categoryTag,_that.brandTag,_that.generalTags,_that.description,_that.imgPath,_that.thumbnailPath);case _:
   return orElse();
 
 }
@@ -181,10 +182,10 @@ return $default(_that.partId,_that.name,_that.detailNumber,_that.price,_that.isR
 /// }
 /// ```
 
-@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function( String partId,  String name,  String detailNumber,  double price,  bool isRecycled,  List<StockPresentation> stock,  TagPresentation? categoryTag,  TagPresentation? brandTag,  List<TagPresentation> generalTags,  String? description,  String? imgPath)  $default,) {final _that = this;
+@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function( String partId,  String name,  String detailNumber,  double price,  bool isRecycled,  List<StockPresentation> stock,  TagPresentation? categoryTag,  TagPresentation? brandTag,  List<TagPresentation> generalTags,  String? description,  String? imgPath,  String? thumbnailPath)  $default,) {final _that = this;
 switch (_that) {
 case _Part():
-return $default(_that.partId,_that.name,_that.detailNumber,_that.price,_that.isRecycled,_that.stock,_that.categoryTag,_that.brandTag,_that.generalTags,_that.description,_that.imgPath);case _:
+return $default(_that.partId,_that.name,_that.detailNumber,_that.price,_that.isRecycled,_that.stock,_that.categoryTag,_that.brandTag,_that.generalTags,_that.description,_that.imgPath,_that.thumbnailPath);case _:
   throw StateError('Unexpected subclass');
 
 }
@@ -201,10 +202,10 @@ return $default(_that.partId,_that.name,_that.detailNumber,_that.price,_that.isR
 /// }
 /// ```
 
-@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function( String partId,  String name,  String detailNumber,  double price,  bool isRecycled,  List<StockPresentation> stock,  TagPresentation? categoryTag,  TagPresentation? brandTag,  List<TagPresentation> generalTags,  String? description,  String? imgPath)?  $default,) {final _that = this;
+@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function( String partId,  String name,  String detailNumber,  double price,  bool isRecycled,  List<StockPresentation> stock,  TagPresentation? categoryTag,  TagPresentation? brandTag,  List<TagPresentation> generalTags,  String? description,  String? imgPath,  String? thumbnailPath)?  $default,) {final _that = this;
 switch (_that) {
 case _Part() when $default != null:
-return $default(_that.partId,_that.name,_that.detailNumber,_that.price,_that.isRecycled,_that.stock,_that.categoryTag,_that.brandTag,_that.generalTags,_that.description,_that.imgPath);case _:
+return $default(_that.partId,_that.name,_that.detailNumber,_that.price,_that.isRecycled,_that.stock,_that.categoryTag,_that.brandTag,_that.generalTags,_that.description,_that.imgPath,_that.thumbnailPath);case _:
   return null;
 
 }
@@ -216,7 +217,7 @@ return $default(_that.partId,_that.name,_that.detailNumber,_that.price,_that.isR
 
 
 class _Part extends PartPresentation {
-  const _Part({required this.partId, required this.name, required this.detailNumber, required this.price, required this.isRecycled, final  List<StockPresentation> stock = const [], this.categoryTag, this.brandTag, final  List<TagPresentation> generalTags = const [], this.description, this.imgPath}): _stock = stock,_generalTags = generalTags,super._();
+  const _Part({required this.partId, required this.name, required this.detailNumber, required this.price, required this.isRecycled, final  List<StockPresentation> stock = const [], this.categoryTag, this.brandTag, final  List<TagPresentation> generalTags = const [], this.description, this.imgPath, this.thumbnailPath}): _stock = stock,_generalTags = generalTags,super._();
   
 
 @override final  String partId;
@@ -242,6 +243,7 @@ class _Part extends PartPresentation {
 
 @override final  String? description;
 @override final  String? imgPath;
+@override final  String? thumbnailPath;
 
 /// Create a copy of PartPresentation
 /// with the given fields replaced by the non-null parameter values.
@@ -253,16 +255,16 @@ _$PartCopyWith<_Part> get copyWith => __$PartCopyWithImpl<_Part>(this, _$identit
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is _Part&&(identical(other.partId, partId) || other.partId == partId)&&(identical(other.name, name) || other.name == name)&&(identical(other.detailNumber, detailNumber) || other.detailNumber == detailNumber)&&(identical(other.price, price) || other.price == price)&&(identical(other.isRecycled, isRecycled) || other.isRecycled == isRecycled)&&const DeepCollectionEquality().equals(other._stock, _stock)&&(identical(other.categoryTag, categoryTag) || other.categoryTag == categoryTag)&&(identical(other.brandTag, brandTag) || other.brandTag == brandTag)&&const DeepCollectionEquality().equals(other._generalTags, _generalTags)&&(identical(other.description, description) || other.description == description)&&(identical(other.imgPath, imgPath) || other.imgPath == imgPath));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is _Part&&(identical(other.partId, partId) || other.partId == partId)&&(identical(other.name, name) || other.name == name)&&(identical(other.detailNumber, detailNumber) || other.detailNumber == detailNumber)&&(identical(other.price, price) || other.price == price)&&(identical(other.isRecycled, isRecycled) || other.isRecycled == isRecycled)&&const DeepCollectionEquality().equals(other._stock, _stock)&&(identical(other.categoryTag, categoryTag) || other.categoryTag == categoryTag)&&(identical(other.brandTag, brandTag) || other.brandTag == brandTag)&&const DeepCollectionEquality().equals(other._generalTags, _generalTags)&&(identical(other.description, description) || other.description == description)&&(identical(other.imgPath, imgPath) || other.imgPath == imgPath)&&(identical(other.thumbnailPath, thumbnailPath) || other.thumbnailPath == thumbnailPath));
 }
 
 
 @override
-int get hashCode => Object.hash(runtimeType,partId,name,detailNumber,price,isRecycled,const DeepCollectionEquality().hash(_stock),categoryTag,brandTag,const DeepCollectionEquality().hash(_generalTags),description,imgPath);
+int get hashCode => Object.hash(runtimeType,partId,name,detailNumber,price,isRecycled,const DeepCollectionEquality().hash(_stock),categoryTag,brandTag,const DeepCollectionEquality().hash(_generalTags),description,imgPath,thumbnailPath);
 
 @override
 String toString() {
-  return 'PartPresentation(partId: $partId, name: $name, detailNumber: $detailNumber, price: $price, isRecycled: $isRecycled, stock: $stock, categoryTag: $categoryTag, brandTag: $brandTag, generalTags: $generalTags, description: $description, imgPath: $imgPath)';
+  return 'PartPresentation(partId: $partId, name: $name, detailNumber: $detailNumber, price: $price, isRecycled: $isRecycled, stock: $stock, categoryTag: $categoryTag, brandTag: $brandTag, generalTags: $generalTags, description: $description, imgPath: $imgPath, thumbnailPath: $thumbnailPath)';
 }
 
 
@@ -273,7 +275,7 @@ abstract mixin class _$PartCopyWith<$Res> implements $PartPresentationCopyWith<$
   factory _$PartCopyWith(_Part value, $Res Function(_Part) _then) = __$PartCopyWithImpl;
 @override @useResult
 $Res call({
- String partId, String name, String detailNumber, double price, bool isRecycled, List<StockPresentation> stock, TagPresentation? categoryTag, TagPresentation? brandTag, List<TagPresentation> generalTags, String? description, String? imgPath
+ String partId, String name, String detailNumber, double price, bool isRecycled, List<StockPresentation> stock, TagPresentation? categoryTag, TagPresentation? brandTag, List<TagPresentation> generalTags, String? description, String? imgPath, String? thumbnailPath
 });
 
 
@@ -290,7 +292,7 @@ class __$PartCopyWithImpl<$Res>
 
 /// Create a copy of PartPresentation
 /// with the given fields replaced by the non-null parameter values.
-@override @pragma('vm:prefer-inline') $Res call({Object? partId = null,Object? name = null,Object? detailNumber = null,Object? price = null,Object? isRecycled = null,Object? stock = null,Object? categoryTag = freezed,Object? brandTag = freezed,Object? generalTags = null,Object? description = freezed,Object? imgPath = freezed,}) {
+@override @pragma('vm:prefer-inline') $Res call({Object? partId = null,Object? name = null,Object? detailNumber = null,Object? price = null,Object? isRecycled = null,Object? stock = null,Object? categoryTag = freezed,Object? brandTag = freezed,Object? generalTags = null,Object? description = freezed,Object? imgPath = freezed,Object? thumbnailPath = freezed,}) {
   return _then(_Part(
 partId: null == partId ? _self.partId : partId // ignore: cast_nullable_to_non_nullable
 as String,name: null == name ? _self.name : name // ignore: cast_nullable_to_non_nullable
@@ -303,6 +305,7 @@ as TagPresentation?,brandTag: freezed == brandTag ? _self.brandTag : brandTag //
 as TagPresentation?,generalTags: null == generalTags ? _self._generalTags : generalTags // ignore: cast_nullable_to_non_nullable
 as List<TagPresentation>,description: freezed == description ? _self.description : description // ignore: cast_nullable_to_non_nullable
 as String?,imgPath: freezed == imgPath ? _self.imgPath : imgPath // ignore: cast_nullable_to_non_nullable
+as String?,thumbnailPath: freezed == thumbnailPath ? _self.thumbnailPath : thumbnailPath // ignore: cast_nullable_to_non_nullable
 as String?,
   ));
 }

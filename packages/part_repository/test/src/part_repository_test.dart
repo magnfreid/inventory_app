@@ -26,6 +26,7 @@ void main() {
       brandTagId: '',
       generalTagIds: [],
       imgPath: 'path',
+      thumbnailPath: null,
     );
 
     domainPart = Part.fromDto(dto);
@@ -44,6 +45,7 @@ void main() {
         brandTagId: '',
         generalTagIds: [],
         imgPath: '',
+        thumbnailPath: null,
       ),
     );
   });

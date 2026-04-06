@@ -191,20 +191,27 @@ class PartDetailsBloc extends Bloc<PartDetailsEvent, PartDetailsState> {
       log('READING BYTES FINISHED!');
 
       log('PROCESSING IMAGE...');
-      final processedImage = await compute(processImage, bytes);
+      final processed = await compute(processImage, bytes);
       log('IMAGE PROCESSED!');
 
-      final downloadPath = await _imageRepository.uploadImage(
+      final paths = await _imageRepository.uploadImage(
         partId: state.part.partId,
-        bytes: processedImage,
+        bytes: processed.full,
+        thumbnailBytes: processed.thumbnail,
       );
       final editedPart = await _partRepository.editPart(
-        state.part.toDomainModel().copyWith(imgPath: downloadPath),
+        state.part.toDomainModel().copyWith(
+          imgPath: paths.imgPath,
+          thumbnailPath: paths.thumbnailPath,
+        ),
       );
       emit(
         state.copyWith(
           imageStatus: .done,
-          part: state.part.copyWith(imgPath: editedPart.imgPath),
+          part: state.part.copyWith(
+            imgPath: editedPart.imgPath,
+            thumbnailPath: editedPart.thumbnailPath,
+          ),
         ),
       );
     } on Exception catch (e) {
@@ -219,7 +226,10 @@ class PartDetailsBloc extends Bloc<PartDetailsEvent, PartDetailsState> {
     emit(state.copyWith(imageStatus: .loading, error: null));
     try {
       final partDomainModel = event.part.toDomainModel();
-      final updatedPart = partDomainModel.copyWith(imgPath: null);
+      final updatedPart = partDomainModel.copyWith(
+        imgPath: null,
+        thumbnailPath: null,
+      );
       await _partRepository.editPart(updatedPart);
       await _imageRepository.deleteImage(partId: event.part.partId);
       emit(state.copyWith(imageStatus: .done));

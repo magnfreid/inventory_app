@@ -78,6 +78,7 @@ class WatchPartPresentations {
                 description: part.description,
                 stock: storageQuantities,
                 imgPath: part.imgPath,
+                thumbnailPath: part.thumbnailPath,
               );
             }).toList();
           },

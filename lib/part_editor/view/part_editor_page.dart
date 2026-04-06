@@ -253,6 +253,7 @@ class _PartEditorViewState extends State<PartEditorView> {
                                   generalTagIds: [],
                                   description: _descriptionController.text,
                                   imgPath: widget.part?.imgPath,
+                                  thumbnailPath: widget.part?.thumbnailPath,
                                 ),
                               ),
                             )

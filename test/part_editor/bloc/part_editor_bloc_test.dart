@@ -37,6 +37,7 @@ void main() {
       generalTagIds: [],
       description: null,
       imgPath: 'imgPath',
+      thumbnailPath: null,
     );
     existingPart = const Part(
       id: '123',
@@ -49,6 +50,7 @@ void main() {
       generalTagIds: [],
       description: null,
       imgPath: 'imgPath',
+      thumbnailPath: null,
     );
 
     brandTag = Tag(id: '123', label: 'Brand', color: .amber, type: .brand);
