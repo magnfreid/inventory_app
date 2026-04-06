@@ -50,11 +50,9 @@ abstract class AppTheme {
       ),
       labelStyle: const TextStyle(fontWeight: .bold),
     ),
-
     bottomSheetTheme: BottomSheetThemeData(
       shape: _defaultShape,
     ),
-
     searchBarTheme: SearchBarThemeData(
       shape: WidgetStatePropertyAll(_defaultShape),
     ),
@@ -66,10 +64,28 @@ abstract class AppTheme {
 
   Color get _effectiveSeedColor => seedColor ?? _defaultSeedColor;
 
-  ColorScheme get _colorScheme => ColorScheme.fromSeed(
-        seedColor: _effectiveSeedColor,
-        brightness: _brightness,
-      );
+  /// Neutral surface colors that don't tint with the accent/seed color.
+  ColorScheme get _colorScheme {
+    final seeded = ColorScheme.fromSeed(
+      seedColor: _effectiveSeedColor,
+      brightness: _brightness,
+    );
+    return seeded.copyWith(
+      surface: _neutralSurface,
+      surfaceContainerLowest: _neutralSurfaceContainerLowest,
+      surfaceContainerLow: _neutralSurfaceContainerLow,
+      surfaceContainer: _neutralSurfaceContainer,
+      surfaceContainerHigh: _neutralSurfaceContainerHigh,
+      surfaceContainerHighest: _neutralSurfaceContainerHighest,
+    );
+  }
+
+  Color get _neutralSurface;
+  Color get _neutralSurfaceContainerLowest;
+  Color get _neutralSurfaceContainerLow;
+  Color get _neutralSurfaceContainer;
+  Color get _neutralSurfaceContainerHigh;
+  Color get _neutralSurfaceContainerHighest;
 
   TextTheme get _textTheme => GoogleFonts.oswaldTextTheme(
     ThemeData.from(colorScheme: _colorScheme).textTheme,
@@ -84,6 +100,24 @@ final class _LightTheme extends AppTheme {
 
   @override
   Brightness get _brightness => .light;
+
+  @override
+  Color get _neutralSurface => const Color(0xFFFBFBFB);
+
+  @override
+  Color get _neutralSurfaceContainerLowest => const Color(0xFFFFFFFF);
+
+  @override
+  Color get _neutralSurfaceContainerLow => const Color(0xFFF5F5F5);
+
+  @override
+  Color get _neutralSurfaceContainer => const Color(0xFFEEEEEE);
+
+  @override
+  Color get _neutralSurfaceContainerHigh => const Color(0xFFE8E8E8);
+
+  @override
+  Color get _neutralSurfaceContainerHighest => const Color(0xFFE0E0E0);
 }
 
 final class _DarkTheme extends AppTheme {
@@ -94,4 +128,22 @@ final class _DarkTheme extends AppTheme {
 
   @override
   Brightness get _brightness => .dark;
+
+  @override
+  Color get _neutralSurface => const Color(0xFF1C1B1F);
+
+  @override
+  Color get _neutralSurfaceContainerLowest => const Color(0xFF0F0D13);
+
+  @override
+  Color get _neutralSurfaceContainerLow => const Color(0xFF1D1B20);
+
+  @override
+  Color get _neutralSurfaceContainer => const Color(0xFF211F26);
+
+  @override
+  Color get _neutralSurfaceContainerHigh => const Color(0xFF2B2930);
+
+  @override
+  Color get _neutralSurfaceContainerHighest => const Color(0xFF36343B);
 }

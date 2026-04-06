@@ -1,5 +1,5 @@
+import 'package:app_ui/app_ui.dart';
 import 'package:hydrated_bloc/hydrated_bloc.dart';
-import 'package:inventory_app/theme/models/app_seed_color.dart';
 
 enum AppThemeMode { system, light, dark }
 

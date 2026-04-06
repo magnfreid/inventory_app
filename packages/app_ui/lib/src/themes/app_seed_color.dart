@@ -1,3 +1,5 @@
+// ignore_for_file: document_ignores, public_member_api_docs
+
 import 'package:flutter/material.dart';
 
 enum AppSeedColor {

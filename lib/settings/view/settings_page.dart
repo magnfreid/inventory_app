@@ -6,7 +6,6 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:inventory_app/l10n/l10n.dart';
 import 'package:inventory_app/statistics/view/statistics_page.dart';
 import 'package:inventory_app/theme/cubit/theme_cubit.dart';
-import 'package:inventory_app/theme/models/app_seed_color.dart';
 
 class SettingsPage extends StatelessWidget {
   const SettingsPage({super.key});

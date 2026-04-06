@@ -5,6 +5,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:inventory_app/authentication/cubit/authentication_cubit.dart';
 import 'package:inventory_app/l10n/l10n.dart';
 import 'package:inventory_app/settings/settings.dart';
+import 'package:inventory_app/statistics/view/statistics_page.dart';
 import 'package:inventory_app/storages/view/storages_page.dart';
 import 'package:inventory_app/tags/view/tags_page.dart';
 
@@ -38,6 +39,14 @@ class InventoryDrawer extends StatelessWidget {
               onTap: () {
                 Navigator.pop(context);
                 unawaited(Navigator.push(context, TagsPage.route()));
+              },
+            ),
+            ListTile(
+              leading: const Icon(Icons.history),
+              title: Text(l10n.drawerStatisticsLinkText),
+              onTap: () {
+                Navigator.pop(context);
+                unawaited(Navigator.push(context, StatisticsPage.route()));
               },
             ),
             ListTile(
