@@ -18,6 +18,8 @@ class Transaction {
         type: dto.type,
         timestamp: dto.timestamp,
         note: dto.note,
+        destinationStorageId: dto.destinationStorageId,
+        destinationStorageName: dto.destinationStorageName,
       );
 
   Transaction._({
@@ -35,6 +37,8 @@ class Transaction {
     required this.type,
     required this.timestamp,
     required this.note,
+    this.destinationStorageId,
+    this.destinationStorageName,
   });
 
   /// Creates a transaction representing usage of stock.
@@ -105,6 +109,49 @@ class Transaction {
       type: .restock,
       timestamp: DateTime.now(),
       note: note,
+    );
+  }
+
+  /// Creates a transaction representing a stock transfer between storages.
+  ///
+  /// The provided [amount] must be greater than zero. [storageId] is the
+  /// source storage and [destinationStorageId] is the destination. The
+  /// [amount] is recorded as positive on both the deduct and add entries;
+  /// the remote is responsible for applying the correct sign to each stock
+  /// document.
+  factory Transaction.transfer({
+    required String partId,
+    required String storageId,
+    required String destinationStorageId,
+    required String userId,
+    required String userDisplayName,
+    required String partName,
+    required String detailNumber,
+    required String storageName,
+    required String destinationStorageName,
+    required double unitPriceSnapshot,
+    required bool isRecycledPart,
+    required int amount,
+    String? note,
+  }) {
+    assert(amount > 0, 'amount must be > 0 for Transaction.transfer');
+    return Transaction._(
+      id: '',
+      partId: partId,
+      storageId: storageId,
+      destinationStorageId: destinationStorageId,
+      userId: userId,
+      userDisplayName: userDisplayName,
+      partName: partName,
+      detailNumber: detailNumber,
+      storageName: storageName,
+      destinationStorageName: destinationStorageName,
+      unitPriceSnapshot: unitPriceSnapshot,
+      isRecycledPart: isRecycledPart,
+      amount: amount,
+      type: .transfer,
+      note: note,
+      timestamp: DateTime.now(),
     );
   }
 
@@ -186,6 +233,16 @@ class Transaction {
   /// Timestamp of when the transaction was created.
   final DateTime timestamp;
 
+  /// Destination storage identifier for transfer transactions.
+  ///
+  /// `null` for non-transfer transactions.
+  final String? destinationStorageId;
+
+  /// Destination storage name snapshotted at write time.
+  ///
+  /// `null` for non-transfer transactions.
+  final String? destinationStorageName;
+
   /// Converts this [Transaction] into a [TransactionDto].
   TransactionDto toDto() => TransactionDto(
         id: null,
@@ -202,5 +259,7 @@ class Transaction {
         type: type,
         note: note,
         timestamp: timestamp,
+        destinationStorageId: destinationStorageId,
+        destinationStorageName: destinationStorageName,
       );
 }

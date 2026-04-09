@@ -123,6 +123,72 @@ class StockRepository {
     }
   }
 
+  /// Transfers stock from one storage to another in a single atomic operation.
+  ///
+  /// Constructs a deduct [TransactionDto] (negative amount, source storage)
+  /// and an add [TransactionDto] (positive amount, destination storage) and
+  /// delegates to [StockRemote.transferStock] so both writes happen in one
+  /// Firestore transaction.
+  ///
+  /// Rethrows [RemoteException] and wraps other exceptions in
+  /// [UnknownRemoteException].
+  Future<void> transferStock({
+    required String partId,
+    required String fromStorageId,
+    required String toStorageId,
+    required String userId,
+    required String userDisplayName,
+    required String partName,
+    required String detailNumber,
+    required String fromStorageName,
+    required String toStorageName,
+    required double unitPriceSnapshot,
+    required bool isRecycledPart,
+    required int amount,
+    String? note,
+  }) async {
+    final transfer = Transaction.transfer(
+      partId: partId,
+      storageId: fromStorageId,
+      destinationStorageId: toStorageId,
+      userId: userId,
+      userDisplayName: userDisplayName,
+      partName: partName,
+      detailNumber: detailNumber,
+      storageName: fromStorageName,
+      destinationStorageName: toStorageName,
+      unitPriceSnapshot: unitPriceSnapshot,
+      isRecycledPart: isRecycledPart,
+      amount: amount,
+      note: note,
+    );
+
+    // Deduct transaction: negative amount on source storage.
+    final deductDto = transfer.toDto().copyWith(
+          amount: -amount,
+          storageId: fromStorageId,
+          storageName: fromStorageName,
+        );
+
+    // Add transaction: positive amount on destination storage.
+    final addDto = transfer.toDto().copyWith(
+          amount: amount,
+          storageId: toStorageId,
+          storageName: toStorageName,
+        );
+
+    try {
+      await _remote.transferStock(
+        deductTransaction: deductDto,
+        addTransaction: addDto,
+      );
+    } on RemoteException {
+      rethrow;
+    } on Exception catch (_) {
+      throw const UnknownRemoteException();
+    }
+  }
+
   /// Adjusts the stock of a part by the given [amount].
   ///
   /// The [amount] may be positive or negative depending on the adjustment.

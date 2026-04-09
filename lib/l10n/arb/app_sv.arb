@@ -464,5 +464,25 @@
 	"settingsStatisticsLinkText": "Min statistik",
 	"@settingsStatisticsLinkText": {
 		"description": "Link to the statistics page from the settings page."
+	},
+	"transferButtonText": "Flytta",
+	"@transferButtonText": {
+		"description": "Transfer stock button label on the in-stock row."
+	},
+	"transferSheetSelectSourceTitle": "Flytta från:",
+	"@transferSheetSelectSourceTitle": {
+		"description": "Title shown when selecting the source storage in the transfer sheet."
+	},
+	"transferSheetSelectDestinationTitle": "Flytta till:",
+	"@transferSheetSelectDestinationTitle": {
+		"description": "Title shown when selecting the destination storage in the transfer sheet."
+	},
+	"transferSheetQuantityTitle": "Antal att flytta",
+	"@transferSheetQuantityTitle": {
+		"description": "Title shown on the quantity step of the transfer sheet."
+	},
+	"transferSheetNoteLabel": "Anteckning (valfri)",
+	"@transferSheetNoteLabel": {
+		"description": "Label for the optional note field in the transfer sheet."
 	}
 }

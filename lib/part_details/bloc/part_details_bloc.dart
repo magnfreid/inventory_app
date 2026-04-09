@@ -40,6 +40,10 @@ class PartDetailsBloc extends Bloc<PartDetailsEvent, PartDetailsState> {
       _onAddToStockButtonPressed,
       transformer: droppable(),
     );
+    on<TransferStockButtonPressed>(
+      _onTransferStockButtonPressed,
+      transformer: droppable(),
+    );
     on<ConfirmDeletePartButtonPressed>(
       _onConfirmDeletePartButtonPressed,
       transformer: droppable(),
@@ -138,6 +142,41 @@ class PartDetailsBloc extends Bloc<PartDetailsEvent, PartDetailsState> {
         storageName: storageName,
         unitPriceSnapshot: state.part.price,
         isRecycledPart: state.part.isRecycled,
+        note: event.note,
+      );
+      emit(state.copyWith(stockStatus: .done));
+    } on Exception catch (e) {
+      emit(state.copyWith(stockStatus: .done, error: e));
+    }
+  }
+
+  FutureOr<void> _onTransferStockButtonPressed(
+    TransferStockButtonPressed event,
+    Emitter<PartDetailsState> emit,
+  ) async {
+    emit(state.copyWith(stockStatus: .loading, error: null));
+    try {
+      final fromStorageName = _storageNameForId(
+        state.storages,
+        event.fromStorageId,
+      );
+      final toStorageName = _storageNameForId(
+        state.storages,
+        event.toStorageId,
+      );
+      await _stockRepository.transferStock(
+        partId: state.part.partId,
+        fromStorageId: event.fromStorageId,
+        toStorageId: event.toStorageId,
+        userId: event.userId,
+        userDisplayName: event.userDisplayName,
+        partName: state.part.name,
+        detailNumber: state.part.detailNumber,
+        fromStorageName: fromStorageName,
+        toStorageName: toStorageName,
+        unitPriceSnapshot: state.part.price,
+        isRecycledPart: state.part.isRecycled,
+        amount: event.quantity,
         note: event.note,
       );
       emit(state.copyWith(stockStatus: .done));

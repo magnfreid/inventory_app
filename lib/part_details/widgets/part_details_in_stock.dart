@@ -7,6 +7,7 @@ class PartDetailsInStock extends StatelessWidget {
   const PartDetailsInStock({
     required this.part,
     required this.onStockSelected,
+    required this.onTransferSelected,
     this.textStyle,
     super.key,
   });
@@ -14,6 +15,9 @@ class PartDetailsInStock extends StatelessWidget {
   final PartPresentation part;
   final TextStyle? textStyle;
   final void Function(StockPresentation stock) onStockSelected;
+
+  /// Called when the user taps the Transfer button for a stock entry.
+  final void Function(StockPresentation stock) onTransferSelected;
 
   @override
   Widget build(BuildContext context) {
@@ -62,6 +66,10 @@ class PartDetailsInStock extends StatelessWidget {
                     TextButton(
                       onPressed: () => onStockSelected(stockItem),
                       child: Text(l10n.useButtonText),
+                    ),
+                    TextButton(
+                      onPressed: () => onTransferSelected(stockItem),
+                      child: Text(l10n.transferButtonText),
                     ),
                   ],
                 ),

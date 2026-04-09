@@ -464,5 +464,25 @@
 	"settingsStatisticsLinkText": "My statistics",
 	"@settingsStatisticsLinkText": {
 		"description": "Link to the statistics page from the settings page."
+	},
+	"transferButtonText": "Transfer",
+	"@transferButtonText": {
+		"description": "Transfer stock button label on the in-stock row."
+	},
+	"transferSheetSelectSourceTitle": "Transfer from:",
+	"@transferSheetSelectSourceTitle": {
+		"description": "Title shown when selecting the source storage in the transfer sheet."
+	},
+	"transferSheetSelectDestinationTitle": "Transfer to:",
+	"@transferSheetSelectDestinationTitle": {
+		"description": "Title shown when selecting the destination storage in the transfer sheet."
+	},
+	"transferSheetQuantityTitle": "Quantity to transfer",
+	"@transferSheetQuantityTitle": {
+		"description": "Title shown on the quantity step of the transfer sheet."
+	},
+	"transferSheetNoteLabel": "Note (optional)",
+	"@transferSheetNoteLabel": {
+		"description": "Label for the optional note field in the transfer sheet."
 	}
 }

@@ -22,6 +22,8 @@ TransactionDto _$TransactionDtoFromJson(Map<String, dynamic> json) =>
       storageName: json['storageName'] as String? ?? '',
       unitPriceSnapshot: (json['unitPriceSnapshot'] as num?)?.toDouble() ?? 0,
       isRecycledPart: json['isRecycledPart'] as bool? ?? false,
+      destinationStorageId: json['destinationStorageId'] as String?,
+      destinationStorageName: json['destinationStorageName'] as String?,
     );
 
 Map<String, dynamic> _$TransactionDtoToJson(TransactionDto instance) =>
@@ -40,10 +42,13 @@ Map<String, dynamic> _$TransactionDtoToJson(TransactionDto instance) =>
       'type': _$TransactionTypeEnumMap[instance.type]!,
       'note': instance.note,
       'timestamp': instance.timestamp.toIso8601String(),
+      'destinationStorageId': instance.destinationStorageId,
+      'destinationStorageName': instance.destinationStorageName,
     };
 
 const _$TransactionTypeEnumMap = {
   TransactionType.use: 'use',
   TransactionType.restock: 'restock',
   TransactionType.adjustment: 'adjustment',
+  TransactionType.transfer: 'transfer',
 };

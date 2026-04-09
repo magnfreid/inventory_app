@@ -9,7 +9,8 @@
       "Bash(python3 -c ':*)",
       "Bash(fvm flutter:*)",
       "Bash(dart run:*)",
-      "Bash(flutter analyze:*)"
+      "Bash(flutter analyze:*)",
+      "mcp__ide__getDiagnostics"
     ]
   }
 }

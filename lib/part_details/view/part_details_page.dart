@@ -11,6 +11,7 @@ import 'package:inventory_app/part_details/widgets/part_details_info_display.dar
 import 'package:inventory_app/part_details/widgets/part_details_pop_up_menu.dart';
 import 'package:inventory_app/part_details/widgets/sheets/image_picker_sheet.dart';
 import 'package:inventory_app/part_details/widgets/sheets/restock_sheet.dart';
+import 'package:inventory_app/part_details/widgets/sheets/transfer_sheet.dart';
 import 'package:inventory_app/part_details/widgets/sheets/use_stock_sheet.dart';
 import 'package:inventory_app/shared/extensions/show_snack_bar_extensions.dart';
 import 'package:inventory_app/shared/widgets/tags_row.dart';
@@ -111,6 +112,8 @@ class PartDetailsView extends StatelessWidget {
                       part: part,
                       onStockSelected: (stock) =>
                           _showUseStockSheet(context, stock, part.name),
+                      onTransferSelected: (stock) =>
+                          _showTransferSheet(context, stock),
                       textStyle: _variantTextStyle(context),
                     ),
                   ],
@@ -149,6 +152,22 @@ class PartDetailsView extends StatelessWidget {
       builder: (_) => BlocProvider.value(
         value: context.read<PartDetailsBloc>(),
         child: const RestockSheet(),
+      ),
+    );
+  }
+
+  Future<void> _showTransferSheet(
+    BuildContext context,
+    StockPresentation sourceStock,
+  ) {
+    return showModalBottomSheet<void>(
+      useSafeArea: true,
+      showDragHandle: true,
+      isScrollControlled: true,
+      context: context,
+      builder: (_) => BlocProvider.value(
+        value: context.read<PartDetailsBloc>(),
+        child: TransferSheet(sourceStock: sourceStock),
       ),
     );
   }

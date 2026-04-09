@@ -12,6 +12,9 @@ enum TransactionType {
 
   /// Manual correction (can be positive or negative).
   adjustment,
+
+  /// Moves stock from one storage to another.
+  transfer,
 }
 
 /// Data Transfer Object (DTO) representing a stock transaction.
@@ -43,6 +46,8 @@ class TransactionDto {
     this.storageName = '',
     this.unitPriceSnapshot = 0,
     this.isRecycledPart = false,
+    this.destinationStorageId,
+    this.destinationStorageName,
   });
 
   /// Creates a [TransactionDto] from a JSON map.
@@ -95,6 +100,19 @@ class TransactionDto {
   @JsonKey(defaultValue: false)
   final bool isRecycledPart;
 
+  /// Destination storage identifier for transfer transactions.
+  ///
+  /// Only set when [type] is [TransactionType.transfer]; `null` for all other
+  /// transaction types.
+  final String? destinationStorageId;
+
+  /// Destination storage name snapshotted at write time for transfer
+  /// transactions.
+  ///
+  /// Only set when [type] is [TransactionType.transfer]; `null` for all other
+  /// transaction types.
+  final String? destinationStorageName;
+
   /// The amount of stock change.
   ///
   /// Positive values increase stock, negative values decrease stock.
@@ -131,6 +149,8 @@ class TransactionDto {
     TransactionType? type,
     String? note,
     DateTime? timestamp,
+    String? destinationStorageId,
+    String? destinationStorageName,
   }) {
     return TransactionDto(
       id: id ?? this.id,
@@ -147,6 +167,10 @@ class TransactionDto {
       type: type ?? this.type,
       note: note ?? this.note,
       timestamp: timestamp ?? this.timestamp,
+      destinationStorageId:
+          destinationStorageId ?? this.destinationStorageId,
+      destinationStorageName:
+          destinationStorageName ?? this.destinationStorageName,
     );
   }
 }

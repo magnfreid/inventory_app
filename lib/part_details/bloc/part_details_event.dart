@@ -59,6 +59,37 @@ final class AddToStockButtonPressed extends PartDetailsEvent {
   final String? note;
 }
 
+/// Dispatched when the user confirms a stock transfer between two storages.
+final class TransferStockButtonPressed extends PartDetailsEvent {
+  /// Creates a [TransferStockButtonPressed] event.
+  const TransferStockButtonPressed({
+    required this.fromStorageId,
+    required this.toStorageId,
+    required this.quantity,
+    required this.userId,
+    required this.userDisplayName,
+    this.note,
+  });
+
+  /// Identifier of the storage to transfer stock from.
+  final String fromStorageId;
+
+  /// Identifier of the storage to transfer stock to.
+  final String toStorageId;
+
+  /// Number of units to transfer. Must be greater than zero.
+  final int quantity;
+
+  /// Identifier of the user performing the transfer.
+  final String userId;
+
+  /// Display name of the user snapshotted onto both transaction records.
+  final String userDisplayName;
+
+  /// Optional note describing the reason for the transfer.
+  final String? note;
+}
+
 final class ImageSelected extends PartDetailsEvent {
   const ImageSelected({required this.file});
   final XFile file;

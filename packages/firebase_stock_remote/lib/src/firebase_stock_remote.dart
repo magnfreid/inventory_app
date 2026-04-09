@@ -122,4 +122,54 @@ class FirebaseStockRemote implements StockRemote {
         ..set(transactionDoc, transaction);
     });
   }
+
+  @override
+  Future<void> transferStock({
+    required TransactionDto deductTransaction,
+    required TransactionDto addTransaction,
+  }) async {
+    if (deductTransaction.amount >= 0 || addTransaction.amount <= 0) {
+      throw const InvalidArgumentRemoteException();
+    }
+
+    final sourceDoc = _stockCollection.doc(
+      '${deductTransaction.partId}_${deductTransaction.storageId}',
+    );
+    final destinationDoc = _stockCollection.doc(
+      '${addTransaction.partId}_${addTransaction.storageId}',
+    );
+    final deductTxnDoc = _transactionsCollection.doc();
+    final addTxnDoc = _transactionsCollection.doc();
+
+    await _firestore.runTransaction((txn) async {
+      final sourceSnapshot = await txn.get(sourceDoc);
+      final destinationSnapshot = await txn.get(destinationDoc);
+
+      final sourceDto = sourceSnapshot.exists
+          ? sourceSnapshot.data()!
+          : StockDto(
+              partId: deductTransaction.partId,
+              storageId: deductTransaction.storageId,
+              quantity: 0,
+            );
+      final destinationDto = destinationSnapshot.exists
+          ? destinationSnapshot.data()!
+          : StockDto(
+              partId: addTransaction.partId,
+              storageId: addTransaction.storageId,
+              quantity: 0,
+            );
+
+      final newSourceQty = sourceDto.quantity + deductTransaction.amount;
+      if (newSourceQty < 0) throw const InvalidArgumentRemoteException();
+
+      final newDestQty = destinationDto.quantity + addTransaction.amount;
+
+      txn
+        ..set(sourceDoc, sourceDto.copyWith(quantity: newSourceQty))
+        ..set(destinationDoc, destinationDto.copyWith(quantity: newDestQty))
+        ..set(deductTxnDoc, deductTransaction)
+        ..set(addTxnDoc, addTransaction);
+    });
+  }
 }
