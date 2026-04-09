@@ -14,20 +14,19 @@ TransactionDto _makeDto({
   double unitPriceSnapshot = 10.0,
   String partName = 'Part',
   DateTime? timestamp,
-}) =>
-    TransactionDto(
-      id: id,
-      partId: 'p1',
-      storageId: 's1',
-      userId: 'u1',
-      amount: amount,
-      type: amount >= 0 ? TransactionType.restock : TransactionType.use,
-      note: '',
-      timestamp: timestamp ?? DateTime(2024, 3, 1),
-      isRecycledPart: isRecycledPart,
-      unitPriceSnapshot: unitPriceSnapshot,
-      partName: partName,
-    );
+}) => TransactionDto(
+  id: id,
+  partId: 'p1',
+  storageId: 's1',
+  userId: 'u1',
+  amount: amount,
+  type: amount >= 0 ? TransactionType.restock : TransactionType.use,
+  note: '',
+  timestamp: timestamp ?? DateTime(2024, 3),
+  isRecycledPart: isRecycledPart,
+  unitPriceSnapshot: unitPriceSnapshot,
+  partName: partName,
+);
 
 Transaction _makeTx({
   required int amount,
@@ -35,17 +34,16 @@ Transaction _makeTx({
   double unitPriceSnapshot = 10.0,
   String partName = 'Part',
   DateTime? timestamp,
-}) =>
-    Transaction.fromDto(
-      _makeDto(
-        id: 'tx1',
-        amount: amount,
-        isRecycledPart: isRecycledPart,
-        unitPriceSnapshot: unitPriceSnapshot,
-        partName: partName,
-        timestamp: timestamp,
-      ),
-    );
+}) => Transaction.fromDto(
+  _makeDto(
+    id: 'tx1',
+    amount: amount,
+    isRecycledPart: isRecycledPart,
+    unitPriceSnapshot: unitPriceSnapshot,
+    partName: partName,
+    timestamp: timestamp,
+  ),
+);
 
 void main() {
   late MockStockRepository mockRepo;
@@ -183,7 +181,7 @@ void main() {
       'StatisticsLoadRequested reloads for selected month',
       build: () => StatisticsBloc(stockRepository: mockRepo),
       seed: () => StatisticsState(
-        selectedMonth: DateTime(2024, 1),
+        selectedMonth: DateTime(2024),
         status: StatisticsStatus.loaded,
         stats: const MonthlyStats.empty(),
       ),
@@ -222,27 +220,32 @@ void main() {
       expect(stats.items.length, 3);
     });
 
-    test('fromTransactions calculates recycledSavings for outgoing recycled', () {
-      final stats = MonthlyStats.fromTransactions(
-        transactions: [
-          _makeTx(amount: -2, isRecycledPart: true, unitPriceSnapshot: 5.0),
-        ],
-      );
-      expect(stats.recycledSavings, closeTo(10.0, 0.001));
-    });
+    test(
+      'fromTransactions calculates recycledSavings for outgoing recycled',
+      () {
+        final stats = MonthlyStats.fromTransactions(
+          transactions: [
+            _makeTx(amount: -2, isRecycledPart: true, unitPriceSnapshot: 5),
+          ],
+        );
+        expect(stats.recycledSavings, closeTo(10.0, 0.001));
+      },
+    );
 
-    test('fromTransactions does not count incoming recycled parts as savings',
-        () {
-      final stats = MonthlyStats.fromTransactions(
-        transactions: [
-          _makeTx(amount: 3, isRecycledPart: true, unitPriceSnapshot: 5.0),
-        ],
-      );
-      expect(stats.recycledSavings, 0);
-    });
+    test(
+      'fromTransactions does not count incoming recycled parts as savings',
+      () {
+        final stats = MonthlyStats.fromTransactions(
+          transactions: [
+            _makeTx(amount: 3, isRecycledPart: true, unitPriceSnapshot: 5),
+          ],
+        );
+        expect(stats.recycledSavings, 0);
+      },
+    );
 
     test('fromTransactions sorts newest first', () {
-      final older = DateTime(2024, 3, 1);
+      final older = DateTime(2024, 3);
       final newer = DateTime(2024, 3, 15);
       final stats = MonthlyStats.fromTransactions(
         transactions: [
@@ -263,8 +266,7 @@ void main() {
         amount: 1,
         type: TransactionType.restock,
         note: '',
-        timestamp: DateTime(2024, 3, 1),
-        partName: '',
+        timestamp: DateTime(2024, 3),
       );
       final stats = MonthlyStats.fromTransactions(
         transactions: [Transaction.fromDto(dto)],

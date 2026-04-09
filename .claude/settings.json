@@ -1,0 +1,15 @@
+{
+  "permissions": {
+    "allow": [
+      "Read",
+      "Glob",
+      "Grep",
+      "Bash(flutter test*)",
+      "Bash(flutter gen-l10n*)",
+      "Bash(flutter analyze*)",
+      "Bash(git status)",
+      "Bash(git diff)",
+      "Bash(git log*)"
+    ]
+  }
+}

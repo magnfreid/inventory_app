@@ -42,7 +42,7 @@ void main() {
     tagController = StreamController();
     storageController = StreamController();
 
-    part = PartPresentation(
+    part = const PartPresentation(
       partId: '111',
       name: 'Test',
       detailNumber: '123',

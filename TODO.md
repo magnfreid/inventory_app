@@ -1,5 +1,7 @@
 # Future features
 
+Concrete implementation plans for each item live in [PLANS.md](PLANS.md).
+
 ## Storage transfer
 Add the ability to transfer a part between two storages. This requires new
 infrastructure (repository method, remote data source) as well as a UI entry

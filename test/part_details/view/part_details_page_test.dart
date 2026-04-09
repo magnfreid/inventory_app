@@ -14,7 +14,7 @@ void main() {
   late PartPresentation part;
 
   setUp(() {
-    part = PartPresentation(
+    part = const PartPresentation(
       partId: '123',
       name: 'Name',
       detailNumber: 'details',

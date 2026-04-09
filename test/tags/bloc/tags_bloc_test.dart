@@ -15,8 +15,7 @@ Tag _makeTag({
   String label = 'Test',
   TagColor color = TagColor.blue,
   TagType type = TagType.general,
-}) =>
-    Tag(id: id, label: label, color: color, type: type);
+}) => Tag(id: id, label: label, color: color, type: type);
 
 void main() {
   late MockTagRepository mockRepo;
@@ -57,7 +56,7 @@ void main() {
         tagController.add([
           _makeTag(id: 'b1', label: 'Nike', type: TagType.brand),
           _makeTag(id: 'c1', label: 'Electronics', type: TagType.category),
-          _makeTag(id: 'g1', label: 'Urgent', type: TagType.general),
+          _makeTag(id: 'g1', label: 'Urgent'),
         ]);
       },
       expect: () => [

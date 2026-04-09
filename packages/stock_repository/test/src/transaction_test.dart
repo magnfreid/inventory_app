@@ -5,23 +5,22 @@ import 'package:stock_repository/stock_repository.dart';
 TransactionDto _baseDto({
   int amount = 5,
   TransactionType type = TransactionType.restock,
-}) =>
-    TransactionDto(
-      id: 'id1',
-      partId: 'p1',
-      storageId: 's1',
-      userId: 'u1',
-      userDisplayName: 'Alice',
-      partName: 'Bolt',
-      detailNumber: 'D1',
-      storageName: 'Shelf A',
-      unitPriceSnapshot: 2.5,
-      isRecycledPart: true,
-      amount: amount,
-      type: type,
-      note: 'a note',
-      timestamp: DateTime(2024, 3, 1),
-    );
+}) => TransactionDto(
+  id: 'id1',
+  partId: 'p1',
+  storageId: 's1',
+  userId: 'u1',
+  userDisplayName: 'Alice',
+  partName: 'Bolt',
+  detailNumber: 'D1',
+  storageName: 'Shelf A',
+  unitPriceSnapshot: 2.5,
+  isRecycledPart: true,
+  amount: amount,
+  type: type,
+  note: 'a note',
+  timestamp: DateTime(2024, 3),
+);
 
 void main() {
   group('Transaction.fromDto', () {
