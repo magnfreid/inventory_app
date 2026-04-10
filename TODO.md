@@ -2,14 +2,13 @@
 
 Concrete implementation plans for each item live in [PLANS.md](PLANS.md).
 
-## Storage transfer
-Add the ability to transfer a part between two storages. This requires new
-infrastructure (repository method, remote data source) as well as a UI entry
-point — likely from the part's in-stock view or a storage-scoped action.
-Transfers must be recorded as a dedicated transaction type (distinct from
-ordinary use/restock entries) so that they can be identified correctly in the
-statistics and transaction history without skewing consumption or replenishment
-data.
+## Snackbar notification system
+Replace the current plain-text error snackbar with a rich, styled, app-wide
+notification system. Add success snackbars alongside error snackbars, with
+clear visual distinction between types. Designed to be extended with additional
+message types (e.g. info, warning) in the future. Reachable via
+`context.showSuccessSnackBar(message)` / `context.showErrorSnackBar(exception)`
+from any widget that has a `ScaffoldMessenger` ancestor.
 
 ## Share part info
 Add the ability to share basic part information — name, detail number, brand,

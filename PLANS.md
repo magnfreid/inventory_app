@@ -5,110 +5,202 @@ Each plan is scoped to what needs to change and where.
 
 ---
 
-## Storage transfer
+## Snackbar notification system
 
 ### Background
-Transfers require two atomic stock mutations (deduct from source, add to
-destination) plus two transaction log entries, all in a single Firestore
-transaction. The existing `applyStockChange` method is single-storage only, so
-a dedicated remote method is needed. To keep the transaction log meaningful,
-`TransactionDto` needs to carry a destination storage for transfer entries.
+The app currently has a single `showErrorSnackBar(Exception)` extension method
+that renders an unstyled `SnackBar` with plain text. There is no positive
+feedback when operations succeed. The new system introduces a styled,
+icon-accompanied snackbar with at minimum two semantic types — **error** and
+**success** — and an architecture that makes adding further types (e.g. info,
+warning) a one-line change.
 
-### Data layer — `packages/`
+### Architecture overview
 
-**1. `stock_remote` — extend `TransactionType` enum**
-
-Add `.transfer` to the existing `TransactionType` enum in
-`packages/stock_remote/lib/src/models/transaction_dto.dart`.
-Update JSON serialization so `"transfer"` round-trips correctly.
-
-**2. `stock_remote` — add destination field to `TransactionDto`**
-
-Add a nullable `String? destinationStorageId` field to `TransactionDto`.
-Only transfer transactions will set this; use/restock/adjustment leave it null.
-Update `fromJson`/`toJson` accordingly.
-
-**3. `stock_repository` — extend `Transaction` domain model**
-
-Add `String? destinationStorageId` to the `Transaction` model in
-`packages/stock_repository/lib/src/models/transaction.dart`.
-
-Add a named constructor `Transaction.transfer(...)` that:
-- Sets `type = .transfer`
-- Sets `amount` to the transferred quantity (positive)
-- Sets both `storageId` (source) and `destinationStorageId`
-- Accepts the usual snapshot fields (partName, storageName, etc.) plus
-  `destinationStorageName`
-
-**4. `stock_remote` — add `transferStock` to the abstract interface**
-
-Add to `StockRemote` (`packages/stock_remote/lib/src/stock_remote.dart`):
+The public surface is two extension methods on `BuildContext`:
 
 ```dart
-Future<void> transferStock({
-  required TransactionDto deductTransaction,
-  required TransactionDto addTransaction,
-});
+context.showSuccessSnackBar(String message);
+context.showErrorSnackBar(Exception exception);
 ```
 
-The two DTOs are already fully formed by the repository; the remote just
-writes them atomically.
+Both delegate to a single private `_showAppSnackBar` helper that resolves
+visual styling from a `SnackBarType` → `_SnackBarConfig` mapping. Adding a
+new type only requires:
+1. One new enum value.
+2. One new case in the config factory.
+3. One new public extension method.
 
-**5. `firebase_stock_remote` — implement `transferStock`**
+No call sites need to change when a new type is added.
 
-In `FirebaseStockRemote`, implement `transferStock` using a single
-`firestore.runTransaction()` that:
-1. Reads source stock doc (`{partId}_{fromStorageId}`)
-2. Reads destination stock doc (`{partId}_{toStorageId}`)
-3. Validates source quantity >= transfer amount (throw
-   `InvalidArgumentRemoteException` otherwise)
-4. Writes updated source stock (decreased), updated destination stock
-   (increased), and both transaction documents — all in one commit
+### Step 1 — `SnackBarType` enum
 
-**6. `stock_repository` — add `transferStock` to the repository**
+Create `lib/shared/widgets/app_snack_bar.dart`. Define:
 
-Add `transferStock(...)` to `StockRepository` following the same pattern as
-`useStock`/`restockStock`. It constructs the two `TransactionDto`s from the
-`Transaction.transfer(...)` domain object and calls
-`_remote.transferStock(...)`.
+```dart
+/// Semantic category of an app-wide snackbar notification.
+enum SnackBarType {
+  /// Indicates a successful operation.
+  success,
 
-### UI layer — `lib/`
+  /// Indicates a failed or erroneous operation.
+  error,
+}
+```
 
-**7. `part_details` Bloc — add event and handler**
+Keep this file as the single source of truth for snackbar styling so all
+future types are added in one place.
 
-Add `TransferStockButtonPressed` event to
-`lib/part_details/bloc/part_details_event.dart` with fields:
-`fromStorageId`, `toStorageId`, `quantity`, `userId`, `userDisplayName`,
-`note` (optional).
+### Step 2 — `_SnackBarConfig` internal data class
 
-Register a `droppable()` handler `_onTransferStockButtonPressed` in
-`PartDetailsBloc` that calls `_stockRepository.transferStock(...)`, mirrors
-the error handling of the existing `_onAddToStockButtonPressed`.
+In the same file, add a private immutable config class:
 
-**8. `part_details` UI — add entry point**
+```dart
+class _SnackBarConfig {
+  const _SnackBarConfig({
+    required this.backgroundColor,
+    required this.foregroundColor,
+    required this.icon,
+    this.duration = const Duration(seconds: 3),
+  });
 
-The most natural entry point is the in-stock tab (same place the "Use" button
-lives), since the user needs to see current stock per storage before choosing
-where to transfer from. Add a "Transfer" button alongside "Use" in the
-in-stock row, or add it as an action in `PartDetailsPopUpMenu` — either works,
-but in-stock row is more discoverable.
+  final Color backgroundColor;
+  final Color foregroundColor;
+  final IconData icon;
+  final Duration duration;
 
-**9. `part_details` — create `TransferSheet`**
+  factory _SnackBarConfig.of(SnackBarType type, ColorScheme scheme) {
+    return switch (type) {
+      SnackBarType.success => _SnackBarConfig(
+          backgroundColor: const Color(0xFFD4EDD4),
+          foregroundColor: const Color(0xFF1A4D1A),
+          icon: Icons.check_circle_outline,
+        ),
+      SnackBarType.error => _SnackBarConfig(
+          backgroundColor: scheme.errorContainer,
+          foregroundColor: scheme.onErrorContainer,
+          icon: Icons.error_outline,
+        ),
+    };
+  }
+}
+```
 
-Model on the existing `RestockSheet` (two-stage nested Navigator).
-Three stages:
-1. **Source storage selector** — list only storages where `quantity > 0`
-2. **Destination storage selector** — list all storages except source
-3. **Quantity selector** — increment/decrement stepper bounded between
-   1 and source quantity; optional note field
+**Notes on color choices:**
+- **Error** uses `colorScheme.errorContainer` / `onErrorContainer` — these are
+  already seeded by the app's dynamic theme and are guaranteed to be legible.
+- **Success** uses fixed green tones that are visually distinct and readable
+  regardless of the seed color. If the app later gains a dedicated success
+  seed color, only the factory case needs to change.
+- The `duration` field exists so individual types (or future call sites) can
+  override persistence length if needed.
 
-On confirm, dispatch `TransferStockButtonPressed`. Listen on `stockStatus`
-(same `.done` pattern as other sheets) to close and show confirmation.
+### Step 3 — private `_showAppSnackBar` helper
 
-**10. Localization**
+Also in `app_snack_bar.dart`:
 
-Add ARB keys for all new UI strings (sheet titles, button labels, validation
-messages) in both `app_en.arb` and `app_sv.arb`. Run `flutter gen-l10n`.
+```dart
+void _showAppSnackBar(
+  BuildContext context,
+  String message,
+  SnackBarType type,
+) {
+  final config = _SnackBarConfig.of(
+    type,
+    Theme.of(context).colorScheme,
+  );
+  ScaffoldMessenger.of(context)
+    ..clearSnackBars()
+    ..showSnackBar(
+      SnackBar(
+        backgroundColor: config.backgroundColor,
+        behavior: SnackBarBehavior.floating,
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(8),
+        ),
+        duration: config.duration,
+        content: Row(
+          children: [
+            Icon(config.icon, color: config.foregroundColor),
+            const SizedBox(width: 10),
+            Expanded(
+              child: Text(
+                message,
+                style: TextStyle(color: config.foregroundColor),
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
+}
+```
+
+`clearSnackBars()` before showing prevents stacking when the user triggers
+multiple operations quickly.
+
+### Step 4 — replace the extension in `show_snack_bar_extensions.dart`
+
+Replace the current `ShowSnackBar` extension body with:
+
+```dart
+import 'package:core_remote/core_remote.dart';
+import 'package:flutter/material.dart';
+import 'package:inventory_app/l10n/l10n.dart';
+import 'package:inventory_app/shared/widgets/app_snack_bar.dart';
+
+extension ShowSnackBar on BuildContext {
+  /// Shows a success snackbar with [message].
+  void showSuccessSnackBar(String message) =>
+      _showAppSnackBar(this, message, .success);
+
+  /// Shows an error snackbar. [exception] is mapped to a localized
+  /// string if it is a [RemoteException]; otherwise falls back to
+  /// [Exception.toString].
+  void showErrorSnackBar(Exception exception) {
+    final message = exception is RemoteException
+        ? exception.toL10n(this)
+        : exception.toString();
+    _showAppSnackBar(this, message, .error);
+  }
+}
+```
+
+All existing `showErrorSnackBar` call sites continue to work unchanged since
+the signature is identical.
+
+### Step 5 — add success feedback at call sites
+
+Existing `BlocListener`s that already handle the `.done` state need a
+`showSuccessSnackBar` call added. Candidate locations:
+
+| Feature | Listener location | Suggested message ARB key |
+|---|---|---|
+| Use stock | `UseStockSheet` done-listener | `snackbarStockUsed` |
+| Restock | `RestockSheet` done-listener | `snackbarStockRestocked` |
+| Transfer | `TransferSheet` done-listener | `snackbarStockTransferred` |
+| Edit part | `PartEditorPage` done-listener | `snackbarPartSaved` |
+| Delete part | `PartDetailsView` delete-listener | *(no success message needed — page pops)* |
+| Upload / delete image | `PartDetailsView` image-listener | `snackbarImageUpdated` |
+
+**Decision point:** Messages can be generic (e.g. a single `snackbarSuccess`
+key reused everywhere) or operation-specific (one key per action). The table
+above assumes operation-specific, which gives users clearer feedback. Choose
+before implementation and update the ARB files accordingly.
+
+### Step 6 — localization
+
+Add ARB keys for each success message (or a single generic one if preferred)
+to both `app_en.arb` and `app_sv.arb`. Run `flutter gen-l10n`.
+
+Example keys (operation-specific):
+```json
+"snackbarStockUsed": "Stock updated.",
+"snackbarStockRestocked": "Stock restocked.",
+"snackbarStockTransferred": "Transfer complete.",
+"snackbarPartSaved": "Part saved.",
+"snackbarImageUpdated": "Image updated."
+```
 
 ---
 
@@ -220,7 +312,10 @@ is only present in compact mode.
 
 **4. Constrain list content width**
 
-In the expanded layout, wrap the parts list (the `ListView.builder` / `SliverList` in `InventoryPage`) in a `Center` with a `ConstrainedBox(maxWidth: 900)` so items don't span the full screen. This also benefits tablet-sized windows.
+In the expanded layout, wrap the parts list (the `ListView.builder` /
+`SliverList` in `InventoryPage`) in a `Center` with a
+`ConstrainedBox(maxWidth: 900)` so items don't span the full screen.
+This also benefits tablet-sized windows.
 
 **5. `InventoryPartCard` — no changes required**
 

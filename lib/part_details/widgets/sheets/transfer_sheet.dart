@@ -8,6 +8,7 @@ import 'package:inventory_app/authenticated_app/cubit/user_state.dart';
 import 'package:inventory_app/l10n/l10n.dart';
 import 'package:inventory_app/part_details/bloc/part_details_bloc.dart';
 import 'package:inventory_app/part_details/bloc/part_details_state.dart';
+import 'package:inventory_app/shared/extensions/show_snack_bar_extensions.dart';
 import 'package:inventory_app/use_cases/part_presentation.dart/models/stock_presentation.dart';
 import 'package:storage_repository/storage_repository.dart';
 
@@ -41,7 +42,14 @@ class _TransferSheetState extends State<TransferSheet> {
       // Pop the bottom sheet from the outer navigator's context, which closes
       // the entire sheet regardless of how many routes the nested navigator
       // has on its stack.
-      listener: (context, state) => Navigator.of(context).pop(),
+      listener: (context, state) {
+        if (state.error == null) {
+          context.showSuccessSnackBar(
+            context.l10n.snackbarStockTransferred,
+          );
+        }
+        Navigator.of(context).pop();
+      },
       child: FractionallySizedBox(
         heightFactor: .75,
         child: Navigator(

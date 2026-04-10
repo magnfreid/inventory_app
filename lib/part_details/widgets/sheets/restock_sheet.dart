@@ -8,6 +8,7 @@ import 'package:inventory_app/authenticated_app/cubit/user_state.dart';
 import 'package:inventory_app/l10n/l10n.dart';
 import 'package:inventory_app/part_details/bloc/part_details_bloc.dart';
 import 'package:inventory_app/part_details/bloc/part_details_state.dart';
+import 'package:inventory_app/shared/extensions/show_snack_bar_extensions.dart';
 import 'package:storage_repository/storage_repository.dart';
 
 class RestockSheet extends StatefulWidget {
@@ -58,6 +59,11 @@ class _StorageSelector extends StatelessWidget {
               previous.stockStatus != current.stockStatus &&
               current.stockStatus == .done,
           listener: (context, state) {
+            if (state.error == null) {
+              context.showSuccessSnackBar(
+                context.l10n.snackbarStockRestocked,
+              );
+            }
             Navigator.pop(context);
           },
         ),

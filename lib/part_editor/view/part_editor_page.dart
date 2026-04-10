@@ -96,6 +96,7 @@ class _PartEditorViewState extends State<PartEditorView> {
         BlocListener<PartEditorBloc, PartEditorState>(
           listenWhen: (previous, current) => current.isSuccess,
           listener: (context, state) {
+            context.showSuccessSnackBar(context.l10n.snackbarPartSaved);
             Navigator.of(context).pop();
           },
         ),

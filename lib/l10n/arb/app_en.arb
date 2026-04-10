@@ -465,6 +465,26 @@
 	"@settingsStatisticsLinkText": {
 		"description": "Link to the statistics page from the settings page."
 	},
+	"snackbarStockUsed": "Stock updated.",
+	"@snackbarStockUsed": {
+		"description": "Success snackbar shown after using one unit of stock."
+	},
+	"snackbarStockRestocked": "Stock restocked.",
+	"@snackbarStockRestocked": {
+		"description": "Success snackbar shown after restocking a part."
+	},
+	"snackbarStockTransferred": "Transfer complete.",
+	"@snackbarStockTransferred": {
+		"description": "Success snackbar shown after transferring stock between storages."
+	},
+	"snackbarPartSaved": "Part saved.",
+	"@snackbarPartSaved": {
+		"description": "Success snackbar shown after saving a part in the editor."
+	},
+	"snackbarImageUpdated": "Image updated.",
+	"@snackbarImageUpdated": {
+		"description": "Success snackbar shown after uploading or removing a part image."
+	},
 	"transferButtonText": "Transfer",
 	"@transferButtonText": {
 		"description": "Transfer stock button label on the in-stock row."

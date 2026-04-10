@@ -53,7 +53,11 @@ class _UseStockSheetState extends State<UseStockSheet> {
       listenWhen: (previous, current) => current.stockStatus == .done,
       listener: (context, state) {
         final error = state.error;
-        if (error != null) context.showErrorSnackBar(error);
+        if (error != null) {
+          context.showErrorSnackBar(error);
+        } else {
+          context.showSuccessSnackBar(context.l10n.snackbarStockUsed);
+        }
         Navigator.pop(context);
       },
       child: SingleChildScrollView(

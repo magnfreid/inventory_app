@@ -70,6 +70,18 @@ class PartDetailsView extends StatelessWidget {
                 Navigator.of(context).popUntil((route) => route.isFirst),
           ),
           BlocListener<PartDetailsBloc, PartDetailsState>(
+            listenWhen: (previous, current) =>
+                previous.imageStatus != current.imageStatus &&
+                current.imageStatus == .done,
+            listener: (context, state) {
+              if (state.error == null) {
+                context.showSuccessSnackBar(
+                  context.l10n.snackbarImageUpdated,
+                );
+              }
+            },
+          ),
+          BlocListener<PartDetailsBloc, PartDetailsState>(
             listenWhen: (previous, current) => previous.error != current.error,
             listener: (context, state) {
               final error = state.error;
