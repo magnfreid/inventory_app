@@ -369,6 +369,22 @@
 	"@popUpMenuDeleteImage": {
 		"description": "Label for menu selection to delete a part's image."
 	},
+	"popUpMenuShare": "Dela",
+	"@popUpMenuShare": {
+		"description": "Label for menu selection to share part info."
+	},
+	"shareTextStock": "Lager",
+	"@shareTextStock": {
+		"description": "Section heading for stock entries in the share text."
+	},
+	"shareTextRecycledYes": "Återvunnen: Ja",
+	"@shareTextRecycledYes": {
+		"description": "Recycled status line in share text when the part is recycled."
+	},
+	"shareTextRecycledNo": "Återvunnen: Nej",
+	"@shareTextRecycledNo": {
+		"description": "Recycled status line in share text when the part is new."
+	},
 	"partDetailsImageNotLoaded": "Bilden kunde inte laddas.",
 	"@partDetailsImageNotLoaded": {
 		"description": "Message shown to user when a part's image could not be loaded."
