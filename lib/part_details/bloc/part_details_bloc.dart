@@ -1,5 +1,4 @@
 import 'dart:async';
-import 'dart:developer';
 
 import 'package:bloc/bloc.dart';
 import 'package:bloc_concurrency/bloc_concurrency.dart';
@@ -225,13 +224,8 @@ class PartDetailsBloc extends Bloc<PartDetailsEvent, PartDetailsState> {
     await Future<void>.delayed(Duration.zero);
 
     try {
-      log('READING BYTES...');
       final bytes = await event.file.readAsBytes();
-      log('READING BYTES FINISHED!');
-
-      log('PROCESSING IMAGE...');
       final processed = await compute(processImage, bytes);
-      log('IMAGE PROCESSED!');
 
       final paths = await _imageRepository.uploadImage(
         partId: state.part.partId,

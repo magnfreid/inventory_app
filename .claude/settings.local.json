@@ -12,7 +12,8 @@
       "Bash(flutter analyze:*)",
       "mcp__ide__getDiagnostics",
       "Bash(flutter pub:*)",
-      "Bash(python3 -c \"import json,sys; pkgs=json.load\\(sys.stdin\\)['packages']; print\\(next\\(p['rootUri'] for p in pkgs if p['name']=='share_plus'\\)\\)\")"
+      "Bash(python3 -c \"import json,sys; pkgs=json.load\\(sys.stdin\\)['packages']; print\\(next\\(p['rootUri'] for p in pkgs if p['name']=='share_plus'\\)\\)\")",
+      "Bash(fvm dart:*)"
     ]
   }
 }

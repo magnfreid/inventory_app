@@ -3,12 +3,11 @@ import 'dart:math';
 import 'package:app_ui/app_ui.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:inventory_app/authenticated_app/cubit/user_cubit.dart';
-import 'package:inventory_app/authenticated_app/cubit/user_state.dart';
 import 'package:inventory_app/l10n/l10n.dart';
 import 'package:inventory_app/part_details/bloc/part_details_bloc.dart';
 import 'package:inventory_app/part_details/bloc/part_details_state.dart';
 import 'package:inventory_app/shared/extensions/show_snack_bar_extensions.dart';
+import 'package:inventory_app/shared/extensions/user_cubit_extensions.dart';
 import 'package:inventory_app/use_cases/part_presentation.dart/models/stock_presentation.dart';
 import 'package:storage_repository/storage_repository.dart';
 
@@ -209,14 +208,8 @@ class _TransferCheckoutState extends State<_TransferCheckout> {
 
   @override
   Widget build(BuildContext context) {
-    final userId = context.read<UserCubit>().state.maybeWhen(
-      loaded: (currentUser) => currentUser.id,
-      orElse: () => null,
-    );
-    final userDisplayName = context.read<UserCubit>().state.maybeWhen(
-      loaded: (currentUser) => currentUser.name,
-      orElse: () => '',
-    );
+    final userId = context.currentUserId;
+    final userDisplayName = context.currentUserDisplayName;
     final l10n = context.l10n;
 
     return Scaffold(
