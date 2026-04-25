@@ -56,39 +56,44 @@ class _SignInViewState extends State<SignInView> {
       child: BlocBuilder<SignInBloc, SignInState>(
         builder: (context, state) {
           return Scaffold(
-            body: Padding(
-              padding: const .symmetric(horizontal: 50),
-              child: Column(
-                spacing: 10,
-                children: [
-                  const Spacer(),
-                  TextFormField(
-                    decoration: InputDecoration(
-                      label: Text(l10n.signInEmailTextFieldLabel),
-                    ),
-                    controller: _emailTextController,
-                  ),
-                  TextFormField(
-                    obscureText: true,
-                    decoration: InputDecoration(
-                      label: Text(l10n.signInPasswordTextFieldLabel),
-                    ),
-                    controller: _passwordTextController,
-                  ),
-                  const Spacer(),
-                  AppButton(
-                    width: .wide,
-                    isLoading: state.isLoading,
-                    onPressed: () => context.read<SignInBloc>().add(
-                      SignInButtonPressed(
-                        email: _emailTextController.text,
-                        password: _passwordTextController.text,
+            body: Center(
+              child: ConstrainedBox(
+                constraints: const BoxConstraints(maxWidth: 400),
+                child: Padding(
+                  padding: const .symmetric(horizontal: 32),
+                  child: Column(
+                    spacing: 10,
+                    children: [
+                      const Spacer(),
+                      TextFormField(
+                        decoration: InputDecoration(
+                          label: Text(l10n.signInEmailTextFieldLabel),
+                        ),
+                        controller: _emailTextController,
                       ),
-                    ),
-                    label: l10n.signInSignInButtonText,
+                      TextFormField(
+                        obscureText: true,
+                        decoration: InputDecoration(
+                          label: Text(l10n.signInPasswordTextFieldLabel),
+                        ),
+                        controller: _passwordTextController,
+                      ),
+                      const Spacer(),
+                      AppButton(
+                        width: .wide,
+                        isLoading: state.isLoading,
+                        onPressed: () => context.read<SignInBloc>().add(
+                          SignInButtonPressed(
+                            email: _emailTextController.text,
+                            password: _passwordTextController.text,
+                          ),
+                        ),
+                        label: l10n.signInSignInButtonText,
+                      ),
+                      const Spacer(),
+                    ],
                   ),
-                  const Spacer(),
-                ],
+                ),
               ),
             ),
           );

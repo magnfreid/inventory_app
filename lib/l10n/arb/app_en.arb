@@ -76,6 +76,10 @@
 	"@drawerHeaderText": {
 		"description": "The title text for the drawer menu"
 	},
+	"drawerInventoryLinkText": "Parts",
+	"@drawerInventoryLinkText": {
+		"description": "Link to inventory/parts list in the navigation rail"
+	},
 	"drawerLocationsLinkText": "Storages",
 	"@drawerLocationsLinkText": {
 		"description": "Link to locations page in drawer menu"

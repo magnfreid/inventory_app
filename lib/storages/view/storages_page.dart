@@ -85,7 +85,7 @@ class StoragesView extends StatelessWidget {
                                                       )
                                                 : null,
                                           ),
-                                      body: _StoragePanelBody(storage: storage),
+                                      body: StoragePanelBody(storage: storage),
                                     ),
                                   )
                                   .toList(),
@@ -101,8 +101,10 @@ class StoragesView extends StatelessWidget {
   }
 }
 
-class _StoragePanelBody extends StatelessWidget {
-  const _StoragePanelBody({required this.storage});
+/// Body widget for an [ExpansionPanelRadio] showing storage details and
+/// actions. Expects a [StoragesBloc] in the widget tree.
+class StoragePanelBody extends StatelessWidget {
+  const StoragePanelBody({required this.storage, super.key});
 
   final Storage storage;
 

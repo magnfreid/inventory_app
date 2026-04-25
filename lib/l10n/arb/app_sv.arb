@@ -76,6 +76,10 @@
 	"@drawerHeaderText": {
 		"description": "The title text for the drawer menu"
 	},
+	"drawerInventoryLinkText": "Delar",
+	"@drawerInventoryLinkText": {
+		"description": "Link to inventory/parts list in the navigation rail"
+	},
 	"drawerLocationsLinkText": "Lager",
 	"@drawerLocationsLinkText": {
 		"description": "Link to locations page in drawer menu"

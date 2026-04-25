@@ -91,9 +91,9 @@ class _TagsViewState extends State<TagsView> with TickerProviderStateMixin {
             return TabBarView(
               controller: _tabController,
               children: [
-                _TabContent(tags: state.brandTags),
-                _TabContent(tags: state.categoryTags),
-                _TabContent(tags: state.generalTags),
+                TagTabContent(tags: state.brandTags),
+                TagTabContent(tags: state.categoryTags),
+                TagTabContent(tags: state.generalTags),
               ],
             );
           },
@@ -103,8 +103,10 @@ class _TagsViewState extends State<TagsView> with TickerProviderStateMixin {
   }
 }
 
-class _TabContent extends StatelessWidget {
-  const _TabContent({required this.tags});
+/// A tab panel showing a [Wrap] of [ActionChip]s for a list of tags.
+/// Expects a [TagsBloc] in the widget tree for editing actions.
+class TagTabContent extends StatelessWidget {
+  const TagTabContent({required this.tags, super.key});
 
   final List<TagPresentation> tags;
 

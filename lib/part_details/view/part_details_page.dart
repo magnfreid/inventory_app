@@ -13,6 +13,7 @@ import 'package:inventory_app/part_details/widgets/sheets/image_picker_sheet.dar
 import 'package:inventory_app/part_details/widgets/sheets/restock_sheet.dart';
 import 'package:inventory_app/part_details/widgets/sheets/transfer_sheet.dart';
 import 'package:inventory_app/part_details/widgets/sheets/use_stock_sheet.dart';
+import 'package:inventory_app/shared/constants/layout.dart';
 import 'package:inventory_app/shared/extensions/show_snack_bar_extensions.dart';
 import 'package:inventory_app/shared/widgets/tags_row.dart';
 import 'package:inventory_app/use_cases/part_presentation.dart/models/part_presentation.dart';
@@ -89,7 +90,10 @@ class PartDetailsView extends StatelessWidget {
             },
           ),
         ],
-        child: SingleChildScrollView(
+        child: Center(
+          child: ConstrainedBox(
+            constraints: const BoxConstraints(maxWidth: kContentMaxWidth),
+            child: SingleChildScrollView(
           physics: const ClampingScrollPhysics(),
           child: BlocBuilder<PartDetailsBloc, PartDetailsState>(
             builder: (context, state) {
@@ -132,6 +136,8 @@ class PartDetailsView extends StatelessWidget {
                 ),
               );
             },
+          ),
+            ),
           ),
         ),
       ),
