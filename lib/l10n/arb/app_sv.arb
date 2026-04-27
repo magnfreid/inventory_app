@@ -437,6 +437,23 @@
 	"@statisticsMessageLabel": {
 		"description": "Label prefix for the transaction note/message in the statistics transaction list."
 	},
+	"statisticsTopContributors": "Toppbidragsgivare",
+	"@statisticsTopContributors": {
+		"description": "Section heading for the leaderboard of most active users on the statistics page."
+	},
+	"statisticsTransactionCount": "{count} transaktioner",
+	"@statisticsTransactionCount": {
+		"description": "Number of transactions label in the statistics leaderboard.",
+		"placeholders": {
+			"count": {
+				"type": "int"
+			}
+		}
+	},
+	"statisticsTopSaver": "Störst besparing",
+	"@statisticsTopSaver": {
+		"description": "Badge label for the user with the highest recycled savings in the statistics leaderboard."
+	},
 	"settingsPageTitle": "Inställningar",
 	"@settingsPageTitle": {
 		"description": "Title for the settings page."

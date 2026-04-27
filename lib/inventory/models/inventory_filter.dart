@@ -6,8 +6,6 @@ enum QuantityFilter { all, inStock, outOfStock }
 
 enum SortByType { name, brand, category, quantity }
 
-//TODO(magnfreid): Make freezed
-
 @JsonSerializable()
 final class InventoryFilter {
   const InventoryFilter({
@@ -15,6 +13,7 @@ final class InventoryFilter {
     this.brandFilters = const {},
     this.categoryFilters = const {},
     this.storageFilters = const {},
+    this.generalTagFilters = const {},
     this.searchQuery = '',
     this.sortByType = .name,
     this.isSortedAscending = true,
@@ -26,19 +25,24 @@ final class InventoryFilter {
   final Set<String> brandFilters;
   final Set<String> categoryFilters;
   final Set<String> storageFilters;
+  final Set<String> generalTagFilters;
   @JsonKey(includeFromJson: false, includeToJson: false)
   final String searchQuery;
   final SortByType sortByType;
   final bool isSortedAscending;
 
   int get totalActiveFilters =>
-      brandFilters.length + categoryFilters.length + storageFilters.length;
+      brandFilters.length +
+      categoryFilters.length +
+      storageFilters.length +
+      generalTagFilters.length;
 
   InventoryFilter copyWith({
     QuantityFilter? quantityFilter,
     Set<String>? brandFilters,
     Set<String>? categoryFilters,
     Set<String>? storageFilters,
+    Set<String>? generalTagFilters,
     String? searchQuery,
     SortByType? sortByType,
     bool? isSortedAscending,
@@ -47,6 +51,7 @@ final class InventoryFilter {
     brandFilters: brandFilters ?? this.brandFilters,
     categoryFilters: categoryFilters ?? this.categoryFilters,
     storageFilters: storageFilters ?? this.storageFilters,
+    generalTagFilters: generalTagFilters ?? this.generalTagFilters,
     searchQuery: searchQuery ?? this.searchQuery,
     sortByType: sortByType ?? this.sortByType,
     isSortedAscending: isSortedAscending ?? this.isSortedAscending,

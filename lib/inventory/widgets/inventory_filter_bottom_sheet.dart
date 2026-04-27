@@ -134,6 +134,31 @@ class InventoryFilterBottomSheet extends StatelessWidget {
                         ),
                       ],
                     ),
+                    Text(l10n.tagTabGeneralText),
+                    Wrap(
+                      spacing: 8,
+                      children: [
+                        FilterChip(
+                          selected: filter.generalTagFilters.isEmpty,
+                          label: Text(l10n.all),
+                          onSelected: (_) => bloc.add(
+                            const ClearFilterChipPressed(type: .general),
+                          ),
+                        ),
+                        ...state.generalTags.sortedByLabel().map(
+                          (tag) => FilterChip(
+                            label: Text(tag.label),
+                            selected: filter.generalTagFilters.contains(tag.id),
+                            onSelected: (_) => bloc.add(
+                              FilterChipPressed(
+                                type: .general,
+                                itemId: tag.id,
+                              ),
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
                   ],
                 ),
               ),

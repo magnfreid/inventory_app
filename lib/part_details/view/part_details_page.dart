@@ -132,6 +132,28 @@ class PartDetailsView extends StatelessWidget {
                           _showTransferSheet(context, stock),
                       textStyle: _variantTextStyle(context),
                     ),
+                    if (part.generalTags.isNotEmpty) ...[
+                      const SizedBox(height: 8),
+                      const Divider(),
+                      Wrap(
+                        spacing: 8,
+                        runSpacing: 4,
+                        children: part.generalTags
+                            .map(
+                              (tag) => Chip(
+                                avatar: Icon(
+                                  Icons.tag,
+                                  size: 14,
+                                  color: tag.color,
+                                ),
+                                label: Text(tag.label),
+                                visualDensity: .compact,
+                                labelStyle: _variantTextStyle(context),
+                              ),
+                            )
+                            .toList(),
+                      ),
+                    ],
                   ],
                 ),
               );

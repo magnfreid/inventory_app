@@ -42,7 +42,6 @@ class StoragesView extends StatelessWidget {
         icon: const Icon(Icons.add),
         onPressed: () => Navigator.push(context, StoragesEditorPage.route()),
       ),
-
       body: BlocListener<StoragesBloc, StoragesState>(
         listenWhen: (previous, current) => previous.error != current.error,
         listener: (context, state) {
@@ -56,43 +55,11 @@ class StoragesView extends StatelessWidget {
               .loading => const Center(
                 child: CircularProgressIndicator.adaptive(),
               ),
-              .loaded =>
-                storages.isEmpty
-                    ? Center(
-                        child: Text(l10n.storage),
-                      )
-                    : Column(
-                        children: [
-                          Padding(
-                            padding: const EdgeInsets.all(24),
-                            child: ExpansionPanelList.radio(
-                              expandedHeaderPadding: const .only(left: 8),
-                              elevation: 1,
-                              dividerColor: Colors.transparent,
-                              children: storages
-                                  .sortedByName()
-                                  .map(
-                                    (storage) => ExpansionPanelRadio(
-                                      canTapOnHeader: true,
-                                      value: storage.id ?? 0,
-                                      headerBuilder: (context, isExpanded) =>
-                                          Text(
-                                            storage.name,
-                                            style: isExpanded
-                                                ? context.text.bodyLarge
-                                                      ?.copyWith(
-                                                        color: Colors.blue,
-                                                      )
-                                                : null,
-                                          ),
-                                      body: StoragePanelBody(storage: storage),
-                                    ),
-                                  )
-                                  .toList(),
-                            ),
-                          ),
-                        ],
-                      ),
+              .loaded => storages.isEmpty
+                  ? Center(child: Text(l10n.storage))
+                  : _StorageList(
+                      storages: storages.sortedByName(),
+                    ),
             };
           },
         ),
@@ -101,64 +68,133 @@ class StoragesView extends StatelessWidget {
   }
 }
 
-/// Body widget for an [ExpansionPanelRadio] showing storage details and
-/// actions. Expects a [StoragesBloc] in the widget tree.
-class StoragePanelBody extends StatelessWidget {
-  const StoragePanelBody({required this.storage, super.key});
+/// Scrollable list of [StorageCard] items with consistent spacing.
+class _StorageList extends StatelessWidget {
+  const _StorageList({required this.storages});
+
+  final List<Storage> storages;
+
+  @override
+  Widget build(BuildContext context) {
+    return ListView.separated(
+      padding: const .all(16),
+      itemCount: storages.length,
+      separatorBuilder: (_, _) => const SizedBox(height: 8),
+      itemBuilder: (_, index) =>
+          StorageCard(storage: storages[index]),
+    );
+  }
+}
+
+/// A single storage card with a left accent border, the storage
+/// name, an optional description, and edit / delete actions.
+class StorageCard extends StatelessWidget {
+  /// Creates a [StorageCard] for the given [storage].
+  const StorageCard({required this.storage, super.key});
 
   final Storage storage;
 
   @override
   Widget build(BuildContext context) {
     final l10n = context.l10n;
-    return Padding(
-      padding: const .only(left: 16),
+    final hasDescription =
+        storage.description != null && storage.description!.isNotEmpty;
+
+    return Card(
+      clipBehavior: .hardEdge,
       child: Container(
-        decoration: const BoxDecoration(
+        decoration: BoxDecoration(
           border: Border(
             left: BorderSide(
-              color: Colors.blue,
-              width: 4,
+              color: context.colors.primary,
+              width: 2,
             ),
           ),
         ),
-        child: Padding(
-          padding: const .symmetric(
-            horizontal: 8,
-          ),
-          child: Row(
-            crossAxisAlignment: .start,
-            children: [
-              Expanded(
+        padding: const .symmetric(
+          horizontal: 12,
+          vertical: 10,
+        ),
+        child: Column(
+          crossAxisAlignment: .start,
+          children: [
+            Row(
+              children: [
+                Expanded(
+                  child: Text(
+                    storage.name,
+                    style: context.text.bodyLarge,
+                  ),
+                ),
+                _ActionButton(
+                  icon: Icons.edit_outlined,
+                  onPressed: () => Navigator.push(
+                    context,
+                    StoragesEditorPage.route(storage: storage),
+                  ),
+                ),
+                _ActionButton(
+                  icon: Icons.delete_outline,
+                  onPressed: () => showModalBottomSheet<void>(
+                    context: context,
+                    builder: (_) => BlocProvider.value(
+                      value: context.read<StoragesBloc>(),
+                      child: _DeleteStorageBottomSheet(
+                        storageName: storage.name,
+                      ),
+                    ),
+                  ),
+                ),
+              ],
+            ),
+            if (hasDescription)
+              Padding(
+                padding: const .only(top: 4),
                 child: Text(
-                  storage.description ?? l10n.storageNoDescriptionText,
+                  storage.description!,
                   style: context.text.bodyMedium?.copyWith(
                     color: context.colors.onSurfaceVariant,
                   ),
                 ),
-              ),
-              IconButton(
-                onPressed: () => showModalBottomSheet<void>(
-                  context: context,
-                  builder: (_) => BlocProvider.value(
-                    value: context.read<StoragesBloc>(),
-                    child: _DeleteStorageBottomSheet(storageName: storage.name),
+              )
+            else
+              Padding(
+                padding: const .only(top: 4),
+                child: Text(
+                  l10n.storageNoDescriptionText,
+                  style: context.text.bodySmall?.copyWith(
+                    color: context.colors.onSurfaceVariant,
+                    fontStyle: .italic,
                   ),
                 ),
-                icon: const Icon(Icons.delete),
               ),
-              IconButton(
-                onPressed: () => Navigator.push(
-                  context,
-                  StoragesEditorPage.route(
-                    storage: storage,
-                  ),
-                ),
-                icon: const Icon(Icons.edit),
-              ),
-            ],
-          ),
+          ],
         ),
+      ),
+    );
+  }
+}
+
+/// Compact icon button used for storage card actions.
+class _ActionButton extends StatelessWidget {
+  const _ActionButton({
+    required this.icon,
+    required this.onPressed,
+  });
+
+  final IconData icon;
+  final VoidCallback onPressed;
+
+  @override
+  Widget build(BuildContext context) {
+    return IconButton(
+      icon: Icon(icon, size: 20),
+      onPressed: onPressed,
+      visualDensity: .compact,
+      padding: .zero,
+      constraints: const BoxConstraints(
+        minWidth: 32,
+        minHeight: 32,
       ),
     );
   }

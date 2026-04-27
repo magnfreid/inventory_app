@@ -1,1 +1,1 @@
-enum InventoryFilterType { brand, category, storage }
+enum InventoryFilterType { brand, category, storage, general }

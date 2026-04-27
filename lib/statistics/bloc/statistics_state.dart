@@ -61,6 +61,25 @@ class StatisticsState {
   }
 }
 
+/// Per-user aggregates for one month, used in the leaderboard.
+class UserActivity {
+  /// Creates a [UserActivity] with the given aggregates.
+  const UserActivity({
+    required this.userDisplayName,
+    required this.transactionCount,
+    required this.recycledSavings,
+  });
+
+  /// Display name of the user.
+  final String userDisplayName;
+
+  /// Total number of transactions this user performed.
+  final int transactionCount;
+
+  /// Total estimated savings from recycled consumption.
+  final double recycledSavings;
+}
+
 /// Precomputed numbers and list rows for one month.
 class MonthlyStats {
   /// Creates stats with explicit totals and line items.
@@ -69,14 +88,16 @@ class MonthlyStats {
     required this.totalIncoming,
     required this.totalOutgoing,
     required this.recycledSavings,
+    required this.topContributors,
   });
 
   /// Zeroed stats with no rows (e.g. before first emission).
   const MonthlyStats.empty()
-    : items = const [],
+    : items = const <TransactionListItem>[],
       totalIncoming = 0,
       totalOutgoing = 0,
-      recycledSavings = 0;
+      recycledSavings = 0,
+      topContributors = const <UserActivity>[];
 
   /// Builds totals and rows from a month query (newest first).
   ///
@@ -92,6 +113,9 @@ class MonthlyStats {
     final sorted = [...transactions]
       ..sort((a, b) => b.timestamp.compareTo(a.timestamp));
 
+    final userCounts = <String, int>{};
+    final userSavings = <String, double>{};
+
     final items = sorted.map((transaction) {
       if (transaction.amount > 0) {
         totalIncoming += transaction.amount;
@@ -104,6 +128,14 @@ class MonthlyStats {
             (-transaction.amount) * transaction.unitPriceSnapshot;
       }
 
+      final name = transaction.userDisplayName;
+      userCounts[name] = (userCounts[name] ?? 0) + 1;
+      if (transaction.amount < 0 && transaction.isRecycledPart) {
+        userSavings[name] =
+            (userSavings[name] ?? 0) +
+            (-transaction.amount) * transaction.unitPriceSnapshot;
+      }
+
       return TransactionListItem(
         transaction: transaction,
         partName: transaction.partName.isNotEmpty
@@ -112,11 +144,24 @@ class MonthlyStats {
       );
     }).toList();
 
+    final topContributors = (userCounts.entries.toList()
+          ..sort((a, b) => b.value.compareTo(a.value)))
+        .take(3)
+        .map(
+          (e) => UserActivity(
+            userDisplayName: e.key,
+            transactionCount: e.value,
+            recycledSavings: userSavings[e.key] ?? 0,
+          ),
+        )
+        .toList();
+
     return MonthlyStats(
       items: items,
       totalIncoming: totalIncoming,
       totalOutgoing: totalOutgoing,
       recycledSavings: recycledSavings,
+      topContributors: topContributors,
     );
   }
 
@@ -131,6 +176,9 @@ class MonthlyStats {
 
   /// Estimated savings from recycled consumption (quantity × snapshot price).
   final double recycledSavings;
+
+  /// Top users ranked by transaction count (at most 3 entries).
+  final List<UserActivity> topContributors;
 }
 
 /// One list row: full transaction plus display title for the part name.

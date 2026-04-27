@@ -62,6 +62,11 @@ class WatchPartPresentations {
               final brandTag = part.brandTagId != null
                   ? tagsMap[part.brandTagId!]
                   : null;
+              final generalTags = part.generalTagIds
+                  .map((id) => tagsMap[id])
+                  .whereType<Tag>()
+                  .map(TagPresentation.fromDomainModel)
+                  .toList();
 
               return PartPresentation(
                 partId: part.id ?? '',
@@ -75,6 +80,7 @@ class WatchPartPresentations {
                 categoryTag: categoryTag == null
                     ? null
                     : TagPresentation.fromDomainModel(categoryTag),
+                generalTags: generalTags,
                 description: part.description,
                 stock: storageQuantities,
                 imgPath: part.imgPath,

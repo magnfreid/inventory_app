@@ -8,6 +8,7 @@ import 'package:inventory_app/l10n/l10n.dart';
 import 'package:inventory_app/part_editor/bloc/part_editor_bloc.dart';
 import 'package:inventory_app/part_editor/bloc/part_editor_state.dart';
 import 'package:inventory_app/part_editor/widgets/part_editor_tag_bottom_sheet.dart';
+import 'package:inventory_app/shared/extensions/list_sorting_extension.dart';
 import 'package:inventory_app/shared/extensions/show_snack_bar_extensions.dart';
 import 'package:inventory_app/tags/models/tag_presentation.dart';
 import 'package:inventory_app/use_cases/part_presentation.dart/models/part_presentation.dart';
@@ -76,6 +77,7 @@ class _PartEditorViewState extends State<PartEditorView> {
     _canSave = widget.part != null;
     _selectedBrandTag = widget.part?.brandTag;
     _selectedCategoryTag = widget.part?.categoryTag;
+    selectedGeneralTags = List.of(widget.part?.generalTags ?? []);
     super.initState();
   }
 
@@ -222,6 +224,18 @@ class _PartEditorViewState extends State<PartEditorView> {
                         onTagSelected: (selectedTag) =>
                             setState(() => _selectedCategoryTag = selectedTag),
                       ),
+                      _GeneralTagSelector(
+                        selectedTags: selectedGeneralTags,
+                        onTagToggled: (tag) => setState(() {
+                          final idx = selectedGeneralTags
+                              .indexWhere((t) => t.id == tag.id);
+                          if (idx >= 0) {
+                            selectedGeneralTags.removeAt(idx);
+                          } else {
+                            selectedGeneralTags.add(tag);
+                          }
+                        }),
+                      ),
                     ],
                   ),
                 ),
@@ -251,7 +265,9 @@ class _PartEditorViewState extends State<PartEditorView> {
                                       0.0,
                                   brandTagId: _selectedBrandTag?.id,
                                   categoryTagId: _selectedCategoryTag?.id,
-                                  generalTagIds: [],
+                                  generalTagIds: selectedGeneralTags
+                      .map((t) => t.id)
+                      .toList(),
                                   description: _descriptionController.text,
                                   imgPath: widget.part?.imgPath,
                                   thumbnailPath: widget.part?.thumbnailPath,
@@ -318,5 +334,48 @@ class _TagSelector extends StatelessWidget {
     );
     if (selectedTag == null) return;
     onTagSelected(selectedTag);
+  }
+}
+
+class _GeneralTagSelector extends StatelessWidget {
+  const _GeneralTagSelector({
+    required this.selectedTags,
+    required this.onTagToggled,
+  });
+
+  final List<TagPresentation> selectedTags;
+  final void Function(TagPresentation tag) onTagToggled;
+
+  @override
+  Widget build(BuildContext context) {
+    final l10n = context.l10n;
+    return BlocBuilder<PartEditorBloc, PartEditorState>(
+      buildWhen: (previous, current) =>
+          previous.generalTags != current.generalTags,
+      builder: (context, state) {
+        if (state.generalTags.isEmpty) return const SizedBox.shrink();
+        return Column(
+          crossAxisAlignment: .start,
+          spacing: 8,
+          children: [
+            Padding(
+              padding: const .symmetric(horizontal: 16),
+              child: Text(l10n.tagTabGeneralText),
+            ),
+            Wrap(
+              spacing: 8,
+              children: state.generalTags.sortedByLabel().map(
+                (tag) => FilterChip(
+                  avatar: Icon(Icons.tag, size: 14, color: tag.color),
+                  label: Text(tag.label),
+                  selected: selectedTags.any((t) => t.id == tag.id),
+                  onSelected: (_) => onTagToggled(tag),
+                ),
+              ).toList(),
+            ),
+          ],
+        );
+      },
+    );
   }
 }

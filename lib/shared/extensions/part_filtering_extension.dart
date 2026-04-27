@@ -45,6 +45,13 @@ extension PartFiltering on InventoryState {
         return false;
       }
 
+      if (filter.generalTagFilters.isNotEmpty &&
+          !part.generalTags.any(
+            (tag) => filter.generalTagFilters.contains(tag.id),
+          )) {
+        return false;
+      }
+
       return true;
     }).toList()..sortBy(filter.sortByType);
 

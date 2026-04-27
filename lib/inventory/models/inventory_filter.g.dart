@@ -29,6 +29,11 @@ InventoryFilter _$InventoryFilterFromJson(Map<String, dynamic> json) =>
               ?.map((e) => e as String)
               .toSet() ??
           const {},
+      generalTagFilters:
+          (json['generalTagFilters'] as List<dynamic>?)
+              ?.map((e) => e as String)
+              .toSet() ??
+          const {},
       sortByType:
           $enumDecodeNullable(_$SortByTypeEnumMap, json['sortByType']) ?? .name,
       isSortedAscending: json['isSortedAscending'] as bool? ?? true,
@@ -40,6 +45,7 @@ Map<String, dynamic> _$InventoryFilterToJson(InventoryFilter instance) =>
       'brandFilters': instance.brandFilters.toList(),
       'categoryFilters': instance.categoryFilters.toList(),
       'storageFilters': instance.storageFilters.toList(),
+      'generalTagFilters': instance.generalTagFilters.toList(),
       'sortByType': _$SortByTypeEnumMap[instance.sortByType]!,
       'isSortedAscending': instance.isSortedAscending,
     };

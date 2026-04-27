@@ -102,7 +102,16 @@ class InventoryBloc extends HydratedBloc<InventoryEvent, InventoryState> {
     final catagoryTags = event.tags
         .where((tag) => tag.type == .category)
         .toList();
-    emit(state.copyWith(brandTags: brandTags, categoryTags: catagoryTags));
+    final generalTags = event.tags
+        .where((tag) => tag.type == .general)
+        .toList();
+    emit(
+      state.copyWith(
+        brandTags: brandTags,
+        categoryTags: catagoryTags,
+        generalTags: generalTags,
+      ),
+    );
   }
 
   FutureOr<void> _onHideEmptyStockSwitchPressed(
@@ -137,6 +146,7 @@ class InventoryBloc extends HydratedBloc<InventoryEvent, InventoryState> {
           brandFilters: {},
           categoryFilters: {},
           storageFilters: {},
+          generalTagFilters: {},
         ),
       ),
     );
@@ -160,9 +170,12 @@ class InventoryBloc extends HydratedBloc<InventoryEvent, InventoryState> {
       case .storage:
         targetFilterSet = filter.storageFilters.toSet();
         totalLength = state.storages.length;
+      case .general:
+        targetFilterSet = filter.generalTagFilters.toSet();
+        totalLength = state.generalTags.length;
     }
     _toggleFilterIdInSet(event.itemId, targetFilterSet);
-    if (targetFilterSet.length >= totalLength) {
+    if (totalLength > 1 && targetFilterSet.length >= totalLength) {
       targetFilterSet.clear();
     }
     switch (event.type) {
@@ -184,6 +197,14 @@ class InventoryBloc extends HydratedBloc<InventoryEvent, InventoryState> {
             filter: state.filter.copyWith(storageFilters: targetFilterSet),
           ),
         );
+      case .general:
+        emit(
+          state.copyWith(
+            filter: state.filter.copyWith(
+              generalTagFilters: targetFilterSet,
+            ),
+          ),
+        );
     }
   }
 
@@ -200,6 +221,12 @@ class InventoryBloc extends HydratedBloc<InventoryEvent, InventoryState> {
         );
       case .storage:
         emit(state.copyWith(filter: state.filter.copyWith(storageFilters: {})));
+      case .general:
+        emit(
+          state.copyWith(
+            filter: state.filter.copyWith(generalTagFilters: {}),
+          ),
+        );
     }
   }
 

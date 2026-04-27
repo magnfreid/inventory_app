@@ -18,6 +18,7 @@ abstract class InventoryState with _$InventoryState {
     @Default(InventoryFilter()) InventoryFilter filter,
     @Default([]) List<TagPresentation> brandTags,
     @Default([]) List<TagPresentation> categoryTags,
+    @Default([]) List<TagPresentation> generalTags,
     @Default([]) List<Storage> storages,
     @Default(InventoryStateBottomSheetStatus.idle)
     InventoryStateBottomSheetStatus bottomSheetStatus,
