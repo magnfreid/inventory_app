@@ -9,16 +9,6 @@ final class _PartsUpdated extends InventoryEvent {
   final List<PartPresentation> parts;
 }
 
-final class _TagsUpdated extends InventoryEvent {
-  const _TagsUpdated({required this.tags});
-  final List<TagPresentation> tags;
-}
-
-final class _StoragesUpdated extends InventoryEvent {
-  const _StoragesUpdated({required this.storages});
-  final List<Storage> storages;
-}
-
 final class _OnStreamError extends InventoryEvent {
   const _OnStreamError({required this.error});
   final RemoteException error;

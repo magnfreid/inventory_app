@@ -22,10 +22,6 @@ extension PartFiltering on InventoryState {
         return false;
       }
 
-      if (filter.quantityFilter == .outOfStock && part.totalQuantity > 0) {
-        return false;
-      }
-
       if (filter.brandFilters.isNotEmpty &&
           !filter.brandFilters.contains(part.brandTag?.id)) {
         return false;
@@ -38,9 +34,9 @@ extension PartFiltering on InventoryState {
 
       if (filter.storageFilters.isNotEmpty &&
           !part.stock.any(
-            (stock) => filter.storageFilters.any(
-              (id) => id == stock.storageId && stock.quantity > 0,
-            ),
+            (stock) =>
+                filter.storageFilters.contains(stock.storageId) &&
+                stock.quantity > 0,
           )) {
         return false;
       }
@@ -53,8 +49,9 @@ extension PartFiltering on InventoryState {
       }
 
       return true;
-    }).toList()..sortBy(filter.sortByType);
+    }).toList()
+      ..sortBy(filter.sortByType, ascending: filter.isSortedAscending);
 
-    return filter.isSortedAscending ? result : result.reversed.toList();
+    return result;
   }
 }

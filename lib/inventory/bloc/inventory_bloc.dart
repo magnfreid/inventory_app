@@ -9,30 +9,16 @@ import 'package:inventory_app/shared/utilities/bloc_transformers.dart';
 import 'package:inventory_app/tags/models/tag_presentation.dart';
 import 'package:inventory_app/use_cases/part_presentation.dart/models/part_presentation.dart';
 import 'package:inventory_app/use_cases/part_presentation.dart/watch_part_presentations.dart';
-
 import 'package:storage_repository/storage_repository.dart';
-import 'package:tag_repository/tag_repository.dart';
 
 part 'inventory_event.dart';
 
 class InventoryBloc extends HydratedBloc<InventoryEvent, InventoryState> {
   InventoryBloc({
     required WatchPartPresentations watchPartPresentations,
-    required TagRepository tagRepository,
-    required StorageRepository storageRepository,
-  }) : _tagRepository = tagRepository,
-       _storageRepository = storageRepository,
-       super(const InventoryState()) {
+  }) : super(const InventoryState()) {
     on<_PartsUpdated>(
       _onPartsUpdated,
-      transformer: throttle(_streamThrottleDuration),
-    );
-    on<_TagsUpdated>(
-      _onTagsUpdated,
-      transformer: throttle(_streamThrottleDuration),
-    );
-    on<_StoragesUpdated>(
-      _onStoragesUpdated,
       transformer: throttle(_streamThrottleDuration),
     );
     on<HideEmptyStockSwitchPressed>(_onHideEmptyStockSwitchPressed);
@@ -57,24 +43,10 @@ class InventoryBloc extends HydratedBloc<InventoryEvent, InventoryState> {
       (parts) => add(_PartsUpdated(parts: parts)),
       onError: _handleStreamError,
     );
-    _tagsStreamSubscription = _tagRepository.watchTags().listen((tags) {
-      final tagPresentations = tags
-          .map(TagPresentation.fromDomainModel)
-          .toList();
-      add(_TagsUpdated(tags: tagPresentations));
-    }, onError: _handleStreamError);
-    _storagesStreamSubscription = _storageRepository.watchStorages().listen(
-      (storages) => add(_StoragesUpdated(storages: storages)),
-      onError: _handleStreamError,
-    );
   }
 
-  final TagRepository _tagRepository;
-  final StorageRepository _storageRepository;
   late final StreamSubscription<List<PartPresentation>>
   _partsStreamSubscription;
-  late final StreamSubscription<List<Tag>> _tagsStreamSubscription;
-  late final StreamSubscription<List<Storage>> _storagesStreamSubscription;
 
   final Duration _streamThrottleDuration = const Duration(milliseconds: 500);
   final Duration _uiThrottleDuration = const Duration(milliseconds: 200);
@@ -82,8 +54,6 @@ class InventoryBloc extends HydratedBloc<InventoryEvent, InventoryState> {
   @override
   Future<void> close() async {
     await _partsStreamSubscription.cancel();
-    await _tagsStreamSubscription.cancel();
-    await _storagesStreamSubscription.cancel();
     return super.close();
   }
 
@@ -91,25 +61,39 @@ class InventoryBloc extends HydratedBloc<InventoryEvent, InventoryState> {
     _PartsUpdated event,
     Emitter<InventoryState> emit,
   ) {
-    emit(state.copyWith(status: .loaded, parts: event.parts, error: null));
-  }
+    final brandTagMap = <String, TagPresentation>{};
+    final categoryTagMap = <String, TagPresentation>{};
+    final generalTagMap = <String, TagPresentation>{};
+    final storageMap = <String, Storage>{};
 
-  FutureOr<void> _onTagsUpdated(
-    _TagsUpdated event,
-    Emitter<InventoryState> emit,
-  ) {
-    final brandTags = event.tags.where((tag) => tag.type == .brand).toList();
-    final catagoryTags = event.tags
-        .where((tag) => tag.type == .category)
-        .toList();
-    final generalTags = event.tags
-        .where((tag) => tag.type == .general)
-        .toList();
+    for (final part in event.parts) {
+      final brand = part.brandTag;
+      if (brand != null) brandTagMap[brand.id] = brand;
+
+      final category = part.categoryTag;
+      if (category != null) categoryTagMap[category.id] = category;
+
+      for (final tag in part.generalTags) {
+        generalTagMap[tag.id] = tag;
+      }
+
+      for (final stock in part.stock) {
+        storageMap[stock.storageId] = Storage(
+          id: stock.storageId,
+          name: stock.storageName,
+        );
+      }
+    }
+
     emit(
       state.copyWith(
-        brandTags: brandTags,
-        categoryTags: catagoryTags,
-        generalTags: generalTags,
+        status: .loaded,
+        parts: event.parts,
+        error: null,
+        brandTags: brandTagMap.values.toList(),
+        categoryTags: categoryTagMap.values.toList(),
+        generalTags: generalTagMap.values.toList(),
+        storages: storageMap.values.toList(),
       ),
     );
   }
@@ -119,7 +103,6 @@ class InventoryBloc extends HydratedBloc<InventoryEvent, InventoryState> {
     Emitter<InventoryState> emit,
   ) {
     final currentFilter = state.filter.quantityFilter;
-
     emit(
       state.copyWith(
         filter: state.filter.copyWith(
@@ -127,13 +110,6 @@ class InventoryBloc extends HydratedBloc<InventoryEvent, InventoryState> {
         ),
       ),
     );
-  }
-
-  FutureOr<void> _onStoragesUpdated(
-    _StoragesUpdated event,
-    Emitter<InventoryState> emit,
-  ) {
-    emit(state.copyWith(storages: event.storages));
   }
 
   FutureOr<void> _onClearAllFiltersButtonPressed(
@@ -288,9 +264,7 @@ class InventoryBloc extends HydratedBloc<InventoryEvent, InventoryState> {
 
   @override
   Map<String, dynamic>? toJson(InventoryState state) {
-    return {
-      'filter': state.filter.toJson(),
-    };
+    return {'filter': state.filter.toJson()};
   }
 
   void _handleStreamError(dynamic e) {

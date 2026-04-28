@@ -31,8 +31,8 @@ class InventoryContent extends StatelessWidget {
       child: BlocBuilder<InventoryBloc, InventoryState>(
         builder: (context, state) {
           final error = state.error;
-          final parts =
-              state.isLoading ? boneMockParts : state.filteredParts;
+          final filteredParts = state.filteredParts;
+          final parts = state.isLoading ? boneMockParts : filteredParts;
           return Padding(
             padding: const .symmetric(horizontal: 8),
             child: Column(
@@ -56,7 +56,7 @@ class InventoryContent extends StatelessWidget {
                         spacing: 4,
                         children: [
                           Text('${l10n.showing}:'),
-                          Text(state.filteredParts.length.toString()),
+                          Text(filteredParts.length.toString()),
                           Text(
                             '(${l10n.ofText} ${state.parts.length})',
                             style: TextStyle(

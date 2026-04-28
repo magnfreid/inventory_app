@@ -42,8 +42,6 @@ class InventoryPage extends StatelessWidget {
         BlocProvider(
           create: (context) => InventoryBloc(
             watchPartPresentations: context.read<WatchPartPresentations>(),
-            tagRepository: context.read<TagRepository>(),
-            storageRepository: context.read<StorageRepository>(),
           ),
         ),
         BlocProvider(

@@ -53,7 +53,6 @@ Map<String, dynamic> _$InventoryFilterToJson(InventoryFilter instance) =>
 const _$QuantityFilterEnumMap = {
   QuantityFilter.all: 'all',
   QuantityFilter.inStock: 'inStock',
-  QuantityFilter.outOfStock: 'outOfStock',
 };
 
 const _$SortByTypeEnumMap = {

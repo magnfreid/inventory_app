@@ -14,15 +14,26 @@ extension StorageSorting on List<Storage> {
 }
 
 extension SortBy on List<PartPresentation> {
-  void sortBy(SortByType type) => switch (type) {
-    .name => sort((a, b) => a.name.compareTo(b.name)),
-    .brand => sort(
-      (a, b) => (a.brandTag?.label ?? '').compareTo(b.brandTag?.label ?? ''),
-    ),
-    .category => sort(
-      (a, b) =>
-          (a.categoryTag?.label ?? '').compareTo(b.categoryTag?.label ?? ''),
-    ),
-    .quantity => sort((a, b) => a.totalQuantity.compareTo(b.totalQuantity)),
-  };
+  /// Sorts this list by [type]. Pass [ascending] false to reverse the order
+  /// without allocating a second list.
+  void sortBy(SortByType type, {bool ascending = true}) {
+    final sign = ascending ? 1 : -1;
+    switch (type) {
+      case .name:
+        sort((a, b) => sign * a.name.compareTo(b.name));
+      case .brand:
+        sort(
+          (a, b) => sign *
+              (a.brandTag?.label ?? '').compareTo(b.brandTag?.label ?? ''),
+        );
+      case .category:
+        sort(
+          (a, b) => sign *
+              (a.categoryTag?.label ?? '')
+                  .compareTo(b.categoryTag?.label ?? ''),
+        );
+      case .quantity:
+        sort((a, b) => sign * a.totalQuantity.compareTo(b.totalQuantity));
+    }
+  }
 }

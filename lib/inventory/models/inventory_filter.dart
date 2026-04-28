@@ -2,7 +2,7 @@ import 'package:freezed_annotation/freezed_annotation.dart';
 
 part 'inventory_filter.g.dart';
 
-enum QuantityFilter { all, inStock, outOfStock }
+enum QuantityFilter { all, inStock }
 
 enum SortByType { name, brand, category, quantity }
 
